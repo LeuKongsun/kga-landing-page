@@ -7,7 +7,7 @@ const Hero = () => (
                 <h1 className="text-4xl text-gray-800 font-extrabold mx-auto sm:text-6xl">
                     KHMER GRS ACADEMY 
                 </h1>
-                <h1 className="text-4xl text-gray-800 font-extrabold mx-auto sm:text-6xl">សិក្សាលម្អិតទៅលើជំនាញផលិតផែនទី</h1>
+                <h1 className="text-4xl text-gray-800 font-extrabold mx-auto sm:text-6xl">សិក្សាលម្អិតទៅលើជំនាញគ្រប់គ្រងទិន្នន័យភូមិសាស្រ្ត និងផែនទី</h1>
                 <p className="max-w-xl mx-auto">
                     យើងផ្តល់ឲ្យនូវការបង្រៀនដែលយកចិត្តទុកដាក់ ប្រកបដោយគុណភាព និងទំនួលខុសត្រូវ។ ការពេញចិត្តរបស់អ្នក គឺជាតម្លៃរបស់យើង។
                 </p>
