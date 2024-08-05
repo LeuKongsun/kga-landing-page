@@ -3,11 +3,11 @@ import NavLink from "../NavLink"
 const Hero = () => (
     <section>
         <div className="custom-screen py-28 text-gray-600">
-            <div className="space-y-5 max-w-4xl mx-auto text-center">
+            <div className="space-y-2 max-w-4xl mx-auto text-center">
                 <h1 className="text-4xl text-gray-800 font-extrabold mx-auto sm:text-6xl">
                     KHMER GRS ACADEMY 
                 </h1>
-                <h1 className="text-4xl text-gray-800 font-extrabold mx-auto sm:text-6xl">សិក្សាលម្អិតទៅលើជំនាញគ្រប់គ្រងទិន្នន័យភូមិសាស្រ្ត និងផែនទី</h1>
+                <h1 className="text-4xl text-gray-800 font-extrabold mx-auto md:leading-snug sm:text-6xl">សិក្សាលម្អិតទៅលើជំនាញគ្រប់គ្រងទិន្នន័យភូមិសាស្រ្ត និងផែនទី</h1>
                 <p className="max-w-xl mx-auto">
                     យើងផ្តល់ឲ្យនូវការបង្រៀនដែលយកចិត្តទុកដាក់ ប្រកបដោយគុណភាព និងទំនួលខុសត្រូវ។ ការពេញចិត្តរបស់អ្នក គឺជាតម្លៃរបស់យើង។
                 </p>
