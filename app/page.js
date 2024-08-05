@@ -7,6 +7,7 @@ import ToolKit from "./components/ui/ToolKit";
 import Testimonials from "./components/ui/Testimonials";
 import FooterCTA from "./components/ui/FooterCTA";
 import Courses from "./components/ui/Courses";
+import Contact from "./components/ui/Contact";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <GradientWrapper>
         <Testimonials />
       </GradientWrapper>
+      <Contact />
       <FooterCTA />
     </>
   );

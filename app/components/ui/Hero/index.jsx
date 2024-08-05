@@ -28,18 +28,6 @@ const Hero = () => (
                 </div>
             </div>
         </div>
-        <ul className="circles">
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-			</ul>
     </section>
 )
 

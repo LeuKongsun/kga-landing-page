@@ -56,7 +56,7 @@ const Testimonials = () => {
       <div id="testimonials" className="max-w-screen-xl mx-auto px-4 md:px-8">
         <div className="max-w-2xl sm:text-center md:mx-auto">
           <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-            មើលអ្វីដែលសិស្សរបស់យើង និយាយអំពីយើង
+            មតិសិស្សរបស់យើង
           </h2>
           <p className="mt-3 text-gray-600">
             យើងតែងតែយកចិត្តទុកដាក់ទៅលើការបញ្ចេញមតិ និងការរិះគន់ស្ថាបនា ដើម្បីស្វែងរកភាពរីកចម្រើនទៅមុខ

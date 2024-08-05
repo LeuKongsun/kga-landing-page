@@ -40,7 +40,7 @@ const LogoGrid = () => (
                     {
                         logos.map((item, idx) => (
                             <li key={idx}>
-                                <Image className='grayscale hover:grayscale-0' src={item.src} alt={item.alt} height="40" width="100%"/>
+                                <Image className='sm:grayscale sm:hover:grayscale-0' src={item.src} alt={item.alt} height="40" width="100%"/>
                             </li>
                         ))
                     }
