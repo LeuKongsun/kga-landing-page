@@ -5,6 +5,7 @@ import sabOur from '../../../../public/students/sab_our.jpg'
 import yunSaknika from '../../../../public/students/yun_saknika.jpg'
 import sreyJokjey from '../../../../public/students/srey_jokjey.jpg'
 import chhay from '../../../../public/students/chhay.jpeg'
+import veayo from '../../../../public/students/veayo.jpeg'
 
 
 const Testimonials = () => {
@@ -45,7 +46,7 @@ const Testimonials = () => {
         "បន្ទាប់ពីខ្ញុំបានបញ្ចប់ ArcMap និង QGIS ជាមួយនឹងសាលា Khmer GRS  Academy ខ្ញុំអាចយកវាមកធ្វើផែនទីផ្សេងៗទៅតាមតម្រូវការបាន។ នេះក៏ដោយសារតែការបង្រៀនរបស់លោកគ្រូនៅ Khmer GRS  Academy បានបង្រៀនដោយយកចិត្តទុកដាក់ ពន្យល់ក្បោះក្បាយច្បាស់ល្អទៅលើ Tool និងមុខងារនីមួយៗនៅក្នុងកម្មវីធី ហើយក៏មានមេរៀនគ្រប់គាន់ក្នុងការបង្រៀនផងដែរ។ ក្នុងឱកាសនេះខ្ញុំបាទសូមអរគុណលោកគ្រូដែលបានបង្ហាត់បង្រៀនដល់រូបខ្ញុំ និងនិស្សិតផ្សេងៗទៀត។ សូមជួនពរលោកគ្រូនៅក្នុងសាលា Khmer GRS  Academy ទាំងអស់ជួបតែសេចក្តីសុខសេចក្តីចម្រើន។",
     },
     {
-      avatar: sowathWilly,
+      avatar: veayo,
       name: "សោន វាយោ",
       title: "និស្សិត | RUPP",
       quote:
