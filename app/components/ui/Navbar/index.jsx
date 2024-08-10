@@ -1,8 +1,9 @@
-'use client'
+"use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Brand from "../Brand";
 import NavLink from "../NavLink";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 const Navbar = () => {
   const [state, setState] = useState(false);
@@ -19,11 +20,11 @@ const Navbar = () => {
   return (
     <header>
       <nav
-        className={`bg-white w-full md:static md:text-sm ${
+        className={`w-full md:static md:text-sm ${
           state ? "fixed z-10 h-full" : ""
         }`}
       >
-        <div className="custom-screen items-center mx-auto md:flex">
+        <div className="custom-screen items-center mx-auto md:flex bg-white dark:bg-[#1B3761]">
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Brand />
             <div className="md:hidden">
@@ -72,7 +73,10 @@ const Navbar = () => {
           >
             <ul className="text-gray-700 justify-end items-center space-y-6 md:flex md:space-x-6 md:space-y-0 md:text-gray-600 md:font-medium">
               {navigation.map((item, idx) => (
-                <li key={idx} className="duration-150 hover:text-gray-900">
+                <li
+                  key={idx}
+                  className="duration-150 hover:text-gray-900 dark:text-gray-300"
+                >
                   <Link href={item.path} className="block">
                     {item.title}
                   </Link>
@@ -85,6 +89,9 @@ const Navbar = () => {
                 >
                   ទំនាក់ទំនង
                 </NavLink>
+              </li>
+              <li>
+                <ThemeSwitcher />
               </li>
             </ul>
           </div>

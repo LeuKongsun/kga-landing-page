@@ -32,7 +32,7 @@ const logos = [
 const LogoGrid = () => (
     <div>
         <div className="custom-screen">
-            <h2 className="font-semibold text-sm text-gray-600 text-center">
+            <h2 className="font-semibold text-sm text-gray-600 text-center dark:text-gray-300">
                 ជំនាញដែលយើងបាននឹងកំពុងបង្រៀន
             </h2>
             <div className="mt-6">

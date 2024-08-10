@@ -5,10 +5,10 @@ const FooterCTA = () => (
   <SectionWrapper>
     <div className="custom-screen">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+        <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl dark:text-gray-300">
           ចុះឈ្មោះចូលរៀនឥលូវនេះ
         </h2>
-        <p className="mt-3 text-gray-600">
+        <p className="mt-3 text-gray-600 dark:text-gray-300">
           រៀននៅថ្ងៃនេះ ជាស្ពានចម្លងទៅអនាគត និងអ្នកជំនាន់ក្រោយ។
           មើលពីភាពរីកចម្រើនពីក្នុងខ្លួន និងប្រជែងជាមួយខ្លួនឯងពីមួយថ្ងៃទៅមួយថ្ងៃ។
           រៀនជាមួយ​ KGA រៀនដោយទំនុកចិត្ត និងរៀនដោយភាពច្បាសល់លាស់។

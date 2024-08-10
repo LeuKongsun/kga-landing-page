@@ -1,8 +1,9 @@
 import { Noto_Sans_Khmer } from "next/font/google";
 import "./globals.css";
 import Layout from "./components/Layout";
+import { ThemeProvider } from "next-themes";
 
-const inter = Noto_Sans_Khmer({ subsets: ["khmer"],weight: "400" });
+const inter = Noto_Sans_Khmer({ subsets: ["khmer"], weight: "400" });
 
 export const metadata = {
   title: "Create Next App",

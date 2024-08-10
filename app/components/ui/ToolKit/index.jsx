@@ -1,6 +1,6 @@
 import SectionWrapper from "../../SectionWrapper"
 import Image from "next/image"
-import wordpress from "../../../../public/icons/kga-logo.svg"
+import kga from "../../../../public/icons/kga-logo.svg"
 import course from "../../../../public/icons/course.svg"
 import student from "../../../../public/icons/student.svg"
 import video from "../../../../public/icons/video.svg"
@@ -11,7 +11,7 @@ const ToolKit = () => {
 
     const descriptions = [
         {
-            icon: wordpress,
+            icon: kga,
             title: "KGA",
             desc: "Khmer GRS Academy គឺជាស្ថាប័នអប់រំផ្តោតទៅលើទីតាំងភូមិសាស្រ្តដែលបានបង្កើតឡើងក្នុងឆ្នាំ២០១៨។"
         },
@@ -23,7 +23,7 @@ const ToolKit = () => {
         {
             icon: student,
             title: "សិស្សរបស់យើង",
-            desc: "រហូតមកដល់ពេលនេះ យើងបានបង្រៀនសិស្សជាង៨០០នាក់រួចមកហើយ រួមមានទាំងស្ថាប័នឯកជន និងរដ្ឋដែលបានមកសិក្សានៅ KGA។"
+            desc: "រហូតមកដល់ពេលនេះ យើងបានបង្រៀនសិស្សជាច្រើននាក់រួចមកហើយ រួមមាននិស្សិត បុគ្គលិកមកពីស្ថាប័នឯកជន និងរដ្ឋជាដើម។"
         },
         {
             icon: video,
@@ -46,10 +46,10 @@ const ToolKit = () => {
         <SectionWrapper>
             <div id="toolkit" className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="max-w-2xl mx-auto space-y-3 sm:text-center">
-                    <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+                    <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl dark:text-gray-300">
                         ខ្មែរជីអាអេស អាខាដឺមី
                     </h2>
-                    <p>
+                    <p className="dark:text-gray-300">
                         ស្គាល់ពីស្ថាប័ន ស្គាល់ពីយើង និងចាប់ផ្តើមជាមួយគ្នា
                     </p>
                 </div>
@@ -59,13 +59,13 @@ const ToolKit = () => {
                             descriptions.map((item, idx) => (
                                 <li key={idx} className="flex gap-x-4">
                                     <div className="flex-none w-12 h-12 gradient-border rounded-full flex items-center justify-center">
-                                        <Image src={item.icon} alt={item.title} />
+                                        <Image src={item.icon} alt={item.title}/>
                                     </div>
                                     <div>
-                                        <h4 className="text-lg text-gray-800 font-semibold">
+                                        <h4 className="text-lg text-gray-800 font-semibold dark:text-gray-300">
                                             {item.title}
-                                        </h4>
-                                        <p className="mt-3">
+                                        </h4> 
+                                        <p className="mt-3 dark:text-gray-300">
                                             {item.desc}
                                         </p>
                                     </div>

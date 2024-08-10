@@ -1,53 +1,55 @@
+import Image from "next/image";
 import SectionWrapper from "../../SectionWrapper";
+import sowathWilly from '../../../../public/students/sowath_willy.jpg'
+import sabOur from '../../../../public/students/sab_our.jpg'
+import yunSaknika from '../../../../public/students/yun_saknika.jpg'
+import sreyJokjey from '../../../../public/students/srey_jokjey.jpg'
+import chhay from '../../../../public/students/chhay.jpeg'
+
 
 const Testimonials = () => {
   const testimonials = [
     {
-      avatar:
-        "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-      name: "វ្លាដេមៀរ ពូទីន",
-      title: "ប្រធាន KGA",
+      avatar: chhay,
+      name: "ឆេង ហុងឆាយ",
+      title: "និស្សិត | ITC, ហាត់ការ ODC",
       quote:
-        "ខ្ញុំធ្លាប់ជាសិស្សសិក្សានៅ KGA (មិនមែន KGB ដូចលោកពូទីនធ្លាប់ធ្វើ) ហើយឥលូវនេះខ្ញុំបានក្លាយជាសហស្ថាបនិកនៃស្ថាប័នអប់រំមួយនេះ។ ខ្ញុំពិតជាមានអារម្មណ៍សប្បាយរីករាយពេកក្រៃ និងបង្រៀនដោយអស់ពីចិត្តដើម្បីឲ្យសិស្សរបស់ខ្ញុំបានទទួលចំណេះទាំងអម្បាលមាណដែលខ្ញុំមាន។",
+        "ខ្ញុំធ្លាប់ជាសិស្សអាហារូបករណ៏នៅ KGA ជំនាន់ទី១ ខ្ញុំពិតជារំភេីបមែនទែនដែលបានជាប់អាហារូបករណ៏ជំនាន់ទី១នៅ KGA។ ក្រោយមកខ្ញុំក៏ក្លាយជំនួយការគ្រូបង្រៀននៅទីនេះ ដោយខ្ញុំធ្លាប់ជាសិស្សឆ្នើម។ ខ្ញុំក៏បាននឹងកំពុងបង្រៀនថ្នាក់អាហារូបករណ៍ទៅកាន់សិស្សជំនាន់ក្រោយៗផងដែរ។ ខ្ញុំរីករាយជាមួយការសិក្សានៅទីនេះ ហើយខ្ញុំពិតជាត្រេកអរជាមួយនឹងឱកាសដែលខ្ញុំទទួលបាន។ Shout out to all KGA Team.",
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-      name: "Karim ahmed",
-      title: "DevOps engineer",
+      avatar: sowathWilly,
+      name: "សុវត្ថិ វាលី",
+      title: "និស្សិត | TSI",
       quote:
-        "My company's software now is easy to use, saves time and money, and is loved by a lot of users. One customer saved $10k over the course of 3 years and another saves 8 hours per week! Thanks to Blinder.",
+        "ក្រោយបញ្ចប់ការសិក្សារបស់ខ្ញុំក្នុងវគ្គសិក្សាការផលិតផែនទី ខ្ញុំបានយល់ដឹងច្រើនអំពីការប្រើប្រាស់ឧបករណ៍(tools)ផ្សេងៗនិង command ជាច្រើនដើម្បីបង្កើតផែនទីដ៏ល្អ និងត្រឹមត្រូវ។ ខ្ញុំទទួលបានជំនាញសំខាន់ៗក្នុងការប្រើប្រាស់ Arcmap និង ArcGIS Pro ដូចជា ចំណេះដឹងទិន្នន័យផែនទី បង្កើតនិងកែសម្រួលផែនទី វិភាគទិន្នន័យភូមិសាស្រ្ត ជាដើម។ ខ្ញុំបានសង្កេតឃើញថាក្រោយពីខ្ញុំបានបញ្ចប់វគ្គសិក្សាពី khmer GRS Academy បានធ្វើអោយខ្ញុំទទួលបានចំណះដឹងច្បាស់ៗ ដើម្បីជាប្រយោជន៍ក្នុងការសិក្សា និងការងារនាពេលអនាគត។",
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-      name: "Lysa stian",
-      title: "System manger",
+      avatar: sabOur,
+      name: "សាប អួ",
+      title: "និស្សិត | RUPP",
       quote:
-        "My business was in a dire situation. I had no idea what to do, and I felt like I was losing hope. Then I found this Startup and everything changed. It helped me create automated sales.",
+        "ខ្ញុំពិតមានសំណាងដែលទទួលបានឱកាសចូលរៀននៅសាលា Khmer GIS Academy។ ការបង្រៀនរបស់លោកគ្រូល្អ ច្បាស់ៗ ងាយយល់ ទោះបីជាអ្នកចាប់ផ្តើមថ្មីក៏អាចរៀនបាន និងឆាប់ចាប់បានផងដែរ។ ការបង្រៀនរបស់លោកគ្រូពិតជាល្អ មានកិច្ចការផ្ទះ និងលំហាត់ជាច្រើនដែលដាក់អោយធ្វើ។ មានទិន្នន័យល្អៗ ជាពិសេសចំពោះអ្នកដែលធ្វើការងារខាងវិស័យដីឡូតិ៍ វិស័យយោធា វិស័យរដ្ឋបាល វិស័យអចនទ្រព្យជាដើម។ ក្រោយពេលដែលខ្ញុំបានបញ្ចប់ការសិក្សា ខ្ញុំក៏បានចូលធ្វើការងារស្ម័គ្រចិត្តផ្នែក GIS ហើយក៏ឃើញថាអ្វីដែលខ្ញុំបានរៀននៅ KGA គឺត្រឹមត្រូវច្រើនជាមួយនឹងការងារជាក់ស្តែង។",
     },
     {
-      avatar: "https://randomuser.me/api/portraits/women/79.jpg",
-      name: "Angela stian",
-      title: "Product designer",
+      avatar: yunSaknika,
+      name: "យន់ សក្តិនិកា",
+      title: "និស្សិត | TSI",
       quote:
-        "One day, my company was about to go under and I had no idea what to do. I found Blinder and it helped me get my business back on track.Now, my company is flourishing and I see new opportunities.",
+        "ខ្ញុំបានសិក្សាកម្មវិធីArcGis Pro រយៈពេល៧សប្ដាហ៍ ដែលនេះជាជំនាញថ្មីមួយសម្រាប់រូបខ្ញុំក្នុងការសិក្សាលើផែនទី និងទិន្នន័យភូមិសាស្រ្ត។ ហើយបន្ទាប់ពីបញ្ចប់ការសិក្សាលើកម្មវិធី ArcGis Pro នេះរួច ខ្ញុំបានទទួលនូវចំណេះដឹង និងប្រយោជន៍ជាច្រើន។ ArcGIS Pro បំផុសឱ្យខ្ញុំចង់ចេះ ចង់ដឹងបន្ថែមអំពីការវិភាគទិន្នន័យ និងការបង្កើតផែនទី ឬក៏ការសិក្សាបន្ថែមអំពី GIS ទូទៅ។ វាកម្មវិធីដ៏ខ្លាំងមួយដែលអាចជួយខ្ញុំក្នុងការវិភាគទិន្នន័យភូមិសាស្រ្តល្អ និងមានប្រយោជន៍ដូចជាការតាមដានបរិស្ថាន ឬការរៀបចំផែនទីសង្គម។ កម្មវិធីនេះបានបំផុសស្មារតីរបស់ខ្ញុំក្នុងការអភិវឌ្ឍន៍ជំនាញឱ្យកាន់តែខ្ពស់បន្ថែមទៀត។",
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1464863979621-258859e62245?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=386&q=80",
-      name: "Jurica koletic",
-      title: "Founder of Let’s code",
+      avatar: sreyJokjey,
+      name: "ស្រី ជោគជ័យ",
+      title: "និស្សិត | RUPP",
       quote:
-        "In these difficult economic times, doing business is tough. Funding is hard to come by and many entrepreneurs are struggling to keep their doors open. but when I found this startup everything changed.",
+        "បន្ទាប់ពីខ្ញុំបានបញ្ចប់ ArcMap និង QGIS ជាមួយនឹងសាលា Khmer GRS  Academy ខ្ញុំអាចយកវាមកធ្វើផែនទីផ្សេងៗទៅតាមតម្រូវការបាន។ នេះក៏ដោយសារតែការបង្រៀនរបស់លោកគ្រូនៅ Khmer GRS  Academy បានបង្រៀនដោយយកចិត្តទុកដាក់ ពន្យល់ក្បោះក្បាយច្បាស់ល្អទៅលើ Tool និងមុខងារនីមួយៗនៅក្នុងកម្មវីធី ហើយក៏មានមេរៀនគ្រប់គាន់ក្នុងការបង្រៀនផងដែរ។ ក្នុងឱកាសនេះខ្ញុំបាទសូមអរគុណលោកគ្រូដែលបានបង្ហាត់បង្រៀនដល់រូបខ្ញុំ និងនិស្សិតផ្សេងៗទៀត។ សូមជួនពរលោកគ្រូនៅក្នុងសាលា Khmer GRS  Academy ទាំងអស់ជួបតែសេចក្តីសុខសេចក្តីចម្រើន។",
     },
     {
-      avatar:
-        "https://images.unsplash.com/photo-1590038767624-dac5740a997b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-      name: "Kavi laron",
-      title: "Full stack engineer",
+      avatar: sowathWilly,
+      name: "សោន វាយោ",
+      title: "និស្សិត | RUPP",
       quote:
-        "We all know how costly it is to find good help. I was faced with this problem when I lost my data entry staff and my business was on the brink of going under. Thankfully, Blinder saved the day.",
+        "ក្នុងនាមខ្ញុំជាកូនសិស្សដែលធ្លាប់បានសិក្សារៀនសូត្រនៅក្នុងសាលា Khmer GRS Academy ខ្ញុំពិតជាពេញចិត្តខ្លាំងណាស់សម្រាប់កាផ្ដល់ឱកាសឲ្យសិស្សានុសិស្សបានសិក្សាអំពីជំនាញ GIS ដែលជាជំនាញមួយដែលពេញនិយមនៅក្នុងវិស័យឌីជីថល។ នៅក្នុងកាបង្រៀនរបស់លោកគ្រូគឺពិតជាល្អក្នុងការពន្យល់មេរៀនយ៉ាងក្បោះក្បាយដល់សិស្សានុសិស្ស និងបានយកចិត្តទុកដាក់ដល់សិស្សានុសិស្សគ្រាប់ៗគ្នា មិនតែប៉ុណ្ណោះលោគ្រូក៏បានលើកទឹកចិត្តឲ្យកូនសិស្សប្រឹងសិក្សារៀនសូ្រត។ ជាចុងក្រោយខ្ញុំសូមអរគុណដល់លោកគ្រូ  សូមឲ្យលោកគ្រូជួបតែសំណាងល្អនៅក្នុងជីវិត។",
     },
   ];
 
@@ -55,35 +57,35 @@ const Testimonials = () => {
     <SectionWrapper className="pb-0">
       <div id="testimonials" className="max-w-screen-xl mx-auto px-4 md:px-8">
         <div className="max-w-2xl sm:text-center md:mx-auto">
-          <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+          <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl dark:text-gray-300">
             មតិសិស្សរបស់យើង
           </h2>
-          <p className="mt-3 text-gray-600">
+          <p className="mt-3 text-gray-600 dark:text-gray-300">
             យើងតែងតែយកចិត្តទុកដាក់ទៅលើការបញ្ចេញមតិ និងការរិះគន់ស្ថាបនា ដើម្បីស្វែងរកភាពរីកចម្រើនទៅមុខ
           </p>
         </div>
         <div className="mt-12">
           <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((item, idx) => (
-              <li key={idx} className="bg-white border p-4 rounded-xl">
+              <li key={idx} className="border p-4 rounded-xl">
                 <figure>
                   <div className="flex items-center gap-x-4">
-                    <img
+                    <Image
                       src={item.avatar}
                       className="w-14 h-14 object-cover rounded-full"
                       alt={item.name}
                     />
                     <div>
-                      <span className="block text-gray-800 font-semibold">
+                      <span className="block text-gray-800 font-semibold dark:text-gray-300">
                         {item.name}
                       </span>
-                      <span className="block text-gray-600 text-sm mt-0.5">
+                      <span className="block text-gray-600 text-sm mt-0.5 dark:text-gray-300">
                         {item.title}
                       </span>
                     </div>
                   </div>
                   <blockquote>
-                    <p className="mt-6 text-gray-700">{item.quote}</p>
+                    <p className="mt-6 text-gray-700 dark:text-gray-300">{item.quote}</p>
                   </blockquote>
                 </figure>
               </li>

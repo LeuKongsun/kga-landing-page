@@ -8,7 +8,7 @@ const Contact = () => (
   <SectionWrapper>
     <div className="custom-screen">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+        <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl dark:text-white">
           ទំនាក់ទំនង
         </h2>
       </div>
@@ -23,14 +23,14 @@ const Contact = () => (
           </div>
           <div className="mb-6">
             <div className="flex gap-3">
-              <Image src={email} height="24" width="24" alt="phone" />
+              <Image src={email} height="24" width="24" alt="email" />
               <h3 className="font-bold text-lg">អាស័យដ្ឋានអ៉ីម៉ែល</h3>
             </div>
             <p>chanmolneang@gmail.com</p>
           </div>
           <div className="mb-6">
             <div className="flex gap-3">
-              <Image src={location} height="24" width="24" alt="phone" />
+              <Image src={location} height="24" width="24" alt="location" />
               <h3 className="font-bold text-lg">ទីតាំង</h3>
             </div>
             <p>អាគារលេខ៤៨ ផ្លូវ២៨៩ សង្កាត់បឹងកក់២ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ</p>
