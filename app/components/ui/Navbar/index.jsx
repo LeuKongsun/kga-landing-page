@@ -12,6 +12,7 @@ const Navbar = () => {
     { title: "មុខវិជ្ជា", path: "#courses" },
     { title: "អំពីយើង", path: "#toolkit" },
     { title: "សិស្សរបស់យើង", path: "#testimonials" },
+    { title: "ឯកសារ", path: "http://doc.khmergrs.com" },
   ];
   const toggleMenu = () => {
     setState(!state);
@@ -24,7 +25,7 @@ const Navbar = () => {
           state ? "fixed z-10 h-full" : ""
         }`}
       >
-        <div className="custom-screen items-center mx-auto md:flex bg-white dark:bg-[#1B3761]">
+        <div className="custom-screen items-center mx-auto md:flex bg-white dark:bg-gray-800">
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Brand />
             <div className="md:hidden">

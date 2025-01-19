@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
         {/* <link rel='icon' href='/favicon.ico' /> */}
       </Head>
       <ThemeProvider attribute="class" defaultTheme="light">
-        <div className="dark:bg-gradient-dark">
+        <div className="dark:bg-gray-800">
           <Navbar />
           <main>{children}</main>
           <Footer />
