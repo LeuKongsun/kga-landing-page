@@ -58,8 +58,8 @@ const ToolKit = () => {
                         {
                             descriptions.map((item, idx) => (
                                 <li key={idx} className="flex gap-x-4">
-                                    <div className="flex-none w-12 h-12 gradient-border rounded-full flex items-center justify-center">
-                                        <Image src={item.icon} alt={item.title}/>
+                                    <div className="flex-none w-12 h-12 gradient-border rounded-full flex items-center justify-center dark:bg-white/5 group-hover:scale-110 transition-transform duration-300">
+                                        <Image src={item.icon} alt={item.title} className="dark:invert transition-all duration-300 opacity-80 group-hover:opacity-100"/>
                                     </div>
                                     <div>
                                         <h4 className="text-lg text-gray-800 font-semibold dark:text-gray-300">

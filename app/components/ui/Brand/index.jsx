@@ -15,13 +15,17 @@ const Brand = () => {
   if (!mounted) return null
 
   return (
-    <Link href="/">
+    <Link href="/" className="flex items-center gap-3">
       <Image
         src={theme === "light" ? "/kga-logo-dark.svg" : "/kga-logo-light.svg"}
-        width={60}
-        height={20}
+        width={40}
+        height={40}
         alt="Kga logo"
+        className="w-10 h-10"
       />
+      <span className="text-lg font-bold text-foreground">
+        Khmer GRS Academy
+      </span>
     </Link>
   )
 }

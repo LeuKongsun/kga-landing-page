@@ -1,8 +1,10 @@
+'use client'
 import SectionWrapper from "../../SectionWrapper";
 import argis from "../../../../public/logos/arcgis.png";
 import arcgisPro from "../../../../public/logos/arcgis-pro-single.png";
 import qgis from "../../../../public/logos/qgis.png";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const Courses = () => {
   const courses = [
@@ -29,19 +31,35 @@ const Courses = () => {
   return (
     <SectionWrapper>
       <div id="courses" className="flex flex-col justify-center items-center">
-        <h1 className="text-3xl font-semibold mb-12">មុខវិជ្ជាដែលយើងបង្រៀន</h1>
-        <div className="custom-screen text-gray-600">
-          <ul className="grid gap-x-12 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.6 }}
+           viewport={{ once: true }}
+           className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4">មុខវិជ្ជាដែលយើងបង្រៀន</h2>
+          <div className="w-16 h-1.5 bg-primary mx-auto rounded-full"></div>
+        </motion.div>
+        <div className="custom-screen">
+          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((item, idx) => (
-              <li key={idx} className="space-y-3">
-                <div className="w-20 h-20 border text-indigo-600 rounded-full flex items-center justify-center">
-                  <Image src={item.icon} alt={item.alt} />
+              <motion.li 
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className="glass-card p-8 rounded-3xl group hover:shadow-primary/5"
+              >
+                <div className="w-24 h-24 mb-6 rounded-2xl bg-white dark:bg-white/10 p-4 border border-border group-hover:scale-110 transition-transform duration-500 shadow-sm flex items-center justify-center">
+                  <Image src={item.icon} alt={item.alt} className="w-full h-full object-contain" />
                 </div>
-                <h4 className="text-lg text-gray-800 font-semibold dark:text-gray-300">
+                <h4 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
                   {item.title}
                 </h4>
-                <p className="dark:text-gray-300">{item.desc}</p>
-              </li>
+                <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+              </motion.li>
             ))}
           </ul>
         </div>

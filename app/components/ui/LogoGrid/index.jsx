@@ -39,8 +39,8 @@ const LogoGrid = () => (
                 <ul className="flex gap-x-10 gap-y-6 flex-wrap items-center justify-center md:gap-x-16">
                     {
                         logos.map((item, idx) => (
-                            <li key={idx}>
-                                <Image className='sm:grayscale sm:hover:grayscale-0' src={item.src} alt={item.alt} height="40" width="100%"/>
+                            <li key={idx} className="group">
+                                <Image className='sm:grayscale sm:hover:grayscale-0 dark:invert opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110' src={item.src} alt={item.alt} height={40} width={100}/>
                             </li>
                         ))
                     }

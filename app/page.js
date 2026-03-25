@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Hero from "./components/ui/Hero";
 import LogoGrid from "./components/ui/LogoGrid";
 import GradientWrapper from "./components/GradientWrapper";
@@ -12,9 +11,6 @@ import Contact from "./components/ui/Contact";
 export default function Home() {
   return (
     <>
-      <Head>
-        <meta name='robots' content='index' />
-      </Head>
       <Hero />
       <LogoGrid />
       <GradientWrapper>
