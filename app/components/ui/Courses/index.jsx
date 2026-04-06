@@ -38,8 +38,8 @@ const Courses = () => {
            viewport={{ once: true }}
            className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4">មុខវិជ្ជាដែលយើងបង្រៀន</h2>
-          <div className="w-16 h-1.5 bg-primary mx-auto rounded-full"></div>
+          <h2 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">មុខវិជ្ជាដែលយើងបង្រៀន</h2>
+          <div className="w-16 h-1.5 bg-brand-orange mx-auto rounded-full"></div>
         </motion.div>
         <div className="custom-screen">
           <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -50,15 +50,16 @@ const Courses = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 rounded-3xl group hover:shadow-primary/5"
+                className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group"
               >
-                <div className="w-24 h-24 mb-6 rounded-2xl bg-white dark:bg-white/10 p-4 border border-border group-hover:scale-110 transition-transform duration-500 shadow-sm flex items-center justify-center">
+                <div className="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="w-14 h-14 mb-6 relative rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center p-3">
                   <Image src={item.icon} alt={item.alt} className="w-full h-full object-contain" />
                 </div>
-                <h4 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
+                <h4 className="text-xl font-display font-700 mb-3 text-brand-text dark:text-white">
                   {item.title}
                 </h4>
-                <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body">{item.desc}</p>
               </motion.li>
             ))}
           </ul>

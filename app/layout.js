@@ -1,9 +1,17 @@
-import { Noto_Sans_Khmer } from "next/font/google";
+import { Hanuman, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Layout from "./components/Layout";
-import { ThemeProvider } from "next-themes";
 
-const inter = Noto_Sans_Khmer({ subsets: ["khmer"], weight: "400" });
+const fontHanuman = Hanuman({
+  weight: ["100", "300", "400", "700", "900"],
+  subsets: ["khmer", "latin"],
+  variable: "--font-hanuman",
+});
+
+const fontJetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+});
 
 export const metadata = {
   title: "Khmer GRS Academy",
@@ -12,8 +20,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${fontHanuman.variable} ${fontJetbrains.variable}`}>
+      <body className="font-body" suppressHydrationWarning>
         <Layout>{children}</Layout>
       </body>
     </html>

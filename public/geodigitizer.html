@@ -1,0 +1,3449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>KGA Geodigitizer</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.16.0/dist/leaflet-geoman.css" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="16x16" href="kga geoditizer.png">
+<link rel="icon" type="image/png" sizes="32x32" href="kga geoditizer.png">
+<link rel="shortcut icon" href="kga geoditizer.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-dark:#0f1729;--bg-panel:#1a2440;--bg-card:#1f2e52;--bg-hover:#253660;
+  --accent:#00c9b7;--accent-glow:#00c9b740;--accent-dim:#00a89a;
+  --text:#e8ecf4;--text-dim:#8b97b5;--text-muted:#5a6785;
+  --border:#2a3a5c;--border-light:#354670;
+  --danger:#ff5c6a;--warning:#ffa94d;--success:#51cf66;
+  --point-color:#ff6b9d;--line-color:#4dabf7;--poly-color:#69db7c;
+  --radius:8px;--radius-lg:12px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);
+  --transition:0.2s cubic-bezier(0.4,0,0.2,1);
+}
+html.light{
+  --bg-dark:#e9ecf2;--bg-panel:#f5f6f9;--bg-card:#ffffff;--bg-hover:#ebedf3;
+  --accent:#00897b;--accent-glow:#00897b30;--accent-dim:#00796b;
+  --text:#1a2440;--text-dim:#4a5568;--text-muted:#8b97b5;
+  --border:#d2d6e0;--border-light:#c4c9d6;
+  --danger:#e53e3e;--warning:#dd6b20;--success:#38a169;
+  --shadow:0 4px 24px rgba(0,0,0,0.1);
+}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--bg-dark);color:var(--text);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#app{display:grid;grid-template-columns:56px 1fr 300px;grid-template-rows:48px 1fr 36px;height:100%;width:100vw}
+
+/* Top Bar */
+.topbar{grid-column:1/-1;background:var(--bg-panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:1000;overflow-x:auto;overflow-y:hidden;white-space:nowrap}
+.topbar::-webkit-scrollbar{display:none}
+.topbar > *{flex-shrink:0}
+.topbar .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:0.5px}
+.topbar .logo svg{width:24px;height:24px}
+.topbar .logo span.kga{color:var(--accent)}
+.topbar-spacer{flex:1}
+.topbar-group{display:flex;align-items:center;gap:6px}
+.basemap-select{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:var(--radius);font-family:inherit;font-size:12px;cursor:pointer;outline:none}
+.basemap-select:focus{border-color:var(--accent)}
+.topbar-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:var(--radius);font-family:inherit;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:var(--transition)}
+.topbar-btn:hover{background:var(--bg-hover);color:var(--text);border-color:var(--border-light)}
+.topbar-btn.active{background:var(--accent);color:var(--bg-dark);border-color:var(--accent)}
+.topbar-btn svg{width:14px;height:14px}
+
+/* Theme Toggle */
+.theme-toggle{display:flex;align-items:center;gap:6px}
+.theme-toggle label{font-size:11px;color:var(--text-muted)}
+.toggle-switch{position:relative;width:36px;height:20px;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;transition:var(--transition)}
+.toggle-track::before{content:'';position:absolute;width:14px;height:14px;left:2px;top:2px;background:var(--text-muted);border-radius:50%;transition:var(--transition)}
+.toggle-switch input:checked+.toggle-track{background:var(--accent);border-color:var(--accent)}
+.toggle-switch input:checked+.toggle-track::before{transform:translateX(16px);background:#fff}
+.theme-icons{display:flex;gap:2px;align-items:center}
+.theme-icons svg{width:14px;height:14px;color:var(--text-muted);transition:var(--transition)}
+.theme-icons .icon-active{color:var(--accent)}
+
+/* CRS Select */
+.crs-select{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:var(--radius);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;outline:none}
+.crs-select:focus{border-color:var(--accent)}
+.topbar-divider{width:1px;height:24px;background:var(--border);margin:0 4px}
+
+/* Style Controls */
+.style-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.style-row label{font-size:11px;color:var(--text-dim);min-width:60px;white-space:nowrap}
+.style-row input[type="color"]{width:28px;height:22px;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:var(--bg-card);padding:1px}
+.style-row input[type="range"]{flex:1;height:4px;-webkit-appearance:none;appearance:none;background:var(--border);border-radius:2px;outline:none}
+.style-row input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg-panel)}
+.style-row input[type="range"]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg-panel)}
+.style-row select{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px;font-size:11px;outline:none;flex:1}
+.style-row .val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);min-width:30px;text-align:right}
+.style-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:10px}
+.style-section-title{font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.style-section-title .dot{width:8px;height:8px;border-radius:50%}
+.style-preview{display:flex;align-items:center;justify-content:center;height:40px;background:var(--bg-dark);border-radius:4px;margin-bottom:8px;overflow:hidden}
+
+/* Left Toolbar */
+.toolbar{grid-row:2;background:var(--bg-panel);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px;z-index:900}
+.tool-btn{width:40px;height:40px;border:none;background:transparent;color:var(--text-dim);border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);position:relative}
+.tool-btn:hover{background:var(--bg-hover);color:var(--text)}
+.tool-btn.active{background:var(--accent);color:var(--bg-dark)}
+.tool-btn svg{width:20px;height:20px}
+.tool-sep{width:28px;height:1px;background:var(--border);margin:4px 0}
+.tool-btn[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);background:var(--bg-dark);color:var(--text);padding:4px 8px;border-radius:4px;font-size:11px;white-space:nowrap;z-index:9999;border:1px solid var(--border);pointer-events:none}
+
+/* Universal tooltip for any element */
+[data-tooltip]{position:relative}
+.topbar-btn[data-tooltip]:hover::after,.basemap-select[data-tooltip]:hover::after,.crs-select[data-tooltip]:hover::after,.toggle-switch[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg-dark);color:var(--text);padding:4px 8px;border-radius:4px;font-size:11px;white-space:nowrap;z-index:9999;border:1px solid var(--border);pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.export-btn[data-tooltip]:hover::after,.btn-sm[data-tooltip]:hover::after,.vis-toggle[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg-dark);color:var(--text);padding:4px 8px;border-radius:4px;font-size:11px;white-space:nowrap;z-index:9999;border:1px solid var(--border);pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+
+/* Map */
+.map-container{grid-row:2;position:relative;z-index:1}
+#map{width:100%;height:100%;background:var(--bg-dark)}
+.leaflet-control-zoom{border:none!important}
+.leaflet-control-zoom a{background:var(--bg-panel)!important;color:var(--text)!important;border:1px solid var(--border)!important;width:32px!important;height:32px!important;line-height:32px!important;font-size:16px!important}
+.leaflet-control-zoom a:hover{background:var(--bg-hover)!important}
+.leaflet-bar{border:none!important;box-shadow:var(--shadow)!important}
+.leaflet-control-scale-line{background:var(--bg-panel)!important;color:var(--text-dim)!important;border-color:var(--border)!important;font-family:'JetBrains Mono',monospace!important;font-size:10px!important;padding:2px 6px!important}
+
+/* Right Panel */
+.right-panel{grid-row:2;background:var(--bg-panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:900}
+.panel-tabs{display:flex;border-bottom:1px solid var(--border)}
+.panel-tab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition)}
+.panel-tab:hover{color:var(--text);background:var(--bg-card)}
+.panel-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.panel-content{flex:1;overflow-y:auto;padding:12px}
+.panel-content::-webkit-scrollbar{width:5px}
+.panel-content::-webkit-scrollbar-track{background:transparent}
+.panel-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.panel-section{margin-bottom:16px}
+.panel-section-title{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+
+/* Layer Items */
+.layer-group{margin-bottom:12px}
+.layer-group-header{display:flex;align-items:center;gap:6px;padding:6px 8px;background:var(--bg-card);border-radius:var(--radius);margin-bottom:4px;cursor:pointer}
+.layer-group-header .dot{width:8px;height:8px;border-radius:50%}
+.layer-group-header .dot.point{background:var(--point-color)}
+.layer-group-header .dot.line{background:var(--line-color)}
+.layer-group-header .dot.polygon{background:var(--poly-color)}
+.layer-group-header span{font-size:12px;font-weight:600;flex:1}
+.layer-group-header .count{font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.layer-item{display:flex;align-items:center;gap:6px;padding:5px 8px 5px 20px;border-radius:4px;cursor:pointer;transition:var(--transition);font-size:12px}
+.layer-item:hover{background:var(--bg-hover)}
+.layer-item.selected{background:var(--bg-hover);border-left:2px solid var(--accent)}
+.layer-item .vis-toggle{width:16px;height:16px;border:1px solid var(--border);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--accent);font-size:10px;flex-shrink:0}
+.layer-item .vis-toggle.on{background:var(--accent);border-color:var(--accent);color:var(--bg-dark)}
+.layer-item .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.layer-item .del-btn{opacity:0;width:18px;height:18px;border:none;background:transparent;color:var(--danger);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:3px;flex-shrink:0}
+.layer-item:hover .del-btn{opacity:1}
+.layer-item .del-btn:hover{background:rgba(255,92,106,0.15)}
+
+/* Feature Properties */
+.prop-form{display:flex;flex-direction:column;gap:8px}
+.prop-field label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:3px}
+.prop-field input,.prop-field textarea{width:100%;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:var(--radius);font-family:inherit;font-size:12px;outline:none;resize:vertical}
+.prop-field input:focus,.prop-field textarea:focus{border-color:var(--accent)}
+.prop-field textarea{min-height:60px}
+.prop-actions{display:flex;gap:6px;margin-top:4px}
+.btn-sm{padding:5px 12px;border-radius:var(--radius);font-size:12px;font-family:inherit;font-weight:600;cursor:pointer;border:1px solid var(--border);transition:var(--transition)}
+.btn-primary{background:var(--accent);color:var(--bg-dark);border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent-dim)}
+.btn-ghost{background:transparent;color:var(--text-dim)}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text)}
+.btn-danger{background:transparent;color:var(--danger);border-color:var(--danger)}
+.btn-danger:hover{background:rgba(255,92,106,0.1)}
+.no-selection{color:var(--text-muted);font-size:12px;text-align:center;padding:20px 0}
+
+/* Export Panel */
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.export-btn{padding:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:var(--transition);font-family:inherit}
+.export-btn:hover{border-color:var(--accent);background:var(--bg-hover)}
+.export-btn svg{width:22px;height:22px;color:var(--accent)}
+.export-btn .fmt{font-size:12px;font-weight:600}
+.export-btn .desc{font-size:10px;color:var(--text-muted)}
+.export-filename{margin-bottom:10px}
+.export-filename label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:3px}
+.export-filename input{width:100%;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:var(--radius);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none}
+.export-filename input:focus{border-color:var(--accent)}
+
+/* Import */
+.import-zone{border:2px dashed var(--border);border-radius:var(--radius-lg);padding:20px;text-align:center;cursor:pointer;transition:var(--transition);margin-bottom:12px}
+.import-zone:hover{border-color:var(--accent);background:var(--bg-card)}
+.import-zone svg{width:28px;height:28px;color:var(--text-muted);margin-bottom:6px}
+.import-zone p{font-size:12px;color:var(--text-dim)}
+.import-zone .formats{font-size:10px;color:var(--text-muted);margin-top:4px}
+
+/* Status Bar */
+.statusbar{grid-column:1/-1;background:var(--bg-panel);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:16px;font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;z-index:1000}
+.statusbar .coord{color:var(--accent)}
+.statusbar .sep{color:var(--border)}
+.statusbar-spacer{flex:1}
+.feature-count{display:flex;gap:10px}
+.feature-count span{display:flex;align-items:center;gap:3px}
+.feature-count .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+
+/* Popups */
+.leaflet-popup-content-wrapper{background:var(--bg-panel)!important;color:var(--text)!important;border-radius:var(--radius-lg)!important;box-shadow:var(--shadow)!important;border:1px solid var(--border)!important}
+.leaflet-popup-tip{background:var(--bg-panel)!important;border:1px solid var(--border)!important}
+.leaflet-popup-close-button{color:var(--text-dim)!important}
+
+/* Measurement Tooltip */
+.measure-tooltip{background:var(--bg-panel);color:var(--accent);padding:3px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid var(--border);box-shadow:var(--shadow);white-space:nowrap}
+
+/* Feature Labels */
+.feature-label{background:transparent!important;border:none!important}
+.feature-label span{background:rgba(0,0,0,0.7);color:#fff;padding:2px 6px;border-radius:3px;font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap;border:1px solid rgba(255,255,255,0.15)}
+html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;border:1px solid rgba(0,0,0,0.15)}
+
+/* Snap indicator pulse */
+.snap-active .leaflet-container{cursor:crosshair!important}
+
+/* Right-click context menu */
+.ctx-menu{position:fixed;z-index:20000;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:4px 0;min-width:170px;display:none}
+.ctx-menu.show{display:block;animation:ctxIn 0.12s ease}
+@keyframes ctxIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+.ctx-menu-item{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:background 0.1s}
+.ctx-menu-item:hover{background:var(--bg-hover)}
+.ctx-menu-item svg{width:14px;height:14px;color:var(--text-dim);flex-shrink:0}
+.ctx-menu-item .shortcut{margin-left:auto;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.ctx-menu-item.danger{color:var(--danger)}
+.ctx-menu-item.danger svg{color:var(--danger)}
+.ctx-menu-sep{height:1px;background:var(--border);margin:4px 0}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;width:420px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:translateY(10px);transition:transform 0.2s}
+.modal-overlay.show .modal{transform:translateY(0)}
+.modal h3{font-size:16px;margin-bottom:16px;color:var(--text)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
+/* Toast */
+.toast-container{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);z-index:10001;display:flex;flex-direction:column;gap:6px;align-items:center}
+.toast{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:var(--radius);font-size:12px;box-shadow:var(--shadow);animation:toastIn 0.3s ease,toastOut 0.3s ease 2.5s forwards;display:flex;align-items:center;gap:6px}
+.toast.success{border-color:var(--success);color:var(--success)}
+.toast.error{border-color:var(--danger);color:var(--danger)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0}}
+
+/* Geoman overrides */
+.leaflet-pm-toolbar .leaflet-pm-icon-marker-removal{display:none}
+.button-container{background:var(--bg-panel)!important;border-color:var(--border)!important}
+.leaflet-pm-actions-container{background:var(--bg-panel)!important;border-color:var(--border)!important}
+.leaflet-pm-actions-container a{color:var(--text)!important;background:var(--bg-card)!important}
+
+/* Loading */
+.loading-screen{position:fixed;inset:0;background:var(--bg-dark);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s}
+.loading-screen.fade{opacity:0;pointer-events:none}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-screen p{margin-top:16px;color:var(--text-dim);font-size:13px}
+
+/* Responsive - Mobile & Tablet */
+@media(max-width:932px){
+  #app{grid-template-columns:1fr;grid-template-rows:44px 1fr auto 30px;grid-template-areas:"topbar" "map" "toolbar-bottom" "statusbar"}
+  .topbar{grid-area:topbar;padding:0 6px;gap:6px;height:44px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  .topbar::-webkit-scrollbar{display:none}
+  .topbar .logo{gap:4px;flex-shrink:0}
+  .topbar .logo svg,.topbar .logo img{width:20px;height:20px}
+  .topbar .logo span{display:none}
+  .topbar-spacer{display:none !important}
+  .topbar-group label{display:none}
+  .topbar-group{flex-shrink:0}
+  .topbar-divider{display:none}
+  .theme-toggle{display:flex !important; align-items:center; flex-shrink:0}
+  .topbar-btn{padding:4px 6px;font-size:10px;gap:3px;flex-shrink:0}
+  .topbar-btn svg{width:12px;height:12px}
+  .topbar-group .topbar-btn span:not(.kga){display:none}
+  .basemap-select,.crs-select{font-size:10px;padding:3px 6px;max-width:110px}
+
+  /* Left toolbar → bottom horizontal bar */
+  .toolbar{grid-area:toolbar-bottom;flex-direction:row;border-right:none;border-top:1px solid var(--border);padding:4px 8px;gap:4px;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;-webkit-overflow-scrolling:touch}
+  .toolbar::-webkit-scrollbar{display:none}
+  .tool-btn{width:36px;height:36px;flex-shrink:0}
+  .tool-btn svg{width:18px;height:18px}
+  .tool-sep{width:1px;height:24px;margin:0 2px;flex-shrink:0}
+  .tool-btn[data-tooltip]:hover::after{display:none}
+
+  /* Map fills the center */
+  .map-container{grid-area:map;min-height:0;min-width:0}
+
+  /* Right panel → slide-over from right */
+  .right-panel{display:flex!important;position:fixed;top:44px;right:0;bottom:0;width:280px;z-index:2000;transform:translateX(100%);transition:transform 0.25s ease;box-shadow:-4px 0 20px rgba(0,0,0,0.3)}
+  .right-panel.mobile-open{transform:translateX(0)}
+
+  /* Status bar */
+  .statusbar{grid-area:statusbar;font-size:9px;gap:6px;padding:0 6px}
+  .statusbar .sep{display:none}
+  .statusbar span:nth-child(n+5){display:none}
+  .feature-count span{font-size:9px}
+}
+
+/* Mobile panel toggle button */
+.mobile-panel-toggle{display:none;position:fixed;bottom:76px;right:12px;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--bg-dark);border:none;cursor:pointer;z-index:2001;box-shadow:0 4px 16px rgba(0,0,0,0.3);align-items:center;justify-content:center;transition:var(--transition)}
+.mobile-panel-toggle svg{width:22px;height:22px}
+.mobile-panel-toggle.open{background:var(--danger)}
+.mobile-panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1999}
+.mobile-panel-overlay.show{display:block}
+
+@media(max-width:932px){
+  .mobile-panel-toggle{display:flex}
+}
+/* Mobile Digitizing Draw Mode */
+#mapCrosshair {
+  position:absolute; top:50%; left:50%; width:32px; height:32px;
+  transform:translate(-50%, -50%); z-index:1000; pointer-events:none;
+  color:var(--danger); filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.mobile-draw-toolbar {
+  grid-column:1/-1; grid-area:toolbar-bottom;
+  background:var(--bg-panel); border-top:1px solid var(--border);
+  padding:8px 12px; z-index:1001; flex-direction:column; gap:6px;
+}
+.mobile-draw-info { display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+.mobile-draw-actions { display:flex; gap:8px; justify-content:space-between; }
+.mobile-draw-actions button { flex:1; font-size:12px; font-weight:600; padding:8px 0; }
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <p>Initializing KGA Geodigitizer...</p>
+</div>
+
+<div id="app">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="logo">
+      <img src="kga geoditizer.png" alt="KGA Logo" width="24" height="24">
+      <span><span class="kga">KGA</span> Geodigitizer</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-group">
+      <label style="font-size:11px;color:var(--text-muted)">CRS:</label>
+      <select class="crs-select" id="crsSelect" data-tooltip="Coordinate Reference System">
+        <optgroup label="★ Common">
+          <option value="4326">WGS 84 (EPSG:4326)</option>
+          <option value="32648">WGS 84 / UTM Zone 48N (EPSG:32648)</option>
+          <option value="3857">Web Mercator (EPSG:3857)</option>
+        </optgroup>
+        <optgroup label="UTM North (WGS 84)">
+          <option value="32601">UTM Zone 1N (EPSG:32601)</option>
+          <option value="32602">UTM Zone 2N (EPSG:32602)</option>
+          <option value="32603">UTM Zone 3N (EPSG:32603)</option>
+          <option value="32604">UTM Zone 4N (EPSG:32604)</option>
+          <option value="32605">UTM Zone 5N (EPSG:32605)</option>
+          <option value="32606">UTM Zone 6N (EPSG:32606)</option>
+          <option value="32607">UTM Zone 7N (EPSG:32607)</option>
+          <option value="32608">UTM Zone 8N (EPSG:32608)</option>
+          <option value="32609">UTM Zone 9N (EPSG:32609)</option>
+          <option value="32610">UTM Zone 10N (EPSG:32610)</option>
+          <option value="32611">UTM Zone 11N (EPSG:32611)</option>
+          <option value="32612">UTM Zone 12N (EPSG:32612)</option>
+          <option value="32613">UTM Zone 13N (EPSG:32613)</option>
+          <option value="32614">UTM Zone 14N (EPSG:32614)</option>
+          <option value="32615">UTM Zone 15N (EPSG:32615)</option>
+          <option value="32616">UTM Zone 16N (EPSG:32616)</option>
+          <option value="32617">UTM Zone 17N (EPSG:32617)</option>
+          <option value="32618">UTM Zone 18N (EPSG:32618)</option>
+          <option value="32619">UTM Zone 19N (EPSG:32619)</option>
+          <option value="32620">UTM Zone 20N (EPSG:32620)</option>
+          <option value="32621">UTM Zone 21N (EPSG:32621)</option>
+          <option value="32622">UTM Zone 22N (EPSG:32622)</option>
+          <option value="32623">UTM Zone 23N (EPSG:32623)</option>
+          <option value="32624">UTM Zone 24N (EPSG:32624)</option>
+          <option value="32625">UTM Zone 25N (EPSG:32625)</option>
+          <option value="32626">UTM Zone 26N (EPSG:32626)</option>
+          <option value="32627">UTM Zone 27N (EPSG:32627)</option>
+          <option value="32628">UTM Zone 28N (EPSG:32628)</option>
+          <option value="32629">UTM Zone 29N (EPSG:32629)</option>
+          <option value="32630">UTM Zone 30N (EPSG:32630)</option>
+          <option value="32631">UTM Zone 31N (EPSG:32631)</option>
+          <option value="32632">UTM Zone 32N (EPSG:32632)</option>
+          <option value="32633">UTM Zone 33N (EPSG:32633)</option>
+          <option value="32634">UTM Zone 34N (EPSG:32634)</option>
+          <option value="32635">UTM Zone 35N (EPSG:32635)</option>
+          <option value="32636">UTM Zone 36N (EPSG:32636)</option>
+          <option value="32637">UTM Zone 37N (EPSG:32637)</option>
+          <option value="32638">UTM Zone 38N (EPSG:32638)</option>
+          <option value="32639">UTM Zone 39N (EPSG:32639)</option>
+          <option value="32640">UTM Zone 40N (EPSG:32640)</option>
+          <option value="32641">UTM Zone 41N (EPSG:32641)</option>
+          <option value="32642">UTM Zone 42N (EPSG:32642)</option>
+          <option value="32643">UTM Zone 43N (EPSG:32643)</option>
+          <option value="32644">UTM Zone 44N (EPSG:32644)</option>
+          <option value="32645">UTM Zone 45N (EPSG:32645)</option>
+          <option value="32646">UTM Zone 46N (EPSG:32646)</option>
+          <option value="32647">UTM Zone 47N (EPSG:32647)</option>
+          <option value="32649">UTM Zone 49N (EPSG:32649)</option>
+          <option value="32650">UTM Zone 50N (EPSG:32650)</option>
+          <option value="32651">UTM Zone 51N (EPSG:32651)</option>
+          <option value="32652">UTM Zone 52N (EPSG:32652)</option>
+          <option value="32653">UTM Zone 53N (EPSG:32653)</option>
+          <option value="32654">UTM Zone 54N (EPSG:32654)</option>
+          <option value="32655">UTM Zone 55N (EPSG:32655)</option>
+          <option value="32656">UTM Zone 56N (EPSG:32656)</option>
+          <option value="32657">UTM Zone 57N (EPSG:32657)</option>
+          <option value="32658">UTM Zone 58N (EPSG:32658)</option>
+          <option value="32659">UTM Zone 59N (EPSG:32659)</option>
+          <option value="32660">UTM Zone 60N (EPSG:32660)</option>
+        </optgroup>
+        <optgroup label="UTM South (WGS 84)">
+          <option value="32701">UTM Zone 1S (EPSG:32701)</option>
+          <option value="32702">UTM Zone 2S (EPSG:32702)</option>
+          <option value="32703">UTM Zone 3S (EPSG:32703)</option>
+          <option value="32704">UTM Zone 4S (EPSG:32704)</option>
+          <option value="32705">UTM Zone 5S (EPSG:32705)</option>
+          <option value="32706">UTM Zone 6S (EPSG:32706)</option>
+          <option value="32707">UTM Zone 7S (EPSG:32707)</option>
+          <option value="32708">UTM Zone 8S (EPSG:32708)</option>
+          <option value="32709">UTM Zone 9S (EPSG:32709)</option>
+          <option value="32710">UTM Zone 10S (EPSG:32710)</option>
+          <option value="32711">UTM Zone 11S (EPSG:32711)</option>
+          <option value="32712">UTM Zone 12S (EPSG:32712)</option>
+          <option value="32713">UTM Zone 13S (EPSG:32713)</option>
+          <option value="32714">UTM Zone 14S (EPSG:32714)</option>
+          <option value="32715">UTM Zone 15S (EPSG:32715)</option>
+          <option value="32716">UTM Zone 16S (EPSG:32716)</option>
+          <option value="32717">UTM Zone 17S (EPSG:32717)</option>
+          <option value="32718">UTM Zone 18S (EPSG:32718)</option>
+          <option value="32719">UTM Zone 19S (EPSG:32719)</option>
+          <option value="32720">UTM Zone 20S (EPSG:32720)</option>
+          <option value="32721">UTM Zone 21S (EPSG:32721)</option>
+          <option value="32722">UTM Zone 22S (EPSG:32722)</option>
+          <option value="32723">UTM Zone 23S (EPSG:32723)</option>
+          <option value="32724">UTM Zone 24S (EPSG:32724)</option>
+          <option value="32725">UTM Zone 25S (EPSG:32725)</option>
+          <option value="32726">UTM Zone 26S (EPSG:32726)</option>
+          <option value="32727">UTM Zone 27S (EPSG:32727)</option>
+          <option value="32728">UTM Zone 28S (EPSG:32728)</option>
+          <option value="32729">UTM Zone 29S (EPSG:32729)</option>
+          <option value="32730">UTM Zone 30S (EPSG:32730)</option>
+          <option value="32731">UTM Zone 31S (EPSG:32731)</option>
+          <option value="32732">UTM Zone 32S (EPSG:32732)</option>
+          <option value="32733">UTM Zone 33S (EPSG:32733)</option>
+          <option value="32734">UTM Zone 34S (EPSG:32734)</option>
+          <option value="32735">UTM Zone 35S (EPSG:32735)</option>
+          <option value="32736">UTM Zone 36S (EPSG:32736)</option>
+          <option value="32737">UTM Zone 37S (EPSG:32737)</option>
+          <option value="32738">UTM Zone 38S (EPSG:32738)</option>
+          <option value="32739">UTM Zone 39S (EPSG:32739)</option>
+          <option value="32740">UTM Zone 40S (EPSG:32740)</option>
+          <option value="32741">UTM Zone 41S (EPSG:32741)</option>
+          <option value="32742">UTM Zone 42S (EPSG:32742)</option>
+          <option value="32743">UTM Zone 43S (EPSG:32743)</option>
+          <option value="32744">UTM Zone 44S (EPSG:32744)</option>
+          <option value="32745">UTM Zone 45S (EPSG:32745)</option>
+          <option value="32746">UTM Zone 46S (EPSG:32746)</option>
+          <option value="32747">UTM Zone 47S (EPSG:32747)</option>
+          <option value="32748">UTM Zone 48S (EPSG:32748)</option>
+          <option value="32749">UTM Zone 49S (EPSG:32749)</option>
+          <option value="32750">UTM Zone 50S (EPSG:32750)</option>
+          <option value="32751">UTM Zone 51S (EPSG:32751)</option>
+          <option value="32752">UTM Zone 52S (EPSG:32752)</option>
+          <option value="32753">UTM Zone 53S (EPSG:32753)</option>
+          <option value="32754">UTM Zone 54S (EPSG:32754)</option>
+          <option value="32755">UTM Zone 55S (EPSG:32755)</option>
+          <option value="32756">UTM Zone 56S (EPSG:32756)</option>
+          <option value="32757">UTM Zone 57S (EPSG:32757)</option>
+          <option value="32758">UTM Zone 58S (EPSG:32758)</option>
+          <option value="32759">UTM Zone 59S (EPSG:32759)</option>
+          <option value="32760">UTM Zone 60S (EPSG:32760)</option>
+        </optgroup>
+        <optgroup label="Geographic / Regional">
+          <option value="4269">NAD83 (EPSG:4269)</option>
+          <option value="4267">NAD27 (EPSG:4267)</option>
+          <option value="4674">SIRGAS 2000 (EPSG:4674)</option>
+          <option value="4283">GDA94 (EPSG:4283)</option>
+          <option value="7844">GDA2020 (EPSG:7844)</option>
+          <option value="4612">JGD2000 (EPSG:4612)</option>
+          <option value="4610">Xian 1980 (EPSG:4610)</option>
+          <option value="4490">CGCS2000 (EPSG:4490)</option>
+          <option value="4214">Beijing 1954 (EPSG:4214)</option>
+          <option value="4258">ETRS89 (EPSG:4258)</option>
+          <option value="4148">Hartebeesthoek94 (EPSG:4148)</option>
+          <option value="4170">SIRGAS (EPSG:4170)</option>
+        </optgroup>
+        <optgroup label="National Grids">
+          <option value="27700">British National Grid (EPSG:27700)</option>
+          <option value="2154">RGF93 Lambert-93 France (EPSG:2154)</option>
+          <option value="25832">ETRS89 / UTM 32N Germany (EPSG:25832)</option>
+          <option value="25833">ETRS89 / UTM 33N (EPSG:25833)</option>
+          <option value="2193">NZGD2000 / NZTM (EPSG:2193)</option>
+          <option value="28992">Amersfoort / RD New Netherlands (EPSG:28992)</option>
+          <option value="3006">SWEREF99 TM Sweden (EPSG:3006)</option>
+          <option value="3035">ETRS89-LAEA Europe (EPSG:3035)</option>
+          <option value="3034">ETRS89-LCC Europe (EPSG:3034)</option>
+          <option value="2056">CH1903+ / LV95 Switzerland (EPSG:2056)</option>
+          <option value="3857">Web Mercator (EPSG:3857)</option>
+          <option value="3395">World Mercator (EPSG:3395)</option>
+          <option value="3785">Popular Web Mercator (EPSG:3785)</option>
+          <option value="32246">NAD27 / State Plane (EPSG:32246)</option>
+          <option value="2229">NAD83 CA Zone 5 ft (EPSG:2229)</option>
+          <option value="2263">NAD83 NY Long Island ft (EPSG:2263)</option>
+          <option value="6933">WGS84 / NSIDC EASE-Grid 2.0 (EPSG:6933)</option>
+          <option value="3577">GDA94 / Australian Albers (EPSG:3577)</option>
+          <option value="24047">Indian 1975 / UTM 47N (EPSG:24047)</option>
+          <option value="24048">Indian 1975 / UTM 48N (EPSG:24048)</option>
+        </optgroup>
+        <optgroup label="Polar / Global">
+          <option value="3413">WGS84 / NSIDC Sea Ice North (EPSG:3413)</option>
+          <option value="3031">WGS84 / Antarctic Polar (EPSG:3031)</option>
+          <option value="4087">WGS84 / Equidistant Cyl. (EPSG:4087)</option>
+          <option value="54009">Mollweide (ESRI:54009)</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-group">
+      <label style="font-size:11px;color:var(--text-muted)">Basemap:</label>
+      <select class="basemap-select" id="basemapSelect" data-tooltip="Change Basemap">
+        <option value="google_satellite" selected>Google Satellite</option>
+        <option value="google_hybrid">Google Hybrid</option>
+        <option value="google_road">Google Roads</option>
+        <option value="google_terrain">Google Terrain</option>
+        <option value="osm">OpenStreetMap (CARTO Voyager)</option>
+        <option value="satellite">Satellite (Esri)</option>
+        <option value="dark">Dark Mode</option>
+        <option value="topo">Topographic</option>
+      </select>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="theme-toggle">
+      <div class="theme-icons">
+        <svg id="iconSun" class="icon-active" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </div>
+      <label class="toggle-switch" data-tooltip="Toggle Light / Dark Mode">
+        <input type="checkbox" id="themeToggle" checked>
+        <span class="toggle-track"></span>
+      </label>
+      <div class="theme-icons">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </div>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-group">
+      <div class="topbar-group" style="position:relative">
+        <button class="topbar-btn" id="btnMeasureLength" data-tooltip="Measure Length">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22L22 2"/><path d="M6 18l2-2"/><path d="M10 14l2-2"/><path d="M14 10l2-2"/><path d="M18 6l2-2"/></svg>
+          <span>Length</span>
+        </button>
+        <button class="topbar-btn" id="btnMeasureArea" data-tooltip="Measure Area">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 3v18" stroke-dasharray="2,2" opacity="0.4"/></svg>
+          <span>Area</span>
+        </button>
+        <button class="topbar-btn" id="btnMeasureDirection" data-tooltip="Measure Bearing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="M12 12l4-6" stroke-width="2.5"/></svg>
+          <span>Bearing</span>
+        </button>
+      <button class="topbar-btn" id="btnUndo" data-tooltip="Undo (Ctrl+Z)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 2.64-6.36L3 7"/></svg>
+      </button>
+      <button class="topbar-btn" id="btnRedo" data-tooltip="Redo (Ctrl+Y)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M21 13a9 9 0 1 1-2.64-6.36L21 7"/></svg>
+      </button>
+      <button class="topbar-btn" id="btnImport" data-tooltip="Import GeoJSON / KML">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Import</span>
+      </button>
+      <button class="topbar-btn" id="btnExportTop" data-tooltip="Export Data" style="background:var(--accent);color:var(--bg-dark);border-color:var(--accent)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Export</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Left Toolbar -->
+  <aside class="toolbar">
+    <button class="tool-btn" id="toolPointer" data-tooltip="Select" data-tool="pointer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+    </button>
+    <div class="tool-sep"></div>
+    <button class="tool-btn" id="toolPoint" data-tooltip="Draw Point" data-tool="point">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-dasharray="3,3"/></svg>
+    </button>
+    <button class="tool-btn" id="toolLine" data-tooltip="Draw Line" data-tool="line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20L20 4"/><circle cx="4" cy="20" r="2" fill="currentColor"/><circle cx="20" cy="4" r="2" fill="currentColor"/></svg>
+    </button>
+    <button class="tool-btn" id="toolPolygon" data-tooltip="Draw Polygon" data-tool="polygon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 5v8l-8 5-8-5V8z"/></svg>
+    </button>
+    <button class="tool-btn" id="toolRectangle" data-tooltip="Draw Rectangle" data-tool="rectangle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="1"/></svg>
+    </button>
+    <button class="tool-btn" id="toolCircle" data-tooltip="Draw Circle" data-tool="circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+    </button>
+    <div class="tool-sep"></div>
+    <button class="tool-btn" id="toolEdit" data-tooltip="Edit Vertices" data-tool="edit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    </button>
+    <button class="tool-btn" id="toolDrag" data-tooltip="Drag Features" data-tool="drag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+    </button>
+    <button class="tool-btn" id="toolDelete" data-tooltip="Delete Feature" data-tool="delete" style="color:var(--danger)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    </button>
+  </aside>
+
+  <!-- Map -->
+  <main class="map-container">
+    <div id="map"></div>
+    <div id="mapCrosshair" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
+    </div>
+  </main>
+
+  <!-- Right Panel -->
+  <aside class="right-panel" id="rightPanel">
+    <div class="panel-tabs">
+      <div class="panel-tab active" data-tab="layers">Layers</div>
+      <div class="panel-tab" data-tab="style">Style</div>
+      <div class="panel-tab" data-tab="properties">Properties</div>
+      <div class="panel-tab" data-tab="export">Export</div>
+    </div>
+
+    <!-- Layers Tab -->
+    <div class="panel-content" id="tabLayers">
+      <div id="layerList"></div>
+    </div>
+
+    <!-- Style Tab -->
+    <div class="panel-content" id="tabStyle" style="display:none">
+      <div id="styleContent"></div>
+    </div>
+
+    <!-- Properties Tab -->
+    <div class="panel-content" id="tabProperties" style="display:none">
+      <div id="propContent">
+        <div class="no-selection">Select a feature to edit its properties</div>
+      </div>
+    </div>
+
+    <!-- Export Tab -->
+    <div class="panel-content" id="tabExport" style="display:none">
+      <div class="panel-section">
+        <div class="panel-section-title">Import Data</div>
+        <div class="import-zone" id="importZone" title="Click or drag & drop a GeoJSON, KML, or GPX file to import">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <p>Drop file or click to import</p>
+          <div class="formats">GeoJSON, KML, GPX</div>
+        </div>
+        <input type="file" id="importFile" accept=".geojson,.json,.kml,.gpx" style="display:none">
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-title">Export Data</div>
+        <div class="export-filename">
+          <label>Filename</label>
+          <input type="text" id="exportFilename" value="kga_geodigitizer_export" placeholder="filename">
+        </div>
+        <div class="export-grid">
+          <button class="export-btn" data-format="geojson" data-tooltip="Standard GIS interchange format">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            <span class="fmt">GeoJSON</span>
+            <span class="desc">Standard format</span>
+          </button>
+          <button class="export-btn" data-format="kml" data-tooltip="Google Earth compatible format">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            <span class="fmt">KML</span>
+            <span class="desc">Google Earth</span>
+          </button>
+          <button class="export-btn" data-format="shp" data-tooltip="Esri Shapefile (zipped .shp/.shx/.dbf/.prj)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            <span class="fmt">Shapefile</span>
+            <span class="desc">SHP (zipped)</span>
+          </button>
+          <button class="export-btn" data-format="gpkg" data-tooltip="OGC GeoPackage (SQLite-based)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            <span class="fmt">GeoPackage</span>
+            <span class="desc">GPKG (SQLite)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Draw Toolbar -->
+  <div id="mobileDrawBar" class="mobile-draw-toolbar" style="display:none">
+    <div class="mobile-draw-info">
+      <span id="mobDrawPrompt">Move map to target</span>
+      <span id="mobDrawCoord">--</span>
+    </div>
+    <div class="mobile-draw-actions">
+      <button class="btn-sm btn-ghost" id="mobBtnCancel">Cancel</button>
+      <button class="btn-sm btn-ghost" id="mobBtnUndo" style="display:none">Undo</button>
+      <button class="btn-sm btn-primary" id="mobBtnAdd">Add Point</button>
+      <button class="btn-sm btn-primary" id="mobBtnFinish" style="display:none;background:var(--success);border-color:var(--success)">Finish</button>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <footer class="statusbar">
+    <span>CRS: <span class="coord" id="statusCRS">WGS 84 | EPSG:4326</span></span>
+    <span class="sep">|</span>
+    <span>Cursor: <span class="coord" id="cursorCoords">--</span></span>
+    <span class="sep">|</span>
+    <span>Projected: <span class="coord" id="projectedCoords">--</span></span>
+    <span class="sep">|</span>
+    <span>Zoom: <span class="coord" id="zoomLevel">--</span></span>
+    <div class="statusbar-spacer"></div>
+    <div class="feature-count">
+      <span><span class="dot" style="background:var(--point-color)"></span> <span id="countPts">0</span> pts</span>
+      <span><span class="dot" style="background:var(--line-color)"></span> <span id="countLns">0</span> ln</span>
+      <span><span class="dot" style="background:var(--poly-color)"></span> <span id="countPly">0</span> pg</span>
+    </div>
+  </footer>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<div class="ctx-menu" id="ctxMenu"></div>
+<div class="mobile-panel-overlay" id="mobilePanelOverlay"></div>
+<button class="mobile-panel-toggle" id="mobilePanelToggle" title="Toggle Layers Panel">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.16.0/dist/leaflet-geoman.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.11.0/proj4.js"></script>
+<script>
+(function(){
+'use strict';
+
+// ── State ──
+const state = {
+  features: [],
+  selectedFeatureId: null,
+  undoStack: [],
+  redoStack: [],
+  featureCounter: 0,
+  measuring: false,
+  measureLayer: null,
+  currentTool: 'pointer',
+  currentCRS: '4326',
+  isDark: true
+};
+
+// ── Symbology State ──
+const symbology = {
+  point: { shape: 'pin', color: '#ff6b9d', size: 24, opacity: 1 },
+  line: { style: 'solid', color: '#4dabf7', width: 3, opacity: 0.9 },
+  polygon: { style: 'solid', fillColor: '#69db7c', fillOpacity: 0.2, outlineColor: '#69db7c', outlineWidth: 2, opacity: 1 },
+  featureOpacity: 1.0,
+  basemapOpacity: 1.0
+};
+
+// ── CRS Definitions (proj4) ──
+const crsDefs = {};
+
+// Generate all UTM zones (WGS 84)
+for(let z = 1; z <= 60; z++) {
+  const cN = 32600 + z;
+  const cS = 32700 + z;
+  crsDefs[cN] = { name: `WGS 84 / UTM Zone ${z}N`, proj: `+proj=utm +zone=${z} +datum=WGS84 +units=m +no_defs`, units: 'm' };
+  crsDefs[cS] = { name: `WGS 84 / UTM Zone ${z}S`, proj: `+proj=utm +zone=${z} +south +datum=WGS84 +units=m +no_defs`, units: 'm' };
+}
+
+// Common geographic CRS
+Object.assign(crsDefs, {
+  '4326':  { name: 'WGS 84', proj: '+proj=longlat +datum=WGS84 +no_defs', units: '°' },
+  '3857':  { name: 'Web Mercator', proj: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +no_defs', units: 'm' },
+  '4269':  { name: 'NAD83', proj: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  '4267':  { name: 'NAD27', proj: '+proj=longlat +datum=NAD27 +no_defs', units: '°' },
+  '4258':  { name: 'ETRS89', proj: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  '4674':  { name: 'SIRGAS 2000', proj: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  '4283':  { name: 'GDA94', proj: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  '7844':  { name: 'GDA2020', proj: '+proj=longlat +ellps=GRS80 +no_defs', units: '°' },
+  '4612':  { name: 'JGD2000', proj: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  '4610':  { name: 'Xian 1980', proj: '+proj=longlat +a=6378140 +b=6356755.288157528 +no_defs', units: '°' },
+  '4490':  { name: 'CGCS2000', proj: '+proj=longlat +ellps=GRS80 +no_defs', units: '°' },
+  '4214':  { name: 'Beijing 1954', proj: '+proj=longlat +ellps=krass +towgs84=15.8,-154.4,-82.3,0,0,0,0 +no_defs', units: '°' },
+  '4148':  { name: 'Hartebeesthoek94', proj: '+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  '4170':  { name: 'SIRGAS', proj: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs', units: '°' },
+  // National Grids
+  '27700': { name: 'British National Grid', proj: '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs', units: 'm' },
+  '2154':  { name: 'RGF93 / Lambert-93', proj: '+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '25832': { name: 'ETRS89 / UTM 32N', proj: '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '25833': { name: 'ETRS89 / UTM 33N', proj: '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '2193':  { name: 'NZGD2000 / NZTM', proj: '+proj=tmerc +lat_0=0 +lon_0=173 +k=0.9996 +x_0=1600000 +y_0=10000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '28992': { name: 'Amersfoort / RD New', proj: '+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.417,50.3319,465.552,-0.398957,0.343988,-1.8774,4.0725 +units=m +no_defs', units: 'm' },
+  '3006':  { name: 'SWEREF99 TM', proj: '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '3035':  { name: 'ETRS89-LAEA Europe', proj: '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '3034':  { name: 'ETRS89-LCC Europe', proj: '+proj=lcc +lat_1=35 +lat_2=65 +lat_0=52 +lon_0=10 +x_0=4000000 +y_0=2800000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '2056':  { name: 'CH1903+ / LV95', proj: '+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '3395':  { name: 'World Mercator', proj: '+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', units: 'm' },
+  '3785':  { name: 'Popular Web Mercator', proj: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +no_defs', units: 'm' },
+  '2229':  { name: 'NAD83 / CA Zone 5 ft', proj: '+proj=lcc +lat_1=35.4666666666667 +lat_2=34.0333333333333 +lat_0=33.5 +lon_0=-118 +x_0=2000000.0001016 +y_0=500000.0001016 +datum=NAD83 +units=us-ft +no_defs', units: 'ft' },
+  '2263':  { name: 'NAD83 / NY Long Island ft', proj: '+proj=lcc +lat_1=41.0333333333333 +lat_2=40.6666666666667 +lat_0=40.1666666666667 +lon_0=-74 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs', units: 'ft' },
+  '6933':  { name: 'WGS84 / EASE-Grid 2.0', proj: '+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', units: 'm' },
+  '3577':  { name: 'GDA94 / Australian Albers', proj: '+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '24047': { name: 'Indian 1975 / UTM 47N', proj: '+proj=utm +zone=47 +a=6377276.345 +b=6356075.41314024 +towgs84=210,814,289,0,0,0,0 +units=m +no_defs', units: 'm' },
+  '24048': { name: 'Indian 1975 / UTM 48N', proj: '+proj=utm +zone=48 +a=6377276.345 +b=6356075.41314024 +towgs84=210,814,289,0,0,0,0 +units=m +no_defs', units: 'm' },
+  // Polar / Global
+  '3413':  { name: 'NSIDC Sea Ice North', proj: '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', units: 'm' },
+  '3031':  { name: 'Antarctic Polar Stereographic', proj: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', units: 'm' },
+  '4087':  { name: 'WGS84 / Equidistant Cyl.', proj: '+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', units: 'm' },
+  '54009': { name: 'Mollweide', proj: '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', units: 'm' },
+});
+
+// Register all CRS with proj4
+if(typeof proj4 !== 'undefined') {
+  for(const [code, def] of Object.entries(crsDefs)) {
+    proj4.defs(`EPSG:${code}`, def.proj);
+  }
+}
+
+function projectCoords(lat, lng) {
+  const code = state.currentCRS;
+  if(code === '4326') return { x: lng, y: lat, units: '°' };
+  try {
+    const result = proj4('EPSG:4326', `EPSG:${code}`, [lng, lat]);
+    return { x: result[0], y: result[1], units: crsDefs[code].units };
+  } catch(e) {
+    return { x: lng, y: lat, units: '°' };
+  }
+}
+
+function formatProjected(p) {
+  if(p.units === '°') return `${p.y.toFixed(6)}, ${p.x.toFixed(6)}`;
+  return `${p.x.toFixed(2)}, ${p.y.toFixed(2)} ${p.units}`;
+}
+
+// ── CRS Selector ──
+document.getElementById('crsSelect').addEventListener('change', e => {
+  state.currentCRS = e.target.value;
+  const def = crsDefs[state.currentCRS];
+  document.getElementById('statusCRS').textContent = `${def.name} | EPSG:${state.currentCRS}`;
+});
+
+// ── Theme Toggle ──
+const themeToggle = document.getElementById('themeToggle');
+const iconSun = document.getElementById('iconSun');
+const iconMoon = document.getElementById('iconMoon');
+
+function applyTheme(dark) {
+  state.isDark = dark;
+  document.documentElement.classList.toggle('light', !dark);
+  iconMoon.classList.toggle('icon-active', dark);
+  iconSun.classList.toggle('icon-active', !dark);
+}
+
+themeToggle.addEventListener('change', () => {
+  applyTheme(themeToggle.checked);
+});
+
+// Initialize dark
+applyTheme(true);
+
+// ── Map Init ──
+const map = L.map('map', {
+  center: [11.55, 104.92],  // Cambodia
+  zoom: 7,
+  zoomControl: false,
+  attributionControl: false
+});
+
+L.control.zoom({ position: 'bottomleft' }).addTo(map);
+L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
+L.control.attribution({ position: 'bottomright', prefix: '© OpenStreetMap' }).addTo(map);
+
+// ── Basemaps ──
+const basemaps = {
+  google_satellite: L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  google_hybrid: L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  google_road: L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  google_terrain: L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  osm: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 20, attribution: '© OpenStreetMap, © CARTO' }),
+  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }),
+  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }),
+  topo: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 })
+};
+basemaps.google_satellite.addTo(map);
+
+document.getElementById('basemapSelect').addEventListener('change', e => {
+  Object.values(basemaps).forEach(l => map.removeLayer(l));
+  const newLayer = basemaps[e.target.value];
+  newLayer.addTo(map);
+  newLayer.setOpacity(symbology.basemapOpacity);
+});
+
+// ── Feature Layer Group ──
+const drawnItems = L.featureGroup().addTo(map);
+
+// ── Styling ──
+function getStyle(geomType) {
+  switch(geomType) {
+    case 'Point': case 'MultiPoint':
+      return { color: symbology.point.color, fillColor: symbology.point.color, fillOpacity: 0.8, weight: 2, radius: symbology.point.size / 4 };
+    case 'LineString': case 'MultiLineString':
+      return { color: symbology.line.color, weight: symbology.line.width, opacity: symbology.line.opacity, dashArray: getLineDash(symbology.line.style) };
+    default:
+      return { color: symbology.polygon.outlineColor, fillColor: symbology.polygon.fillColor, fillOpacity: symbology.polygon.fillOpacity, weight: symbology.polygon.outlineWidth, dashArray: getLineDash(symbology.polygon.style) };
+  }
+}
+
+function getLineDash(style) {
+  switch(style) {
+    case 'dashed': return '10,6';
+    case 'dotted': return '3,4';
+    case 'dashdot': return '10,4,3,4';
+    default: return null;
+  }
+}
+
+function getMarkerSVG(shape, color, size) {
+  const s = size || 24;
+  switch(shape) {
+    case 'pin':
+      return `<svg width="${s}" height="${Math.round(s*1.5)}" viewBox="0 0 24 36"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="${color}" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="5" fill="#fff" opacity="0.9"/></svg>`;
+    case 'circle':
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="${color}" stroke="#fff" stroke-width="2"/></svg>`;
+    case 'square':
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" fill="${color}" stroke="#fff" stroke-width="2"/></svg>`;
+    case 'diamond':
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><polygon points="12,1 23,12 12,23 1,12" fill="${color}" stroke="#fff" stroke-width="1.5"/></svg>`;
+    case 'triangle':
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><polygon points="12,2 22,22 2,22" fill="${color}" stroke="#fff" stroke-width="1.5"/></svg>`;
+    case 'star':
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><polygon points="12,1 15,9 23,9 17,14 19,22 12,18 5,22 7,14 1,9 9,9" fill="${color}" stroke="#fff" stroke-width="1"/></svg>`;
+    case 'cross':
+      return `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z" fill="${color}" stroke="#fff" stroke-width="1"/></svg>`;
+    default:
+      return `<svg width="${s}" height="${Math.round(s*1.5)}" viewBox="0 0 24 36"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="${color}" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="5" fill="#fff" opacity="0.9"/></svg>`;
+  }
+}
+
+function createMarkerIcon(color, shape, size) {
+  const c = color || symbology.point.color;
+  const sh = shape || symbology.point.shape;
+  const sz = size || symbology.point.size;
+  const isPin = sh === 'pin';
+  return L.divIcon({
+    className: '',
+    html: getMarkerSVG(sh, c, sz),
+    iconSize: [sz, isPin ? Math.round(sz*1.5) : sz],
+    iconAnchor: [sz/2, isPin ? Math.round(sz*1.5) : sz/2],
+    popupAnchor: [0, isPin ? -Math.round(sz*1.5) : -sz/2]
+  });
+}
+
+function applySymbologyToAll() {
+  state.features.forEach(f => {
+    applySymbologyToFeature(f);
+  });
+  drawnItems.eachLayer(l => {
+    if(l.setOpacity) l.setOpacity(symbology.featureOpacity);
+  });
+}
+
+function applySymbologyToFeature(feat) {
+  const layer = feat.layer;
+  if(feat.geomType === 'Point' && layer instanceof L.Marker) {
+    layer.setIcon(createMarkerIcon(symbology.point.color, symbology.point.shape, symbology.point.size));
+    if(layer.setOpacity) layer.setOpacity(symbology.featureOpacity);
+  } else if(feat.geomType === 'LineString' && layer.setStyle) {
+    layer.setStyle({
+      color: symbology.line.color,
+      weight: symbology.line.width,
+      opacity: symbology.line.opacity * symbology.featureOpacity,
+      dashArray: getLineDash(symbology.line.style)
+    });
+  } else if((feat.geomType === 'Polygon' || feat.geomType === 'Circle') && layer.setStyle) {
+    layer.setStyle({
+      color: symbology.polygon.outlineColor,
+      fillColor: symbology.polygon.fillColor,
+      fillOpacity: symbology.polygon.fillOpacity * symbology.featureOpacity,
+      weight: symbology.polygon.outlineWidth,
+      opacity: symbology.featureOpacity,
+      dashArray: getLineDash(symbology.polygon.style)
+    });
+  }
+}
+
+function setBasemapOpacity(val) {
+  symbology.basemapOpacity = val;
+  Object.values(basemaps).forEach(l => {
+    if(map.hasLayer(l)) l.setOpacity(val);
+  });
+}
+
+// ── Geoman Setup ──
+map.pm.addControls({
+  position: 'topleft',
+  drawMarker: false, drawPolyline: false, drawPolygon: false,
+  drawRectangle: false, drawCircle: false, drawCircleMarker: false,
+  drawText: false, editMode: false, dragMode: false,
+  cutPolygon: false, removalMode: false, rotateMode: false
+});
+// Hide default geoman toolbar and disable tooltips
+document.querySelectorAll('.leaflet-pm-toolbar').forEach(el => el.style.display = 'none');
+map.pm.setGlobalOptions({
+  tooltips: false
+});
+
+// ── Drawing Handlers ──
+function isMobileMode() {
+  return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 932;
+}
+const mobileDraw = { active: false, tool: null, coords: [], preview: null, hint: null };
+
+function activateTool(tool) {
+  state.currentTool = tool;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`[data-tool="${tool}"]`);
+  if(btn) btn.classList.add('active');
+
+  // Disable all first
+  map.pm.disableDraw();
+  map.pm.disableGlobalEditMode();
+  map.pm.disableGlobalDragMode();
+  map.pm.disableGlobalRemovalMode();
+  stopMobileDraw();
+
+  if(['point','line','polygon','rectangle','circle'].includes(tool)) {
+    if(isMobileMode() && ['point','line','polygon'].includes(tool)) {
+      startMobileDraw(tool);
+    } else {
+      activateDrawTool(tool);
+    }
+  } else {
+    switch(tool) {
+      case 'edit':
+        map.pm.enableGlobalEditMode({ snappable: true, snapDistance: 15 });
+        break;
+      case 'drag':
+        map.pm.enableGlobalDragMode();
+        break;
+      case 'delete':
+        map.pm.enableGlobalRemovalMode();
+        break;
+    }
+  }
+}
+
+function startMobileDraw(tool) {
+  mobileDraw.active = true;
+  mobileDraw.tool = tool;
+  mobileDraw.coords = [];
+  snapEngine.currentDrawVertices = [];
+  document.getElementById('mapCrosshair').style.display = 'block';
+  document.getElementById('mobileDrawBar').style.display = 'flex';
+  setTimeout(() => map.invalidateSize(), 50);
+  
+  if(tool === 'point') {
+    document.getElementById('mobBtnAdd').textContent = 'Add Point';
+    document.getElementById('mobBtnAdd').style.display = 'block';
+    document.getElementById('mobBtnUndo').style.display = 'none';
+    document.getElementById('mobBtnFinish').style.display = 'none';
+  } else {
+    document.getElementById('mobBtnAdd').textContent = 'Add Vertex';
+    document.getElementById('mobBtnAdd').style.display = 'block';
+    document.getElementById('mobBtnUndo').style.display = 'none';
+    document.getElementById('mobBtnFinish').style.display = 'none';
+    
+    const styleOpts = tool === 'line' ? getStyle('LineString') : getStyle('Polygon');
+    if(tool === 'line') {
+      mobileDraw.preview = L.polyline([], styleOpts).addTo(map);
+    } else {
+      mobileDraw.preview = L.polygon([], styleOpts).addTo(map);
+    }
+    mobileDraw.hint = L.polyline([], { color: styleOpts.color||styleOpts.outlineColor, dashArray:'5,5', weight: styleOpts.weight }).addTo(map);
+  }
+  updateMobileDrawHint();
+}
+
+function stopMobileDraw() {
+  if(!mobileDraw.active) return;
+  mobileDraw.active = false;
+  mobileDraw.tool = null;
+  mobileDraw.coords = [];
+  snapEngine.currentDrawVertices = [];
+  if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
+  document.getElementById('mapCrosshair').style.display = 'none';
+  document.getElementById('mobileDrawBar').style.display = 'none';
+  setTimeout(() => map.invalidateSize(), 50);
+  if(mobileDraw.preview) { map.removeLayer(mobileDraw.preview); mobileDraw.preview = null; }
+  if(mobileDraw.hint) { map.removeLayer(mobileDraw.hint); mobileDraw.hint = null; }
+}
+
+function getMobileTargetLatLng() {
+  const center = map.getCenter();
+  const containerCenter = map.latLngToContainerPoint(center);
+  const snap = findSnapPoint(containerCenter);
+  
+  if(snap) {
+    snapEngine.snappedLatLng = snap.latlng;
+    snapEngine.indicator.setLatLng(snap.latlng);
+    if(!map.hasLayer(snapEngine.indicator)) map.addLayer(snapEngine.indicator);
+    snapEngine.indicator.setStyle({
+      color: snap.type === 'vertex' ? '#ffff00' : '#00ffff',
+      fillColor: snap.type === 'vertex' ? '#ffff00' : '#00ffff'
+    });
+    return snap.latlng;
+  } else {
+    snapEngine.snappedLatLng = null;
+    if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
+    return center;
+  }
+}
+
+function updateMobileDrawHint() {
+  if(!mobileDraw.active) return;
+  const targetLatLng = getMobileTargetLatLng();
+  document.getElementById('mobDrawCoord').textContent = `${targetLatLng.lat.toFixed(5)}, ${targetLatLng.lng.toFixed(5)}`;
+  if(mobileDraw.tool !== 'point' && mobileDraw.hint) {
+    if(mobileDraw.coords.length > 0) {
+      const last = mobileDraw.coords[mobileDraw.coords.length - 1];
+      let hintCoords = [last, targetLatLng];
+      if(mobileDraw.tool === 'polygon' && mobileDraw.coords.length > 0) {
+        hintCoords.push(mobileDraw.coords[0]);
+      }
+      mobileDraw.hint.setLatLngs(hintCoords);
+    } else {
+      mobileDraw.hint.setLatLngs([]);
+    }
+  }
+}
+
+function updateMobileDrawButtons() {
+  const len = mobileDraw.coords.length;
+  document.getElementById('mobBtnUndo').style.display = len > 0 ? 'block' : 'none';
+  if(mobileDraw.tool === 'line') {
+    document.getElementById('mobBtnFinish').style.display = len >= 2 ? 'block' : 'none';
+  } else if(mobileDraw.tool === 'polygon') {
+    document.getElementById('mobBtnFinish').style.display = len >= 3 ? 'block' : 'none';
+  }
+}
+
+map.on('move', () => {
+  if(mobileDraw.active) updateMobileDrawHint();
+});
+
+document.getElementById('mobBtnCancel').addEventListener('click', () => {
+  activateTool('pointer');
+});
+
+document.getElementById('mobBtnUndo').addEventListener('click', () => {
+  if(mobileDraw.coords.length > 0) {
+    mobileDraw.coords.pop();
+    snapEngine.currentDrawVertices = [...mobileDraw.coords];
+    mobileDraw.preview.setLatLngs(mobileDraw.coords);
+    updateMobileDrawHint();
+    updateMobileDrawButtons();
+  }
+});
+
+document.getElementById('mobBtnAdd').addEventListener('click', () => {
+  const targetLatLng = getMobileTargetLatLng();
+  if(mobileDraw.tool === 'point') {
+    const layer = L.marker(targetLatLng, { icon: createMarkerIcon() }).addTo(map);
+    map.fire('pm:create', { layer, shape: 'Marker' });
+  } else {
+    mobileDraw.coords.push(targetLatLng);
+    snapEngine.currentDrawVertices = [...mobileDraw.coords];
+    mobileDraw.preview.setLatLngs(mobileDraw.coords);
+    updateMobileDrawHint();
+    updateMobileDrawButtons();
+  }
+});
+
+document.getElementById('mobBtnFinish').addEventListener('click', () => {
+  if(mobileDraw.tool === 'line' && mobileDraw.coords.length >= 2) {
+    const layer = L.polyline([...mobileDraw.coords], getStyle('LineString')).addTo(map);
+    map.fire('pm:create', { layer, shape: 'Line' });
+  } else if(mobileDraw.tool === 'polygon' && mobileDraw.coords.length >= 3) {
+    const layer = L.polygon([...mobileDraw.coords], getStyle('Polygon')).addTo(map);
+    map.fire('pm:create', { layer, shape: 'Polygon' });
+  }
+});
+
+// Re-enable a drawing tool without resetting the active button state
+function activateDrawTool(tool) {
+  map.pm.disableDraw();
+  const snapOpts = {
+    snappable: false,  // disable geoman's built-in snap — we use our own
+    allowSelfIntersection: true
+  };
+  switch(tool) {
+    case 'point':
+      map.pm.enableDraw('Marker', { ...snapOpts, markerStyle: { icon: createMarkerIcon() }});
+      break;
+    case 'line':
+      map.pm.enableDraw('Line', {
+        ...snapOpts,
+        finishOn: 'dblclick',
+        templineStyle: { color: symbology.line.color },
+        hintlineStyle: { color: symbology.line.color, dashArray: '5,5' },
+        pathOptions: { color: symbology.line.color, weight: symbology.line.width, dashArray: getLineDash(symbology.line.style) }
+      });
+      break;
+    case 'polygon':
+      map.pm.enableDraw('Polygon', {
+        ...snapOpts,
+        templineStyle: { color: symbology.polygon.outlineColor },
+        hintlineStyle: { color: symbology.polygon.outlineColor, dashArray: '5,5' },
+        pathOptions: { color: symbology.polygon.outlineColor, fillColor: symbology.polygon.fillColor, fillOpacity: symbology.polygon.fillOpacity, weight: symbology.polygon.outlineWidth }
+      });
+      break;
+    case 'rectangle':
+      map.pm.enableDraw('Rectangle', { ...snapOpts, pathOptions: { color: symbology.polygon.outlineColor, fillColor: symbology.polygon.fillColor, fillOpacity: symbology.polygon.fillOpacity, weight: symbology.polygon.outlineWidth }});
+      break;
+    case 'circle':
+      map.pm.enableDraw('Circle', { ...snapOpts, pathOptions: { color: symbology.polygon.outlineColor, fillColor: symbology.polygon.fillColor, fillOpacity: symbology.polygon.fillOpacity, weight: symbology.polygon.outlineWidth }});
+      break;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ESRI-STYLE CUSTOM SNAPPING ENGINE
+// Lightweight: only moves hintMarker when near snap target
+// Does NOT add click listeners — lets Geoman handle all clicks
+// ══════════════════════════════════════════════════════
+
+const snapEngine = {
+  enabled: true,
+  tolerance: 15,
+  currentDrawVertices: [],
+  snappedLatLng: null,
+  indicator: null,
+  _listening: false
+};
+
+snapEngine.indicator = L.circleMarker([0,0], {
+  radius: 8, color: '#ffff00', fillColor: '#ffff00', fillOpacity: 0.5,
+  weight: 2.5, opacity: 1, interactive: false, pmIgnore: true
+});
+
+function collectSnapTargets() {
+  const vertices = [];
+  const edges = [];
+  state.features.forEach(f => {
+    if(!drawnItems.hasLayer(f.layer)) return;
+    const gj = layerToGeoJSON(f.layer);
+    if(!gj || !gj.geometry) return;
+    const g = gj.geometry;
+    if(g.type === 'Point') {
+      vertices.push(L.latLng(g.coordinates[1], g.coordinates[0]));
+    } else if(g.type === 'LineString') {
+      g.coordinates.forEach(c => vertices.push(L.latLng(c[1], c[0])));
+      for(let i = 0; i < g.coordinates.length - 1; i++)
+        edges.push([L.latLng(g.coordinates[i][1], g.coordinates[i][0]), L.latLng(g.coordinates[i+1][1], g.coordinates[i+1][0])]);
+    } else if(g.type === 'Polygon') {
+      g.coordinates.forEach(ring => {
+        ring.forEach(c => vertices.push(L.latLng(c[1], c[0])));
+        for(let i = 0; i < ring.length - 1; i++)
+          edges.push([L.latLng(ring[i][1], ring[i][0]), L.latLng(ring[i+1][1], ring[i+1][0])]);
+      });
+    }
+  });
+  snapEngine.currentDrawVertices.forEach(ll => vertices.push(ll));
+  for(let i = 0; i < snapEngine.currentDrawVertices.length - 1; i++)
+    edges.push([snapEngine.currentDrawVertices[i], snapEngine.currentDrawVertices[i+1]]);
+  return { vertices, edges };
+}
+
+function closestPointOnSegment(p, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const lenSq = dx*dx + dy*dy;
+  if(lenSq === 0) return { point: a, dist: Math.sqrt((p.x-a.x)**2 + (p.y-a.y)**2) };
+  let t = Math.max(0, Math.min(1, ((p.x-a.x)*dx + (p.y-a.y)*dy) / lenSq));
+  const proj = { x: a.x + t*dx, y: a.y + t*dy };
+  return { point: proj, dist: Math.sqrt((p.x-proj.x)**2 + (p.y-proj.y)**2) };
+}
+
+function findSnapPoint(mouseContainerPt) {
+  if(!snapEngine.enabled) return null;
+  const tol = snapEngine.tolerance;
+  let bestDist = tol + 1, bestLatLng = null, snapType = null;
+  const { vertices, edges } = collectSnapTargets();
+  vertices.forEach(ll => {
+    const pt = map.latLngToContainerPoint(ll);
+    const dist = Math.sqrt((mouseContainerPt.x-pt.x)**2 + (mouseContainerPt.y-pt.y)**2);
+    if(dist < bestDist) { bestDist = dist; bestLatLng = ll; snapType = 'vertex'; }
+  });
+  if(bestDist > tol) {
+    edges.forEach(([a, b]) => {
+      const result = closestPointOnSegment(mouseContainerPt, map.latLngToContainerPoint(a), map.latLngToContainerPoint(b));
+      if(result.dist < bestDist) {
+        bestDist = result.dist;
+        bestLatLng = map.containerPointToLatLng(L.point(result.point.x, result.point.y));
+        snapType = 'edge';
+      }
+    });
+  }
+  return (bestDist <= tol && bestLatLng) ? { latlng: bestLatLng, type: snapType } : null;
+}
+
+function getActiveDrawShape() {
+  try {
+    for(const [name, shape] of Object.entries(map.pm.Draw)) {
+      if(shape._enabled) return { name, shape };
+    }
+  } catch(e) {}
+  return null;
+}
+
+// Only visual indicator + hintMarker move. No click interception.
+function onDrawMouseMove(e) {
+  const snap = findSnapPoint(e.containerPoint);
+  const active = getActiveDrawShape();
+  if(snap) {
+    snapEngine.snappedLatLng = snap.latlng;
+    snapEngine.indicator.setLatLng(snap.latlng);
+    if(!map.hasLayer(snapEngine.indicator)) map.addLayer(snapEngine.indicator);
+    snapEngine.indicator.setStyle({
+      color: snap.type === 'vertex' ? '#ffff00' : '#00ffff',
+      fillColor: snap.type === 'vertex' ? '#ffff00' : '#00ffff'
+    });
+    if(active && active.shape._hintMarker) {
+      active.shape._hintMarker.setLatLng(snap.latlng);
+    }
+  } else {
+    snapEngine.snappedLatLng = null;
+    if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
+  }
+}
+
+function startSnapListeners() {
+  if(snapEngine._listening) return;
+  snapEngine._listening = true;
+  map.on('mousemove', onDrawMouseMove);
+}
+
+function stopSnapListeners() {
+  snapEngine._listening = false;
+  snapEngine.currentDrawVertices = [];
+  snapEngine.snappedLatLng = null;
+  if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
+  map.off('mousemove', onDrawMouseMove);
+}
+
+// Track vertices via pm:vertexadded — correct snapped position here
+map.on('pm:drawstart', e => {
+  snapEngine.currentDrawVertices = [];
+  snapEngine.snappedLatLng = null;
+  const wl = e.workingLayer;
+  if(wl) {
+    wl.on('pm:vertexadded', ve => {
+      if(!ve.latlng) return;
+      const ll = snapEngine.snappedLatLng
+        ? L.latLng(snapEngine.snappedLatLng.lat, snapEngine.snappedLatLng.lng)
+        : L.latLng(ve.latlng.lat, ve.latlng.lng);
+      snapEngine.currentDrawVertices.push(ll);
+      // Correct last vertex to snapped position
+      if(snapEngine.snappedLatLng) {
+        try {
+          const latlngs = wl.getLatLngs();
+          const coords = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+          if(coords.length > 0) {
+            coords[coords.length - 1] = L.latLng(snapEngine.snappedLatLng.lat, snapEngine.snappedLatLng.lng);
+            wl.setLatLngs(Array.isArray(latlngs[0]) ? [coords] : coords);
+          }
+        } catch(ex) {}
+      }
+    });
+  }
+  startSnapListeners();
+});
+
+map.on('pm:drawend', () => {
+  stopSnapListeners();
+});
+
+// Point marker snap correction
+map.on('pm:create', e => {
+  if(snapEngine.snappedLatLng && e.layer instanceof L.Marker) {
+    e.layer.setLatLng(snapEngine.snappedLatLng);
+  }
+  snapEngine.currentDrawVertices = [];
+  snapEngine.snappedLatLng = null;
+  if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
+});
+
+
+// Tool buttons
+document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
+  btn.addEventListener('click', () => activateTool(btn.dataset.tool));
+});
+
+// ── Feature Creation ──
+map.on('pm:create', e => {
+  const layer = e.layer;
+  const id = ++state.featureCounter;
+  const geomType = getGeomType(layer);
+  const feature = {
+    id,
+    layer,
+    geomType,
+    props: { name: `Feature ${id}`, description: '', customFields: {} }
+  };
+
+  drawnItems.addLayer(layer);
+  state.features.push(feature);
+
+  // Auto-populate geometry fields
+  computeGeometryFields(feature);
+
+  pushUndo('create', feature);
+
+  layer.on('click', () => selectFeature(id));
+
+  // Style
+  if(layer instanceof L.Marker) {
+    layer.setIcon(createMarkerIcon());
+    if(layer.setOpacity) layer.setOpacity(symbology.featureOpacity);
+  } else {
+    applySymbologyToFeature(feature);
+  }
+
+  // Select without zooming
+  state.selectedFeatureId = id;
+  updateLayerPanel();
+  updatePropertiesPanel();
+  updateCounts();
+  updateLabels();
+  showToast(`${geomType} feature created`, 'success');
+
+  // Keep the current drawing tool active — re-enable it
+  // so user can continue creating features without re-clicking the tool
+  const toolToReactivate = state.currentTool;
+  if(['point','line','polygon','rectangle','circle'].includes(toolToReactivate)) {
+  // Use setTimeout to let geoman finish its internal cleanup first
+    setTimeout(() => activateTool(toolToReactivate), 50);
+  }
+});
+
+// ── Feature Removal via Geoman ──
+map.on('pm:remove', e => {
+  const layer = e.layer;
+  const feat = state.features.find(f => f.layer === layer);
+  if(feat) {
+    pushUndo('delete', {...feat});
+    state.features = state.features.filter(f => f.id !== feat.id);
+    if(state.selectedFeatureId === feat.id) {
+      state.selectedFeatureId = null;
+      updatePropertiesPanel();
+    }
+    updateLayerPanel();
+    updateCounts();
+    updateLabels();
+    showToast('Feature deleted', 'success');
+  }
+});
+
+// Recompute geometry fields after editing vertices or dragging
+map.on('pm:globaleditmodetoggled', e => {
+  if(!e.enabled) {
+    recomputeAllGeometryFields();
+    updatePropertiesPanel();
+    updateLabels();
+  }
+});
+map.on('pm:globaldragmodetoggled', e => {
+  if(!e.enabled) {
+    recomputeAllGeometryFields();
+    updatePropertiesPanel();
+    updateLabels();
+  }
+});
+
+function getGeomType(layer) {
+  if(layer instanceof L.Marker) return 'Point';
+  if(layer instanceof L.Circle) return 'Circle';
+  if(layer instanceof L.Rectangle) return 'Polygon';
+  if(layer instanceof L.Polygon) return 'Polygon';
+  if(layer instanceof L.Polyline) return 'LineString';
+  return 'Unknown';
+}
+
+// ── Selection ──
+function selectFeature(id, zoomTo) {
+  state.selectedFeatureId = id;
+  updateLayerPanel();
+  updatePropertiesPanel();
+  switchTab('properties');
+
+  if(zoomTo) {
+    const feat = state.features.find(f => f.id === id);
+    if(feat && feat.layer) {
+      const currentZoom = map.getZoom();
+      if(feat.layer.getBounds) {
+        map.fitBounds(feat.layer.getBounds(), { padding: [50,50], maxZoom: Math.max(currentZoom, 18) });
+      } else if(feat.layer.getLatLng) {
+        map.setView(feat.layer.getLatLng(), Math.max(currentZoom, 14));
+      }
+    }
+  }
+}
+
+// ── Undo/Redo ──
+function pushUndo(action, feature) {
+  state.undoStack.push({ action, feature: JSON.parse(JSON.stringify({
+    id: feature.id,
+    geomType: feature.geomType,
+    props: feature.props,
+    geojson: feature.layer ? layerToGeoJSON(feature.layer) : null
+  }))});
+  state.redoStack = [];
+}
+
+function undo() {
+  if(!state.undoStack.length) return;
+  const entry = state.undoStack.pop();
+  state.redoStack.push(entry);
+  if(entry.action === 'create') {
+    const feat = state.features.find(f => f.id === entry.feature.id);
+    if(feat) {
+      drawnItems.removeLayer(feat.layer);
+      state.features = state.features.filter(f => f.id !== entry.feature.id);
+    }
+  } else if(entry.action === 'delete') {
+    restoreFeature(entry.feature);
+  }
+  updateLayerPanel();
+  updateCounts();
+  updateLabels();
+  updatePropertiesPanel();
+}
+
+function redo() {
+  if(!state.redoStack.length) return;
+  const entry = state.redoStack.pop();
+  state.undoStack.push(entry);
+  if(entry.action === 'create') {
+    restoreFeature(entry.feature);
+  } else if(entry.action === 'delete') {
+    const feat = state.features.find(f => f.id === entry.feature.id);
+    if(feat) {
+      drawnItems.removeLayer(feat.layer);
+      state.features = state.features.filter(f => f.id !== entry.feature.id);
+    }
+  }
+  updateLayerPanel();
+  updateCounts();
+  updatePropertiesPanel();
+}
+
+function restoreFeature(data) {
+  if(!data.geojson) return;
+  const gj = data.geojson;
+  let layer;
+  if(gj.type === 'Feature') {
+    layer = L.geoJSON(gj, {
+      pointToLayer: (f,ll) => L.marker(ll, { icon: createMarkerIcon() }),
+      style: () => getStyle(gj.geometry.type)
+    }).getLayers()[0];
+  }
+  if(!layer) return;
+  drawnItems.addLayer(layer);
+  const feat = { id: data.id, layer, geomType: data.geomType, props: data.props };
+  state.features.push(feat);
+  layer.on('click', () => selectFeature(data.id));
+}
+
+function layerToGeoJSON(layer) {
+  if(layer.toGeoJSON) return layer.toGeoJSON();
+  return null;
+}
+
+document.getElementById('btnUndo').addEventListener('click', () => handleUndo());
+document.getElementById('btnRedo').addEventListener('click', () => handleRedo());
+document.addEventListener('keydown', e => {
+  if(e.ctrlKey && e.key === 'z') { e.preventDefault(); handleUndo(); }
+  if(e.ctrlKey && e.key === 'y') { e.preventDefault(); handleRedo(); }
+  if(e.key === 'Escape') {
+    // If currently drawing, cancel the current shape first
+    if(isDrawingActive()) {
+      map.pm.disableDraw();
+      // Re-enable so user can start a fresh shape
+      const tool = state.currentTool;
+      if(['point','line','polygon','rectangle','circle'].includes(tool)) {
+        setTimeout(() => activateDrawTool(tool), 50);
+      }
+    } else {
+      activateTool('pointer');
+    }
+  }
+  if(e.key === 'Delete' && state.selectedFeatureId) deleteSelectedFeature();
+});
+
+function isDrawingActive() {
+  // Check if geoman is currently in drawing mode with vertices placed
+  try {
+    const dm = map.pm.Draw;
+    for(const shape of Object.values(dm)) {
+      if(shape._enabled) return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function getActiveDrawingWorkingLayer() {
+  // Get the current in-progress drawing layer to check vertex count
+  try {
+    const dm = map.pm.Draw;
+    for(const [name, shape] of Object.entries(dm)) {
+      if(shape._enabled && shape._layer) {
+        return { shape, name };
+      }
+    }
+  } catch(e) {}
+  return null;
+}
+
+function handleUndo() {
+  const drawing = getActiveDrawingWorkingLayer();
+  if(drawing && ['Line','Polygon'].includes(drawing.name)) {
+    // During line/polygon drawing: remove last placed vertex
+    try {
+      const layer = drawing.shape._layer;
+      const latlngs = layer.getLatLngs();
+      const coords = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+      if(coords.length > 0) {
+        // Use geoman's internal method to remove last vertex
+        drawing.shape._removeLastVertex();
+        return;
+      }
+    } catch(e) {
+      // Fallback: try alternative approach
+      try {
+        const markers = drawing.shape._markers || [];
+        if(markers.length > 0) {
+          drawing.shape._removeLastVertex();
+          return;
+        }
+      } catch(e2) {}
+    }
+  }
+  // Not drawing, or point tool: undo last completed feature
+  undo();
+}
+
+function handleRedo() {
+  // During active drawing there's no vertex-level redo in geoman,
+  // so redo always works on completed features
+  redo();
+}
+
+// ── Right-Click Context Menu ──
+const ctxMenu = document.getElementById('ctxMenu');
+let ctxMenuVisible = false;
+
+function showCtxMenu(x, y, items) {
+  let html = '';
+  items.forEach(item => {
+    if(item === 'sep') {
+      html += '<div class="ctx-menu-sep"></div>';
+      return;
+    }
+    const cls = item.danger ? 'ctx-menu-item danger' : 'ctx-menu-item';
+    html += `<div class="${cls}" data-action="${item.action}">
+      ${item.icon || ''}
+      <span>${item.label}</span>
+      ${item.shortcut ? `<span class="shortcut">${item.shortcut}</span>` : ''}
+    </div>`;
+  });
+  ctxMenu.innerHTML = html;
+  ctxMenu.style.left = x + 'px';
+  ctxMenu.style.top = y + 'px';
+  ctxMenu.classList.add('show');
+  ctxMenuVisible = true;
+
+  // Adjust if off-screen
+  const rect = ctxMenu.getBoundingClientRect();
+  if(rect.right > window.innerWidth) ctxMenu.style.left = (x - rect.width) + 'px';
+  if(rect.bottom > window.innerHeight) ctxMenu.style.top = (y - rect.height) + 'px';
+
+  // Wire click handlers
+  ctxMenu.querySelectorAll('.ctx-menu-item').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      hideCtxMenu();
+      handleCtxAction(el.dataset.action);
+    });
+  });
+}
+
+function hideCtxMenu() {
+  ctxMenu.classList.remove('show');
+  ctxMenuVisible = false;
+}
+
+// Close on any click outside
+document.addEventListener('click', () => { if(ctxMenuVisible) hideCtxMenu(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && ctxMenuVisible) hideCtxMenu(); });
+
+function handleCtxAction(action) {
+  const drawing = getActiveDrawingWorkingLayer();
+  switch(action) {
+    case 'finish':
+      if(drawing) {
+        try { drawing.shape._finishShape(); } catch(e) {
+          // Fallback: simulate double-click to finish
+          map.pm.disableDraw();
+        }
+      }
+      break;
+    case 'cancel':
+      if(drawing) {
+        map.pm.disableDraw();
+        const tool = state.currentTool;
+        if(['point','line','polygon','rectangle','circle'].includes(tool)) {
+          setTimeout(() => activateDrawTool(tool), 50);
+        }
+      }
+      break;
+    case 'undo_vertex':
+      if(drawing) {
+        try { drawing.shape._removeLastVertex(); } catch(e) {}
+      }
+      break;
+    case 'stop_drawing':
+      activateTool('pointer');
+      break;
+    case 'delete_feature':
+      if(state.selectedFeatureId) deleteSelectedFeature();
+      break;
+    case 'zoom_feature':
+      if(state.selectedFeatureId) selectFeature(state.selectedFeatureId, true);
+      break;
+    case 'edit_props':
+      if(state.selectedFeatureId) {
+        selectFeature(state.selectedFeatureId);
+        switchTab('properties');
+      }
+      break;
+  }
+}
+
+// SVG icons for context menu
+const ctxIcons = {
+  finish: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>',
+  cancel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 2.64-6.36L3 7"/></svg>',
+  stop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>',
+  del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>'
+};
+
+// Intercept right-click on map
+map.getContainer().addEventListener('contextmenu', e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const drawing = getActiveDrawingWorkingLayer();
+  const items = [];
+
+  if(drawing && ['Line','Polygon'].includes(drawing.name)) {
+    // During line/polygon drawing
+    const layer = drawing.shape._layer;
+    let vertexCount = 0;
+    try {
+      const ll = layer.getLatLngs();
+      const coords = Array.isArray(ll[0]) ? ll[0] : ll;
+      vertexCount = coords.length;
+    } catch(ex) {}
+
+    const minVerts = drawing.name === 'Polygon' ? 3 : 2;
+    if(vertexCount >= minVerts) {
+      items.push({ action: 'finish', label: 'Finish Feature', icon: ctxIcons.finish, shortcut: 'Dbl-click' });
+    }
+    if(vertexCount > 0) {
+      items.push({ action: 'undo_vertex', label: 'Remove Last Vertex', icon: ctxIcons.undo, shortcut: 'Ctrl+Z' });
+    }
+    items.push('sep');
+    items.push({ action: 'cancel', label: 'Cancel Current Shape', icon: ctxIcons.cancel, shortcut: 'Esc' });
+    items.push({ action: 'stop_drawing', label: 'Stop Drawing Tool', icon: ctxIcons.stop });
+  } else if(isDrawingActive()) {
+    // During point/rectangle/circle drawing
+    items.push({ action: 'stop_drawing', label: 'Stop Drawing Tool', icon: ctxIcons.stop, shortcut: 'Esc' });
+  } else {
+    // Normal mode — feature context menu
+    // Find if user right-clicked on a feature
+    const latlng = map.containerPointToLatLng(L.point(e.layerX, e.layerY));
+    let clickedFeat = null;
+    state.features.forEach(f => {
+      if(!drawnItems.hasLayer(f.layer)) return;
+      try {
+        if(f.layer instanceof L.Marker) {
+          const pos = f.layer.getLatLng();
+          const pt = map.latLngToContainerPoint(pos);
+          if(Math.abs(pt.x - e.layerX) < 20 && Math.abs(pt.y - e.layerY) < 20) clickedFeat = f;
+        } else if(f.layer.getBounds && f.layer.getBounds().contains(latlng)) {
+          clickedFeat = f;
+        }
+      } catch(ex) {}
+    });
+
+    if(clickedFeat) {
+      state.selectedFeatureId = clickedFeat.id;
+      updateLayerPanel();
+      items.push({ action: 'edit_props', label: `Edit "${clickedFeat.props.name}"`, icon: ctxIcons.edit });
+      items.push({ action: 'zoom_feature', label: 'Zoom to Feature', icon: ctxIcons.zoom });
+      items.push('sep');
+      items.push({ action: 'delete_feature', label: 'Delete Feature', icon: ctxIcons.del, shortcut: 'Del', danger: true });
+    } else {
+      // No feature clicked — show general options
+      return; // Don't show menu for empty right-click
+    }
+  }
+
+  if(items.length > 0) {
+    showCtxMenu(e.clientX, e.clientY, items);
+  }
+});
+
+// ── Auto Geometry Fields ──
+function computeGeometryFields(feat) {
+  const geojson = layerToGeoJSON(feat.layer);
+  if(!geojson || !geojson.geometry) return;
+  const g = geojson.geometry;
+  const cf = feat.props.customFields;
+
+  if(g.type === 'Point') {
+    cf['latitude'] = g.coordinates[1].toFixed(8);
+    cf['longitude'] = g.coordinates[0].toFixed(8);
+    const p = projectCoords(g.coordinates[1], g.coordinates[0]);
+    cf['x_projected'] = (p.units === '°' ? p.x.toFixed(8) : p.x.toFixed(3));
+    cf['y_projected'] = (p.units === '°' ? p.y.toFixed(8) : p.y.toFixed(3));
+  } else if(g.type === 'LineString') {
+    const len = calcLineLength(g.coordinates);
+    const bearing = g.coordinates.length >= 2 ? calcBearing(g.coordinates[0][1], g.coordinates[0][0], g.coordinates[g.coordinates.length-1][1], g.coordinates[g.coordinates.length-1][0]) : 0;
+    cf['length_m'] = len.toFixed(2);
+    cf['length_km'] = (len/1000).toFixed(4);
+    cf['bearing_deg'] = bearing.toFixed(2);
+    cf['vertices'] = String(g.coordinates.length);
+  } else if(g.type === 'Polygon') {
+    const ring = g.coordinates[0];
+    const area = calcPolygonArea(ring);
+    const perimeter = calcLineLength(ring);
+    cf['area_m2'] = area.toFixed(2);
+    cf['area_ha'] = (area/1e4).toFixed(4);
+    cf['area_km2'] = (area/1e6).toFixed(6);
+    cf['perimeter_m'] = perimeter.toFixed(2);
+    cf['vertices'] = String(ring.length - 1);
+  }
+}
+
+function recomputeAllGeometryFields() {
+  state.features.forEach(f => {
+    // Remove old geometry fields first
+    const geoKeys = ['latitude','longitude','x_projected','y_projected','length_m','length_km','bearing_deg','vertices','area_m2','area_ha','area_km2','perimeter_m'];
+    geoKeys.forEach(k => delete f.props.customFields[k]);
+    computeGeometryFields(f);
+  });
+}
+
+// ── Labelling System ──
+const labelLayers = L.layerGroup().addTo(map);
+
+// Per-type layer config
+state.layerConfig = {
+  Point:      { name: 'Points',   labelField: 'name', showLabels: true, collapsed: false },
+  LineString: { name: 'Lines',    labelField: 'name', showLabels: true, collapsed: false },
+  Polygon:    { name: 'Polygons', labelField: 'name', showLabels: true, collapsed: false },
+  Circle:     { name: 'Circles',  labelField: 'name', showLabels: true, collapsed: false }
+};
+
+function updateLabels() {
+  labelLayers.clearLayers();
+
+  state.features.forEach(f => {
+    if(!drawnItems.hasLayer(f.layer)) return;
+    const cfg = state.layerConfig[f.geomType];
+    if(!cfg || !cfg.showLabels || !cfg.labelField) return;
+
+    const labelText = getLabelText(f, cfg.labelField);
+    if(!labelText) return;
+
+    let latlng;
+    if(f.layer.getLatLng) {
+      latlng = f.layer.getLatLng();
+    } else if(f.layer.getBounds) {
+      latlng = f.layer.getBounds().getCenter();
+    }
+    if(!latlng) return;
+
+    L.marker(latlng, {
+      icon: L.divIcon({
+        className: 'feature-label',
+        html: `<span>${escHtml(labelText)}</span>`,
+        iconSize: 'auto',
+        iconAnchor: [0, -12]
+      }),
+      interactive: false
+    }).addTo(labelLayers);
+  });
+}
+
+function getLabelText(feat, fieldName) {
+  if(fieldName === 'name') return feat.props.name;
+  if(fieldName === 'description') return feat.props.description;
+  if(fieldName === 'id') return String(feat.id);
+  return feat.props.customFields[fieldName] || '';
+}
+
+// ── Layer Panel ──
+const GEO_FIELD_KEYS = {
+  Point: ['latitude','longitude','x_projected','y_projected'],
+  LineString: ['length_m','length_km','bearing_deg','vertices'],
+  Polygon: ['area_m2','area_ha','area_km2','perimeter_m','vertices'],
+  Circle: ['area_m2','area_ha','area_km2','perimeter_m']
+};
+
+function getFieldsForType(type) {
+  const fields = new Set(['name','description']);
+  state.features.filter(f => f.geomType === type).forEach(f => {
+    Object.keys(f.props.customFields).forEach(k => fields.add(k));
+  });
+  return [...fields];
+}
+
+function updateLayerPanel() {
+  const container = document.getElementById('layerList');
+  const groups = { Point: [], LineString: [], Polygon: [], Circle: [] };
+  state.features.forEach(f => {
+    if(groups[f.geomType]) groups[f.geomType].push(f);
+    else groups[f.geomType] = [f];
+  });
+
+  const typeInfo = {
+    Point:      { label: 'Points',   dotClass: 'point',   icon: '◉' },
+    LineString: { label: 'Lines',    dotClass: 'line',     icon: '╱' },
+    Polygon:    { label: 'Polygons', dotClass: 'polygon',  icon: '⬡' },
+    Circle:     { label: 'Circles',  dotClass: 'polygon',  icon: '◯' }
+  };
+
+  let html = '';
+  let hasAny = false;
+
+  for(const [type, feats] of Object.entries(groups)) {
+    if(!feats.length) continue;
+    hasAny = true;
+    const info = typeInfo[type] || { label: type, dotClass: 'polygon', icon: '?' };
+    const cfg = state.layerConfig[type];
+    const fields = getFieldsForType(type);
+    const geoKeys = GEO_FIELD_KEYS[type] || [];
+
+    // Build label field options for this type
+    const labelOpts = fields.map(k =>
+      `<option value="${escHtml(k)}" ${cfg.labelField === k ? 'selected' : ''}>${escHtml(k)}</option>`
+    ).join('');
+
+    html += `
+    <div class="layer-type-section" data-type="${type}" style="margin-bottom:14px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      <!-- Type Header -->
+      <div class="layer-group-header" data-collapse="${type}" style="border-radius:0;margin:0;cursor:pointer">
+        <div class="dot ${info.dotClass}"></div>
+        <span>${escHtml(cfg.name)}</span>
+        <span class="count">${feats.length}</span>
+        <span style="font-size:10px;color:var(--text-muted)">${cfg.collapsed ? '▸' : '▾'}</span>
+      </div>
+
+      <div class="layer-type-body" style="${cfg.collapsed ? 'display:none' : ''};padding:8px">
+        <!-- Layer Name -->
+        <div style="margin-bottom:6px">
+          <label style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Layer Name</label>
+          <input type="text" data-typename="${type}" class="layer-name-input" value="${escHtml(cfg.name)}" style="width:100%;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:11px;outline:none;margin-top:2px">
+        </div>
+
+        <!-- Label Controls -->
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <label style="font-size:10px;color:var(--text-muted);white-space:nowrap">Label:</label>
+          <select class="label-field-select" data-typename="${type}" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;font-size:10px;outline:none">
+            <option value="" ${cfg.labelField === '' ? 'selected' : ''}>(none)</option>
+            <option value="id" ${cfg.labelField === 'id' ? 'selected' : ''}>ID</option>
+            ${labelOpts}
+          </select>
+          <button class="vis-toggle ${cfg.showLabels ? 'on' : ''} toggle-labels-btn" data-typename="${type}" style="width:18px;height:18px;font-size:8px" title="Toggle labels">${cfg.showLabels ? '✓' : ''}</button>
+        </div>
+
+        <!-- Feature List -->
+        <div style="margin-bottom:8px">
+          ${feats.map(f => {
+            const sel = f.id === state.selectedFeatureId ? 'selected' : '';
+            const vis = drawnItems.hasLayer(f.layer);
+            return `<div class="layer-item ${sel}" data-id="${f.id}">
+              <button class="vis-toggle ${vis?'on':''}" data-vis="${f.id}" title="Toggle visibility">${vis?'✓':''}</button>
+              <span class="name">${escHtml(f.props.name)}</span>
+              <button class="del-btn" data-del="${f.id}" title="Delete feature">✕</button>
+            </div>`;
+          }).join('')}
+        </div>
+
+        <!-- Field Management for this type -->
+        <div style="border-top:1px solid var(--border);padding-top:6px">
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Fields</div>
+          <div style="display:flex;flex-direction:column;gap:3px">
+            ${fields.map(k => {
+              const isSystem = ['name','description'].includes(k);
+              const isGeo = geoKeys.includes(k) || ['vertices'].includes(k);
+              return `<div style="display:flex;align-items:center;gap:3px;padding:2px 5px;background:var(--bg-card);border-radius:3px;font-size:10px">
+                <span style="flex:1;color:${isGeo?'var(--accent)':isSystem?'var(--text)':'var(--text-dim)'}">${escHtml(k)}</span>
+                ${isGeo ? '<span style="font-size:8px;color:var(--accent);background:var(--accent-glow);padding:0 3px;border-radius:2px">auto</span>' : ''}
+                ${isSystem ? '<span style="font-size:8px;color:var(--text-muted);background:var(--bg-hover);padding:0 3px;border-radius:2px">sys</span>' : ''}
+                ${!isSystem && !isGeo ? `<button class="del-btn" data-delfield="${escHtml(k)}" data-deltype="${type}" title="Remove field from all ${type} features" style="opacity:1;width:14px;height:14px;border:none;background:transparent;color:var(--danger);cursor:pointer;font-size:9px;display:flex;align-items:center;justify-content:center">✕</button>` : ''}
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="display:flex;gap:3px;margin-top:4px">
+            <input type="text" class="new-field-input" data-typename="${type}" placeholder="New field..." style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:3px;font-size:10px;outline:none">
+            <button class="btn-sm btn-primary add-field-btn" data-typename="${type}" title="Add new field to all ${type} features" style="padding:2px 6px;font-size:10px">+</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(!hasAny) html = '<div class="no-selection">No features digitized yet.<br>Use the drawing tools to start.</div>';
+
+  container.innerHTML = html;
+
+  // ── Wire up events ──
+
+  // Collapse/expand headers
+  container.querySelectorAll('[data-collapse]').forEach(el => {
+    el.addEventListener('click', () => {
+      const type = el.dataset.collapse;
+      state.layerConfig[type].collapsed = !state.layerConfig[type].collapsed;
+      updateLayerPanel();
+    });
+  });
+
+  // Layer name change
+  container.querySelectorAll('.layer-name-input').forEach(el => {
+    el.addEventListener('change', e => {
+      state.layerConfig[el.dataset.typename].name = e.target.value;
+      updateLayerPanel();
+    });
+  });
+
+  // Label field change per type
+  container.querySelectorAll('.label-field-select').forEach(el => {
+    el.addEventListener('change', e => {
+      state.layerConfig[el.dataset.typename].labelField = e.target.value;
+      updateLabels();
+    });
+  });
+
+  // Toggle labels per type
+  container.querySelectorAll('.toggle-labels-btn').forEach(el => {
+    el.addEventListener('click', () => {
+      const type = el.dataset.typename;
+      state.layerConfig[type].showLabels = !state.layerConfig[type].showLabels;
+      updateLayerPanel();
+      updateLabels();
+    });
+  });
+
+  // Feature clicks
+  container.querySelectorAll('.layer-item').forEach(el => {
+    el.addEventListener('click', e => {
+      if(e.target.closest('.vis-toggle') || e.target.closest('.del-btn')) return;
+      selectFeature(parseInt(el.dataset.id), true);
+    });
+  });
+  container.querySelectorAll('.vis-toggle[data-vis]').forEach(el => {
+    el.addEventListener('click', () => { toggleVisibility(parseInt(el.dataset.vis)); updateLabels(); });
+  });
+  container.querySelectorAll('.del-btn[data-del]').forEach(el => {
+    el.addEventListener('click', () => deleteFeatureById(parseInt(el.dataset.del)));
+  });
+
+  // Field management: delete field per type
+  container.querySelectorAll('[data-delfield]').forEach(el => {
+    el.addEventListener('click', () => {
+      const fieldName = el.dataset.delfield;
+      const type = el.dataset.deltype;
+      state.features.filter(f => f.geomType === type).forEach(f => delete f.props.customFields[fieldName]);
+      updateLayerPanel();
+      updatePropertiesPanel();
+      showToast(`Field "${fieldName}" removed from ${type} features`, 'success');
+    });
+  });
+
+  // Add field per type
+  container.querySelectorAll('.add-field-btn').forEach(el => {
+    el.addEventListener('click', () => {
+      const type = el.dataset.typename;
+      const input = container.querySelector(`.new-field-input[data-typename="${type}"]`);
+      const name = input?.value.trim();
+      if(!name) return;
+      state.features.filter(f => f.geomType === type).forEach(f => {
+        if(!(name in f.props.customFields)) f.props.customFields[name] = '';
+      });
+      input.value = '';
+      updateLayerPanel();
+      updatePropertiesPanel();
+      showToast(`Field "${name}" added to ${type} features`, 'success');
+    });
+  });
+}
+
+function toggleVisibility(id) {
+  const feat = state.features.find(f => f.id === id);
+  if(!feat) return;
+  if(drawnItems.hasLayer(feat.layer)) {
+    drawnItems.removeLayer(feat.layer);
+  } else {
+    drawnItems.addLayer(feat.layer);
+  }
+  updateLayerPanel();
+}
+
+// ── Style Panel ──
+function updateStylePanel() {
+  const container = document.getElementById('styleContent');
+  const sp = symbology.point;
+  const sl = symbology.line;
+  const sg = symbology.polygon;
+
+  container.innerHTML = `
+    <div class="panel-section">
+      <div class="panel-section-title">Transparency</div>
+      <div class="style-section">
+        <div class="style-row">
+          <label>Basemap</label>
+          <input type="range" min="0" max="100" value="${Math.round(symbology.basemapOpacity*100)}" id="sldBasemapOp">
+          <span class="val" id="valBasemapOp">${Math.round(symbology.basemapOpacity*100)}%</span>
+        </div>
+        <div class="style-row">
+          <label>Features</label>
+          <input type="range" min="0" max="100" value="${Math.round(symbology.featureOpacity*100)}" id="sldFeatureOp">
+          <span class="val" id="valFeatureOp">${Math.round(symbology.featureOpacity*100)}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title"><span class="dot" style="background:${sp.color}"></span> Point Symbol</div>
+      <div class="style-section">
+        <div class="style-preview" id="pointPreview">${getMarkerSVG(sp.shape, sp.color, 32)}</div>
+        <div class="style-row">
+          <label>Shape</label>
+          <select id="selPointShape">
+            <option value="pin" ${sp.shape==='pin'?'selected':''}>📍 Pin</option>
+            <option value="circle" ${sp.shape==='circle'?'selected':''}>⬤ Circle</option>
+            <option value="square" ${sp.shape==='square'?'selected':''}>◼ Square</option>
+            <option value="diamond" ${sp.shape==='diamond'?'selected':''}>◆ Diamond</option>
+            <option value="triangle" ${sp.shape==='triangle'?'selected':''}>▲ Triangle</option>
+            <option value="star" ${sp.shape==='star'?'selected':''}>★ Star</option>
+            <option value="cross" ${sp.shape==='cross'?'selected':''}>✚ Cross</option>
+          </select>
+        </div>
+        <div class="style-row">
+          <label>Color</label>
+          <input type="color" value="${sp.color}" id="colPoint">
+          <span class="val">${sp.color}</span>
+        </div>
+        <div class="style-row">
+          <label>Size</label>
+          <input type="range" min="12" max="48" value="${sp.size}" id="sldPointSize">
+          <span class="val" id="valPointSize">${sp.size}px</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title"><span class="dot" style="background:${sl.color}"></span> Line Symbol</div>
+      <div class="style-section">
+        <div class="style-preview" id="linePreview">
+          <svg width="200" height="30" viewBox="0 0 200 30">
+            <line x1="10" y1="15" x2="190" y2="15" stroke="${sl.color}" stroke-width="${sl.width}" stroke-dasharray="${getLineDash(sl.style)||''}" opacity="${sl.opacity}"/>
+          </svg>
+        </div>
+        <div class="style-row">
+          <label>Style</label>
+          <select id="selLineStyle">
+            <option value="solid" ${sl.style==='solid'?'selected':''}>─── Solid</option>
+            <option value="dashed" ${sl.style==='dashed'?'selected':''}>- - - Dashed</option>
+            <option value="dotted" ${sl.style==='dotted'?'selected':''}>··· Dotted</option>
+            <option value="dashdot" ${sl.style==='dashdot'?'selected':''}>-·-· Dash-Dot</option>
+          </select>
+        </div>
+        <div class="style-row">
+          <label>Color</label>
+          <input type="color" value="${sl.color}" id="colLine">
+          <span class="val">${sl.color}</span>
+        </div>
+        <div class="style-row">
+          <label>Width</label>
+          <input type="range" min="1" max="12" value="${sl.width}" id="sldLineWidth">
+          <span class="val" id="valLineWidth">${sl.width}px</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title"><span class="dot" style="background:${sg.fillColor}"></span> Polygon Symbol</div>
+      <div class="style-section">
+        <div class="style-preview" id="polyPreview">
+          <svg width="200" height="40" viewBox="0 0 200 40">
+            <rect x="10" y="4" width="180" height="32" rx="3" fill="${sg.fillColor}" fill-opacity="${sg.fillOpacity}" stroke="${sg.outlineColor}" stroke-width="${sg.outlineWidth}" stroke-dasharray="${getLineDash(sg.style)||''}"/>
+          </svg>
+        </div>
+        <div class="style-row">
+          <label>Line Style</label>
+          <select id="selPolyStyle">
+            <option value="solid" ${sg.style==='solid'?'selected':''}>─── Solid</option>
+            <option value="dashed" ${sg.style==='dashed'?'selected':''}>- - - Dashed</option>
+            <option value="dotted" ${sg.style==='dotted'?'selected':''}>··· Dotted</option>
+            <option value="dashdot" ${sg.style==='dashdot'?'selected':''}>-·-· Dash-Dot</option>
+          </select>
+        </div>
+        <div class="style-row">
+          <label>Fill Color</label>
+          <input type="color" value="${sg.fillColor}" id="colPolyFill">
+          <span class="val">${sg.fillColor}</span>
+        </div>
+        <div class="style-row">
+          <label>Fill Opacity</label>
+          <input type="range" min="0" max="100" value="${Math.round(sg.fillOpacity*100)}" id="sldPolyFillOp">
+          <span class="val" id="valPolyFillOp">${Math.round(sg.fillOpacity*100)}%</span>
+        </div>
+        <div class="style-row">
+          <label>Outline</label>
+          <input type="color" value="${sg.outlineColor}" id="colPolyOutline">
+          <span class="val">${sg.outlineColor}</span>
+        </div>
+        <div class="style-row">
+          <label>Outline W.</label>
+          <input type="range" min="0" max="8" value="${sg.outlineWidth}" id="sldPolyOutW">
+          <span class="val" id="valPolyOutW">${sg.outlineWidth}px</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:8px">
+      <button class="btn-sm btn-primary" id="btnApplyStyle" title="Apply current symbology settings to all existing features" style="width:100%">Apply to All Features</button>
+    </div>`;
+
+  // ── Event Wiring ──
+  // Transparency
+  bindSlider('sldBasemapOp', 'valBasemapOp', v => { symbology.basemapOpacity = v/100; setBasemapOpacity(v/100); }, '%');
+  bindSlider('sldFeatureOp', 'valFeatureOp', v => { symbology.featureOpacity = v/100; applySymbologyToAll(); }, '%');
+
+  // Point
+  $('selPointShape').addEventListener('change', e => { sp.shape = e.target.value; refreshPointPreview(); });
+  $('colPoint').addEventListener('input', e => { sp.color = e.target.value; refreshPointPreview(); e.target.nextElementSibling.textContent = e.target.value; });
+  bindSlider('sldPointSize', 'valPointSize', v => { sp.size = v; refreshPointPreview(); }, 'px');
+
+  // Line
+  $('selLineStyle').addEventListener('change', e => { sl.style = e.target.value; refreshLinePreview(); });
+  $('colLine').addEventListener('input', e => { sl.color = e.target.value; refreshLinePreview(); e.target.nextElementSibling.textContent = e.target.value; });
+  bindSlider('sldLineWidth', 'valLineWidth', v => { sl.width = v; refreshLinePreview(); }, 'px');
+
+  // Polygon
+  $('selPolyStyle').addEventListener('change', e => { sg.style = e.target.value; refreshPolyPreview(); });
+  $('colPolyFill').addEventListener('input', e => { sg.fillColor = e.target.value; refreshPolyPreview(); e.target.nextElementSibling.textContent = e.target.value; });
+  bindSlider('sldPolyFillOp', 'valPolyFillOp', v => { sg.fillOpacity = v/100; refreshPolyPreview(); }, '%');
+  $('colPolyOutline').addEventListener('input', e => { sg.outlineColor = e.target.value; refreshPolyPreview(); e.target.nextElementSibling.textContent = e.target.value; });
+  bindSlider('sldPolyOutW', 'valPolyOutW', v => { sg.outlineWidth = v; refreshPolyPreview(); }, 'px');
+
+  // Apply button
+  $('btnApplyStyle').addEventListener('click', () => { applySymbologyToAll(); showToast('Symbology applied to all features', 'success'); });
+
+  function refreshPointPreview() {
+    const el = $('pointPreview');
+    if(el) el.innerHTML = getMarkerSVG(sp.shape, sp.color, 32);
+  }
+  function refreshLinePreview() {
+    const el = $('linePreview');
+    if(el) el.innerHTML = `<svg width="200" height="30" viewBox="0 0 200 30"><line x1="10" y1="15" x2="190" y2="15" stroke="${sl.color}" stroke-width="${sl.width}" stroke-dasharray="${getLineDash(sl.style)||''}" opacity="${sl.opacity}"/></svg>`;
+  }
+  function refreshPolyPreview() {
+    const el = $('polyPreview');
+    if(el) el.innerHTML = `<svg width="200" height="40" viewBox="0 0 200 40"><rect x="10" y="4" width="180" height="32" rx="3" fill="${sg.fillColor}" fill-opacity="${sg.fillOpacity}" stroke="${sg.outlineColor}" stroke-width="${sg.outlineWidth}" stroke-dasharray="${getLineDash(sg.style)||''}"/></svg>`;
+  }
+}
+
+function $(id) { return document.getElementById(id); }
+
+function bindSlider(sliderId, valId, onChange, unit) {
+  const slider = $(sliderId);
+  const valEl = $(valId);
+  if(!slider) return;
+  slider.addEventListener('input', e => {
+    const v = parseInt(e.target.value);
+    if(valEl) valEl.textContent = v + (unit||'');
+    onChange(v);
+  });
+}
+
+function deleteFeatureById(id) {
+  const feat = state.features.find(f => f.id === id);
+  if(!feat) return;
+  pushUndo('delete', feat);
+  drawnItems.removeLayer(feat.layer);
+  state.features = state.features.filter(f => f.id !== id);
+  if(state.selectedFeatureId === id) {
+    state.selectedFeatureId = null;
+    updatePropertiesPanel();
+  }
+  updateLayerPanel();
+  updateCounts();
+  showToast('Feature deleted', 'success');
+}
+
+function deleteSelectedFeature() {
+  if(state.selectedFeatureId) deleteFeatureById(state.selectedFeatureId);
+}
+
+// ── Properties Panel ──
+function updatePropertiesPanel() {
+  const container = document.getElementById('propContent');
+  const feat = state.features.find(f => f.id === state.selectedFeatureId);
+  if(!feat) {
+    container.innerHTML = '<div class="no-selection">Select a feature to edit its properties</div>';
+    return;
+  }
+  const geojson = layerToGeoJSON(feat.layer);
+  let geomHtml = '';
+
+  if(geojson && geojson.geometry) {
+    const g = geojson.geometry;
+    if(g.type === 'Point') {
+      const lat = g.coordinates[1];
+      const lng = g.coordinates[0];
+      const p = projectCoords(lat, lng);
+      geomHtml = `
+        <div class="panel-section-title" style="margin-top:8px">Geometry Properties</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Latitude</span><span style="color:var(--accent)">${lat.toFixed(8)}°</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Longitude</span><span style="color:var(--accent)">${lng.toFixed(8)}°</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">X (${crsDefs[state.currentCRS]?.name || 'WGS84'})</span><span style="color:var(--warning)">${p.units === '°' ? p.x.toFixed(8) : p.x.toFixed(3)} ${p.units}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Y (${crsDefs[state.currentCRS]?.name || 'WGS84'})</span><span style="color:var(--warning)">${p.units === '°' ? p.y.toFixed(8) : p.y.toFixed(3)} ${p.units}</span></div>
+        </div>`;
+    } else if(g.type === 'LineString') {
+      const coords = g.coordinates;
+      const len = calcLineLength(coords);
+      const segments = [];
+      for(let i = 1; i < coords.length; i++) {
+        const segLen = haversineDistance(coords[i-1][1], coords[i-1][0], coords[i][1], coords[i][0]);
+        const bearing = calcBearing(coords[i-1][1], coords[i-1][0], coords[i][1], coords[i][0]);
+        segments.push({ len: segLen, bearing });
+      }
+      const overallBearing = coords.length >= 2 ? calcBearing(coords[0][1], coords[0][0], coords[coords.length-1][1], coords[coords.length-1][0]) : 0;
+      geomHtml = `
+        <div class="panel-section-title" style="margin-top:8px">Geometry Properties</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Total Length</span><span style="color:var(--accent)">${formatLength(len)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Vertices</span><span style="color:var(--text)">${coords.length}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Overall Bearing</span><span style="color:var(--warning)">${overallBearing.toFixed(2)}°</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Start</span><span style="color:var(--text-muted)">${coords[0][1].toFixed(6)}, ${coords[0][0].toFixed(6)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">End</span><span style="color:var(--text-muted)">${coords[coords.length-1][1].toFixed(6)}, ${coords[coords.length-1][0].toFixed(6)}</span></div>
+        </div>
+        ${segments.length > 1 ? `<div class="panel-section-title" style="margin-top:8px">Segments</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;font-family:'JetBrains Mono',monospace;font-size:10px;max-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:3px">
+          ${segments.map((s,i) => `<div style="display:flex;justify-content:space-between;gap:8px"><span style="color:var(--text-muted)">Seg ${i+1}</span><span style="color:var(--accent)">${formatLength(s.len)}</span><span style="color:var(--warning)">${s.bearing.toFixed(1)}°</span></div>`).join('')}
+        </div>` : ''}`;
+    } else if(g.type === 'Polygon') {
+      const ring = g.coordinates[0];
+      const area = calcPolygonArea(ring);
+      const perimeter = calcLineLength(ring);
+      geomHtml = `
+        <div class="panel-section-title" style="margin-top:8px">Geometry Properties</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Area</span><span style="color:var(--accent)">${formatArea(area)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Perimeter</span><span style="color:var(--accent)">${formatLength(perimeter)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Vertices</span><span style="color:var(--text)">${ring.length - 1}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-dim)">Rings</span><span style="color:var(--text)">${g.coordinates.length}</span></div>
+        </div>`;
+    }
+  }
+
+  container.innerHTML = `
+    <div class="prop-form">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">ID: ${feat.id} | Type: ${feat.geomType}</div>
+      <div class="prop-field">
+        <label>Name</label>
+        <input type="text" id="propName" value="${escHtml(feat.props.name)}">
+      </div>
+      <div class="prop-field">
+        <label>Description</label>
+        <textarea id="propDesc">${escHtml(feat.props.description)}</textarea>
+      </div>
+      ${geomHtml}
+      <div id="customFieldsContainer"></div>
+      <button class="btn-sm btn-ghost" id="addFieldBtn" title="Add a custom attribute field" style="width:100%;text-align:center;margin-top:4px">+ Add Custom Field</button>
+      <div class="prop-actions">
+        <button class="btn-sm btn-primary" id="propSave" title="Save changes to this feature">Save</button>
+        <button class="btn-sm btn-danger" id="propDelete" title="Delete this feature">Delete</button>
+      </div>
+    </div>`;
+
+  renderCustomFields(feat);
+
+  document.getElementById('propSave').addEventListener('click', () => {
+    feat.props.name = document.getElementById('propName').value;
+    feat.props.description = document.getElementById('propDesc').value;
+    // Save custom fields
+    const newCF = {};
+    document.querySelectorAll('.custom-field-row').forEach(row => {
+      const key = row.querySelector('.cf-key').value;
+      const val = row.querySelector('.cf-val').value;
+      if(key) newCF[key] = val;
+    });
+    feat.props.customFields = newCF;
+    // Recompute geometry fields (in case user cleared them)
+    computeGeometryFields(feat);
+    updateLayerPanel();
+    updateLabels();
+    showToast('Properties saved', 'success');
+  });
+
+  document.getElementById('propDelete').addEventListener('click', () => deleteFeatureById(feat.id));
+  document.getElementById('addFieldBtn').addEventListener('click', () => {
+    feat.props.customFields['field_' + Date.now()] = '';
+    renderCustomFields(feat);
+  });
+}
+
+function renderCustomFields(feat) {
+  const container = document.getElementById('customFieldsContainer');
+  if(!container) return;
+  let html = '';
+  for(const [key, val] of Object.entries(feat.props.customFields)) {
+    html += `<div class="custom-field-row" style="display:flex;gap:4px;margin-bottom:4px">
+      <input class="cf-key" type="text" value="${escHtml(key)}" placeholder="Field name" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:11px;outline:none">
+      <input class="cf-val" type="text" value="${escHtml(val)}" placeholder="Value" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:11px;outline:none">
+      <button class="btn-sm btn-ghost" onclick="this.parentElement.remove()" title="Remove this field" style="padding:2px 6px;font-size:11px">✕</button>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ── Tab Switching ──
+function switchTab(tabName) {
+  document.querySelectorAll('.panel-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+  document.getElementById('tabLayers').style.display = tabName === 'layers' ? '' : 'none';
+  document.getElementById('tabStyle').style.display = tabName === 'style' ? '' : 'none';
+  document.getElementById('tabProperties').style.display = tabName === 'properties' ? '' : 'none';
+  document.getElementById('tabExport').style.display = tabName === 'export' ? '' : 'none';
+  if(tabName === 'style') updateStylePanel();
+}
+document.querySelectorAll('.panel-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+// ── Counts ──
+function updateCounts() {
+  let pts=0, lns=0, plys=0;
+  state.features.forEach(f => {
+    if(f.geomType==='Point') pts++;
+    else if(f.geomType==='LineString') lns++;
+    else plys++;
+  });
+  document.getElementById('countPts').textContent = pts;
+  document.getElementById('countLns').textContent = lns;
+  document.getElementById('countPly').textContent = plys;
+}
+
+// ── Cursor Coords ──
+map.on('mousemove', e => {
+  document.getElementById('cursorCoords').textContent = `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+  const p = projectCoords(e.latlng.lat, e.latlng.lng);
+  document.getElementById('projectedCoords').textContent = formatProjected(p);
+});
+map.on('zoomend', () => {
+  document.getElementById('zoomLevel').textContent = map.getZoom();
+});
+
+// ── Export ──
+function getAllGeoJSON() {
+  const features = [];
+  state.features.forEach(f => {
+    const gj = layerToGeoJSON(f.layer);
+    if(gj) {
+      gj.properties = { id: f.id, name: f.props.name, description: f.props.description, ...f.props.customFields };
+      features.push(gj);
+    }
+  });
+  return { type: 'FeatureCollection', features };
+}
+
+// Get GeoJSON with coordinates transformed to the selected CRS
+function getAllGeoJSONProjected() {
+  const code = state.currentCRS;
+  const fc = getAllGeoJSON();
+  if(code === '4326' || !crsDefs[code]) return fc;
+
+  // Deep clone and transform coordinates
+  const projected = JSON.parse(JSON.stringify(fc));
+  projected.features.forEach(f => {
+    if(f.geometry) transformGeometryCoords(f.geometry, code);
+  });
+  return projected;
+}
+
+function transformGeometryCoords(geometry, targetCode) {
+  function transformCoord(c) {
+    try {
+      const result = proj4('EPSG:4326', `EPSG:${targetCode}`, [c[0], c[1]]);
+      c[0] = result[0];
+      c[1] = result[1];
+    } catch(e) {}
+  }
+  function walk(coords) {
+    if(typeof coords[0] === 'number') { transformCoord(coords); return; }
+    coords.forEach(walk);
+  }
+  walk(geometry.coordinates);
+}
+
+// WKT definitions for common CRS (for .prj files and GPKG)
+function getWKT(code) {
+  const c = String(code);
+  // WGS 84
+  if(c === '4326') return 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]';
+  // Web Mercator
+  if(c === '3857') return 'PROJCS["WGS_1984_Web_Mercator_Auxiliary_Sphere",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Mercator_Auxiliary_Sphere"],PARAMETER["False_Easting",0.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",0.0],PARAMETER["Standard_Parallel_1",0.0],PARAMETER["Auxiliary_Sphere_Type",0.0],UNIT["Meter",1.0]]';
+  // UTM zones (WGS 84)
+  const utmN = parseInt(c) - 32600;
+  if(utmN >= 1 && utmN <= 60) {
+    const cm = (utmN - 1) * 6 - 177;
+    return `PROJCS["WGS_1984_UTM_Zone_${utmN}N",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",0.0],PARAMETER["Central_Meridian",${cm}.0],PARAMETER["Scale_Factor",0.9996],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]`;
+  }
+  const utmS = parseInt(c) - 32700;
+  if(utmS >= 1 && utmS <= 60) {
+    const cm = (utmS - 1) * 6 - 177;
+    return `PROJCS["WGS_1984_UTM_Zone_${utmS}S",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",500000.0],PARAMETER["False_Northing",10000000.0],PARAMETER["Central_Meridian",${cm}.0],PARAMETER["Scale_Factor",0.9996],PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0]]`;
+  }
+  // NAD83
+  if(c === '4269') return 'GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]';
+  // ETRS89
+  if(c === '4258') return 'GEOGCS["GCS_ETRS_1989",DATUM["D_ETRS_1989",SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]';
+  // British National Grid
+  if(c === '27700') return 'PROJCS["British_National_Grid",GEOGCS["GCS_OSGB_1936",DATUM["D_OSGB_1936",SPHEROID["Airy_1830",6377563.396,299.3249646]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",400000.0],PARAMETER["False_Northing",-100000.0],PARAMETER["Central_Meridian",-2.0],PARAMETER["Scale_Factor",0.9996012717],PARAMETER["Latitude_Of_Origin",49.0],UNIT["Meter",1.0]]';
+  // Fallback: use proj4 string as pseudo-WKT
+  const def = crsDefs[c];
+  if(def) return def.proj;
+  return 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]';
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportGeoJSON() {
+  const data = getAllGeoJSONProjected();
+  if(!data.features.length) { showToast('No features to export', 'error'); return; }
+  const filename = document.getElementById('exportFilename').value || 'export';
+  // Add CRS info
+  if(state.currentCRS !== '4326') {
+    data.crs = { type: 'name', properties: { name: `urn:ogc:def:crs:EPSG::${state.currentCRS}` }};
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  downloadBlob(blob, `${filename}.geojson`);
+  showToast('GeoJSON exported!', 'success');
+}
+
+function exportKML() {
+  const data = getAllGeoJSON();
+  if(!data.features.length) { showToast('No features to export', 'error'); return; }
+  const filename = document.getElementById('exportFilename').value || 'export';
+
+  // Simple KML generation
+  let kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  kml += '<kml xmlns="http://www.opengis.net/kml/2.2">\n<Document>\n';
+  kml += `<name>${escXml(filename)}</name>\n`;
+
+  data.features.forEach(f => {
+    kml += '<Placemark>\n';
+    kml += `<name>${escXml(f.properties.name || '')}</name>\n`;
+    kml += `<description>${escXml(f.properties.description || '')}</description>\n`;
+
+    const g = f.geometry;
+    if(g.type === 'Point') {
+      kml += `<Point><coordinates>${g.coordinates[0]},${g.coordinates[1]},0</coordinates></Point>\n`;
+    } else if(g.type === 'LineString') {
+      kml += '<LineString><coordinates>' + g.coordinates.map(c => `${c[0]},${c[1]},0`).join(' ') + '</coordinates></LineString>\n';
+    } else if(g.type === 'Polygon') {
+      kml += '<Polygon><outerBoundaryIs><LinearRing><coordinates>' +
+        g.coordinates[0].map(c => `${c[0]},${c[1]},0`).join(' ') +
+        '</coordinates></LinearRing></outerBoundaryIs></Polygon>\n';
+    }
+    kml += '</Placemark>\n';
+  });
+
+  kml += '</Document>\n</kml>';
+  const blob = new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' });
+  downloadBlob(blob, `${filename}.kml`);
+  showToast('KML exported!', 'success');
+}
+
+async function exportSHP() {
+  const data = getAllGeoJSONProjected();
+  if(!data.features.length) { showToast('No features to export', 'error'); return; }
+  const filename = document.getElementById('exportFilename').value || 'export';
+  const prjContent = getWKT(state.currentCRS);
+
+  try {
+    // Group features by geometry type
+    const groups = { Point: [], LineString: [], Polygon: [] };
+    data.features.forEach(f => {
+      const t = f.geometry.type;
+      if(groups[t]) groups[t].push(f);
+    });
+
+    // We need JSZip for bundling
+    if(!window.JSZip) {
+      showToast('Loading ZIP library...', 'success');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+    }
+
+    const zip = new JSZip();
+    let hasContent = false;
+
+    for(const [geomType, features] of Object.entries(groups)) {
+      if(!features.length) continue;
+      hasContent = true;
+      const layerName = geomType === 'Point' ? 'points' : geomType === 'LineString' ? 'lines' : 'polygons';
+      const result = buildShapefile(features, geomType);
+      zip.file(`${layerName}.shp`, result.shp);
+      zip.file(`${layerName}.shx`, result.shx);
+      zip.file(`${layerName}.dbf`, result.dbf);
+      zip.file(`${layerName}.prj`, prjContent);
+    }
+
+    if(!hasContent) { showToast('No exportable features', 'error'); return; }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    downloadBlob(blob, `${filename}_shp.zip`);
+    showToast('Shapefile exported!', 'success');
+  } catch(err) {
+    console.error('SHP export error:', err);
+    showToast('Shapefile export failed: ' + err.message, 'error');
+  }
+}
+
+function buildShapefile(features, geomType) {
+  const shpType = geomType === 'Point' ? 1 : geomType === 'LineString' ? 3 : 5;
+
+  // Dynamically collect ALL property keys from features
+  const allKeys = new Set();
+  features.forEach(f => {
+    if(f.properties) {
+      Object.keys(f.properties).forEach(k => allKeys.add(k));
+    }
+  });
+  // Remove 'id' as it's implicit in SHP
+  allKeys.delete('id');
+
+  // Build full key list and DBF-safe short names (max 10 chars, unique)
+  const propFullKeys = [...allKeys];
+  const propKeys = [];
+  const usedShort = new Set();
+  propFullKeys.forEach(k => {
+    let short = k.replace(/[^a-zA-Z0-9_]/g, '').substring(0, 10);
+    if(!short) short = 'fld';
+    let base = short;
+    let n = 1;
+    while(usedShort.has(short)) { short = base.substring(0, 8) + (n++); }
+    usedShort.add(short);
+    propKeys.push(short);
+  });
+
+  // Determine field types: N for numeric, C for character
+  const fieldTypes = propFullKeys.map(k => {
+    const allNumeric = features.every(f => {
+      const v = f.properties?.[k];
+      return v === undefined || v === null || v === '' || !isNaN(Number(v));
+    });
+    return allNumeric ? 'N' : 'C';
+  });
+
+  // Calculate bounding box
+  let xMin=180, yMin=90, xMax=-180, yMax=-90;
+  features.forEach(f => {
+    const ac = getAllCoords(f.geometry);
+    ac.forEach(c => { xMin=Math.min(xMin,c[0]); yMin=Math.min(yMin,c[1]); xMax=Math.max(xMax,c[0]); yMax=Math.max(yMax,c[1]); });
+  });
+
+  // Build SHP records
+  const shpRecords = [];
+  const shxRecords = [];
+  let shpOffset = 50;
+
+  features.forEach((f, idx) => {
+    const g = f.geometry;
+    let recData;
+
+    if(shpType === 1) {
+      recData = new ArrayBuffer(20);
+      const v = new DataView(recData);
+      v.setInt32(0, shpType, true);
+      v.setFloat64(4, g.coordinates[0], true);
+      v.setFloat64(12, g.coordinates[1], true);
+    } else {
+      const parts = shpType === 5 ? g.coordinates : [g.coordinates];
+      const allPts = [];
+      const partOffsets = [];
+      parts.forEach(ring => {
+        partOffsets.push(allPts.length);
+        ring.forEach(c => allPts.push(c));
+      });
+
+      let pxMin=180,pyMin=90,pxMax=-180,pyMax=-90;
+      allPts.forEach(c => { pxMin=Math.min(pxMin,c[0]);pyMin=Math.min(pyMin,c[1]);pxMax=Math.max(pxMax,c[0]);pyMax=Math.max(pyMax,c[1]); });
+
+      const contentLen = 4 + 32 + 4 + 4 + partOffsets.length * 4 + allPts.length * 16;
+      recData = new ArrayBuffer(contentLen);
+      const v = new DataView(recData);
+      v.setInt32(0, shpType, true);
+      v.setFloat64(4, pxMin, true); v.setFloat64(12, pyMin, true);
+      v.setFloat64(20, pxMax, true); v.setFloat64(28, pyMax, true);
+      v.setInt32(36, partOffsets.length, true);
+      v.setInt32(40, allPts.length, true);
+      partOffsets.forEach((po, i) => v.setInt32(44 + i*4, po, true));
+      const ptsStart = 44 + partOffsets.length * 4;
+      allPts.forEach((c, i) => {
+        v.setFloat64(ptsStart + i*16, c[0], true);
+        v.setFloat64(ptsStart + i*16 + 8, c[1], true);
+      });
+    }
+
+    const recHeader = new ArrayBuffer(8);
+    const rhv = new DataView(recHeader);
+    rhv.setInt32(0, idx + 1, false);
+    rhv.setInt32(4, recData.byteLength / 2, false);
+
+    shxRecords.push({ offset: shpOffset, contentLen: recData.byteLength / 2 });
+    shpOffset += (8 + recData.byteLength) / 2;
+    shpRecords.push({ header: new Uint8Array(recHeader), data: new Uint8Array(recData) });
+  });
+
+  // Build SHP file
+  const shpFileLen = shpOffset * 2;
+  const shpBuf = new ArrayBuffer(shpFileLen);
+  const shpView = new DataView(shpBuf);
+  shpView.setInt32(0, 9994, false);
+  shpView.setInt32(24, shpOffset, false);
+  shpView.setInt32(28, 1000, true);
+  shpView.setInt32(32, shpType, true);
+  shpView.setFloat64(36, xMin, true); shpView.setFloat64(44, yMin, true);
+  shpView.setFloat64(52, xMax, true); shpView.setFloat64(60, yMax, true);
+
+  let writePos = 100;
+  shpRecords.forEach(r => {
+    new Uint8Array(shpBuf, writePos, r.header.length).set(r.header);
+    writePos += r.header.length;
+    new Uint8Array(shpBuf, writePos, r.data.length).set(r.data);
+    writePos += r.data.length;
+  });
+
+  // Build SHX file
+  const shxLen = 50 + features.length * 4;
+  const shxBuf = new ArrayBuffer(shxLen * 2);
+  const shxView = new DataView(shxBuf);
+  shxView.setInt32(0, 9994, false);
+  shxView.setInt32(24, shxLen, false);
+  shxView.setInt32(28, 1000, true);
+  shxView.setInt32(32, shpType, true);
+  shxView.setFloat64(36, xMin, true); shxView.setFloat64(44, yMin, true);
+  shxView.setFloat64(52, xMax, true); shxView.setFloat64(60, yMax, true);
+  shxRecords.forEach((r, i) => {
+    shxView.setInt32(100 + i*8, r.offset, false);
+    shxView.setInt32(100 + i*8 + 4, r.contentLen, false);
+  });
+
+  // Build DBF with all fields
+  const dbf = buildDBF(features, propFullKeys, propKeys, fieldTypes);
+
+  return {
+    shp: new Uint8Array(shpBuf),
+    shx: new Uint8Array(shxBuf),
+    dbf
+  };
+}
+
+function buildDBF(features, fullKeys, shortKeys, fieldTypes) {
+  const numRecords = features.length;
+  const numFields = shortKeys.length;
+  const charFieldLen = 80;  // chars per character field
+  const numFieldLen = 20;   // chars per numeric field
+  const numFieldDec = 8;    // decimal places for numeric
+
+  // Calculate record length
+  let recordLen = 1; // deletion flag
+  const fieldLens = fieldTypes.map((t, i) => t === 'N' ? numFieldLen : charFieldLen);
+  fieldLens.forEach(l => recordLen += l);
+
+  const headerLen = 32 + numFields * 32 + 1;
+  const totalLen = headerLen + numRecords * recordLen;
+  const buf = new ArrayBuffer(totalLen);
+  const view = new DataView(buf);
+  const bytes = new Uint8Array(buf);
+
+  // Header
+  view.setUint8(0, 3);
+  const now = new Date();
+  view.setUint8(1, now.getFullYear() - 1900);
+  view.setUint8(2, now.getMonth() + 1);
+  view.setUint8(3, now.getDate());
+  view.setUint32(4, numRecords, true);
+  view.setUint16(8, headerLen, true);
+  view.setUint16(10, recordLen, true);
+
+  // Field descriptors
+  shortKeys.forEach((key, i) => {
+    const offset = 32 + i * 32;
+    const nameBytes = new TextEncoder().encode(key.substring(0, 10));
+    bytes.set(nameBytes, offset);
+    view.setUint8(offset + 11, fieldTypes[i] === 'N' ? 0x4E : 0x43); // 'N' or 'C'
+    view.setUint8(offset + 16, fieldLens[i]);
+    if(fieldTypes[i] === 'N') view.setUint8(offset + 17, numFieldDec);
+  });
+  view.setUint8(headerLen - 1, 0x0D);
+
+  // Records
+  features.forEach((f, ri) => {
+    const recOffset = headerLen + ri * recordLen;
+    view.setUint8(recOffset, 0x20);
+    let fieldOffset = 1;
+    fullKeys.forEach((key, fi) => {
+      const rawVal = f.properties?.[key];
+      const fLen = fieldLens[fi];
+      let val;
+      if(fieldTypes[fi] === 'N') {
+        const num = Number(rawVal);
+        val = isNaN(num) ? '' : num.toFixed(numFieldDec);
+        // Right-align numeric fields
+        val = val.substring(0, fLen).padStart(fLen, ' ');
+      } else {
+        val = String(rawVal || '').substring(0, fLen);
+      }
+      const valBytes = new TextEncoder().encode(val);
+      bytes.set(valBytes, recOffset + fieldOffset);
+      fieldOffset += fLen;
+    });
+  });
+
+  return new Uint8Array(buf);
+}
+
+async function exportGPKG() {
+  const data = getAllGeoJSONProjected();
+  if(!data.features.length) { showToast('No features to export', 'error'); return; }
+  const filename = document.getElementById('exportFilename').value || 'export';
+  const srsCode = parseInt(state.currentCRS);
+  const srsWKT = getWKT(state.currentCRS);
+  const srsName = crsDefs[state.currentCRS]?.name || 'WGS 84';
+
+  try {
+    if(!window.initSqlJs) {
+      showToast('Loading GeoPackage library...', 'success');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js');
+    }
+    const SQL = await initSqlJs({ locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}` });
+    const db = new SQL.Database();
+
+    // ── Set GeoPackage application_id and user_version ──
+    db.run("PRAGMA application_id = 1196444487");
+    db.run("PRAGMA user_version = 10301");
+
+    // ── Required system tables ──
+    db.run(`CREATE TABLE gpkg_spatial_ref_sys (
+      srs_name TEXT NOT NULL, srs_id INTEGER NOT NULL PRIMARY KEY,
+      organization TEXT NOT NULL, organization_coordsys_id INTEGER NOT NULL,
+      definition TEXT NOT NULL, description TEXT)`);
+
+    db.run(`INSERT INTO gpkg_spatial_ref_sys VALUES
+      ('Undefined cartesian SRS', -1, 'NONE', -1, 'undefined', 'undefined cartesian coordinate reference system'),
+      ('Undefined geographic SRS', 0, 'NONE', 0, 'undefined', 'undefined geographic coordinate reference system')`);
+
+    // Insert the selected CRS
+    db.run(`INSERT INTO gpkg_spatial_ref_sys VALUES (?, ?, 'EPSG', ?, ?, ?)`,
+      [srsName, srsCode, srsCode, srsWKT, srsName]);
+
+    // Also insert WGS84 if it's not the selected CRS (may be referenced)
+    if(srsCode !== 4326) {
+      db.run(`INSERT INTO gpkg_spatial_ref_sys VALUES ('WGS 84 geodetic', 4326, 'EPSG', 4326, ?, 'WGS 84')`,
+        [getWKT('4326')]);
+    }
+
+    db.run(`CREATE TABLE gpkg_contents (
+      table_name TEXT NOT NULL PRIMARY KEY, data_type TEXT NOT NULL,
+      identifier TEXT UNIQUE, description TEXT DEFAULT '',
+      last_change DATETIME NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      min_x DOUBLE, min_y DOUBLE, max_x DOUBLE, max_y DOUBLE,
+      srs_id INTEGER,
+      CONSTRAINT fk_gc_r_srs_id FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys(srs_id))`);
+
+    db.run(`CREATE TABLE gpkg_geometry_columns (
+      table_name TEXT NOT NULL, column_name TEXT NOT NULL,
+      geometry_type_name TEXT NOT NULL, srs_id INTEGER NOT NULL,
+      z TINYINT NOT NULL, m TINYINT NOT NULL,
+      CONSTRAINT pk_geom_cols PRIMARY KEY (table_name, column_name),
+      CONSTRAINT fk_gc_tn FOREIGN KEY (table_name) REFERENCES gpkg_contents(table_name),
+      CONSTRAINT fk_gc_srs FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys(srs_id))`);
+
+    // ── Group features by geometry type ──
+    const groups = {};
+    data.features.forEach(f => {
+      const t = f.geometry.type;
+      if(!groups[t]) groups[t] = [];
+      groups[t].push(f);
+    });
+
+    const gpkgGeomNames = { Point: 'POINT', LineString: 'LINESTRING', Polygon: 'POLYGON' };
+
+    for(const [geomType, feats] of Object.entries(groups)) {
+      const tableName = geomType === 'Point' ? 'points' : geomType === 'LineString' ? 'lines' : 'polygons';
+      const gpkgGeomType = gpkgGeomNames[geomType] || 'GEOMETRY';
+
+      // Collect all property keys
+      const allKeys = new Set();
+      feats.forEach(f => {
+        if(f.properties) Object.keys(f.properties).forEach(k => { if(k !== 'id') allKeys.add(k); });
+      });
+      const propKeys = [...allKeys];
+
+      // Detect types
+      const fieldTypes = {};
+      propKeys.forEach(k => {
+        const allNum = feats.every(f => {
+          const v = f.properties?.[k];
+          return v === undefined || v === null || v === '' || !isNaN(Number(v));
+        });
+        fieldTypes[k] = allNum ? 'REAL' : 'TEXT';
+      });
+
+      // Create feature table - use geometry type name as column type (ArcGIS Pro compatibility)
+      const colDefs = propKeys.map(k => `"${k.replace(/"/g,'""')}" ${fieldTypes[k]}`).join(', ');
+      db.run(`CREATE TABLE "${tableName}" (fid INTEGER PRIMARY KEY AUTOINCREMENT, geom ${gpkgGeomType}${colDefs ? ', ' + colDefs : ''})`);
+
+      // Bounds
+      let minX=180, minY=90, maxX=-180, maxY=-90;
+      feats.forEach(f => {
+        getAllCoords(f.geometry).forEach(c => {
+          minX=Math.min(minX,c[0]); minY=Math.min(minY,c[1]);
+          maxX=Math.max(maxX,c[0]); maxY=Math.max(maxY,c[1]);
+        });
+      });
+
+      // Register in system tables
+      db.run(`INSERT INTO gpkg_contents (table_name,data_type,identifier,description,last_change,min_x,min_y,max_x,max_y,srs_id) VALUES (?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?,?,?,?)`,
+        [tableName, 'features', tableName, `Digitized ${geomType} features`, minX, minY, maxX, maxY, srsCode]);
+      db.run(`INSERT INTO gpkg_geometry_columns (table_name,column_name,geometry_type_name,srs_id,z,m) VALUES (?,?,?,?,0,0)`,
+        [tableName, 'geom', gpkgGeomType, srsCode]);
+
+      // Insert features
+      const colNames = propKeys.map(k => `"${k.replace(/"/g,'""')}"`).join(', ');
+      const placeholders = propKeys.map(() => '?').join(',');
+      const insertSQL = `INSERT INTO "${tableName}" (fid, geom${propKeys.length ? ', ' + colNames : ''}) VALUES (?, ?${propKeys.length ? ', ' + placeholders : ''})`;
+
+      feats.forEach((f, idx) => {
+        const wkb = geojsonToWKB(f.geometry);
+        const gpb = buildGPBWithEnvelope(srsCode, f.geometry, wkb);
+        const values = propKeys.map(k => {
+          const v = f.properties?.[k];
+          if(v === undefined || v === null || v === '') return null;
+          return fieldTypes[k] === 'REAL' ? Number(v) : String(v);
+        });
+        db.run(insertSQL, [idx + 1, gpb, ...values]);
+      });
+    }
+
+    const binaryArray = db.export();
+    db.close();
+
+    // ── Patch SQLite header directly ──
+    // sql.js PRAGMA may not persist to exported bytes, so we patch manually
+    // SQLite header format: https://www.sqlite.org/fileformat.html
+    // Bytes 60-63: user_version (big-endian int32) = 10301 for GPKG 1.3.1
+    // Bytes 68-71: application_id (big-endian int32) = 0x47504B47 ("GPKG")
+    const bytes = new Uint8Array(binaryArray);
+    const headerView = new DataView(bytes.buffer);
+
+    // application_id at offset 68 (big-endian): 0x47504B47
+    headerView.setUint32(68, 0x47504B47, false);
+
+    // user_version at offset 60 (big-endian): 10301
+    headerView.setUint32(60, 10301, false);
+
+    const blob = new Blob([bytes], { type: 'application/geopackage+sqlite3' });
+    downloadBlob(blob, `${filename}.gpkg`);
+    showToast('GeoPackage exported!', 'success');
+  } catch(err) {
+    console.error('GPKG export error:', err);
+    showToast('GeoPackage export failed: ' + err.message, 'error');
+  }
+}
+
+function getAllCoords(geometry) {
+  const coords = [];
+  function extract(c) {
+    if(typeof c[0] === 'number') { coords.push(c); return; }
+    c.forEach(extract);
+  }
+  extract(geometry.coordinates);
+  return coords;
+}
+
+function buildGPBWithEnvelope(srsId, geometry, wkb) {
+  // GeoPackage Binary format:
+  // magic 'GP' (2), version (1), flags (1), srs_id (4), [envelope], WKB
+  // flags byte: bit 0 = byte order (1=LE), bits 1-3 = envelope type (1=xy)
+  const coords = getAllCoords(geometry);
+  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+  coords.forEach(c => { minX=Math.min(minX,c[0]); minY=Math.min(minY,c[1]); maxX=Math.max(maxX,c[0]); maxY=Math.max(maxY,c[1]); });
+
+  // Header: 8 bytes + envelope 32 bytes (4 doubles: minX, maxX, minY, maxY)
+  const headerSize = 8 + 32;
+  const total = headerSize + wkb.length;
+  const buf = new ArrayBuffer(total);
+  const view = new DataView(buf);
+  const arr = new Uint8Array(buf);
+
+  view.setUint8(0, 0x47); // 'G'
+  view.setUint8(1, 0x50); // 'P'
+  view.setUint8(2, 0);    // version 0
+  view.setUint8(3, 0x03); // flags: LE byte order (bit0=1), envelope type xy (bits1-3 = 001) = 0b00000011 = 3
+  view.setInt32(4, srsId, true);
+
+  // Envelope: minX, maxX, minY, maxY (little-endian doubles)
+  view.setFloat64(8, minX, true);
+  view.setFloat64(16, maxX, true);
+  view.setFloat64(24, minY, true);
+  view.setFloat64(32, maxY, true);
+
+  // Append WKB
+  arr.set(wkb, headerSize);
+  return arr;
+}
+
+function geojsonToWKB(geometry) {
+  const parts = [];
+  const le = true; // little endian
+
+  function writePoint(coords) {
+    const buf = new ArrayBuffer(21);
+    const v = new DataView(buf);
+    v.setUint8(0, 1); // byte order: LE
+    v.setUint32(1, 1, le); // wkbPoint
+    v.setFloat64(5, coords[0], le);
+    v.setFloat64(13, coords[1], le);
+    return new Uint8Array(buf);
+  }
+
+  function writeLineString(coords) {
+    const buf = new ArrayBuffer(9 + coords.length * 16);
+    const v = new DataView(buf);
+    v.setUint8(0, 1);
+    v.setUint32(1, 2, le); // wkbLineString
+    v.setUint32(5, coords.length, le);
+    coords.forEach((c, i) => {
+      v.setFloat64(9 + i*16, c[0], le);
+      v.setFloat64(9 + i*16 + 8, c[1], le);
+    });
+    return new Uint8Array(buf);
+  }
+
+  function writePolygon(rings) {
+    let size = 9;
+    rings.forEach(r => size += 4 + r.length * 16);
+    const buf = new ArrayBuffer(size);
+    const v = new DataView(buf);
+    v.setUint8(0, 1);
+    v.setUint32(1, 3, le); // wkbPolygon
+    v.setUint32(5, rings.length, le);
+    let offset = 9;
+    rings.forEach(ring => {
+      v.setUint32(offset, ring.length, le);
+      offset += 4;
+      ring.forEach(c => {
+        v.setFloat64(offset, c[0], le); offset += 8;
+        v.setFloat64(offset, c[1], le); offset += 8;
+      });
+    });
+    return new Uint8Array(buf);
+  }
+
+  switch(geometry.type) {
+    case 'Point': return writePoint(geometry.coordinates);
+    case 'LineString': return writeLineString(geometry.coordinates);
+    case 'Polygon': return writePolygon(geometry.coordinates);
+    default: return writePoint([0,0]);
+  }
+}
+
+// Export button handlers
+document.querySelectorAll('.export-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const fmt = btn.dataset.format;
+    switch(fmt) {
+      case 'geojson': exportGeoJSON(); break;
+      case 'kml': exportKML(); break;
+      case 'shp': exportSHP(); break;
+      case 'gpkg': exportGPKG(); break;
+    }
+  });
+});
+
+document.getElementById('btnExportTop').addEventListener('click', () => switchTab('export'));
+
+// ── Import ──
+function importGeoJSON(text) {
+  try {
+    const data = JSON.parse(text);
+    let features = [];
+    if(data.type === 'FeatureCollection') features = data.features;
+    else if(data.type === 'Feature') features = [data];
+
+    let count = 0;
+    features.forEach(f => {
+      if(!f.geometry) return;
+      const style = getStyle(f.geometry.type);
+      const layer = L.geoJSON(f, {
+        pointToLayer: (feat, ll) => L.marker(ll, { icon: createMarkerIcon() }),
+        style: () => style
+      }).getLayers()[0];
+
+      if(!layer) return;
+      drawnItems.addLayer(layer);
+      const id = ++state.featureCounter;
+      const feat = {
+        id, layer,
+        geomType: f.geometry.type === 'MultiPolygon' ? 'Polygon' : (f.geometry.type === 'MultiLineString' ? 'LineString' : f.geometry.type),
+        props: {
+          name: f.properties?.name || f.properties?.Name || `Imported ${id}`,
+          description: f.properties?.description || f.properties?.Description || '',
+          customFields: {}
+        }
+      };
+      // Copy other properties as custom fields
+      if(f.properties) {
+        for(const [k,v] of Object.entries(f.properties)) {
+          if(k !== 'name' && k !== 'Name' && k !== 'description' && k !== 'Description') {
+            feat.props.customFields[k] = String(v);
+          }
+        }
+      }
+      state.features.push(feat);
+      layer.on('click', () => selectFeature(id));
+      count++;
+    });
+
+    updateLayerPanel();
+    updateCounts();
+    recomputeAllGeometryFields();
+    updateLabels();
+    if(drawnItems.getLayers().length) map.fitBounds(drawnItems.getBounds(), { padding: [30,30] });
+    showToast(`Imported ${count} features`, 'success');
+  } catch(e) {
+    showToast('Failed to parse file', 'error');
+    console.error(e);
+  }
+}
+
+function importKML(text) {
+  // Basic KML parser
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/xml');
+    const placemarks = doc.querySelectorAll('Placemark');
+    const features = [];
+
+    placemarks.forEach(pm => {
+      const name = pm.querySelector('name')?.textContent || '';
+      const desc = pm.querySelector('description')?.textContent || '';
+
+      const point = pm.querySelector('Point coordinates');
+      const line = pm.querySelector('LineString coordinates');
+      const poly = pm.querySelector('Polygon coordinates');
+
+      if(point) {
+        const parts = point.textContent.trim().split(',');
+        features.push({ type:'Feature', properties:{name,description:desc}, geometry:{type:'Point',coordinates:[parseFloat(parts[0]),parseFloat(parts[1])]}});
+      }
+      if(line) {
+        const coords = line.textContent.trim().split(/\s+/).map(s => { const p=s.split(','); return [parseFloat(p[0]),parseFloat(p[1])]; });
+        features.push({ type:'Feature', properties:{name,description:desc}, geometry:{type:'LineString',coordinates:coords}});
+      }
+      if(poly) {
+        const coords = poly.textContent.trim().split(/\s+/).map(s => { const p=s.split(','); return [parseFloat(p[0]),parseFloat(p[1])]; });
+        features.push({ type:'Feature', properties:{name,description:desc}, geometry:{type:'Polygon',coordinates:[coords]}});
+      }
+    });
+
+    importGeoJSON(JSON.stringify({ type:'FeatureCollection', features }));
+  } catch(e) {
+    showToast('Failed to parse KML', 'error');
+  }
+}
+
+function handleImport(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
+    const ext = file.name.split('.').pop().toLowerCase();
+    if(ext === 'geojson' || ext === 'json') importGeoJSON(text);
+    else if(ext === 'kml') importKML(text);
+    else showToast('Unsupported format', 'error');
+  };
+  reader.readAsText(file);
+}
+
+const importZone = document.getElementById('importZone');
+const importFile = document.getElementById('importFile');
+importZone.addEventListener('click', () => importFile.click());
+importZone.addEventListener('dragover', e => { e.preventDefault(); importZone.style.borderColor = 'var(--accent)'; });
+importZone.addEventListener('dragleave', () => { importZone.style.borderColor = 'var(--border)'; });
+importZone.addEventListener('drop', e => { e.preventDefault(); importZone.style.borderColor = 'var(--border)'; if(e.dataTransfer.files[0]) handleImport(e.dataTransfer.files[0]); });
+importFile.addEventListener('change', e => { if(e.target.files[0]) handleImport(e.target.files[0]); });
+document.getElementById('btnImport').addEventListener('click', () => { switchTab('export'); importFile.click(); });
+
+// ── Geometry Calculation Helpers ──
+const DEG2RAD = Math.PI / 180;
+const RAD2DEG = 180 / Math.PI;
+const EARTH_R = 6371000; // meters
+
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const dLat = (lat2 - lat1) * DEG2RAD;
+  const dLng = (lng2 - lng1) * DEG2RAD;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*DEG2RAD) * Math.cos(lat2*DEG2RAD) * Math.sin(dLng/2)**2;
+  return EARTH_R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function calcBearing(lat1, lng1, lat2, lng2) {
+  const dLng = (lng2 - lng1) * DEG2RAD;
+  const y = Math.sin(dLng) * Math.cos(lat2 * DEG2RAD);
+  const x = Math.cos(lat1*DEG2RAD)*Math.sin(lat2*DEG2RAD) - Math.sin(lat1*DEG2RAD)*Math.cos(lat2*DEG2RAD)*Math.cos(dLng);
+  return ((Math.atan2(y, x) * RAD2DEG) + 360) % 360;
+}
+
+function calcLineLength(coords) {
+  let total = 0;
+  for(let i = 1; i < coords.length; i++) {
+    total += haversineDistance(coords[i-1][1], coords[i-1][0], coords[i][1], coords[i][0]);
+  }
+  return total;
+}
+
+function calcPolygonArea(ring) {
+  // Spherical excess method
+  let area = 0;
+  const n = ring.length;
+  for(let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    area += (ring[j][0] - ring[i][0]) * DEG2RAD *
+      (Math.sin(ring[i][1]*DEG2RAD) + Math.sin(ring[j][1]*DEG2RAD));
+  }
+  return Math.abs(area * EARTH_R * EARTH_R / 2);
+}
+
+function formatLength(m) {
+  if(m >= 1000) return (m/1000).toFixed(3) + ' km';
+  return m.toFixed(2) + ' m';
+}
+
+function formatArea(sqm) {
+  if(sqm >= 1e6) return (sqm/1e6).toFixed(4) + ' km²';
+  if(sqm >= 1e4) return (sqm/1e4).toFixed(4) + ' ha';
+  return sqm.toFixed(2) + ' m²';
+}
+
+// ── Measurement Tools ──
+let measurePoints = [];
+let measureLines = L.layerGroup().addTo(map);
+let measureMode = null; // 'length', 'area', 'direction'
+
+function stopMeasure() {
+  measurePoints = [];
+  measureLines.clearLayers();
+  measureMode = null;
+  map.off('click', measureClick);
+  map.off('dblclick', measureDoubleClick);
+  document.getElementById('btnMeasureLength').classList.remove('active');
+  document.getElementById('btnMeasureArea').classList.remove('active');
+  document.getElementById('btnMeasureDirection').classList.remove('active');
+  map.doubleClickZoom.enable();
+}
+
+function startMeasure(mode) {
+  if(measureMode === mode) { stopMeasure(); return; }
+  stopMeasure();
+  measureMode = mode;
+  activateTool('pointer');
+  map.doubleClickZoom.disable();
+  map.on('click', measureClick);
+  map.on('dblclick', measureDoubleClick);
+  const btnId = mode === 'length' ? 'btnMeasureLength' : mode === 'area' ? 'btnMeasureArea' : 'btnMeasureDirection';
+  document.getElementById(btnId).classList.add('active');
+  const msgs = { length: 'Click to measure distance. Double-click to finish.', area: 'Click polygon vertices. Double-click to close & measure area.', direction: 'Click two points to measure bearing & direction.' };
+  showToast(msgs[mode], 'success');
+}
+
+document.getElementById('btnMeasureLength').addEventListener('click', () => startMeasure('length'));
+document.getElementById('btnMeasureArea').addEventListener('click', () => startMeasure('area'));
+document.getElementById('btnMeasureDirection').addEventListener('click', () => startMeasure('direction'));
+
+function measureClick(e) {
+  measurePoints.push(e.latlng);
+  L.circleMarker(e.latlng, { radius: 4, color: '#ffa94d', fillColor: '#ffa94d', fillOpacity: 1 }).addTo(measureLines);
+
+  if(measureMode === 'direction') {
+    if(measurePoints.length === 2) {
+      const p1 = measurePoints[0], p2 = measurePoints[1];
+      L.polyline([p1, p2], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
+      const dist = haversineDistance(p1.lat, p1.lng, p2.lat, p2.lng);
+      const bearing = calcBearing(p1.lat, p1.lng, p2.lat, p2.lng);
+      const compassDir = getCompassDirection(bearing);
+      const mid = L.latLng((p1.lat+p2.lat)/2, (p1.lng+p2.lng)/2);
+      const label = `${formatLength(dist)} | ${bearing.toFixed(2)}° ${compassDir}`;
+      L.marker(mid, {
+        icon: L.divIcon({ className: 'measure-tooltip', html: label, iconSize: 'auto', iconAnchor: [-8, 12] })
+      }).addTo(measureLines);
+      // Draw N arrow at start
+      L.marker(p1, {
+        icon: L.divIcon({ className: 'measure-tooltip', html: `↑N  →${bearing.toFixed(1)}°`, iconSize: 'auto', iconAnchor: [-8, -8] })
+      }).addTo(measureLines);
+      measurePoints = [];
+    }
+    return;
+  }
+
+  if(measureMode === 'length' && measurePoints.length > 1) {
+    const prev = measurePoints[measurePoints.length - 2];
+    const curr = measurePoints[measurePoints.length - 1];
+    L.polyline([prev, curr], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
+    let totalDist = 0;
+    for(let i = 1; i < measurePoints.length; i++) {
+      totalDist += haversineDistance(measurePoints[i-1].lat, measurePoints[i-1].lng, measurePoints[i].lat, measurePoints[i].lng);
+    }
+    const segDist = haversineDistance(prev.lat, prev.lng, curr.lat, curr.lng);
+    const bearing = calcBearing(prev.lat, prev.lng, curr.lat, curr.lng);
+    L.marker(curr, {
+      icon: L.divIcon({ className: 'measure-tooltip', html: `${formatLength(totalDist)} (seg: ${formatLength(segDist)}, ${bearing.toFixed(1)}°)`, iconSize: 'auto', iconAnchor: [-8, 12] })
+    }).addTo(measureLines);
+  }
+
+  if(measureMode === 'area' && measurePoints.length > 1) {
+    const prev = measurePoints[measurePoints.length - 2];
+    const curr = measurePoints[measurePoints.length - 1];
+    L.polyline([prev, curr], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
+  }
+}
+
+function measureDoubleClick(e) {
+  if(measureMode === 'length' && measurePoints.length >= 2) {
+    let totalDist = 0;
+    for(let i = 1; i < measurePoints.length; i++) {
+      totalDist += haversineDistance(measurePoints[i-1].lat, measurePoints[i-1].lng, measurePoints[i].lat, measurePoints[i].lng);
+    }
+    showToast(`Total length: ${formatLength(totalDist)}`, 'success');
+    measurePoints = [];
+  }
+  if(measureMode === 'area' && measurePoints.length >= 3) {
+    // Close polygon
+    L.polyline([measurePoints[measurePoints.length-1], measurePoints[0]], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
+    L.polygon(measurePoints, { color: '#ffa94d', fillColor: '#ffa94d', fillOpacity: 0.15, weight: 2, dashArray: '6,4' }).addTo(measureLines);
+    const ring = measurePoints.map(p => [p.lng, p.lat]);
+    ring.push(ring[0]); // close
+    const area = calcPolygonArea(ring);
+    const perimeter = calcLineLength(ring);
+    const centroid = L.latLng(
+      measurePoints.reduce((s,p)=>s+p.lat,0)/measurePoints.length,
+      measurePoints.reduce((s,p)=>s+p.lng,0)/measurePoints.length
+    );
+    L.marker(centroid, {
+      icon: L.divIcon({ className: 'measure-tooltip', html: `Area: ${formatArea(area)}<br>Perimeter: ${formatLength(perimeter)}`, iconSize: 'auto', iconAnchor: [-8, 12] })
+    }).addTo(measureLines);
+    showToast(`Area: ${formatArea(area)} | Perimeter: ${formatLength(perimeter)}`, 'success');
+    measurePoints = [];
+  }
+}
+
+function getCompassDirection(deg) {
+  const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  return dirs[Math.round(deg / 22.5) % 16];
+}
+
+// ── Utilities ──
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escXml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;'); }
+
+function showToast(msg, type='') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = msg;
+  document.getElementById('toastContainer').appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function loadScript(url) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = url;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+// ── Init ──
+document.getElementById('zoomLevel').textContent = map.getZoom();
+activateTool('pointer');
+
+// ── Mobile Panel Toggle ──
+const mobilePanelToggle = document.getElementById('mobilePanelToggle');
+const mobilePanelOverlay = document.getElementById('mobilePanelOverlay');
+const rightPanel = document.getElementById('rightPanel');
+let mobilePanelOpen = false;
+
+function toggleMobilePanel() {
+  mobilePanelOpen = !mobilePanelOpen;
+  rightPanel.classList.toggle('mobile-open', mobilePanelOpen);
+  mobilePanelOverlay.classList.toggle('show', mobilePanelOpen);
+  mobilePanelToggle.classList.toggle('open', mobilePanelOpen);
+  mobilePanelToggle.innerHTML = mobilePanelOpen
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>';
+}
+
+mobilePanelToggle.addEventListener('click', toggleMobilePanel);
+mobilePanelOverlay.addEventListener('click', toggleMobilePanel);
+
+// Auto-open panel on tab switch if mobile
+const origSwitchTab = switchTab;
+switchTab = function(tabName) {
+  origSwitchTab(tabName);
+  if(window.innerWidth <= 768 && !mobilePanelOpen) {
+    toggleMobilePanel();
+  }
+};
+
+// Close mobile panel when clicking export/import buttons that open panel
+document.getElementById('btnExportTop').addEventListener('click', () => {
+  if(window.innerWidth <= 768 && !mobilePanelOpen) toggleMobilePanel();
+});
+
+// Try geolocation
+if(navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    pos => map.setView([pos.coords.latitude, pos.coords.longitude], 13),
+    () => {},
+    { timeout: 5000 }
+  );
+}
+
+// Remove loading screen
+setTimeout(() => {
+  const ls = document.getElementById('loadingScreen');
+  ls.classList.add('fade');
+  setTimeout(() => ls.remove(), 500);
+}, 600);
+
+})();
+</script>
+</body>
+</html>

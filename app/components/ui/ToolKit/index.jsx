@@ -46,10 +46,10 @@ const ToolKit = () => {
         <SectionWrapper>
             <div id="toolkit" className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="max-w-2xl mx-auto space-y-3 sm:text-center">
-                    <h2 className="text-gray-800 text-3xl font-semibold sm:text-4xl dark:text-gray-300">
+                    <h2 className="text-3xl font-display font-800 leading-[1.4] text-brand-text dark:text-white sm:text-4xl">
                         ខ្មែរជីអាអេស អាខាដឺមី
                     </h2>
-                    <p className="dark:text-gray-300">
+                    <p className="text-brand-text/60 dark:text-gray-400 font-body">
                         ស្គាល់ពីស្ថាប័ន ស្គាល់ពីយើង និងចាប់ផ្តើមជាមួយគ្នា
                     </p>
                 </div>
@@ -62,10 +62,10 @@ const ToolKit = () => {
                                         <Image src={item.icon} alt={item.title} className="dark:invert transition-all duration-300 opacity-80 group-hover:opacity-100"/>
                                     </div>
                                     <div>
-                                        <h4 className="text-lg text-gray-800 font-semibold dark:text-gray-300">
+                                        <h4 className="text-lg font-display font-700 text-brand-text dark:text-white">
                                             {item.title}
                                         </h4> 
-                                        <p className="mt-3 dark:text-gray-300">
+                                        <p className="mt-3 text-brand-text/60 dark:text-gray-400 font-body text-sm leading-relaxed">
                                             {item.desc}
                                         </p>
                                     </div>

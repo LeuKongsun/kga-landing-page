@@ -60,7 +60,7 @@ html {
 }
 
 body {
-  @apply bg-background text-foreground;
+  @apply bg-brand-light text-brand-text dark:bg-[#0B1929] dark:text-gray-100 transition-colors duration-500 font-body;
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
@@ -118,4 +118,52 @@ body {
 
 .dark .map-filter {
   filter: invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.2);
+}
+
+/* ─── Grid Pattern Background ─── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(36,76,143,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36,76,143,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.dark .grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+}
+
+/* ─── Hero Gradient ─── */
+.dark .hero-gradient {
+  background: linear-gradient(165deg, #244C8F 0%, #1A3668 35%, #0F2347 70%, #0B1929 100%);
+}
+.hero-gradient {
+  background: linear-gradient(165deg, #e8edf5 0%, #dce4f0 35%, #cfd9eb 70%, #F5F7FA 100%);
+}
+
+/* ─── Navbar blur ─── */
+.nav-blur {
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+}
+
+/* ─── Card Hover ─── */
+.tool-card {
+  transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.tool-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -12px rgba(36,76,143,0.18), 0 0 0 1px rgba(36,76,143,0.08);
+}
+.dark .tool-card:hover {
+  box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,100,52,0.15);
+}
+
+/* ─── Orange Glow ─── */
+.orange-glow {
+  box-shadow: 0 0 0 0 rgba(255,100,52,0);
+  transition: box-shadow 0.3s ease;
+}
+.orange-glow:hover {
+  box-shadow: 0 4px 24px rgba(255,100,52,0.35);
 }

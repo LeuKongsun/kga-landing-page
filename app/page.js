@@ -22,7 +22,7 @@ export default function Home() {
         <Testimonials />
       </GradientWrapper>
       <Contact />
-      <FooterCTA />
+      {/* <FooterCTA /> */}
     </>
   );
 }

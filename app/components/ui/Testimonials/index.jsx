@@ -53,7 +53,7 @@ const Testimonials = () => {
   return (
     <SectionWrapper id="testimonials">
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 relative pb-4">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -z-10 rounded-full"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 blur-[100px] -z-10 rounded-full"></div>
         <div className="max-w-2xl sm:text-center md:mx-auto mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -61,10 +61,10 @@ const Testimonials = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-6">
+            <h2 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-6 text-brand-text dark:text-white">
               មតិសិស្សរបស់យើង
             </h2>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            <p className="text-lg text-brand-text/60 dark:text-gray-400 font-body max-w-xl mx-auto leading-relaxed">
               យើងតែងតែយកចិត្តទុកដាក់ទៅលើការបញ្ចេញមតិ និងការរិះគន់ស្ថាបនា ដើម្បីស្វែងរកភាពរីកចម្រើនទៅមុខ
             </p>
           </motion.div>
@@ -78,30 +78,29 @@ const Testimonials = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 rounded-3xl relative group"
+                className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group"
               >
-                <Quote className="absolute top-6 right-8 w-10 h-10 text-primary/10 group-hover:text-primary/20 transition-colors" />
+                <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-blue/10 dark:text-white/5" />
                 <figure className="relative z-10">
                   <div className="flex items-center gap-x-4 mb-6">
                     <div className="relative">
-                        <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-blue-400 rounded-full blur opacity-30 group-hover:opacity-60 transition-opacity"></div>
                         <Image
                             src={item.avatar}
-                            className="w-16 h-16 object-cover rounded-full relative z-10 border-2 border-background"
+                            className="w-14 h-14 object-cover rounded-full relative z-10 border border-brand-blue/10 dark:border-white/10"
                             alt={item.name}
                         />
                     </div>
                     <div>
-                      <span className="block text-xl font-bold">
+                      <span className="block text-lg font-display font-700 text-brand-text dark:text-white">
                         {item.name}
                       </span>
-                      <span className="block text-sm text-primary font-medium mt-0.5">
+                      <span className="block text-xs font-mono text-brand-orange mt-0.5">
                         {item.title}
                       </span>
                     </div>
                   </div>
                   <blockquote>
-                    <p className="text-foreground/80 leading-relaxed italic">&quot;{item.quote}&quot;</p>
+                    <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed italic font-body">&quot;{item.quote}&quot;</p>
                   </blockquote>
                 </figure>
               </motion.li>

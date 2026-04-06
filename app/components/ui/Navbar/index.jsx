@@ -22,6 +22,13 @@ const Navbar = () => {
     { title: "មុខវិជ្ជា", path: "#courses" },
     { title: "អំពីយើង", path: "#toolkit" },
     { title: "សិស្សរបស់យើង", path: "#testimonials" },
+    { 
+      title: "សមិទ្ធផលរបស់យើង", 
+      submenu: [
+        { title: "KGA Toolbox", path: "/kga-toolbox.html", target: "_blank" },
+        { title: "KGA Geodigitizer", path: "/geodigitizer.html", target: "_blank" },
+      ]
+    },
     // { title: "ឯកសារ", path: "http://doc.khmergrs.com" },
   ];
 
@@ -33,7 +40,7 @@ const Navbar = () => {
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${scrolled ? "py-2" : "py-4"}`}>
       <nav
         className={`mx-auto max-w-screen-xl px-4 md:px-8 transition-all duration-300 ${
-          scrolled || state ? "glass rounded-2xl mx-4" : "bg-transparent"
+          scrolled || state ? "nav-blur bg-white/80 dark:bg-[#0B1929]/80 border border-brand-blue/10 dark:border-white/5 rounded-2xl mx-4" : "bg-transparent"
         }`}
       >
         <div className="flex items-center justify-between py-3">
@@ -41,14 +48,44 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8">
             <ul className="flex items-center space-x-8 text-sm font-medium">
               {navigation.map((item, idx) => (
-                <li key={idx}>
-                  <Link 
-                    href={item.path} 
-                    className="text-foreground/70 hover:text-primary transition-colors duration-200 relative group"
-                  >
-                    {item.title}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                  </Link>
+                <li key={idx} className="relative group">
+                  {item.submenu ? (
+                    <>
+                      <button 
+                        className="text-foreground/70 group-hover:text-brand-orange transition-colors duration-200 relative flex items-center gap-1"
+                      >
+                        {item.title}
+                        <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                      </button>
+                      
+                      <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                        <div className="glass rounded-xl shadow-lg border border-border/50 py-2 w-48 flex flex-col bg-background/80 backdrop-blur-xl">
+                          {item.submenu.map((subItem, subIdx) => (
+                            <Link 
+                              key={subIdx}
+                              href={subItem.path}
+                              target={subItem.target}
+                              className="px-4 py-2 hover:bg-brand-orange/10 hover:text-brand-orange text-sm text-foreground/80 transition-colors"
+                            >
+                              {subItem.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Link 
+                      href={item.path} 
+                      className="text-foreground/70 hover:text-brand-orange transition-colors duration-200 relative flex items-center group pointer-events-auto"
+                      target={item.target}
+                    >
+                      {item.title}
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -56,7 +93,7 @@ const Navbar = () => {
               <ThemeSwitcher />
               <NavLink
                 href="https://t.me/khmergrsacademy"
-                className="rounded-full px-6 py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shadow-md hover:shadow-primary/20"
+                className="rounded-xl px-6 py-2 bg-brand-orange text-white text-sm font-display font-700 hover:bg-brand-orange-hover transition-all hover:scale-105 active:scale-95 orange-glow"
               >
                 ទំនាក់ទំនង
               </NavLink>
@@ -67,7 +104,7 @@ const Navbar = () => {
             <button
               role="button"
               aria-label="Open the menu"
-              className="p-2 text-foreground/70 hover:text-primary transition-colors"
+              className="p-2 text-foreground/70 hover:text-brand-orange transition-colors"
               onClick={toggleMenu}
             >
               {state ? (
@@ -93,20 +130,43 @@ const Navbar = () => {
             >
               <ul className="flex flex-col space-y-4 pt-4 border-t border-border">
                 {navigation.map((item, idx) => (
-                  <li key={idx}>
-                    <Link 
-                      href={item.path} 
-                      className="block text-lg font-medium text-foreground/80 hover:text-primary"
-                      onClick={() => setState(false)}
-                    >
-                      {item.title}
-                    </Link>
+                  <li key={idx} className="flex flex-col">
+                    {item.submenu ? (
+                      <>
+                        <div className="text-lg font-medium text-foreground/80 pb-2">
+                          {item.title}
+                        </div>
+                        <ul className="flex flex-col space-y-3 pl-4 border-l-2 border-border/50 ml-2">
+                          {item.submenu.map((subItem, subIdx) => (
+                            <li key={subIdx}>
+                              <Link 
+                                href={subItem.path} 
+                                className="block text-base font-medium text-foreground/70 hover:text-brand-orange"
+                                onClick={() => setState(false)}
+                                target={subItem.target}
+                              >
+                                {subItem.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <Link 
+                        href={item.path} 
+                        className="block text-lg font-medium text-foreground/80 hover:text-brand-orange"
+                        onClick={() => setState(false)}
+                        target={item.target}
+                      >
+                        {item.title}
+                      </Link>
+                    )}
                   </li>
                 ))}
                 <li>
                   <NavLink
                     href="https://t.me/khmergrsacademy"
-                    className="block w-full text-center rounded-xl py-3 bg-primary text-primary-foreground shadow-lg"
+                    className="block w-full text-center rounded-xl py-3 bg-brand-orange text-white font-display font-700 orange-glow"
                     onClick={() => setState(false)}
                   >
                     ទំនាក់ទំនង

@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KGA Toolbox — Engineering - Grade GIS Tools for ArcGIS Pro</title>
+  <link rel="icon" type="image/png" href="KGA_Toolbox_Logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#244C8F',
+              'blue-dark': '#1A3668',
+              'blue-deeper': '#0F2347',
+              orange: '#FF6434',
+              'orange-hover': '#E8551F',
+              text: '#1E2F4F',
+              light: '#F5F7FA',
+              muted: '#D9D9D9',
+            }
+          },
+          fontFamily: {
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
+            body: ['"DM Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ─── Base ─── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-family: 'DM Sans', sans-serif; }
+
+    /* ─── Grid Pattern Background ─── */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(36,76,143,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,76,143,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .dark .grid-bg {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    }
+
+    /* ─── Hero Gradient ─── */
+    .dark .hero-gradient {
+      background: linear-gradient(165deg, #244C8F 0%, #1A3668 35%, #0F2347 70%, #1E2F4F 100%);
+    }
+    .hero-gradient {
+      background: linear-gradient(165deg, #e8edf5 0%, #dce4f0 35%, #cfd9eb 70%, #c5d0e3 100%);
+    }
+    
+    /* ─── Gear Watermark ─── */
+    .gear-watermark {
+      position: absolute;
+      right: -120px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 600px;
+      height: 600px;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+    @media (max-width: 768px) {
+      .gear-watermark { width: 350px; height: 350px; right: -80px; }
+    }
+
+    /* ─── Card Hover ─── */
+    .tool-card {
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .tool-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -12px rgba(36,76,143,0.18), 0 0 0 1px rgba(36,76,143,0.08);
+    }
+    .dark .tool-card:hover {
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,100,52,0.15);
+    }
+
+    /* ─── Scroll Reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Logo Animation ─── */
+    @keyframes logoEntry {
+      0% { opacity: 0; transform: scale(0.7) rotate(-8deg); }
+      60% { opacity: 1; transform: scale(1.04) rotate(1deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    .logo-animate {
+      animation: logoEntry 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+
+    /* ─── Stagger Delays ─── */
+    .delay-1 { transition-delay: 0.08s; }
+    .delay-2 { transition-delay: 0.16s; }
+    .delay-3 { transition-delay: 0.24s; }
+    .delay-4 { transition-delay: 0.32s; }
+    .delay-5 { transition-delay: 0.40s; }
+    .delay-6 { transition-delay: 0.48s; }
+    .delay-7 { transition-delay: 0.56s; }
+    .delay-8 { transition-delay: 0.64s; }
+    .delay-9 { transition-delay: 0.72s; }
+    .delay-10 { transition-delay: 0.80s; }
+    .delay-11 { transition-delay: 0.88s; }
+
+    /* ─── Featured Tag ─── */
+    .featured-tag {
+      background: linear-gradient(135deg, #FF6434, #e8551f);
+      clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
+    }
+
+    /* ─── Navbar blur ─── */
+    .nav-blur {
+      backdrop-filter: blur(16px) saturate(1.6);
+      -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F5F7FA; }
+    ::-webkit-scrollbar-thumb { background: #244C8F; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-track { background: #0F2347; }
+    .dark ::-webkit-scrollbar-thumb { background: #FF6434; }
+
+    /* ─── Orange Glow ─── */
+    .orange-glow {
+      box-shadow: 0 0 0 0 rgba(255,100,52,0);
+      transition: box-shadow 0.3s ease;
+    }
+    .orange-glow:hover {
+      box-shadow: 0 4px 24px rgba(255,100,52,0.35);
+    }
+
+    /* ─── Topo Lines Decoration ─── */
+    .topo-lines {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%23244C8F' stroke-width='0.5' opacity='0.06'/%3E%3Ccircle cx='100' cy='100' r='55' fill='none' stroke='%23244C8F' stroke-width='0.5' opacity='0.05'/%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23244C8F' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E");
+    }
+    .dark .topo-lines {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.03'/%3E%3Ccircle cx='100' cy='100' r='55' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.025'/%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.02'/%3E%3C/svg%3E");
+    }
+
+    /* ─── Pricing Card Popular ─── */
+    .pricing-popular {
+      background: linear-gradient(165deg, #244C8F 0%, #1A3668 100%);
+      position: relative;
+    }
+    .pricing-popular::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 1.125rem;
+      padding: 2px;
+      background: linear-gradient(135deg, #FF6434, #244C8F, #FF6434);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,100,52,0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(255,100,52,0); }
+    }
+    .badge-pulse { animation: badgePulse 2s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-brand-light text-brand-text dark:bg-[#0B1929] dark:text-gray-100 transition-colors duration-500">
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/80 dark:bg-[#0B1929]/80 border-b border-brand-blue/10 dark:border-white/5 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo Mark -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-9 h-9 rounded-lg overflow-hidden shadow-md group-hover:shadow-brand-blue/30 transition-shadow">
+            <img src="KGA_Toolbox_Logo.png" alt="KGA Toolbox Logo" class="w-full h-full object-cover" />
+          </div>
+          <span class="font-display font-800 text-lg tracking-tight text-brand-text dark:text-white">KGA <span class="text-brand-orange">Toolbox</span></span>
+        </a>
+
+        <!-- Nav Links (desktop) -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#tools" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">Tools</a>
+          <a href="#featured" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">Featured</a>
+          <a href="#pricing" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">Pricing</a>
+          <a href="#about" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">About</a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Dark mode toggle -->
+          <button id="darkToggle" class="w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors" aria-label="Toggle dark mode">
+            <svg id="sunIcon" class="w-4.5 h-4.5 hidden dark:block text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg id="moonIcon" class="w-4.5 h-4.5 block dark:hidden text-brand-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile menu toggle -->
+          <button id="mobileMenuBtn" class="md:hidden w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center" aria-label="Menu">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+
+          <!-- GitHub (desktop) -->
+          <a href="https://www.khmergrs.com/" target="_blank" rel="noopener" class="hidden md:inline-flex items-center gap-2 px-4 py-2 bg-brand-orange text-white text-sm font-semibold rounded-lg orange-glow hover:bg-brand-orange-hover transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Visit Us!
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-brand-blue/10 dark:border-white/5 bg-white/95 dark:bg-[#0B1929]/95 nav-blur">
+      <div class="px-4 py-4 flex flex-col gap-3">
+        <a href="#tools" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">Tools</a>
+        <a href="#featured" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">Featured</a>
+        <a href="#pricing" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">Pricing</a>
+        <a href="#about" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">About</a>
+        <a href="https://github.com/kga-toolbox" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-brand-orange text-white text-sm font-semibold rounded-lg w-fit">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section class="hero-gradient relative overflow-hidden pt-16">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
+
+      <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+      <div class="max-w-3xl lg:max-w-xl xl:max-w-2xl flex-shrink-0">
+        <!-- Logo -->
+        <div class="logo-animate mb-8">
+          <div class="inline-flex items-center gap-4 bg-brand-blue/10 dark:bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border border-brand-blue/15 dark:border-white/10">
+            <div class="w-14 h-14 rounded-xl overflow-hidden">
+              <img src="KGA_Toolbox_Logo.png" alt="KGA Toolbox Logo" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div class="font-display font-800 text-2xl text-brand-text dark:text-white tracking-tight">KGA Toolbox</div>
+              <div class="font-mono text-xs text-brand-text/50 dark:text-white/50 tracking-wider">v2026.1.1 — ArcGIS Pro</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <h1 class="font-display font-800 text-4xl sm:text-5xl lg:text-6xl text-brand-text dark:text-white leading-[1.1] tracking-tight mb-6">
+          Engineering-Grade<br/>
+          <span class="text-brand-orange">GIS Tools</span> for<br/>
+          ArcGIS Pro
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-lg sm:text-xl text-brand-text/60 dark:text-white/60 font-body max-w-xl mb-10 leading-relaxed">
+          A comprehensive Python toolbox with 11 specialized categories — from cadastral operations and CRS management to topology checks and spatial analysis.
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-wrap gap-4">
+          <a href="https://t.me/khmergrsacademy" target="_blank" class="inline-flex items-center gap-2.5 px-7 py-3.5 bg-brand-orange text-white font-display font-700 rounded-xl orange-glow hover:bg-brand-orange-hover transition-all text-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Purchase Toolbox
+          </a>
+          <a href="#tools" class="inline-flex items-center gap-2.5 px-7 py-3.5 border-2 border-brand-blue/25 dark:border-white/25 text-brand-text dark:text-white font-display font-700 rounded-xl hover:bg-brand-blue/10 dark:hover:bg-white/10 transition-all text-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+            Explore Tools
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex flex-wrap gap-8 mt-14 pt-8 border-t border-brand-blue/10 dark:border-white/10">
+          <div>
+            <div class="font-display font-800 text-2xl text-brand-text dark:text-white">11</div>
+            <div class="text-sm text-brand-text/40 dark:text-white/40 font-mono">Categories</div>
+          </div>
+          <div>
+            <div class="font-display font-800 text-2xl text-brand-text dark:text-white">50+</div>
+            <div class="text-sm text-brand-text/40 dark:text-white/40 font-mono">Tools</div>
+          </div>
+          <div>
+            <div class="font-display font-800 text-2xl text-brand-text dark:text-white">100%</div>
+            <div class="text-sm text-brand-text/40 dark:text-white/40 font-mono">Python / arcpy</div>
+          </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="flex items-center gap-3 mt-8">
+          <span class="text-xs text-brand-text/30 dark:text-white/30 font-mono uppercase tracking-wider mr-1">Follow us</span>
+          <a href="https://www.facebook.com/khmergisacademy" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 rounded-lg bg-brand-blue/8 dark:bg-white/8 border border-brand-blue/10 dark:border-white/10 flex items-center justify-center text-brand-text/50 dark:text-white/50 hover:text-brand-blue dark:hover:text-white hover:bg-brand-blue/15 dark:hover:bg-white/15 transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/@Khmergisacademy" target="_blank" rel="noopener" aria-label="YouTube" class="w-9 h-9 rounded-lg bg-brand-blue/8 dark:bg-white/8 border border-brand-blue/10 dark:border-white/10 flex items-center justify-center text-brand-text/50 dark:text-white/50 hover:text-brand-blue dark:hover:text-white hover:bg-brand-blue/15 dark:hover:bg-white/15 transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+          <a href="https://t.me/khmergisacademychannel" target="_blank" rel="noopener" aria-label="Telegram" class="w-9 h-9 rounded-lg bg-brand-blue/8 dark:bg-white/8 border border-brand-blue/10 dark:border-white/10 flex items-center justify-center text-brand-text/50 dark:text-white/50 hover:text-brand-blue dark:hover:text-white hover:bg-brand-blue/15 dark:hover:bg-white/15 transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@khmergrsacademy" target="_blank" rel="noopener" aria-label="TikTok" class="w-9 h-9 rounded-lg bg-brand-blue/8 dark:bg-white/8 border border-brand-blue/10 dark:border-white/10 flex items-center justify-center text-brand-text/50 dark:text-white/50 hover:text-brand-blue dark:hover:text-white hover:bg-brand-blue/15 dark:hover:bg-white/15 transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </a>
+          <a href="https://linkedin.com/company/khmer-grs-academy" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 rounded-lg bg-brand-blue/8 dark:bg-white/8 border border-brand-blue/10 dark:border-white/10 flex items-center justify-center text-brand-text/50 dark:text-white/50 hover:text-brand-blue dark:hover:text-white hover:bg-brand-blue/15 dark:hover:bg-white/15 transition-all">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Image Carousel -->
+      <div class="hidden lg:flex flex-1 items-center justify-center">
+        <div id="heroCarousel" class="relative w-full max-w-2xl xl:max-w-3xl">
+          <!-- Slides -->
+          <div class="relative overflow-hidden">
+            <div id="carouselTrack" class="flex transition-transform duration-700 ease-in-out">
+              <img src="hero-1.png" alt="GIS Layers Illustration" class="w-full flex-shrink-0 drop-shadow-2xl" />
+              <img src="hero-2.png" alt="GIS Workflow Illustration" class="w-full flex-shrink-0 drop-shadow-2xl" />
+              <img src="hero-3.png" alt="GIS Workflow Illustration" class="w-full flex-shrink-0 drop-shadow-2xl" />
+              <img src="hero-4.png" alt="GIS Workflow Illustration" class="w-full flex-shrink-0 drop-shadow-2xl" />
+              <img src="hero-5.png" alt="GIS Workflow Illustration" class="w-full flex-shrink-0 drop-shadow-2xl" />
+              <img src="hero-6.png" alt="GIS Workflow Illustration" class="w-full flex-shrink-0 drop-shadow-2xl" />
+            </div>
+          </div>
+          <!-- Dots -->
+          <div class="flex justify-center gap-2.5 mt-6">
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-brand-blue/60 dark:bg-white/60 transition-all duration-300" data-index="0"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-brand-blue/20 dark:bg-white/20 transition-all duration-300" data-index="1"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-brand-blue/20 dark:bg-white/20 transition-all duration-300" data-index="2"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-brand-blue/20 dark:bg-white/20 transition-all duration-300" data-index="3"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-brand-blue/20 dark:bg-white/20 transition-all duration-300" data-index="4"></button>
+            <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-brand-blue/20 dark:bg-white/20 transition-all duration-300" data-index="5"></button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-brand-light dark:from-[#0B1929] to-transparent"></div>
+  </section>
+
+
+  <!-- ═══════════════ TOOL CATEGORIES ═══════════════ -->
+  <section id="tools" class="grid-bg topo-lines relative py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-blue dark:text-brand-orange tracking-wider uppercase mb-4">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          11 Categories
+        </div>
+        <h2 class="font-display font-800 text-3xl sm:text-4xl text-brand-text dark:text-white tracking-tight mb-4">Toolbox Categories</h2>
+        <p class="text-brand-text/60 dark:text-gray-400 max-w-2xl mx-auto">Each category groups related GIS operations into a focused, production-ready module designed for cadastral, engineering, and spatial workflows.</p>
+      </div>
+
+      <!-- Card Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+        <!-- Card 1: BasicDataCreation -->
+        <div class="tool-card reveal delay-1 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGABasicDataCreation</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Generate foundational GIS datasets including points, lines, polygons, and annotation layers from scratch.</p>
+        </div>
+
+        <!-- Card 2: Cadastral -->
+        <div class="tool-card reveal delay-2 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGACadastral</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Cadastral-specific tools for parcel management, boundary adjustments, and land survey data processing.</p>
+        </div>
+
+        <!-- Card 3: Converter -->
+        <div class="tool-card reveal delay-3 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGAConverter</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Convert between formats — shapefile, GeoJSON, KML, CAD, and geodatabase feature classes with precision.</p>
+        </div>
+
+        <!-- Card 4: CRS -->
+        <div class="tool-card reveal delay-4 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGACRS</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Coordinate Reference System tools — detect, assign, reproject, and harmonize spatial references across datasets.</p>
+        </div>
+
+        <!-- Card 5: DataCreation -->
+        <div class="tool-card reveal delay-5 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGADataCreation</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Advanced data creation with schema templates, attribute population, and domain-driven feature generation.</p>
+        </div>
+
+        <!-- Card 6: DataManagement -->
+        <div class="tool-card reveal delay-6 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGADataManagement</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Manage geodatabases, feature classes, domains, subtypes, and attribute rules at enterprise scale.</p>
+        </div>
+
+        <!-- Card 7: Geoprocessing -->
+        <div class="tool-card reveal delay-7 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGAGeoprocessing</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Clip, buffer, dissolve, intersect, and merge operations with smart defaults and batch processing support.</p>
+        </div>
+
+        <!-- Card 8: Mapping -->
+        <div class="tool-card reveal delay-8 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGAMapping</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Automate map production — symbology, labeling, layout generation, and multi-page map series export.</p>
+        </div>
+
+        <!-- Card 9: QC -->
+        <div class="tool-card reveal delay-9 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGAQC</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Quality Control checks — validate attributes, geometry integrity, schema conformance, and data completeness.</p>
+        </div>
+
+        <!-- Card 10: SpatialAnalysis -->
+        <div class="tool-card reveal delay-10 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGASpatialAnalysis</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Proximity, overlay, direction-based selection, and spatial statistics for complex analytical workflows.</p>
+        </div>
+
+        <!-- Card 11: TopologyCheck -->
+        <div class="tool-card reveal delay-11 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-blue dark:text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-base text-brand-text dark:text-white mb-2">KGATopologyCheck</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed">Detect gaps, overlaps, dangles, and self-intersections with automated topology rule validation.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ FEATURED TOOLS ═══════════════ -->
+  <section id="featured" class="relative py-20 sm:py-28 bg-white dark:bg-[#0E1E35]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-orange tracking-wider uppercase mb-4">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Highlighted
+        </div>
+        <h2 class="font-display font-800 text-3xl sm:text-4xl text-brand-text dark:text-white tracking-tight mb-4">Featured Tools</h2>
+        <p class="text-brand-text/60 dark:text-gray-400 max-w-2xl mx-auto">Hand-picked tools that solve the hardest, most common GIS problems in engineering and cadastral workflows.</p>
+      </div>
+
+      <!-- Featured Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Featured 1 -->
+        <div class="reveal delay-1 group relative bg-gradient-to-br from-brand-blue/[0.03] to-brand-orange/[0.03] dark:from-white/[0.03] dark:to-brand-orange/[0.03] rounded-2xl border border-brand-blue/10 dark:border-white/8 p-8 hover:border-brand-orange/30 transition-all duration-300">
+          <div class="featured-tag absolute top-6 right-6 px-3 py-1 text-white text-xs font-mono font-600 tracking-wider">FEATURED</div>
+          <div class="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-xl text-brand-text dark:text-white mb-3">Direction-Based Feature Selector</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">Select features by compass direction relative to a reference point or feature. Perfect for regulatory compliance where directional context matters.</p>
+          <div class="flex items-center gap-2 text-xs font-mono text-brand-blue dark:text-brand-orange">
+            <span class="px-2 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded">KGASpatialAnalysis</span>
+          </div>
+        </div>
+
+        <!-- Featured 2 -->
+        <div class="reveal delay-2 group relative bg-gradient-to-br from-brand-blue/[0.03] to-brand-orange/[0.03] dark:from-white/[0.03] dark:to-brand-orange/[0.03] rounded-2xl border border-brand-blue/10 dark:border-white/8 p-8 hover:border-brand-orange/30 transition-all duration-300">
+          <div class="featured-tag absolute top-6 right-6 px-3 py-1 text-white text-xs font-mono font-600 tracking-wider">FEATURED</div>
+          <div class="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-xl text-brand-text dark:text-white mb-3">CRS Fixer &amp; Harmonizer</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">Detect mismatched coordinate reference systems, batch-assign correct CRS, and reproject entire geodatabases in one operation.</p>
+          <div class="flex items-center gap-2 text-xs font-mono text-brand-blue dark:text-brand-orange">
+            <span class="px-2 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded">KGACRS</span>
+          </div>
+        </div>
+
+        <!-- Featured 3 -->
+        <div class="reveal delay-3 group relative bg-gradient-to-br from-brand-blue/[0.03] to-brand-orange/[0.03] dark:from-white/[0.03] dark:to-brand-orange/[0.03] rounded-2xl border border-brand-blue/10 dark:border-white/8 p-8 hover:border-brand-orange/30 transition-all duration-300">
+          <div class="featured-tag absolute top-6 right-6 px-3 py-1 text-white text-xs font-mono font-600 tracking-wider">FEATURED</div>
+          <div class="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-xl text-brand-text dark:text-white mb-3">Smart Default Value Filler</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">Populate missing attributes intelligently based on domain rules, spatial relationships, and configurable default value mappings.</p>
+          <div class="flex items-center gap-2 text-xs font-mono text-brand-blue dark:text-brand-orange">
+            <span class="px-2 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded">KGADataManagement</span>
+          </div>
+        </div>
+
+        <!-- Featured 4 -->
+        <div class="reveal delay-4 group relative bg-gradient-to-br from-brand-blue/[0.03] to-brand-orange/[0.03] dark:from-white/[0.03] dark:to-brand-orange/[0.03] rounded-2xl border border-brand-blue/10 dark:border-white/8 p-8 hover:border-brand-orange/30 transition-all duration-300">
+          <div class="featured-tag absolute top-6 right-6 px-3 py-1 text-white text-xs font-mono font-600 tracking-wider">FEATURED</div>
+          <div class="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+          </div>
+          <h3 class="font-display font-700 text-xl text-brand-text dark:text-white mb-3">Topology Checker</h3>
+          <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">Run comprehensive topology rules — gaps, overlaps, dangles, self-intersections — with detailed error reports and auto-fix suggestions.</p>
+          <div class="flex items-center gap-2 text-xs font-mono text-brand-blue dark:text-brand-orange">
+            <span class="px-2 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded">KGATopologyCheck</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ PRICING ═══════════════ -->
+  <section id="pricing" class="grid-bg relative py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-16 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-orange tracking-wider uppercase mb-4">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          License Packages
+        </div>
+        <h2 class="font-display font-800 text-3xl sm:text-4xl text-brand-text dark:text-white tracking-tight mb-4">License Package Available</h2>
+        <p class="text-brand-text/60 dark:text-gray-400 max-w-2xl mx-auto">All packages include full access to 50+ tools across 11 categories. Node-locked licenses tied to your device for maximum security.</p>
+      </div>
+
+      <!-- Pricing Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+
+        <!-- KGA Students -->
+        <div class="reveal delay-1 tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/10 dark:border-white/8 p-8 flex flex-col">
+          <div class="mb-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-blue dark:text-brand-orange mb-3">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 12 3 12 0v-5"/></svg>
+              Student
+            </div>
+            <h3 class="font-display font-700 text-lg text-brand-text dark:text-white mb-1">KGA Students</h3>
+            <p class="text-sm text-brand-text/50 dark:text-gray-500">For GIS students &amp; learners</p>
+          </div>
+          <div class="mb-6">
+            <div class="flex items-baseline gap-1">
+              <span class="font-display font-800 text-4xl text-brand-text dark:text-white">$40</span>
+              <span class="text-sm text-brand-text/40 dark:text-gray-500">/ year</span>
+            </div>
+          </div>
+          <ul class="flex flex-col gap-3 mb-8 flex-grow">
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              1 device (node-locked)
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              All 11 categories (50+ tools)
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              1 year license duration
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Community support
+            </li>
+          </ul>
+          <a href="https:/t.me/khmergrsacademy" target="_blank" class="block text-center px-6 py-3 rounded-xl border-2 border-brand-blue/20 dark:border-white/15 text-brand-blue dark:text-white font-display font-700 text-sm hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-all">
+            Get Student License
+          </a>
+        </div>
+
+        <!-- General Users (Popular) -->
+        <div class="reveal delay-2 tool-card pricing-popular rounded-2xl p-8 flex flex-col relative">
+          <div class="badge-pulse absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-brand-orange text-white text-xs font-mono font-600 rounded-full tracking-wider uppercase">Most Popular</div>
+          <div class="mb-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-mono font-600 text-brand-orange mb-3">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Individual
+            </div>
+            <h3 class="font-display font-700 text-lg text-white mb-1">General Users</h3>
+            <p class="text-sm text-white/50">For professionals &amp; freelancers</p>
+          </div>
+          <div class="mb-6">
+            <div class="flex items-baseline gap-1">
+              <span class="font-display font-800 text-4xl text-white">$50</span>
+              <span class="text-sm text-white/40">/ year</span>
+            </div>
+          </div>
+          <ul class="flex flex-col gap-3 mb-8 flex-grow">
+            <li class="flex items-start gap-2.5 text-sm text-white/80">
+              <svg class="w-4 h-4 text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              1 device (node-locked)
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-white/80">
+              <svg class="w-4 h-4 text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              All 11 categories (50+ tools)
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-white/80">
+              <svg class="w-4 h-4 text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              1 year license duration
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-white/80">
+              <svg class="w-4 h-4 text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Priority email support
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-white/80">
+              <svg class="w-4 h-4 text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Free updates during license period
+            </li>
+          </ul>
+          <a href="https:/t.me/khmergrsacademy" target="_blank" class="block text-center px-6 py-3 rounded-xl bg-brand-orange text-white font-display font-700 text-sm orange-glow hover:bg-brand-orange-hover transition-all">
+            Purchase License
+          </a>
+        </div>
+
+        <!-- Team -->
+        <div class="reveal delay-3 tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/10 dark:border-white/8 p-8 flex flex-col">
+          <div class="mb-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-blue dark:text-brand-orange mb-3">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Team
+            </div>
+            <h3 class="font-display font-700 text-lg text-brand-text dark:text-white mb-1">Team</h3>
+            <p class="text-sm text-brand-text/50 dark:text-gray-500">For teams &amp; organizations</p>
+          </div>
+          <div class="mb-6">
+            <div class="flex items-baseline gap-1">
+              <span class="font-display font-800 text-4xl text-brand-text dark:text-white">$120</span>
+              <span class="text-sm text-brand-text/40 dark:text-gray-500">/ year</span>
+            </div>
+          </div>
+          <ul class="flex flex-col gap-3 mb-8 flex-grow">
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Up to 3 devices (node-locked)
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              All 11 categories (50+ tools)
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              1 year license duration
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Priority email &amp; Telegram support
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-brand-text/70 dark:text-gray-300">
+              <svg class="w-4 h-4 text-brand-blue dark:text-brand-orange mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Free updates during license period
+            </li>
+          </ul>
+          <a href="https:/t.me/khmergrsacademy" target="_blank" class="block text-center px-6 py-3 rounded-xl border-2 border-brand-blue/20 dark:border-white/15 text-brand-blue dark:text-white font-display font-700 text-sm hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-all">
+            Get Team License
+          </a>
+        </div>
+
+      </div>
+
+      <!-- License Comparison Table -->
+      <div class="reveal mt-16 max-w-4xl mx-auto">
+        <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/10 dark:border-white/8 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-brand-blue/10 dark:border-white/8">
+                  <th class="text-left font-display font-700 text-brand-text dark:text-white px-6 py-4">Package</th>
+                  <th class="text-center font-display font-700 text-brand-text dark:text-white px-4 py-4">Devices</th>
+                  <th class="text-center font-display font-700 text-brand-text dark:text-white px-4 py-4">License Type</th>
+                  <th class="text-center font-display font-700 text-brand-text dark:text-white px-4 py-4">Price (USD)</th>
+                  <th class="text-center font-display font-700 text-brand-text dark:text-white px-4 py-4">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-brand-blue/5 dark:border-white/5">
+                  <td class="px-6 py-4 font-medium text-brand-text dark:text-gray-200">KGA Students</td>
+                  <td class="text-center px-4 py-4 text-brand-text/60 dark:text-gray-400">1</td>
+                  <td class="text-center px-4 py-4"><span class="px-2.5 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono text-brand-blue dark:text-brand-orange">Node-locked</span></td>
+                  <td class="text-center px-4 py-4 font-display font-700 text-brand-orange">$40</td>
+                  <td class="text-center px-4 py-4 text-brand-text/60 dark:text-gray-400">1 year</td>
+                </tr>
+                <tr class="border-b border-brand-blue/5 dark:border-white/5 bg-brand-blue/[0.02] dark:bg-white/[0.02]">
+                  <td class="px-6 py-4 font-medium text-brand-text dark:text-gray-200">General Users</td>
+                  <td class="text-center px-4 py-4 text-brand-text/60 dark:text-gray-400">1</td>
+                  <td class="text-center px-4 py-4"><span class="px-2.5 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono text-brand-blue dark:text-brand-orange">Node-locked</span></td>
+                  <td class="text-center px-4 py-4 font-display font-700 text-brand-orange">$50</td>
+                  <td class="text-center px-4 py-4 text-brand-text/60 dark:text-gray-400">1 year</td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4 font-medium text-brand-text dark:text-gray-200">Team</td>
+                  <td class="text-center px-4 py-4 text-brand-text/60 dark:text-gray-400">Up to 3</td>
+                  <td class="text-center px-4 py-4"><span class="px-2.5 py-0.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono text-brand-blue dark:text-brand-orange">Node-locked</span></td>
+                  <td class="text-center px-4 py-4 font-display font-700 text-brand-orange">$120</td>
+                  <td class="text-center px-4 py-4 text-brand-text/60 dark:text-gray-400">1 year</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods Note -->
+      <div class="reveal text-center mt-12">
+        <p class="text-sm text-brand-text/40 dark:text-gray-500 mb-4">Accepted payment methods</p>
+        <div class="flex items-center justify-center gap-6 flex-wrap">
+          <div class="flex items-center gap-2 text-brand-text/50 dark:text-gray-400">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span class="text-xs font-mono">Visa / Mastercard</span>
+          </div>
+          <div class="flex items-center gap-2 text-brand-text/50 dark:text-gray-400">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span class="text-xs font-mono">PayPal</span>
+          </div>
+          <div class="flex items-center gap-2 text-brand-text/50 dark:text-gray-400">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span class="text-xs font-mono">Bank Transfer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ ABOUT / HOW IT WORKS ═══════════════ -->
+  <section id="about" class="grid-bg py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/8 dark:bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-blue dark:text-brand-orange tracking-wider uppercase mb-4">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          About
+        </div>
+        <h2 class="font-display font-800 text-3xl sm:text-4xl text-brand-text dark:text-white tracking-tight mb-6">Built for GIS Professionals</h2>
+        <p class="text-brand-text/60 dark:text-gray-400 leading-relaxed mb-8">KGA Toolbox is a Python-based ArcGIS Pro toolbox (.pyt) built by GIS engineers for GIS engineers. It eliminates repetitive tasks, enforces data quality standards, and accelerates production workflows in cadastral, infrastructure, and environmental mapping projects.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left mt-12">
+          <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6">
+            <div class="font-mono text-brand-orange text-2xl font-700 mb-2">01</div>
+            <h3 class="font-display font-700 text-brand-text dark:text-white mb-2">Activate</h3>
+            <p class="text-sm text-brand-text/60 dark:text-gray-400">Purchase and Activate toolbox license and install to your ArcGIS Pro project.</p>
+          </div>
+          <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6">
+            <div class="font-mono text-brand-orange text-2xl font-700 mb-2">02</div>
+            <h3 class="font-display font-700 text-brand-text dark:text-white mb-2">Configure</h3>
+            <p class="text-sm text-brand-text/60 dark:text-gray-400">Set your workspace, CRS defaults, and QC thresholds in the config file.</p>
+          </div>
+          <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6">
+            <div class="font-mono text-brand-orange text-2xl font-700 mb-2">03</div>
+            <h3 class="font-display font-700 text-brand-text dark:text-white mb-2">Execute</h3>
+            <p class="text-sm text-brand-text/60 dark:text-gray-400">Run tools directly from the Geoprocessing pane — all 50+ tools ready to go.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="bg-brand-blue-deeper dark:bg-[#060E1A] border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+
+        <!-- Brand Column -->
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 rounded-lg overflow-hidden">
+              <img src="KGA_Toolbox_Logo.png" alt="KGA Toolbox Logo" class="w-full h-full object-cover" />
+            </div>
+            <span class="font-display font-800 text-lg text-white tracking-tight">KGA <span class="text-brand-orange">Toolbox</span></span>
+          </div>
+          <p class="text-white/40 text-sm leading-relaxed max-w-sm mb-6">Engineering-grade GIS tools built for ArcGIS Pro. From cadastral operations to topology validation — automate your spatial workflows.</p>
+
+          <!-- Social Media Links -->
+          <div class="flex items-center gap-2.5">
+            <a href="https://www.facebook.com/khmergisacademy" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center text-white/40 hover:text-brand-orange hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@Khmergisacademy" target="_blank" rel="noopener" aria-label="YouTube" class="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center text-white/40 hover:text-brand-orange hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="https://t.me/khmergisacademychannel" target="_blank" rel="noopener" aria-label="Telegram" class="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center text-white/40 hover:text-brand-orange hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@khmergrsacademy" target="_blank" rel="noopener" aria-label="TikTok" class="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center text-white/40 hover:text-brand-orange hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+            <a href="https://linkedin.com/company/khmer-grs-academy" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center text-white/40 hover:text-brand-orange hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <!--<a href="https://github.com/kga-toolbox" target="_blank" rel="noopener" aria-label="GitHub" class="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center text-white/40 hover:text-brand-orange hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>-->
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="font-display font-700 text-white text-sm mb-4">Product</h4>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="#tools" class="text-sm text-white/40 hover:text-brand-orange transition-colors">Tool Categories</a></li>
+            <li><a href="#featured" class="text-sm text-white/40 hover:text-brand-orange transition-colors">Featured Tools</a></li>
+            <li><a href="#pricing" class="text-sm text-white/40 hover:text-brand-orange transition-colors">Pricing</a></li>
+            <!--<li><a href="https://github.com/kga-toolbox" target="_blank" class="text-sm text-white/40 hover:text-brand-orange transition-colors">GitHub Repo</a></li>-->
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div>
+          <h4 class="font-display font-700 text-white text-sm mb-4">Community</h4>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="https://www.facebook.com/khmergisacademy" target="_blank" class="text-sm text-white/40 hover:text-brand-orange transition-colors flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook Page
+            </a></li>
+            <li><a href="https://www.youtube.com/@Khmergisacademy" target="_blank" class="text-sm text-white/40 hover:text-brand-orange transition-colors flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              YouTube Channel
+            </a></li>
+            <li><a href="https://t.me/khmergisacademychannel" target="_blank" class="text-sm text-white/40 hover:text-brand-orange transition-colors flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+              Telegram Channel
+            </a></li>
+            <li><a href="https://linkedin.com/company/khmer-grs-academy" target="_blank" class="text-sm text-white/40 hover:text-brand-orange transition-colors flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a></li>
+            <li><a href="https://www.tiktok.com/@khmergrsacademy" target="_blank" class="text-sm text-white/40 hover:text-brand-orange transition-colors flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+              TikTok
+            </a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-white/30 text-xs font-mono">&copy; 2026 KGA Toolbox. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <span class="text-white/20 font-mono text-xs">v2026.1.1</span>
+          <span class="text-white/10">|</span>
+          <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Privacy Policy</a>
+          <span class="text-white/10">|</span>
+          <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════ SCRIPTS ═══════════════ -->
+  <script>
+    // ─── Dark Mode Toggle ───
+    const html = document.documentElement;
+    const darkToggle = document.getElementById('darkToggle');
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+    darkToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // ─── Mobile Menu ───
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+    // ─── Scroll Reveal ───
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ─── Navbar Scroll Shadow ───
+    const navbar = document.getElementById('navbar');
+    let lastY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > 20) {
+        navbar.classList.add('shadow-lg', 'shadow-brand-blue/5');
+      } else {
+        navbar.classList.remove('shadow-lg', 'shadow-brand-blue/5');
+      }
+      lastY = y;
+    }, { passive: true });
+
+    // ─── Hero Carousel ───
+    (() => {
+      const track = document.getElementById('carouselTrack');
+      const dots = document.querySelectorAll('.carousel-dot');
+      if (!track || !dots.length) return;
+      const total = track.children.length;
+      let current = 0;
+      let timer;
+
+      function goTo(i) {
+        current = ((i % total) + total) % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, idx) => {
+          const active = idx === current;
+          d.classList.toggle('bg-brand-blue/60', active);
+          d.classList.toggle('dark:bg-white/60', active);
+          d.classList.toggle('bg-brand-blue/20', !active);
+          d.classList.toggle('dark:bg-white/20', !active);
+          d.style.width = active ? '24px' : '';
+          d.style.borderRadius = '9999px';
+        });
+      }
+
+      function startAuto() {
+        clearInterval(timer);
+        timer = setInterval(() => goTo(current + 1), 4000);
+      }
+
+      dots.forEach(d => d.addEventListener('click', () => {
+        goTo(+d.dataset.index);
+        startAuto();
+      }));
+
+      startAuto();
+    })();
+  </script>
+
+</body>
+</html>

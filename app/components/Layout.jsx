@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
   return (
     <HeroUIProvider>
       <ThemeProvider attribute="class" defaultTheme="light">
-        <div className="dark:bg-gray-800">
+        <div className="min-h-screen">
           <Navbar />
           <main>{children}</main>
           <Footer />

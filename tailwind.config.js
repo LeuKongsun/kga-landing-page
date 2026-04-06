@@ -11,6 +11,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        brand: {
+          blue: '#244C8F',
+          'blue-dark': '#1A3668',
+          'blue-deeper': '#0F2347',
+          orange: '#FF6434',
+          'orange-hover': '#E8551F',
+          text: '#1E2F4F',
+          light: '#F5F7FA',
+          muted: '#D9D9D9',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -49,6 +59,11 @@ module.exports = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        display: ['var(--font-hanuman)', 'serif'],
+        body: ['var(--font-hanuman)', 'serif'],
+        mono: ['var(--font-jetbrains)', 'monospace'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

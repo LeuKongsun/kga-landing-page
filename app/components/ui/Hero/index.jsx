@@ -21,10 +21,10 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full pt-32 pb-20 overflow-hidden bg-mesh-gradient">
+    <section className="relative w-full pt-32 pb-20 overflow-hidden hero-gradient grid-bg">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-brand-blue/20 blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-brand-orange/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="custom-screen relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
@@ -33,26 +33,26 @@ const Hero = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <h1 className="text-3xl md:text-6xl font-extrabold leading-[1.1] md:leading-[1.4] mb-8">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-800 leading-[1.8] md:leading-[2] mb-8 text-brand-text dark:text-white">
             <span className="block">សិក្សាលម្អិតទៅលើ</span>
-            <span className="gradient-text italic">ជំនាញគ្រប់គ្រងទិន្នន័យ</span>
+            <span className="text-brand-orange italic block py-4">ជំនាញគ្រប់គ្រងទិន្នន័យ</span>
             <span className="block">ភូមិសាស្រ្ត និងផែនទី</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl leading-relaxed">
+          <p className="text-lg md:text-xl text-brand-text/60 dark:text-white/60 mb-10 max-w-xl leading-relaxed font-body">
             យើងផ្តល់ឲ្យនូវការបង្រៀនដែលយកចិត្តទុកដាក់ ប្រកបដោយគុណភាព និងទំនួលខុសត្រូវ។
             ការពេញចិត្តរបស់អ្នក គឺជាតម្លៃរបស់យើងខ្ញុំ។
           </p>
           <div className="flex flex-wrap gap-5">
             <NavLink
               href="https://t.me/khmergrsacademy"
-              className="flex items-center gap-2 rounded-full px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20 font-bold group"
+              className="flex items-center gap-2 rounded-xl px-7 py-3.5 bg-brand-orange text-white hover:bg-brand-orange-hover transition-all hover:scale-105 active:scale-95 font-display font-700 orange-glow group"
             >
               ចុះឈ្មោះឥលូវនេះ
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </NavLink>
             <NavLink
               href="https://www.youtube.com/@Khmergisacademy"
-              className="flex items-center gap-2 rounded-full px-8 py-4 glass-liquid transition-all hover:scale-105 active:scale-95 font-bold group"
+              className="flex items-center gap-2 rounded-xl px-7 py-3.5 border-2 border-brand-blue/25 dark:border-white/25 text-brand-text dark:text-white font-display font-700 hover:bg-brand-blue/10 dark:hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group"
               scroll={false}
             >
               <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -67,9 +67,9 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="relative w-full h-[300px] md:h-[400px] rounded-3xl overflow-hidden glass-card"
+          className="relative w-full h-[300px] md:h-[400px] rounded-3xl overflow-hidden shadow-2xl border border-brand-blue/10 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm"
         >
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-blue-400/5 blur-3xl opacity-50"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-brand-blue/5 to-brand-orange/5 blur-3xl opacity-50"></div>
           <HorizontalSlidingShowcase onImgClick={handleImgClick} />
         </motion.div>
       </div>
@@ -104,6 +104,9 @@ const Hero = () => {
           )}
         </ModalContent>
       </Modal>
+
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-brand-light dark:from-[#0B1929] to-transparent pointer-events-none"></div>
     </section>
   );
 };
