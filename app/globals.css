@@ -4,6 +4,11 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #e8edf5 !important;
+}
+
+html.dark {
+  background-color: #244C8F !important;
 }
 
 [id] {
@@ -62,6 +67,7 @@ html {
 body {
   @apply bg-brand-light text-brand-text dark:bg-[#0B1929] dark:text-gray-100 transition-colors duration-500 font-body;
   font-feature-settings: "rlig" 1, "calt" 1;
+  overscroll-behavior-y: none;
 }
 
 .custom-screen {

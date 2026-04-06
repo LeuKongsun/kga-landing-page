@@ -25,8 +25,8 @@ const Navbar = () => {
     { 
       title: "សមិទ្ធផលរបស់យើង", 
       submenu: [
-        { title: "KGA Toolbox", path: "/kga-toolbox.html", target: "_blank" },
-        { title: "KGA Geodigitizer", path: "/geodigitizer.html", target: "_blank" },
+        { title: "KGA Toolbox", path: "/kga-toolbox", target: "_blank" },
+        { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
       ]
     },
     // { title: "ឯកសារ", path: "http://doc.khmergrs.com" },

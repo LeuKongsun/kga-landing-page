@@ -18,6 +18,13 @@ export const metadata = {
   description: "Khmer GRS Academy",
 };
 
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#e8edf5" },
+    { media: "(prefers-color-scheme: dark)", color: "#244C8F" },
+  ],
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${fontHanuman.variable} ${fontJetbrains.variable}`}>
