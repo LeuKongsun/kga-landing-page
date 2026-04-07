@@ -7,7 +7,7 @@ import yunSaknika from '../../../../public/students/yun_saknika.jpg'
 import sreyJokjey from '../../../../public/students/srey_jokjey.jpg'
 import chhay from '../../../../public/students/chhay.jpeg'
 import veayo from '../../../../public/students/veayo.jpeg'
-import { motion } from "framer-motion"
+import { m } from "framer-motion";
 import { Quote } from "lucide-react"
 
 const Testimonials = () => {
@@ -53,32 +53,31 @@ const Testimonials = () => {
   return (
     <SectionWrapper id="testimonials">
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 relative pb-4">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 blur-[100px] -z-10 rounded-full"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 blur-[100px] -z-10 rounded-full hidden lg:block"></div>
         <div className="max-w-2xl sm:text-center md:mx-auto mb-16">
-          <motion.div
+          <m.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-display font-800 leading-[1.4] text-brand-text dark:text-white"
           >
-            <h2 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-6 text-brand-text dark:text-white">
-              មតិសិស្សរបស់យើង
-            </h2>
-            <p className="text-lg text-brand-text/60 dark:text-gray-400 font-body max-w-xl mx-auto leading-relaxed">
-              យើងតែងតែយកចិត្តទុកដាក់ទៅលើការបញ្ចេញមតិ និងការរិះគន់ស្ថាបនា ដើម្បីស្វែងរកភាពរីកចម្រើនទៅមុខ
-            </p>
-          </motion.div>
+            មតិសិស្សរបស់យើង
+          </m.h2>
+          <p className="text-lg text-brand-text/60 dark:text-gray-400 font-body max-w-xl mx-auto leading-relaxed">
+            យើងតែងតែយកចិត្តទុកដាក់ទៅលើការបញ្ចេញមតិ និងការរិះគន់ស្ថាបនា ដើម្បីស្វែងរកភាពរីកចម្រើនទៅមុខ
+          </p>
         </div>
         <div className="mt-12">
           <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((item, idx) => (
-              <motion.li 
+              <m.div 
                 key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group"
+                className="glass-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group"
               >
                 <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-blue/10 dark:text-white/5" />
                 <figure className="relative z-10">
@@ -103,7 +102,7 @@ const Testimonials = () => {
                     <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed italic font-body">&quot;{item.quote}&quot;</p>
                   </blockquote>
                 </figure>
-              </motion.li>
+              </m.div>
             ))}
           </ul>
         </div>

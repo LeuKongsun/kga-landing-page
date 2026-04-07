@@ -3,7 +3,7 @@ import SectionWrapper from "../../SectionWrapper"
 import NavLink from "../NavLink"
 import ctaImage from "../../../../public/cta-image.jpg"
 import Image from "next/image"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { CheckCircle2 } from "lucide-react"
 
 const CTA = () => {
@@ -18,7 +18,7 @@ const CTA = () => {
             <div className="custom-screen relative">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-blue/5 blur-[100px] -z-10"></div>
                 <div className="items-center gap-x-16 lg:flex">
-                    <motion.div 
+                    <m.div 
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
@@ -33,8 +33,8 @@ const CTA = () => {
                             sizes="(max-width: 768px) 100vw, 50vw"
                             quality={80}
                         />
-                    </motion.div>
-                    <motion.div 
+                    </m.div>
+                    <m.div 
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
@@ -61,7 +61,7 @@ const CTA = () => {
                         >
                             ចូលរៀនឥឡូវនេះ
                         </NavLink>
-                    </motion.div>
+                    </m.div>
                 </div>
             </div>
         </SectionWrapper>

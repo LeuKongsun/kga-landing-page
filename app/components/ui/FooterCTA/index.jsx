@@ -1,13 +1,12 @@
-'use client'
 import SectionWrapper from "../../SectionWrapper";
 import NavLink from "../NavLink";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Send } from "lucide-react";
 
 const FooterCTA = () => (
   <SectionWrapper>
     <div className="custom-screen">
-      <motion.div 
+      <m.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -31,7 +30,7 @@ const FooterCTA = () => (
           <Send className="w-5 h-5" />
           ឆាតតេលេក្រាម
         </NavLink>
-      </motion.div>
+      </m.div>
     </div>
   </SectionWrapper>
 );

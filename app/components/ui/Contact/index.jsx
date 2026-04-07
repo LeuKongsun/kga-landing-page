@@ -1,6 +1,6 @@
 "use client";
 import SectionWrapper from "../../SectionWrapper";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Phone, Mail, MapPin, Send } from "lucide-react";
 import Image from "next/image";
 
@@ -29,7 +29,7 @@ const Contact = () => {
   return (
     <SectionWrapper>
       <div id="contact" className="custom-screen relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-10 opacity-10 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-10 opacity-10 pointer-events-none hidden lg:block">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-brand-blue blur-[100px] rounded-full animate-pulse"></div>
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-brand-orange blur-[100px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
@@ -44,7 +44,7 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -81,9 +81,9 @@ const Contact = () => {
                  ផ្ញើសារតាម Telegram
                </a>
             </div>
-          </motion.div>
+          </m.div>
 
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -95,7 +95,7 @@ const Contact = () => {
               loading="lazy"
               allowFullScreen
             ></iframe>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </SectionWrapper>

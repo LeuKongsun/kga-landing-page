@@ -38,7 +38,7 @@ const Hero = () => {
 
   return (
     <section className="relative w-full pt-32 pb-20 overflow-hidden hero-gradient grid-bg">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 hidden lg:block">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-brand-blue/20 blur-[80px] md:blur-[120px] md:animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-brand-orange/10 blur-[80px] md:blur-[120px] md:animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>

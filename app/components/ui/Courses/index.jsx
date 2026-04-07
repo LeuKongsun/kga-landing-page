@@ -4,7 +4,7 @@ import argis from "../../../../public/logos/arcgis.png";
 import arcgisPro from "../../../../public/logos/arcgis-pro-single.png";
 import qgis from "../../../../public/logos/qgis.png";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const Courses = () => {
   const courses = [
@@ -31,7 +31,7 @@ const Courses = () => {
   return (
     <SectionWrapper>
       <div id="courses" className="flex flex-col justify-center items-center">
-        <motion.div
+        <m.div
            initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.6 }}
@@ -40,11 +40,11 @@ const Courses = () => {
         >
           <h2 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">មុខវិជ្ជាដែលយើងបង្រៀន</h2>
           <div className="w-16 h-1.5 bg-brand-orange mx-auto rounded-full"></div>
-        </motion.div>
+        </m.div>
         <div className="custom-screen">
           <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((item, idx) => (
-              <motion.li 
+              <m.li 
                 key={idx}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -60,7 +60,7 @@ const Courses = () => {
                   {item.title}
                 </h4>
                 <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body">{item.desc}</p>
-              </motion.li>
+              </m.li>
             ))}
           </ul>
         </div>

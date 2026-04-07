@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 
 const ThemeSwitcher = () => {
@@ -20,7 +20,7 @@ const ThemeSwitcher = () => {
       className="relative h-9 w-9 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-secondary focus-visible:ring-2 focus-visible:ring-primary outline-none"
       aria-label="Toggle theme"
     >
-      <motion.div
+      <m.div
         initial={false}
         animate={{
           rotate: isDark ? 0 : 90,
@@ -31,8 +31,8 @@ const ThemeSwitcher = () => {
         className="absolute"
       >
         <Moon className="w-5 h-5 text-blue-400" />
-      </motion.div>
-      <motion.div
+      </m.div>
+      <m.div
         initial={false}
         animate={{
           rotate: isDark ? -90 : 0,
@@ -43,7 +43,7 @@ const ThemeSwitcher = () => {
         className="absolute"
       >
         <Sun className="w-5 h-5 text-orange-500" />
-      </motion.div>
+      </m.div>
     </button>
   );
 };

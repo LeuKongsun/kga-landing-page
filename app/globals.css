@@ -67,7 +67,6 @@ html.dark {
 body {
   @apply bg-brand-light text-brand-text dark:bg-[#0B1929] dark:text-gray-100 transition-colors duration-500 font-body;
   font-feature-settings: "rlig" 1, "calt" 1;
-  overscroll-behavior-y: none;
 }
 
 .custom-screen {
@@ -78,8 +77,20 @@ body {
   @apply bg-white/70 dark:bg-black/60 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg;
 }
 
+@media (max-width: 768px) {
+  .glass {
+    @apply backdrop-blur-sm border-white/10;
+  }
+}
+
 .glass-card {
   @apply bg-white/40 dark:bg-white/5 backdrop-blur-sm border border-white/20 dark:border-white/10 shadow-xl transition-all duration-300;
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    @apply backdrop-blur-none bg-white/80 dark:bg-white/10;
+  }
 }
 
 .glass-liquid {
@@ -145,6 +156,13 @@ body {
 }
 .hero-gradient {
   background: linear-gradient(165deg, #e8edf5 0%, #dce4f0 35%, #cfd9eb 70%, #F5F7FA 100%);
+}
+
+@media (max-width: 768px) {
+  .hero-gradient, .dark .hero-gradient {
+    background: none;
+    @apply bg-brand-light dark:bg-[#0B1929];
+  }
 }
 
 /* ─── Navbar blur ─── */
