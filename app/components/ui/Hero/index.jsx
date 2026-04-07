@@ -11,9 +11,25 @@ import {
   useDisclosure 
 } from "@heroui/react";
 
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1024px)");
+    setIsMobile(mediaQuery.matches);
+
+    const handler = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  return isMobile;
+};
+
 const Hero = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedImg, setSelectedImg] = useState(null);
+  const isMobile = useIsMobile();
 
   const handleImgClick = (src) => {
     setSelectedImg(src);
@@ -29,20 +45,21 @@ const Hero = () => {
 
       <div className="custom-screen relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
         <m.div
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          className={isMobile ? "text-center" : ""}
         >
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-800 leading-[1.8] md:leading-[2] mb-8 text-brand-text dark:text-white">
             <span className="block">សិក្សាលម្អិតទៅលើ</span>
             <span className="text-brand-orange italic block py-4">ជំនាញគ្រប់គ្រងទិន្នន័យ</span>
             <span className="block">ភូមិសាស្រ្ត និងផែនទី</span>
           </h1>
-          <p className="text-lg md:text-xl text-brand-text/60 dark:text-white/60 mb-10 max-w-xl leading-relaxed font-body">
+          <p className="text-lg md:text-xl text-brand-text/60 dark:text-white/60 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-body text-center lg:text-left">
             យើងផ្តល់ឲ្យនូវការបង្រៀនដែលយកចិត្តទុកដាក់ ប្រកបដោយគុណភាព និងទំនួលខុសត្រូវ។
             ការពេញចិត្តរបស់អ្នក គឺជាតម្លៃរបស់យើងខ្ញុំ។
           </p>
-          <div className="flex flex-wrap gap-5">
+          <div className="flex flex-wrap justify-center lg:justify-start gap-5">
             <NavLink
               href="https://t.me/khmergrsacademy"
               className="flex items-center gap-2 rounded-xl px-7 py-3.5 bg-brand-orange text-white hover:bg-brand-orange-hover transition-all hover:scale-105 active:scale-95 font-display font-700 orange-glow group"
@@ -67,10 +84,10 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="relative w-full h-[300px] md:h-[400px] rounded-3xl overflow-hidden shadow-2xl border border-brand-blue/10 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm"
+          className="relative w-full h-[300px] md:h-[400px] rounded-3xl overflow-hidden shadow-2xl border border-brand-blue/10 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm lg:backdrop-blur-sm"
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-brand-blue/5 to-brand-orange/5 blur-3xl opacity-50"></div>
-          <HorizontalSlidingShowcase onImgClick={handleImgClick} />
+          <HorizontalSlidingShowcase onImgClick={handleImgClick} isMobile={isMobile} />
         </m.div>
       </div>
 
@@ -121,7 +138,7 @@ const images = [
   "/gallery/13.jpg", "/gallery/14.jpg", "/gallery/15.jpg", "/gallery/16.jpg",
 ];
 
-const HorizontalSlidingShowcase = ({ onImgClick }) => {
+const HorizontalSlidingShowcase = ({ onImgClick, isMobile }) => {
   const [mounted, setMounted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   
@@ -129,19 +146,20 @@ const HorizontalSlidingShowcase = ({ onImgClick }) => {
 
   if (!mounted) return <div className="h-full w-full" />;
 
-  const doubledImages = [...images, ...images];
+  const displayImages = isMobile ? images : [...images, ...images];
 
   return (
     <div 
-      className="relative w-full h-full flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      className={`relative w-full h-full flex items-center ${isMobile ? "overflow-x-auto scrollbar-hide snap-x pointer-events-auto" : "overflow-hidden"}`}
+      onMouseEnter={() => !isMobile && setIsPaused(true)}
+      onMouseLeave={() => !isMobile && setIsPaused(false)}
+      style={{ WebkitOverflowScrolling: "touch" }}
     >
       <m.div
-        animate={{
+        animate={isMobile ? { x: 0 } : {
           x: isPaused ? undefined : ["0%", "-50%"],
         }}
-        transition={{
+        transition={isMobile ? { duration: 0 } : {
           duration: 60,
           repeat: Infinity,
           ease: "linear",
@@ -152,29 +170,31 @@ const HorizontalSlidingShowcase = ({ onImgClick }) => {
           }
         }}
         className="flex gap-4 px-4 h-full items-center"
-        style={{ width: "fit-content" }}
+        style={{ width: isMobile ? "auto" : "fit-content" }}
       >
-        {doubledImages.map((src, i) => (
+        {displayImages.map((src, i) => (
           <m.div
             key={i}
-            whileHover={{ scale: 1.02 }}
+            whileHover={isMobile ? undefined : { scale: 1.02 }}
             onClick={() => onImgClick(src)}
-            className="relative w-[280px] h-[350px] md:w-[320px] md:h-[380px] rounded-2xl overflow-hidden shadow-xl border border-white/10 group flex-shrink-0 cursor-zoom-in"
+            className="relative w-[260px] h-[330px] md:w-[320px] md:h-[380px] rounded-2xl overflow-hidden shadow-xl border border-white/10 group flex-shrink-0 cursor-zoom-in snap-center"
           >
             <Image
               src={src}
               alt={`Gallery ${i}`}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0"
-              sizes="(max-width: 768px) 280px, 400px"
-              priority={i < 2 || (i >= images.length && i < images.length + 2)}
-              quality={75}
+              className={`object-cover transition-transform duration-700 ${!isMobile ? "group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0" : ""}`}
+              sizes="(max-width: 768px) 260px, 400px"
+              priority={i < 2}
+              quality={isMobile ? 65 : 75}
             />
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-               <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                  មើលរូបភាពធំ
-               </span>
-            </div>
+            {!isMobile && (
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                 <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                    មើលរូបភាពធំ
+                 </span>
+              </div>
+            )}
           </m.div>
         ))}
       </m.div>
