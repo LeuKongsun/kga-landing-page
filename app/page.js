@@ -1,12 +1,13 @@
+import dynamic from "next/dynamic";
 import Hero from "./components/ui/Hero";
-import LogoGrid from "./components/ui/LogoGrid";
 import GradientWrapper from "./components/GradientWrapper";
-import CTA from "./components/ui/CTA";
-import ToolKit from "./components/ui/ToolKit";
-import Testimonials from "./components/ui/Testimonials";
-import FooterCTA from "./components/ui/FooterCTA";
-import Courses from "./components/ui/Courses";
-import Contact from "./components/ui/Contact";
+
+const LogoGrid = dynamic(() => import("./components/ui/LogoGrid"), { ssr: true });
+const Courses = dynamic(() => import("./components/ui/Courses"), { ssr: true });
+const CTA = dynamic(() => import("./components/ui/CTA"), { ssr: true });
+const ToolKit = dynamic(() => import("./components/ui/ToolKit"), { ssr: true });
+const Testimonials = dynamic(() => import("./components/ui/Testimonials"), { ssr: true });
+const Contact = dynamic(() => import("./components/ui/Contact"), { ssr: true });
 
 export default function Home() {
   return (
@@ -22,7 +23,6 @@ export default function Home() {
         <Testimonials />
       </GradientWrapper>
       <Contact />
-      {/* <FooterCTA /> */}
     </>
   );
 }

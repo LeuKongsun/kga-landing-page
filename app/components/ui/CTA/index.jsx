@@ -29,7 +29,9 @@ const CTA = () => {
                         <Image 
                             src={ctaImage} 
                             className="rounded-2xl shadow-2xl relative z-10 border border-white/20" 
-                            alt="Khmer GRS Academy Training" 
+                            alt="Khmer GRS Academy Training"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            quality={80}
                         />
                     </motion.div>
                     <motion.div 

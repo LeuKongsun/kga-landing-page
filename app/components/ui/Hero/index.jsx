@@ -1,5 +1,4 @@
-"use client";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import NavLink from "../NavLink";
@@ -23,12 +22,12 @@ const Hero = () => {
   return (
     <section className="relative w-full pt-32 pb-20 overflow-hidden hero-gradient grid-bg">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-brand-blue/20 blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-brand-orange/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-brand-blue/20 blur-[80px] md:blur-[120px] md:animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-brand-orange/10 blur-[80px] md:blur-[120px] md:animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="custom-screen relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -61,9 +60,9 @@ const Hero = () => {
               YouTube
             </NavLink>
           </div>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
@@ -71,7 +70,7 @@ const Hero = () => {
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-brand-blue/5 to-brand-orange/5 blur-3xl opacity-50"></div>
           <HorizontalSlidingShowcase onImgClick={handleImgClick} />
-        </motion.div>
+        </m.div>
       </div>
 
       <Modal 
@@ -88,17 +87,20 @@ const Hero = () => {
           {(onClose) => (
             <ModalBody className="p-2 md:p-4 flex items-center justify-center">
               {selectedImg && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="relative max-w-full max-h-[90vh] flex items-center justify-center"
+                  className="relative w-full aspect-video max-h-[85vh] flex items-center justify-center"
                 >
-                  <img
+                  <Image
                     src={selectedImg}
                     alt="Gallery Image Full"
-                    className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10"
+                    fill
+                    className="object-contain rounded-xl shadow-2xl border border-white/10"
+                    sizes="90vw"
+                    priority
                   />
-                </motion.div>
+                </m.div>
               )}
             </ModalBody>
           )}
@@ -134,7 +136,7 @@ const HorizontalSlidingShowcase = ({ onImgClick }) => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <motion.div
+      <m.div
         animate={{
           x: isPaused ? undefined : ["0%", "-50%"],
         }}
@@ -152,7 +154,7 @@ const HorizontalSlidingShowcase = ({ onImgClick }) => {
         style={{ width: "fit-content" }}
       >
         {doubledImages.map((src, i) => (
-          <motion.div
+          <m.div
             key={i}
             whileHover={{ scale: 1.02 }}
             onClick={() => onImgClick(src)}
@@ -163,16 +165,18 @@ const HorizontalSlidingShowcase = ({ onImgClick }) => {
               alt={`Gallery ${i}`}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[20%] group-hover:grayscale-0"
-              sizes="(max-width: 768px) 280px, 320px"
+              sizes="(max-width: 768px) 280px, 400px"
+              priority={i < 2 || (i >= images.length && i < images.length + 2)}
+              quality={75}
             />
             <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
                <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                   មើលរូបភាពធំ
                </span>
             </div>
-          </motion.div>
+          </m.div>
         ))}
-      </motion.div>
+      </m.div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Brand from "../Brand";
 import NavLink from "../NavLink";
 import ThemeSwitcher from "../ThemeSwitcher";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [state, setState] = useState(false);
@@ -122,7 +122,7 @@ const Navbar = () => {
         
         <AnimatePresence>
           {state && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -173,7 +173,7 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               </ul>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </nav>
