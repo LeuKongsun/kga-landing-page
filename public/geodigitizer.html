@@ -7,8 +7,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.16.0/dist/leaflet-geoman.css" />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" type="image/svg+xml" href="kga-logo-light.svg">
-<link rel="shortcut icon" href="kga-logo-light.svg">
+<link rel="icon" type="image/png" sizes="16x16" href="kga geoditizer.png">
+<link rel="icon" type="image/png" sizes="32x32" href="kga geoditizer.png">
+<link rel="shortcut icon" href="kga geoditizer.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -224,6 +225,25 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes toastOut{from{opacity:1}to{opacity:0}}
 
+/* Custom geocoder */
+.custom-geocoder{position:relative;width:260px}
+.custom-geocoder input{width:100%;box-sizing:border-box;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:7px 32px 7px 10px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
+.custom-geocoder input:focus{border-color:var(--accent)}
+.custom-geocoder input::placeholder{color:var(--text-muted)}
+.geocoder-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;line-height:1;display:none;font-size:16px}
+.geocoder-results{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:20000;max-height:280px;overflow-y:auto;display:none}
+.geocoder-result{padding:8px 12px;cursor:pointer;font-size:12px;color:var(--text);border-bottom:1px solid var(--border);line-height:1.4;transition:background .1s}
+.geocoder-result:last-child{border-bottom:none}
+.geocoder-result:hover,.geocoder-result.active{background:var(--bg-card)}
+.geocoder-result strong{color:var(--accent);font-weight:600}
+.geocoder-status{padding:8px 12px;font-size:12px;color:var(--text-muted);font-style:italic}
+@media(max-width:932px){.custom-geocoder{width:160px}.custom-geocoder input{font-size:12px;padding:5px 28px 5px 8px}}
+
+/* Smooth zoom */
+.leaflet-zoom-animated { will-change: transform; }
+.leaflet-tile-container { will-change: transform; }
+.leaflet-zoom-anim .leaflet-zoom-animated { transition: transform 0.2s cubic-bezier(0,0,0.25,1) !important; }
+
 /* Geoman overrides */
 .leaflet-pm-toolbar .leaflet-pm-icon-marker-removal{display:none}
 .button-container{background:var(--bg-panel)!important;border-color:var(--border)!important}
@@ -301,6 +321,7 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
 .mobile-draw-info { display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
 .mobile-draw-actions { display:flex; gap:8px; justify-content:space-between; }
 .mobile-draw-actions button { flex:1; font-size:12px; font-weight:600; padding:8px 0; }
+
 </style>
 </head>
 <body>
@@ -313,17 +334,17 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
 <div id="app">
   <!-- Top Bar -->
   <header class="topbar">
-    <a href="/" class="logo" style="text-decoration: none; color: inherit;">
-      <img src="kga-logo-light.svg" alt="KGA Logo" width="24" height="24">
+    <div class="logo">
+      <img src="kga geoditizer.png" alt="KGA Logo" width="24" height="24">
       <span><span class="kga">KGA</span> Geodigitizer</span>
-    </a>
+    </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-group">
       <label style="font-size:11px;color:var(--text-muted)">CRS:</label>
       <select class="crs-select" id="crsSelect" data-tooltip="Coordinate Reference System">
         <optgroup label="★ Common">
           <option value="4326">WGS 84 (EPSG:4326)</option>
-          <option value="32648">WGS 84 / UTM Zone 48N (EPSG:32648)</option>
+          <option value="32648" selected>WGS 84 / UTM Zone 48N (EPSG:32648)</option>
           <option value="3857">Web Mercator (EPSG:3857)</option>
         </optgroup>
         <optgroup label="UTM North (WGS 84)">
@@ -535,12 +556,6 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="M12 12l4-6" stroke-width="2.5"/></svg>
           <span>Bearing</span>
         </button>
-      <button class="topbar-btn" id="btnUndo" data-tooltip="Undo (Ctrl+Z)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 2.64-6.36L3 7"/></svg>
-      </button>
-      <button class="topbar-btn" id="btnRedo" data-tooltip="Redo (Ctrl+Y)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M21 13a9 9 0 1 1-2.64-6.36L21 7"/></svg>
-      </button>
       <button class="topbar-btn" id="btnImport" data-tooltip="Import GeoJSON / KML">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span>Import</span>
@@ -636,6 +651,14 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
           <label>Filename</label>
           <input type="text" id="exportFilename" value="kga_geodigitizer_export" placeholder="filename">
         </div>
+        <div class="export-layer" style="margin-bottom:12px;display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Layers to Export</label>
+          <div id="exportLayerSelect" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg-card);border:1px solid var(--border);padding:8px;border-radius:4px;font-size:11px;">
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" value="Point" checked> Points</label>
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" value="LineString" checked> Lines</label>
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;grid-column:span 2"><input type="checkbox" value="Polygon" checked> Polygons</label>
+          </div>
+        </div>
         <div class="export-grid">
           <button class="export-btn" data-format="geojson" data-tooltip="Standard GIS interchange format">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
@@ -674,11 +697,15 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
       <button class="btn-sm btn-primary" id="mobBtnAdd">Add Point</button>
       <button class="btn-sm btn-primary" id="mobBtnFinish" style="display:none;background:var(--success);border-color:var(--success)">Finish</button>
     </div>
+    <div id="mobExtraActions" style="display:none;gap:8px">
+      <button class="btn-sm btn-ghost" id="mobBtnCoords" style="flex:1">Enter Coords</button>
+      <button class="btn-sm btn-ghost" id="mobBtnDistBear" style="flex:1;display:none">Dist &amp; Bearing</button>
+    </div>
   </div>
 
   <!-- Status Bar -->
   <footer class="statusbar">
-    <span>CRS: <span class="coord" id="statusCRS">WGS 84 | EPSG:4326</span></span>
+    <span>CRS: <span class="coord" id="statusCRS">WGS 84 / UTM Zone 48N | EPSG:32648</span></span>
     <span class="sep">|</span>
     <span>Cursor: <span class="coord" id="cursorCoords">--</span></span>
     <span class="sep">|</span>
@@ -691,6 +718,8 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
       <span><span class="dot" style="background:var(--line-color)"></span> <span id="countLns">0</span> ln</span>
       <span><span class="dot" style="background:var(--poly-color)"></span> <span id="countPly">0</span> pg</span>
     </div>
+    <span class="sep">|</span>
+    <span style="opacity:0.4;font-family:monospace;letter-spacing:0.05em;">V2026.1</span>
   </footer>
 </div>
 
@@ -720,11 +749,15 @@ const state = {
   undoStack: [],
   redoStack: [],
   featureCounter: 0,
+  pointCounter: 0,
+  lineCounter: 0,
+  polyCounter: 0,
   measuring: false,
   measureLayer: null,
   currentTool: 'pointer',
-  currentCRS: '4326',
-  isDark: true
+  currentCRS: '32648',
+  isDark: true,
+  importLayers: {}   // key: filename, value: { collapsed: bool }
 };
 
 // ── Symbology State ──
@@ -843,31 +876,169 @@ const map = L.map('map', {
   center: [11.55, 104.92],  // Cambodia
   zoom: 7,
   zoomControl: false,
-  attributionControl: false
+  attributionControl: false,
+  zoomAnimation: true,
+  zoomAnimationThreshold: 4,
+  zoomSnap: 0.25,
+  zoomDelta: 0.5,
+  wheelDebounceTime: 40,
+  wheelPxPerZoomLevel: 80
 });
 
 L.control.zoom({ position: 'bottomleft' }).addTo(map);
 L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
-L.control.attribution({ position: 'bottomright', prefix: '© OpenStreetMap' }).addTo(map);
+L.control.attribution({ position: 'bottomright', prefix: false }).addTo(map);
+
+// ── Custom Geocoder (Nominatim, case-insensitive, search-as-you-type) ──
+const GeocoderControl = L.Control.extend({
+  onAdd() {
+    const wrap = L.DomUtil.create('div', 'custom-geocoder');
+    L.DomEvent.disableClickPropagation(wrap);
+    L.DomEvent.disableScrollPropagation(wrap);
+
+    const input = L.DomUtil.create('input', '', wrap);
+    input.type = 'text';
+    input.placeholder = 'Search places…';
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+
+    const clearBtn = L.DomUtil.create('button', 'geocoder-clear', wrap);
+    clearBtn.innerHTML = '×';
+    clearBtn.title = 'Clear';
+
+    const list = L.DomUtil.create('div', 'geocoder-results', wrap);
+
+    let timer = null, active = -1, lastQ = '';
+
+    function showStatus(msg) {
+      list.innerHTML = `<div class="geocoder-status">${msg}</div>`;
+      list.style.display = 'block';
+    }
+    function closeList() {
+      list.style.display = 'none';
+      list.innerHTML = '';
+      active = -1;
+    }
+    function highlight(text, q) {
+      // Bold the matching part (case-insensitive)
+      const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+      return text.replace(re, '<strong>$1</strong>');
+    }
+    function buildResults(results, q) {
+      list.innerHTML = '';
+      if(!results.length) { showStatus('No results found'); return; }
+      results.forEach((r, i) => {
+        const item = L.DomUtil.create('div', 'geocoder-result', list);
+        // Show first part of display_name highlighted
+        const parts = r.display_name.split(',');
+        const main  = parts.slice(0, 2).join(', ');
+        const sub   = parts.slice(2).join(', ').trim();
+        item.innerHTML = `<div>${highlight(main, q)}</div>${sub ? `<div style="font-size:11px;color:var(--text-muted);margin-top:2px">${sub}</div>` : ''}`;
+        item.addEventListener('mousedown', e => {
+          e.preventDefault();
+          selectResult(r);
+        });
+      });
+      list.style.display = 'block';
+    }
+    function selectResult(r) {
+      input.value = r.display_name.split(',').slice(0, 2).join(', ');
+      clearBtn.style.display = 'block';
+      closeList();
+      const bb = r.boundingbox; // [south, north, west, east]
+      map.fitBounds([[+bb[0], +bb[2]], [+bb[1], +bb[3]]]);
+    }
+    function search(q) {
+      if(q === lastQ) return;
+      lastQ = q;
+      showStatus('Searching…');
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=7&addressdetails=0`, {
+        headers: { 'Accept-Language': 'en' }
+      })
+        .then(r => r.json())
+        .then(results => buildResults(results, q))
+        .catch(() => showStatus('Search unavailable'));
+    }
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim();
+      clearBtn.style.display = q ? 'block' : 'none';
+      clearTimeout(timer);
+      if(q.length < 2) { closeList(); lastQ = ''; return; }
+      timer = setTimeout(() => search(q), 300);
+    });
+
+    input.addEventListener('keydown', e => {
+      const items = list.querySelectorAll('.geocoder-result');
+      if(e.key === 'ArrowDown') {
+        e.preventDefault();
+        active = Math.min(active + 1, items.length - 1);
+        items.forEach((el, i) => el.classList.toggle('active', i === active));
+      } else if(e.key === 'ArrowUp') {
+        e.preventDefault();
+        active = Math.max(active - 1, 0);
+        items.forEach((el, i) => el.classList.toggle('active', i === active));
+      } else if(e.key === 'Enter') {
+        e.preventDefault();
+        if(active >= 0 && items[active]) items[active].dispatchEvent(new MouseEvent('mousedown'));
+        else if(items[0]) items[0].dispatchEvent(new MouseEvent('mousedown'));
+        else { clearTimeout(timer); search(input.value.trim()); }
+      } else if(e.key === 'Escape') {
+        closeList(); input.blur();
+      }
+    });
+
+    input.addEventListener('blur', () => setTimeout(closeList, 150));
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.style.display = 'none';
+      closeList();
+      lastQ = '';
+      input.focus();
+    });
+
+    return wrap;
+  }
+});
+new GeocoderControl({ position: 'topleft' }).addTo(map);
 
 // ── Basemaps ──
+const basemapAttribution = {
+  google_satellite: '© Google',
+  google_hybrid:    '© Google',
+  google_road:      '© Google',
+  google_terrain:   '© Google',
+  osm:              '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © CARTO',
+  satellite:        '© Esri, Maxar, Earthstar Geographics',
+  dark:             '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, © CARTO',
+  topo:             '© Esri, HERE, Garmin, © OpenStreetMap contributors'
+};
+
 const basemaps = {
   google_satellite: L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { maxZoom: 21 }),
-  google_hybrid: L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { maxZoom: 21 }),
-  google_road: L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 21 }),
-  google_terrain: L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { maxZoom: 21 }),
-  osm: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 20, attribution: '© OpenStreetMap, © CARTO' }),
+  google_hybrid:    L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  google_road:      L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  google_terrain:   L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { maxZoom: 21 }),
+  osm:       L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 20 }),
   satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }),
-  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }),
-  topo: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 })
+  dark:      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }),
+  topo:      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 })
 };
+
+function setBasemapAttribution(key) {
+  map.attributionControl.setPrefix(basemapAttribution[key] || '');
+}
+
 basemaps.google_satellite.addTo(map);
+setBasemapAttribution('google_satellite');
 
 document.getElementById('basemapSelect').addEventListener('change', e => {
   Object.values(basemaps).forEach(l => map.removeLayer(l));
   const newLayer = basemaps[e.target.value];
   newLayer.addTo(map);
   newLayer.setOpacity(symbology.basemapOpacity);
+  setBasemapAttribution(e.target.value);
 });
 
 // ── Feature Layer Group ──
@@ -1032,7 +1203,14 @@ function startMobileDraw(tool) {
   document.getElementById('mapCrosshair').style.display = 'block';
   document.getElementById('mobileDrawBar').style.display = 'flex';
   setTimeout(() => map.invalidateSize(), 50);
-  
+
+  // Extra action row
+  const extraRow = document.getElementById('mobExtraActions');
+  extraRow.style.display = 'flex';
+  document.getElementById('mobBtnCoords').style.display   = tool === 'point' ? 'block' : 'none';
+  document.getElementById('mobBtnDistBear').style.display = (tool === 'line' || tool === 'polygon') ? 'block' : 'none';
+  document.getElementById('mobBtnDistBear').style.opacity = '0.4'; // dim until first vertex
+
   if(tool === 'point') {
     document.getElementById('mobBtnAdd').textContent = 'Add Point';
     document.getElementById('mobBtnAdd').style.display = 'block';
@@ -1043,7 +1221,7 @@ function startMobileDraw(tool) {
     document.getElementById('mobBtnAdd').style.display = 'block';
     document.getElementById('mobBtnUndo').style.display = 'none';
     document.getElementById('mobBtnFinish').style.display = 'none';
-    
+
     const styleOpts = tool === 'line' ? getStyle('LineString') : getStyle('Polygon');
     if(tool === 'line') {
       mobileDraw.preview = L.polyline([], styleOpts).addTo(map);
@@ -1064,6 +1242,7 @@ function stopMobileDraw() {
   if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
   document.getElementById('mapCrosshair').style.display = 'none';
   document.getElementById('mobileDrawBar').style.display = 'none';
+  document.getElementById('mobExtraActions').style.display = 'none';
   setTimeout(() => map.invalidateSize(), 50);
   if(mobileDraw.preview) { map.removeLayer(mobileDraw.preview); mobileDraw.preview = null; }
   if(mobileDraw.hint) { map.removeLayer(mobileDraw.hint); mobileDraw.hint = null; }
@@ -1116,6 +1295,9 @@ function updateMobileDrawButtons() {
   } else if(mobileDraw.tool === 'polygon') {
     document.getElementById('mobBtnFinish').style.display = len >= 3 ? 'block' : 'none';
   }
+  // Enable D&B button once at least one vertex is placed
+  const dbBtn = document.getElementById('mobBtnDistBear');
+  if(dbBtn) dbBtn.style.opacity = len > 0 ? '1' : '0.4';
 }
 
 map.on('move', () => {
@@ -1158,6 +1340,15 @@ document.getElementById('mobBtnFinish').addEventListener('click', () => {
     const layer = L.polygon([...mobileDraw.coords], getStyle('Polygon')).addTo(map);
     map.fire('pm:create', { layer, shape: 'Polygon' });
   }
+});
+
+document.getElementById('mobBtnCoords').addEventListener('click', () => {
+  showPointCoordsDialog();
+});
+
+document.getElementById('mobBtnDistBear').addEventListener('click', () => {
+  if(mobileDraw.coords.length === 0) return;
+  showMobileDistanceBearingDialog();
 });
 
 // Re-enable a drawing tool without resetting the active button state
@@ -1286,8 +1477,31 @@ function getActiveDrawShape() {
   return null;
 }
 
-// Only visual indicator + hintMarker move. No click interception.
 function onDrawMouseMove(e) {
+  // ── Circle radius-snap phase ──
+  // This handler is re-registered AFTER Geoman's _moveHint (which fires on the
+  // first click), so our setRadius() call runs last and wins every frame.
+  if(snapEngine.circleDrawPhase === 'radius' && snapEngine.circleWorkingLayer) {
+    const snap = findSnapPoint(e.containerPoint);
+    if(snap) {
+      const center = snapEngine.circleWorkingLayer.getLatLng();
+      const snappedRadius = center.distanceTo(snap.latlng);
+      snapEngine.circleWorkingLayer.setRadius(snappedRadius);
+      snapEngine.snappedRadiusPoint = snap.latlng;
+      snapEngine.indicator.setLatLng(snap.latlng);
+      if(!map.hasLayer(snapEngine.indicator)) map.addLayer(snapEngine.indicator);
+      snapEngine.indicator.setStyle({
+        color: snap.type === 'vertex' ? '#ffff00' : '#00ffff',
+        fillColor: snap.type === 'vertex' ? '#ffff00' : '#00ffff'
+      });
+    } else {
+      snapEngine.snappedRadiusPoint = null;
+      if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
+    }
+    return;
+  }
+
+  // ── Normal center / vertex snap ──
   const snap = findSnapPoint(e.containerPoint);
   const active = getActiveDrawShape();
   if(snap) {
@@ -1317,6 +1531,9 @@ function stopSnapListeners() {
   snapEngine._listening = false;
   snapEngine.currentDrawVertices = [];
   snapEngine.snappedLatLng = null;
+  snapEngine.circleDrawPhase = null;
+  snapEngine.circleWorkingLayer = null;
+  snapEngine.snappedRadiusPoint = null;
   if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
   map.off('mousemove', onDrawMouseMove);
 }
@@ -1325,7 +1542,46 @@ function stopSnapListeners() {
 map.on('pm:drawstart', e => {
   snapEngine.currentDrawVertices = [];
   snapEngine.snappedLatLng = null;
+  snapEngine.circleSnapCenter = null;
+  snapEngine.circleDrawPhase = null;
+  snapEngine.circleWorkingLayer = null;
+  snapEngine.snappedRadiusPoint = null;
   const wl = e.workingLayer;
+
+  if(e.shape === 'Circle') {
+    snapEngine.circleDrawPhase = 'center';
+
+    // After the center click: Geoman places center AND registers its _moveHint
+    // mousemove. We use a click handler (fires after Geoman's click handler)
+    // to: 1) snap the center, 2) re-register our mousemove so it runs AFTER
+    // Geoman's _moveHint and can override the radius each frame.
+    function onCenterClick() {
+      map.off('click', onCenterClick);
+
+      // Get actual working layer from Geoman (wl may be null before first click)
+      const circleLayer = (map.pm.Draw.Circle && map.pm.Draw.Circle._layer) || wl;
+      snapEngine.circleWorkingLayer = circleLayer;
+
+      // Snap the center
+      if(snapEngine.snappedLatLng && circleLayer) {
+        snapEngine.circleSnapCenter = L.latLng(snapEngine.snappedLatLng.lat, snapEngine.snappedLatLng.lng);
+        try { circleLayer.setLatLng(snapEngine.circleSnapCenter); } catch(ex) {}
+      }
+
+      // Switch phase THEN re-register our mousemove after Geoman's _moveHint
+      snapEngine.circleDrawPhase = 'radius';
+      map.off('mousemove', onDrawMouseMove);
+      map.on('mousemove', onDrawMouseMove);
+
+      // On mobile there's no drag UX — open the radius dialog immediately
+      if(isMobileMode()) {
+        setTimeout(() => showSetRadiusDialog(), 120);
+      }
+    }
+    map.on('click', onCenterClick);
+    map.once('pm:drawend', () => map.off('click', onCenterClick));
+  }
+
   if(wl) {
     wl.on('pm:vertexadded', ve => {
       if(!ve.latlng) return;
@@ -1333,7 +1589,6 @@ map.on('pm:drawstart', e => {
         ? L.latLng(snapEngine.snappedLatLng.lat, snapEngine.snappedLatLng.lng)
         : L.latLng(ve.latlng.lat, ve.latlng.lng);
       snapEngine.currentDrawVertices.push(ll);
-      // Correct last vertex to snapped position
       if(snapEngine.snappedLatLng) {
         try {
           const latlngs = wl.getLatLngs();
@@ -1353,13 +1608,24 @@ map.on('pm:drawend', () => {
   stopSnapListeners();
 });
 
-// Point marker snap correction
+// Point / Circle snap correction on creation
 map.on('pm:create', e => {
   if(snapEngine.snappedLatLng && e.layer instanceof L.Marker) {
     e.layer.setLatLng(snapEngine.snappedLatLng);
   }
+  if(e.layer instanceof L.Circle && !(e.layer instanceof L.Polygon)) {
+    // Apply snapped center
+    if(snapEngine.circleSnapCenter) {
+      e.layer.setLatLng(snapEngine.circleSnapCenter);
+    }
+    // Radius is already correct — set by the last mousemove snap before click
+  }
   snapEngine.currentDrawVertices = [];
   snapEngine.snappedLatLng = null;
+  snapEngine.circleSnapCenter = null;
+  snapEngine.circleDrawPhase = null;
+  snapEngine.circleWorkingLayer = null;
+  snapEngine.snappedRadiusPoint = null;
   if(map.hasLayer(snapEngine.indicator)) map.removeLayer(snapEngine.indicator);
 });
 
@@ -1374,11 +1640,28 @@ map.on('pm:create', e => {
   const layer = e.layer;
   const id = ++state.featureCounter;
   const geomType = getGeomType(layer);
+  
+  let prefix = 'Feature ';
+  let num = id;
+  if (geomType === 'Point') {
+    state.pointCounter = (state.pointCounter || 0) + 1;
+    prefix = 'p';
+    num = state.pointCounter;
+  } else if (geomType === 'LineString') {
+    state.lineCounter = (state.lineCounter || 0) + 1;
+    prefix = 'L';
+    num = state.lineCounter;
+  } else if (geomType === 'Polygon' || geomType === 'Circle') {
+    state.polyCounter = (state.polyCounter || 0) + 1;
+    prefix = 'polygon ';
+    num = state.polyCounter;
+  }
+
   const feature = {
     id,
     layer,
     geomType,
-    props: { name: `Feature ${id}`, description: '', customFields: {} }
+    props: { name: `${prefix}${num}`, description: '', customFields: {} }
   };
 
   drawnItems.addLayer(layer);
@@ -1545,12 +1828,29 @@ function restoreFeature(data) {
 }
 
 function layerToGeoJSON(layer) {
+  // Convert circles to polygon (64-point approximation)
+  if(layer instanceof L.Circle && typeof layer.getRadius === 'function' && layer.getRadius() > 0) {
+    var center = layer.getLatLng();
+    var radius = layer.getRadius();
+    var points = 64;
+    var coords = [];
+    for(var i = 0; i <= points; i++) {
+      var angle = (i / points) * 360;
+      var rad = angle * Math.PI / 180;
+      var dLat = (radius / 111320) * Math.cos(rad);
+      var dLng = (radius / (111320 * Math.cos(center.lat * Math.PI / 180))) * Math.sin(rad);
+      coords.push([center.lng + dLng, center.lat + dLat]);
+    }
+    return {
+      type: 'Feature',
+      properties: {},
+      geometry: { type: 'Polygon', coordinates: [coords] }
+    };
+  }
   if(layer.toGeoJSON) return layer.toGeoJSON();
   return null;
 }
 
-document.getElementById('btnUndo').addEventListener('click', () => handleUndo());
-document.getElementById('btnRedo').addEventListener('click', () => handleRedo());
 document.addEventListener('keydown', e => {
   if(e.ctrlKey && e.key === 'z') { e.preventDefault(); handleUndo(); }
   if(e.ctrlKey && e.key === 'y') { e.preventDefault(); handleRedo(); }
@@ -1716,7 +2016,459 @@ function handleCtxAction(action) {
         switchTab('properties');
       }
       break;
+    case 'set_circle_radius':
+      showSetRadiusDialog();
+      break;
+    case 'add_by_bearing':
+      showDistanceBearingDialog(drawing);
+      break;
+    case 'add_point_coords':
+      showPointCoordsDialog();
+      break;
   }
+}
+
+// ── Set Radius Dialog ──
+const RADIUS_UNITS = [
+  { label: 'm',  value: 'm',  toM: 1 },
+  { label: 'km', value: 'km', toM: 1000 },
+  { label: 'ft', value: 'ft', toM: 0.3048 },
+  { label: 'mi', value: 'mi', toM: 1609.344 },
+  { label: 'nmi',value: 'nmi',toM: 1852 },
+  { label: 'yd', value: 'yd', toM: 0.9144 },
+];
+let _radiusDialogUnit = localStorage.getItem('circleRadiusUnit') || 'm';
+
+function showSetRadiusDialog() {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+
+  // Current radius as hint
+  let hintM = 0;
+  try { hintM = Math.round(snapEngine.circleWorkingLayer.getRadius()); } catch(e) {}
+  const hintUnit = RADIUS_UNITS.find(u => u.value === _radiusDialogUnit) || RADIUS_UNITS[0];
+  const hintVal = hintM > 0 ? (hintM / hintUnit.toM).toFixed(2) : '';
+
+  const unitOpts = RADIUS_UNITS.map(u =>
+    `<option value="${u.value}"${u.value === _radiusDialogUnit ? ' selected' : ''}>${u.label}</option>`
+  ).join('');
+
+  content.innerHTML = `
+    <h3>Set Circle Radius</h3>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px">
+      <input id="radiusValInput" type="number" min="0.01" step="any"
+        value="${hintVal}" placeholder="Enter radius"
+        style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+               color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+      <select id="radiusUnitSel"
+        style="background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+               color:var(--text);padding:8px 10px;font-size:14px;cursor:pointer">
+        ${unitOpts}
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-ghost" id="radiusCancelBtn">Cancel</button>
+      <button class="btn-sm btn-primary" id="radiusApplyBtn">Apply</button>
+    </div>`;
+
+  overlay.classList.add('show');
+
+  // Close on backdrop click
+  function onBackdrop(ev) { if(ev.target === overlay) { overlay.classList.remove('show'); overlay.removeEventListener('click', onBackdrop); } }
+  overlay.addEventListener('click', onBackdrop);
+
+  const input = content.querySelector('#radiusValInput');
+  const unitSel = content.querySelector('#radiusUnitSel');
+  input.focus();
+  input.select();
+
+  function applyRadius() {
+    const val = parseFloat(input.value);
+    if(isNaN(val) || val <= 0) { input.focus(); return; }
+    const unit = RADIUS_UNITS.find(u => u.value === unitSel.value) || RADIUS_UNITS[0];
+    _radiusDialogUnit = unit.value;
+    localStorage.setItem('circleRadiusUnit', unit.value);
+    const radiusM = val * unit.toM;
+    overlay.classList.remove('show');
+
+    const circleLayer = snapEngine.circleWorkingLayer;
+    const drawCircle = map.pm.Draw.Circle;
+    try {
+      // Set the exact radius — no recalculation via Geoman
+      circleLayer.setRadius(radiusM);
+
+      // Detach layer from Geoman's internal layerGroup BEFORE disable(),
+      // so disable() removes the group without taking the circle with it.
+      if(drawCircle._layerGroup) {
+        drawCircle._layerGroup.removeLayer(circleLayer);
+        circleLayer.addTo(map); // keep it visible on the map
+      }
+
+      // Init Geoman editing support on the layer (mirrors what _finishShape does)
+      try { if(circleLayer.pm && circleLayer.pm._initModes) circleLayer.pm._initModes(); } catch(_) {}
+
+      // Disable the draw tool — cleans up Geoman state and fires pm:drawend
+      drawCircle.disable();
+
+      // Fire pm:create — our handler adds it to drawnItems and state.features
+      map.fire('pm:create', { shape: 'Circle', layer: circleLayer, marker: circleLayer });
+
+    } catch(ex) {
+      try { map.pm.disableDraw(); } catch(e2) {}
+    }
+  }
+
+  content.querySelector('#radiusApplyBtn').addEventListener('click', applyRadius);
+  content.querySelector('#radiusCancelBtn').addEventListener('click', () => overlay.classList.remove('show'));
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') applyRadius(); if(e.key === 'Escape') overlay.classList.remove('show'); });
+}
+
+// ── Distance & Bearing Dialog ──
+let _lastBearingDeg = parseFloat(localStorage.getItem('lastBearingDeg')) || 0;
+let _lastDistUnit   = localStorage.getItem('lastDistUnit') || 'm';
+
+// Geodesic destination: given start (lat,lng), distance (m), bearing (deg) → L.LatLng
+function geodesicDestination(lat, lng, distM, bearingDeg) {
+  const R = 6371000;
+  const δ = distM / R;
+  const θ = bearingDeg * Math.PI / 180;
+  const φ1 = lat * Math.PI / 180;
+  const λ1 = lng * Math.PI / 180;
+  const φ2 = Math.asin(Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ));
+  const λ2 = λ1 + Math.atan2(Math.sin(θ) * Math.sin(δ) * Math.cos(φ1), Math.cos(δ) - Math.sin(φ1) * Math.sin(φ2));
+  return L.latLng(φ2 * 180 / Math.PI, ((λ2 * 180 / Math.PI) + 540) % 360 - 180);
+}
+
+function showDistanceBearingDialog(drawing) {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+
+  // Get last committed vertex from working layer
+  let fromLatLng = null;
+  try {
+    const ll = drawing.shape._layer.getLatLngs();
+    const coords = Array.isArray(ll[0]) ? ll[0] : ll;
+    fromLatLng = coords[coords.length - 1];
+  } catch(e) {}
+  if(!fromLatLng && snapEngine.currentDrawVertices.length > 0)
+    fromLatLng = snapEngine.currentDrawVertices[snapEngine.currentDrawVertices.length - 1];
+  if(!fromLatLng) return;
+
+  const unitOpts = RADIUS_UNITS.map(u =>
+    `<option value="${u.value}"${u.value === _lastDistUnit ? ' selected' : ''}>${u.label}</option>`
+  ).join('');
+
+  content.innerHTML = `
+    <h3>Add Vertex by Distance &amp; Bearing</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="color:var(--text-muted);font-size:12px;width:70px;flex-shrink:0">Distance</label>
+        <input id="distValInput" type="number" min="0.001" step="any" placeholder="Enter distance"
+          style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                 color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+        <select id="distUnitSel"
+          style="background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                 color:var(--text);padding:8px 10px;font-size:14px;cursor:pointer">
+          ${unitOpts}
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="color:var(--text-muted);font-size:12px;width:70px;flex-shrink:0">Bearing</label>
+        <input id="bearingInput" type="number" min="0" max="360" step="any"
+          value="${_lastBearingDeg.toFixed(2)}" placeholder="0 – 360"
+          style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                 color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+        <span style="color:var(--text-muted);font-size:12px;width:54px;flex-shrink:0">° (N=0, E=90)</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-ghost" id="dbCancelBtn">Cancel</button>
+      <button class="btn-sm btn-ghost" id="dbAddMoreBtn">Add &amp; Continue</button>
+      <button class="btn-sm btn-primary" id="dbApplyBtn">Add &amp; Close</button>
+    </div>`;
+
+  overlay.classList.add('show');
+
+  function onBackdrop(ev) { if(ev.target === overlay) { overlay.classList.remove('show'); overlay.removeEventListener('click', onBackdrop); } }
+  overlay.addEventListener('click', onBackdrop);
+
+  const distInput   = content.querySelector('#distValInput');
+  const unitSel     = content.querySelector('#distUnitSel');
+  const bearingInp  = content.querySelector('#bearingInput');
+  distInput.focus();
+
+  function addVertex() {
+    const dist = parseFloat(distInput.value);
+    let bearing = parseFloat(bearingInp.value);
+    if(isNaN(dist) || dist <= 0) { distInput.focus(); return null; }
+    if(isNaN(bearing)) { bearingInp.focus(); return null; }
+    bearing = ((bearing % 360) + 360) % 360; // normalise
+    const unit = RADIUS_UNITS.find(u => u.value === unitSel.value) || RADIUS_UNITS[0];
+    const distM = dist * unit.toM;
+
+    _lastBearingDeg = bearing;
+    _lastDistUnit   = unit.value;
+    localStorage.setItem('lastBearingDeg', bearing);
+    localStorage.setItem('lastDistUnit', unit.value);
+
+    const dest = geodesicDestination(fromLatLng.lat, fromLatLng.lng, distM, bearing);
+
+    try {
+      // Add vertex programmatically through Geoman's internal handler
+      drawing.shape._addVertex({ latlng: dest });
+      // Update fromLatLng for chained "Add & Continue"
+      fromLatLng = dest;
+      // Update bearing hint to same bearing (user likely continuing same direction)
+      bearingInp.value = bearing.toFixed(2);
+      distInput.value = '';
+    } catch(ex) {
+      // Fallback: push latlng directly and update layer
+      try {
+        const ll = drawing.shape._layer.getLatLngs();
+        const coords = Array.isArray(ll[0]) ? ll[0] : ll;
+        coords.push(dest);
+        drawing.shape._layer.setLatLngs(Array.isArray(ll[0]) ? [coords] : coords);
+        snapEngine.currentDrawVertices.push(dest);
+        fromLatLng = dest;
+        bearingInp.value = bearing.toFixed(2);
+        distInput.value = '';
+      } catch(e2) {}
+    }
+    return dest;
+  }
+
+  content.querySelector('#dbApplyBtn').addEventListener('click', () => {
+    if(addVertex()) overlay.classList.remove('show');
+  });
+  content.querySelector('#dbAddMoreBtn').addEventListener('click', () => {
+    addVertex();
+    distInput.focus();
+    distInput.select();
+  });
+  content.querySelector('#dbCancelBtn').addEventListener('click', () => overlay.classList.remove('show'));
+
+  content.querySelector('#distValInput').addEventListener('keydown', e => {
+    if(e.key === 'Enter') { e.preventDefault(); bearingInp.focus(); bearingInp.select(); }
+    if(e.key === 'Escape') overlay.classList.remove('show');
+  });
+  content.querySelector('#bearingInput').addEventListener('keydown', e => {
+    if(e.key === 'Enter') { if(addVertex()) overlay.classList.remove('show'); }
+    if(e.key === 'Escape') overlay.classList.remove('show');
+  });
+}
+
+// ── Point by Coordinates Dialog ──
+function showPointCoordsDialog() {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+  const crsCode = state.currentCRS;
+  const crsName = (crsDefs[crsCode] && crsDefs[crsCode].name) || `EPSG:${crsCode}`;
+  const isGeo   = crsCode === '4326';
+
+  // Tab state
+  let activeTab = 'latlon';
+
+  function renderContent() {
+    const tabLatLon = activeTab === 'latlon';
+    content.innerHTML = `
+      <h3>Place Point by Coordinates</h3>
+      <div style="display:flex;gap:0;margin-bottom:14px;border-bottom:1px solid var(--border)">
+        <button id="tabLatLon" style="flex:1;padding:7px;background:none;border:none;border-bottom:2px solid ${tabLatLon ? 'var(--accent)' : 'transparent'};
+          color:${tabLatLon ? 'var(--accent)' : 'var(--text-muted)'};cursor:pointer;font-size:13px;transition:color .15s">
+          Lat / Lon
+        </button>
+        <button id="tabXY" style="flex:1;padding:7px;background:none;border:none;border-bottom:2px solid ${!tabLatLon ? 'var(--accent)' : 'transparent'};
+          color:${!tabLatLon ? 'var(--accent)' : 'var(--text-muted)'};cursor:pointer;font-size:13px;transition:color .15s">
+          ${isGeo ? 'Lon / Lat (X/Y)' : `X / Y — ${crsName}`}
+        </button>
+      </div>
+
+      ${tabLatLon ? `
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <label style="color:var(--text-muted);font-size:12px;width:60px;flex-shrink:0">Latitude</label>
+            <input id="ptLat" type="number" step="any" placeholder="-90 to 90"
+              style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                     color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label style="color:var(--text-muted);font-size:12px;width:60px;flex-shrink:0">Longitude</label>
+            <input id="ptLon" type="number" step="any" placeholder="-180 to 180"
+              style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                     color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+          </div>
+        </div>
+      ` : `
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <label style="color:var(--text-muted);font-size:12px;width:60px;flex-shrink:0">X (Easting)</label>
+            <input id="ptX" type="number" step="any" placeholder="Easting / Longitude"
+              style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                     color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label style="color:var(--text-muted);font-size:12px;width:60px;flex-shrink:0">Y (Northing)</label>
+            <input id="ptY" type="number" step="any" placeholder="Northing / Latitude"
+              style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                     color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+          </div>
+          ${!isGeo ? `<div style="font-size:11px;color:var(--text-muted);padding-left:68px">CRS: ${crsName} (EPSG:${crsCode})</div>` : ''}
+        </div>
+      `}
+
+      <div class="modal-actions">
+        <button class="btn-sm btn-ghost" id="ptCancelBtn">Cancel</button>
+        <button class="btn-sm btn-ghost" id="ptAddMoreBtn">Place &amp; Continue</button>
+        <button class="btn-sm btn-primary" id="ptApplyBtn">Place &amp; Close</button>
+      </div>`;
+
+    // Tab switching
+    content.querySelector('#tabLatLon').addEventListener('click', () => { activeTab = 'latlon'; renderContent(); });
+    content.querySelector('#tabXY').addEventListener('click',     () => { activeTab = 'xy';     renderContent(); });
+
+    function placePoint() {
+      let lat, lng;
+      if(activeTab === 'latlon') {
+        lat = parseFloat(content.querySelector('#ptLat').value);
+        lng = parseFloat(content.querySelector('#ptLon').value);
+        if(isNaN(lat) || isNaN(lng)) { content.querySelector('#ptLat').focus(); return false; }
+        if(lat < -90 || lat > 90 || lng < -180 || lng > 180) { content.querySelector('#ptLat').focus(); return false; }
+      } else {
+        const x = parseFloat(content.querySelector('#ptX').value);
+        const y = parseFloat(content.querySelector('#ptY').value);
+        if(isNaN(x) || isNaN(y)) { content.querySelector('#ptX').focus(); return false; }
+        if(isGeo) {
+          lng = x; lat = y;
+        } else {
+          try {
+            const wgs = proj4(`EPSG:${crsCode}`, 'EPSG:4326', [x, y]);
+            lng = wgs[0]; lat = wgs[1];
+          } catch(e) { content.querySelector('#ptX').focus(); return false; }
+        }
+      }
+
+      // Place a marker via Geoman's click handler
+      try {
+        const latlng = L.latLng(lat, lng);
+        // Inject through Geoman's marker click handler
+        if(map.pm.Draw.Marker && map.pm.Draw.Marker._enabled && map.pm.Draw.Marker._createMarker) {
+          map.pm.Draw.Marker._createMarker({ latlng });
+        } else {
+          // Fallback: fire pm:create manually with a new marker
+          const marker = L.marker(latlng, { pmIgnore: false });
+          map.fire('pm:create', { shape: 'Marker', layer: marker, marker });
+        }
+      } catch(ex) {
+        try {
+          const marker = L.marker(L.latLng(lat, lng), { pmIgnore: false });
+          map.fire('pm:create', { shape: 'Marker', layer: marker, marker });
+        } catch(e2) {}
+      }
+      return true;
+    }
+
+    content.querySelector('#ptApplyBtn').addEventListener('click', () => { if(placePoint()) overlay.classList.remove('show'); });
+    content.querySelector('#ptAddMoreBtn').addEventListener('click', () => { placePoint(); });
+    content.querySelector('#ptCancelBtn').addEventListener('click', () => overlay.classList.remove('show'));
+
+    // Enter key navigation
+    const firstInput = content.querySelector('input');
+    const inputs = Array.from(content.querySelectorAll('input'));
+    inputs.forEach((inp, i) => {
+      inp.addEventListener('keydown', e => {
+        if(e.key === 'Enter') { e.preventDefault(); if(i < inputs.length - 1) { inputs[i+1].focus(); inputs[i+1].select(); } else { if(placePoint()) overlay.classList.remove('show'); } }
+        if(e.key === 'Escape') overlay.classList.remove('show');
+      });
+    });
+    if(firstInput) { firstInput.focus(); }
+  }
+
+  overlay.classList.add('show');
+  function onBackdrop(ev) { if(ev.target === overlay) { overlay.classList.remove('show'); overlay.removeEventListener('click', onBackdrop); } }
+  overlay.addEventListener('click', onBackdrop);
+  renderContent();
+}
+
+// ── Mobile Distance & Bearing Dialog ──
+function showMobileDistanceBearingDialog() {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+
+  const unitOpts = RADIUS_UNITS.map(u =>
+    `<option value="${u.value}"${u.value === _lastDistUnit ? ' selected' : ''}>${u.label}</option>`
+  ).join('');
+
+  content.innerHTML = `
+    <h3>Add Vertex by Distance &amp; Bearing</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="color:var(--text-muted);font-size:12px;width:70px;flex-shrink:0">Distance</label>
+        <input id="mobDistVal" type="number" min="0.001" step="any" placeholder="Enter distance"
+          style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                 color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+        <select id="mobDistUnit"
+          style="background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                 color:var(--text);padding:8px 10px;font-size:14px;cursor:pointer">
+          ${unitOpts}
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="color:var(--text-muted);font-size:12px;width:70px;flex-shrink:0">Bearing</label>
+        <input id="mobBearing" type="number" min="0" max="360" step="any"
+          value="${_lastBearingDeg.toFixed(2)}" placeholder="0–360"
+          style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+                 color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+        <span style="color:var(--text-muted);font-size:12px;width:54px;flex-shrink:0">° (N=0, E=90)</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-ghost" id="mobDbCancel">Cancel</button>
+      <button class="btn-sm btn-ghost" id="mobDbAddMore">Add &amp; Continue</button>
+      <button class="btn-sm btn-primary" id="mobDbApply">Add &amp; Close</button>
+    </div>`;
+
+  overlay.classList.add('show');
+  function onBackdrop(ev) { if(ev.target === overlay) { overlay.classList.remove('show'); overlay.removeEventListener('click', onBackdrop); } }
+  overlay.addEventListener('click', onBackdrop);
+
+  const distInput  = content.querySelector('#mobDistVal');
+  const unitSel    = content.querySelector('#mobDistUnit');
+  const bearingInp = content.querySelector('#mobBearing');
+  distInput.focus();
+
+  function addVertex() {
+    const dist    = parseFloat(distInput.value);
+    let   bearing = parseFloat(bearingInp.value);
+    if(isNaN(dist) || dist <= 0)   { distInput.focus();  return false; }
+    if(isNaN(bearing))             { bearingInp.focus(); return false; }
+    bearing = ((bearing % 360) + 360) % 360;
+    const unit  = RADIUS_UNITS.find(u => u.value === unitSel.value) || RADIUS_UNITS[0];
+    const distM = dist * unit.toM;
+
+    _lastBearingDeg = bearing;
+    _lastDistUnit   = unit.value;
+    localStorage.setItem('lastBearingDeg', bearing);
+    localStorage.setItem('lastDistUnit',   unit.value);
+
+    const from = mobileDraw.coords[mobileDraw.coords.length - 1];
+    const dest = geodesicDestination(from.lat, from.lng, distM, bearing);
+
+    mobileDraw.coords.push(dest);
+    snapEngine.currentDrawVertices = [...mobileDraw.coords];
+    if(mobileDraw.preview) mobileDraw.preview.setLatLngs(mobileDraw.coords);
+    updateMobileDrawHint();
+    updateMobileDrawButtons();
+
+    bearingInp.value = bearing.toFixed(2);
+    distInput.value  = '';
+    return true;
+  }
+
+  content.querySelector('#mobDbApply').addEventListener('click',   () => { if(addVertex()) overlay.classList.remove('show'); });
+  content.querySelector('#mobDbAddMore').addEventListener('click', () => { addVertex(); distInput.focus(); distInput.select(); });
+  content.querySelector('#mobDbCancel').addEventListener('click',  () => overlay.classList.remove('show'));
+  distInput.addEventListener('keydown',  e => { if(e.key === 'Enter') { e.preventDefault(); bearingInp.focus(); bearingInp.select(); } if(e.key === 'Escape') overlay.classList.remove('show'); });
+  bearingInp.addEventListener('keydown', e => { if(e.key === 'Enter') { if(addVertex()) overlay.classList.remove('show'); } if(e.key === 'Escape') overlay.classList.remove('show'); });
 }
 
 // SVG icons for context menu
@@ -1727,7 +2479,9 @@ const ctxIcons = {
   stop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>',
   del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
   zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>',
-  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>'
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+  radius: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="12" x2="19" y2="12"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
+  bearing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v4"/><circle cx="12" cy="8" r="1.5" fill="currentColor"/><line x1="12" y1="12" x2="17" y2="7" stroke-width="2"/></svg>'
 };
 
 // Intercept right-click on map
@@ -1753,13 +2507,24 @@ map.getContainer().addEventListener('contextmenu', e => {
       items.push({ action: 'finish', label: 'Finish Feature', icon: ctxIcons.finish, shortcut: 'Dbl-click' });
     }
     if(vertexCount > 0) {
+      items.push({ action: 'add_by_bearing', label: 'Add by Distance & Bearing…', icon: ctxIcons.bearing });
       items.push({ action: 'undo_vertex', label: 'Remove Last Vertex', icon: ctxIcons.undo, shortcut: 'Ctrl+Z' });
     }
     items.push('sep');
     items.push({ action: 'cancel', label: 'Cancel Current Shape', icon: ctxIcons.cancel, shortcut: 'Esc' });
     items.push({ action: 'stop_drawing', label: 'Stop Drawing Tool', icon: ctxIcons.stop });
+  } else if(snapEngine.circleDrawPhase === 'radius' && snapEngine.circleWorkingLayer) {
+    // During circle radius drag — offer manual radius entry
+    items.push({ action: 'set_circle_radius', label: 'Set Radius…', icon: ctxIcons.radius });
+    items.push('sep');
+    items.push({ action: 'stop_drawing', label: 'Cancel Circle', icon: ctxIcons.cancel, shortcut: 'Esc' });
+  } else if(isDrawingActive() && state.currentTool === 'point') {
+    // During point drawing
+    items.push({ action: 'add_point_coords', label: 'Enter Coordinates…', icon: ctxIcons.bearing });
+    items.push('sep');
+    items.push({ action: 'stop_drawing', label: 'Stop Drawing Tool', icon: ctxIcons.stop, shortcut: 'Esc' });
   } else if(isDrawingActive()) {
-    // During point/rectangle/circle drawing
+    // During rectangle drawing
     items.push({ action: 'stop_drawing', label: 'Stop Drawing Tool', icon: ctxIcons.stop, shortcut: 'Esc' });
   } else {
     // Normal mode — feature context menu
@@ -1799,10 +2564,30 @@ map.getContainer().addEventListener('contextmenu', e => {
 
 // ── Auto Geometry Fields ──
 function computeGeometryFields(feat) {
+  const cf = feat.props.customFields;
+
+  // Circles: use exact π·r² instead of polygon approximation
+  if(feat.layer instanceof L.Circle && typeof feat.layer.getRadius === 'function') {
+    const r = feat.layer.getRadius();
+    const center = feat.layer.getLatLng();
+    const area = Math.PI * r * r;
+    const circ = 2 * Math.PI * r;
+    cf['radius_m'] = r.toFixed(2);
+    cf['area_m2'] = area.toFixed(2);
+    cf['area_ha'] = (area / 1e4).toFixed(4);
+    cf['area_km2'] = (area / 1e6).toFixed(6);
+    cf['perimeter_m'] = circ.toFixed(2);
+    cf['latitude'] = center.lat.toFixed(8);
+    cf['longitude'] = center.lng.toFixed(8);
+    const p = projectCoords(center.lat, center.lng);
+    cf['x_projected'] = (p.units === '°' ? p.x.toFixed(8) : p.x.toFixed(3));
+    cf['y_projected'] = (p.units === '°' ? p.y.toFixed(8) : p.y.toFixed(3));
+    return;
+  }
+
   const geojson = layerToGeoJSON(feat.layer);
   if(!geojson || !geojson.geometry) return;
   const g = geojson.geometry;
-  const cf = feat.props.customFields;
 
   if(g.type === 'Point') {
     cf['latitude'] = g.coordinates[1].toFixed(8);
@@ -1832,7 +2617,7 @@ function computeGeometryFields(feat) {
 function recomputeAllGeometryFields() {
   state.features.forEach(f => {
     // Remove old geometry fields first
-    const geoKeys = ['latitude','longitude','x_projected','y_projected','length_m','length_km','bearing_deg','vertices','area_m2','area_ha','area_km2','perimeter_m'];
+    const geoKeys = ['latitude','longitude','x_projected','y_projected','length_m','length_km','bearing_deg','vertices','area_m2','area_ha','area_km2','perimeter_m','radius_m'];
     geoKeys.forEach(k => delete f.props.customFields[k]);
     computeGeometryFields(f);
   });
@@ -1844,40 +2629,113 @@ const labelLayers = L.layerGroup().addTo(map);
 // Per-type layer config
 state.layerConfig = {
   Point:      { name: 'Points',   labelField: 'name', showLabels: true, collapsed: false },
-  LineString: { name: 'Lines',    labelField: 'name', showLabels: true, collapsed: false },
-  Polygon:    { name: 'Polygons', labelField: 'name', showLabels: true, collapsed: false },
-  Circle:     { name: 'Circles',  labelField: 'name', showLabels: true, collapsed: false }
+  LineString: { name: 'Lines',    labelField: 'length_m', showLabels: true, collapsed: false },
+  Polygon:    { name: 'Polygons', labelField: 'area_m2', showLabels: true, collapsed: false },
+  Circle:     { name: 'Circles',  labelField: 'area_m2', showLabels: true, collapsed: false }
 };
+
+function getLineLabelPlacements(layer, labelField) {
+  const latlngs = Array.isArray(layer.getLatLngs()[0]) ? layer.getLatLngs()[0] : layer.getLatLngs();
+  if (!latlngs || latlngs.length < 2) return [];
+  
+  const placements = [];
+  let maxDist = -1;
+  let maxSegIdx = 0;
+
+  for(let i=0; i<latlngs.length-1; i++) {
+    const p1 = map.project(latlngs[i]);
+    const p2 = map.project(latlngs[i+1]);
+    const dist = p1.distanceTo(p2);
+    
+    if(dist > maxDist) { maxDist = dist; maxSegIdx = i; }
+    if(dist < 30) continue;
+    
+    const midPt = map.unproject(p1.add(p2).divideBy(2));
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    if (angle > 90 || angle < -90) angle += 180;
+    
+    let segText = null;
+    if (labelField === 'length_m' || labelField === 'length_km') {
+       const segDist = latlngs[i].distanceTo(latlngs[i+1]);
+       if (labelField === 'length_m') segText = segDist.toFixed(2);
+       if (labelField === 'length_km') segText = (segDist/1000).toFixed(4);
+    }
+    
+    placements.push({ latlng: midPt, angle: angle, segText: segText });
+  }
+  
+  if (placements.length === 0 && latlngs.length >= 2) {
+    const i = maxSegIdx;
+    const p1 = map.project(latlngs[i]);
+    const p2 = map.project(latlngs[i+1]);
+    const midPt = map.unproject(p1.add(p2).divideBy(2));
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    if (angle > 90 || angle < -90) angle += 180;
+    
+    let segText = null;
+    if (labelField === 'length_m' || labelField === 'length_km') {
+       const segDist = latlngs[i].distanceTo(latlngs[i+1]);
+       if (labelField === 'length_m') segText = segDist.toFixed(2);
+       if (labelField === 'length_km') segText = (segDist/1000).toFixed(4);
+    }
+    placements.push({ latlng: midPt, angle: angle, segText: segText });
+  }
+  
+  return placements;
+}
 
 function updateLabels() {
   labelLayers.clearLayers();
 
   state.features.forEach(f => {
     if(!drawnItems.hasLayer(f.layer)) return;
-    const cfg = state.layerConfig[f.geomType];
+    const cfg = f.importSource
+      ? state.importLayers[f.importSource]
+      : state.layerConfig[f.geomType];
     if(!cfg || !cfg.showLabels || !cfg.labelField) return;
 
     const labelText = getLabelText(f, cfg.labelField);
     if(!labelText) return;
 
-    let latlng;
-    if(f.layer.getLatLng) {
-      latlng = f.layer.getLatLng();
+    if(f.geomType === 'Point' && f.layer.getLatLng) {
+      const latlng = f.layer.getLatLng();
+      const htmlStr = `<div style="position: absolute; left: 0; top: 0; transform: translate(12px, -24px); white-space: nowrap;"><span>${escHtml(labelText)}</span></div>`;
+      addLabelMarker(latlng, htmlStr);
+    } else if(f.geomType === 'LineString') {
+      const placements = getLineLabelPlacements(f.layer, cfg.labelField);
+      if (placements.length > 0) {
+        placements.forEach(p => {
+          const textToDisplay = p.segText || labelText;
+          const htmlStr = `<div style="position: absolute; left: 0; top: 0; transform: translate(-50%, -50%) rotate(${p.angle}deg); white-space: nowrap;"><span>${escHtml(textToDisplay)}</span></div>`;
+          addLabelMarker(p.latlng, htmlStr);
+        });
+      } else if (f.layer.getBounds) {
+        const latlng = f.layer.getBounds().getCenter();
+        const htmlStr = `<div style="position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap;"><span>${escHtml(labelText)}</span></div>`;
+        addLabelMarker(latlng, htmlStr);
+      }
     } else if(f.layer.getBounds) {
-      latlng = f.layer.getBounds().getCenter();
+      const latlng = f.layer.getBounds().getCenter();
+      const htmlStr = `<div style="position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap;"><span>${escHtml(labelText)}</span></div>`;
+      addLabelMarker(latlng, htmlStr);
     }
-    if(!latlng) return;
+  });
 
-    L.marker(latlng, {
+  function addLabelMarker(pos, htmlText) {
+    L.marker(pos, {
       icon: L.divIcon({
         className: 'feature-label',
-        html: `<span>${escHtml(labelText)}</span>`,
-        iconSize: 'auto',
-        iconAnchor: [0, -12]
+        html: htmlText,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0]
       }),
       interactive: false
     }).addTo(labelLayers);
-  });
+  }
 }
 
 function getLabelText(feat, fieldName) {
@@ -1905,11 +2763,80 @@ function getFieldsForType(type) {
 
 function updateLayerPanel() {
   const container = document.getElementById('layerList');
+
+  // Split features: imported (have importSource) vs drawn
+  const importedBySource = {};
   const groups = { Point: [], LineString: [], Polygon: [], Circle: [] };
   state.features.forEach(f => {
-    if(groups[f.geomType]) groups[f.geomType].push(f);
-    else groups[f.geomType] = [f];
+    if (f.importSource) {
+      if (!importedBySource[f.importSource]) importedBySource[f.importSource] = [];
+      importedBySource[f.importSource].push(f);
+      // ensure import layer state exists with label defaults
+      if (!state.importLayers[f.importSource]) state.importLayers[f.importSource] = { collapsed: false, showLabels: true, labelField: 'name' };
+    } else {
+      if(groups[f.geomType]) groups[f.geomType].push(f);
+      else groups[f.geomType] = [f];
+    }
   });
+
+  // ── Imported layers section ──
+  let importHtml = '';
+  for (const [src, feats] of Object.entries(importedBySource)) {
+    const layerState = state.importLayers[src] || (state.importLayers[src] = { collapsed: false, showLabels: true, labelField: 'name' });
+    const allVisible = feats.every(f => drawnItems.hasLayer(f.layer));
+    const anyVisible = feats.some(f => drawnItems.hasLayer(f.layer));
+    const visState = allVisible ? 'on' : anyVisible ? 'partial' : '';
+    const ext = src.split('.').pop().toUpperCase();
+    const chevron = layerState.collapsed ? '▸' : '▾';
+    // Collect available label fields for this import source
+    const importFields = new Set(['name', 'description']);
+    feats.forEach(f => Object.keys(f.props.customFields).forEach(k => importFields.add(k)));
+    const labelOpts = [...importFields].map(k =>
+      `<option value="${escHtml(k)}" ${layerState.labelField === k ? 'selected' : ''}>${escHtml(k)}</option>`
+    ).join('');
+
+    importHtml += `
+    <div class="layer-type-section" style="margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      <div class="layer-group-header" data-import-collapse="${escHtml(src)}" style="border-radius:0;margin:0;cursor:pointer;background:var(--bg-hover)">
+        <div class="dot polygon" style="background:var(--warning);width:8px;height:8px"></div>
+        <span style="flex:1;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(src)}">${escHtml(src)}</span>
+        <span class="count">${feats.length}</span>
+        <span style="font-size:8px;color:var(--text-muted);background:var(--bg-card);padding:0 4px;border-radius:2px;margin-left:4px">${ext}</span>
+        <button class="vis-toggle ${visState}" data-import-vis-all="${escHtml(src)}" title="Toggle all visibility" style="width:18px;height:18px;font-size:8px;margin-left:4px">${allVisible ? '✓' : anyVisible ? '◑' : ''}</button>
+        <button class="del-btn" data-import-del-all="${escHtml(src)}" title="Remove imported layer" style="margin-left:4px">✕</button>
+        <span style="font-size:10px;color:var(--text-muted);margin-left:4px;flex:none">${chevron}</span>
+      </div>
+      ${layerState.collapsed ? '' : `
+      <div style="padding:6px 8px">
+        <!-- Label controls -->
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <label style="font-size:10px;color:var(--text-muted);white-space:nowrap">Label:</label>
+          <select class="import-label-field" data-import-src="${escHtml(src)}" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;font-size:10px;outline:none">
+            <option value="" ${layerState.labelField === '' ? 'selected' : ''}>(none)</option>
+            ${labelOpts}
+          </select>
+          <button class="vis-toggle ${layerState.showLabels ? 'on' : ''} import-label-toggle" data-import-src="${escHtml(src)}" style="width:18px;height:18px;font-size:8px" title="Toggle labels">${layerState.showLabels ? '✓' : ''}</button>
+        </div>
+        <!-- Feature list -->
+        <div style="max-height:180px;overflow-y:auto">
+          ${feats.map(f => {
+            const sel = f.id === state.selectedFeatureId ? 'selected' : '';
+            const vis = drawnItems.hasLayer(f.layer);
+            return `<div class="layer-item ${sel}" data-id="${f.id}">
+              <button class="vis-toggle ${vis?'on':''}" data-vis="${f.id}" title="Toggle visibility">${vis?'✓':''}</button>
+              <span class="name">${escHtml(f.props.name)}</span>
+              <button class="del-btn" data-del="${f.id}" title="Delete feature">✕</button>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`}
+    </div>`;
+  }
+
+  if (importHtml) {
+    importHtml = `<div style="margin-bottom:6px;font-size:9px;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);padding:0 2px">Imported Files</div>${importHtml}
+    <div style="border-top:1px solid var(--border);margin-bottom:10px"></div>`;
+  }
 
   const typeInfo = {
     Point:      { label: 'Points',   dotClass: 'point',   icon: '◉' },
@@ -1918,8 +2845,8 @@ function updateLayerPanel() {
     Circle:     { label: 'Circles',  dotClass: 'polygon',  icon: '◯' }
   };
 
-  let html = '';
-  let hasAny = false;
+  let html = importHtml;
+  let hasAny = !!importHtml;
 
   for(const [type, feats] of Object.entries(groups)) {
     if(!feats.length) continue;
@@ -1941,7 +2868,8 @@ function updateLayerPanel() {
         <div class="dot ${info.dotClass}"></div>
         <span>${escHtml(cfg.name)}</span>
         <span class="count">${feats.length}</span>
-        <span style="font-size:10px;color:var(--text-muted)">${cfg.collapsed ? '▸' : '▾'}</span>
+        <button class="del-entire-layer-btn" data-del-layer="${type}" title="Delete all features in ${escHtml(cfg.name)}" style="border:none;background:transparent;color:var(--danger);cursor:pointer;border-radius:3px;margin-left:4px;width:18px;height:18px;font-size:11px;display:flex;align-items:center;justify-content:center;">✕</button>
+        <span style="font-size:10px;color:var(--text-muted);margin-left:4px;flex:none">${cfg.collapsed ? '▸' : '▾'}</span>
       </div>
 
       <div class="layer-type-body" style="${cfg.collapsed ? 'display:none' : ''};padding:8px">
@@ -2005,12 +2933,102 @@ function updateLayerPanel() {
 
   // ── Wire up events ──
 
+  // Imported: collapse/expand
+  container.querySelectorAll('[data-import-collapse]').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target.closest('[data-import-vis-all]') || e.target.closest('[data-import-del-all]')) return;
+      const src = el.dataset.importCollapse;
+      if (state.importLayers[src]) state.importLayers[src].collapsed = !state.importLayers[src].collapsed;
+      updateLayerPanel();
+    });
+  });
+
+  // Imported: toggle all visibility for a file
+  container.querySelectorAll('[data-import-vis-all]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const src = el.dataset.importVisAll;
+      const feats = state.features.filter(f => f.importSource === src);
+      const allVis = feats.every(f => drawnItems.hasLayer(f.layer));
+      feats.forEach(f => {
+        if (allVis) drawnItems.removeLayer(f.layer);
+        else drawnItems.addLayer(f.layer);
+      });
+      updateLayerPanel();
+      updateLabels();
+    });
+  });
+
+  // Imported: label field change
+  container.querySelectorAll('.import-label-field').forEach(el => {
+    el.addEventListener('change', e => {
+      e.stopPropagation();
+      const src = el.dataset.importSrc;
+      if (state.importLayers[src]) state.importLayers[src].labelField = el.value;
+      updateLabels();
+    });
+  });
+
+  // Imported: toggle labels
+  container.querySelectorAll('.import-label-toggle').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const src = el.dataset.importSrc;
+      if (state.importLayers[src]) state.importLayers[src].showLabels = !state.importLayers[src].showLabels;
+      updateLayerPanel();
+      updateLabels();
+    });
+  });
+
+  // Imported: delete entire imported file layer
+  container.querySelectorAll('[data-import-del-all]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      const src = el.dataset.importDelAll;
+      if (!confirm(`Remove all features from "${src}"?`)) return;
+      state.features.filter(f => f.importSource === src).forEach(f => {
+        drawnItems.removeLayer(f.layer);
+        if (state.selectedFeatureId === f.id) state.selectedFeatureId = null;
+      });
+      state.features = state.features.filter(f => f.importSource !== src);
+      delete state.importLayers[src];
+      updateLayerPanel();
+      updatePropertiesPanel();
+      updateCounts();
+      updateLabels();
+      showToast(`Removed "${src}"`, 'success');
+    });
+  });
+
   // Collapse/expand headers
   container.querySelectorAll('[data-collapse]').forEach(el => {
-    el.addEventListener('click', () => {
+    el.addEventListener('click', (e) => {
+      if(e.target.closest('.del-entire-layer-btn')) return;
       const type = el.dataset.collapse;
       state.layerConfig[type].collapsed = !state.layerConfig[type].collapsed;
       updateLayerPanel();
+    });
+  });
+
+  // Delete entire layer
+  container.querySelectorAll('.del-entire-layer-btn').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const type = el.dataset.delLayer;
+      if(confirm(`Are you sure you want to delete ALL features in this layer?`)) {
+        const featsToDelete = state.features.filter(f => f.geomType === type);
+        featsToDelete.forEach(f => {
+          pushUndo('delete', f);
+          drawnItems.removeLayer(f.layer);
+          if (state.selectedFeatureId === f.id) state.selectedFeatureId = null;
+        });
+        state.features = state.features.filter(f => f.geomType !== type);
+        updateLayerPanel();
+        updatePropertiesPanel();
+        updateCounts();
+        updateLabels();
+        showToast(`Layer deleted`, 'success');
+      }
     });
   });
 
@@ -2381,14 +3399,12 @@ function updatePropertiesPanel() {
   document.getElementById('propSave').addEventListener('click', () => {
     feat.props.name = document.getElementById('propName').value;
     feat.props.description = document.getElementById('propDesc').value;
-    // Save custom fields
-    const newCF = {};
+    // Save custom fields (update values for existing schema)
     document.querySelectorAll('.custom-field-row').forEach(row => {
       const key = row.querySelector('.cf-key').value;
       const val = row.querySelector('.cf-val').value;
-      if(key) newCF[key] = val;
+      if(key) feat.props.customFields[key] = val;
     });
-    feat.props.customFields = newCF;
     // Recompute geometry fields (in case user cleared them)
     computeGeometryFields(feat);
     updateLayerPanel();
@@ -2397,23 +3413,44 @@ function updatePropertiesPanel() {
   });
 
   document.getElementById('propDelete').addEventListener('click', () => deleteFeatureById(feat.id));
-  document.getElementById('addFieldBtn').addEventListener('click', () => {
-    feat.props.customFields['field_' + Date.now()] = '';
+  
+  // Clone button instead of direct event listener to prevent duplicate firings if properties panel is updated multiple times
+  const oldAddBtn = document.getElementById('addFieldBtn');
+  const newAddBtn = oldAddBtn.cloneNode(true);
+  oldAddBtn.parentNode.replaceChild(newAddBtn, oldAddBtn);
+  
+  newAddBtn.addEventListener('click', () => {
+    const name = prompt("Enter new field name:");
+    if (!name || !name.trim()) return;
+    const cleanName = name.trim();
+    // Add field to all features of this layer
+    state.features.filter(f => f.geomType === feat.geomType).forEach(f => {
+      if(!(cleanName in f.props.customFields)) f.props.customFields[cleanName] = '';
+    });
     renderCustomFields(feat);
+    updateLayerPanel();
   });
 }
 
 function renderCustomFields(feat) {
   const container = document.getElementById('customFieldsContainer');
   if(!container) return;
+  
+  // Gather schema from all features in the exact same layer/geomType
+  const schemaKeys = new Set();
+  state.features.filter(f => f.geomType === feat.geomType).forEach(f => {
+    Object.keys(f.props.customFields).forEach(k => schemaKeys.add(k));
+  });
+
   let html = '';
-  for(const [key, val] of Object.entries(feat.props.customFields)) {
+  schemaKeys.forEach(key => {
+    const val = feat.props.customFields[key] || '';
     html += `<div class="custom-field-row" style="display:flex;gap:4px;margin-bottom:4px">
-      <input class="cf-key" type="text" value="${escHtml(key)}" placeholder="Field name" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:11px;outline:none">
+      <input class="cf-key" type="text" value="${escHtml(key)}" readonly title="Field Name (Edit schema in Layers panel)" style="flex:1;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-muted);padding:4px 6px;border-radius:4px;font-size:11px;outline:none;cursor:default;">
       <input class="cf-val" type="text" value="${escHtml(val)}" placeholder="Value" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:11px;outline:none">
-      <button class="btn-sm btn-ghost" onclick="this.parentElement.remove()" title="Remove this field" style="padding:2px 6px;font-size:11px">✕</button>
     </div>`;
-  }
+  });
+  
   container.innerHTML = html;
 }
 
@@ -2453,8 +3490,21 @@ map.on('zoomend', () => {
 
 // ── Export ──
 function getAllGeoJSON() {
+  const container = document.getElementById('exportLayerSelect');
+  const selectedTypes = new Set();
+  if (container) {
+    container.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+      selectedTypes.add(cb.value);
+      if (cb.value === 'Polygon') selectedTypes.add('Circle');
+    });
+  } else {
+    ['Point','LineString','Polygon','Circle'].forEach(t => selectedTypes.add(t));
+  }
+
   const features = [];
   state.features.forEach(f => {
+    if (!selectedTypes.has(f.geomType)) return;
+
     const gj = layerToGeoJSON(f.layer);
     if(gj) {
       gj.properties = { id: f.id, name: f.props.name, description: f.props.description, ...f.props.customFields };
@@ -3091,12 +4141,17 @@ document.querySelectorAll('.export-btn').forEach(btn => {
 document.getElementById('btnExportTop').addEventListener('click', () => switchTab('export'));
 
 // ── Import ──
-function importGeoJSON(text) {
+function importGeoJSON(text, sourceName) {
   try {
     const data = JSON.parse(text);
     let features = [];
     if(data.type === 'FeatureCollection') features = data.features;
     else if(data.type === 'Feature') features = [data];
+
+    // Initialise import layer state with label defaults (once per source)
+    if (sourceName && !state.importLayers[sourceName]) {
+      state.importLayers[sourceName] = { collapsed: false, showLabels: true, labelField: 'name' };
+    }
 
     let count = 0;
     features.forEach(f => {
@@ -3113,6 +4168,7 @@ function importGeoJSON(text) {
       const feat = {
         id, layer,
         geomType: f.geometry.type === 'MultiPolygon' ? 'Polygon' : (f.geometry.type === 'MultiLineString' ? 'LineString' : f.geometry.type),
+        importSource: sourceName || null,
         props: {
           name: f.properties?.name || f.properties?.Name || `Imported ${id}`,
           description: f.properties?.description || f.properties?.Description || '',
@@ -3144,7 +4200,7 @@ function importGeoJSON(text) {
   }
 }
 
-function importKML(text) {
+function importKML(text, sourceName) {
   // Basic KML parser
   try {
     const parser = new DOMParser();
@@ -3174,7 +4230,7 @@ function importKML(text) {
       }
     });
 
-    importGeoJSON(JSON.stringify({ type:'FeatureCollection', features }));
+    importGeoJSON(JSON.stringify({ type:'FeatureCollection', features }), sourceName);
   } catch(e) {
     showToast('Failed to parse KML', 'error');
   }
@@ -3185,8 +4241,9 @@ function handleImport(file) {
   reader.onload = e => {
     const text = e.target.result;
     const ext = file.name.split('.').pop().toLowerCase();
-    if(ext === 'geojson' || ext === 'json') importGeoJSON(text);
-    else if(ext === 'kml') importKML(text);
+    const src = file.name;
+    if(ext === 'geojson' || ext === 'json') importGeoJSON(text, src);
+    else if(ext === 'kml') importKML(text, src);
     else showToast('Unsupported format', 'error');
   };
   reader.readAsText(file);
@@ -3426,14 +4483,129 @@ document.getElementById('btnExportTop').addEventListener('click', () => {
   if(window.innerWidth <= 768 && !mobilePanelOpen) toggleMobilePanel();
 });
 
-// Try geolocation
-if(navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    pos => map.setView([pos.coords.latitude, pos.coords.longitude], 13),
-    () => {},
-    { timeout: 5000 }
-  );
-}
+// ── ArcGIS Pro Desktop Sync ──
+(function initDesktopSync() {
+  const params = new URLSearchParams(window.location.search);
+  const lat = parseFloat(params.get('lat'));
+  const lng = parseFloat(params.get('lng'));
+  const z   = parseInt(params.get('z'));
+  const isDesktopSync = params.get('sync') === 'desktop';
+  const hasUrlView = !isNaN(lat) && !isNaN(lng);
+
+  // Set map view from URL params (priority over geolocation)
+  if (hasUrlView) {
+    map.setView([lat, lng], isNaN(z) ? 13 : z);
+  }
+
+  // Only use geolocation if no URL params provided
+  if (!hasUrlView && navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => map.setView([pos.coords.latitude, pos.coords.longitude], 13),
+      () => {},
+      { timeout: 5000 }
+    );
+  }
+
+  // Desktop sync features — only when opened from ArcGIS Pro
+  if (!isDesktopSync) return;
+
+  const SYNC_URL = 'http://localhost:5005/import';
+
+  // ── Sync indicator badge in topbar ──
+  const badge = document.createElement('div');
+  badge.className = 'topbar-btn';
+  badge.id = 'syncBadge';
+  badge.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">' +
+    '<circle cx="12" cy="12" r="3"/></svg>' +
+    '<span>Pro sync</span>';
+  badge.style.cursor = 'default';
+  document.querySelector('.topbar').appendChild(badge);
+
+  // ── Add "Send to ArcGIS Pro" button to export panel ──
+  const exportGrid = document.querySelector('.export-grid');
+  var syncBtn = null;
+  if (exportGrid) {
+    syncBtn = document.createElement('button');
+    syncBtn.className = 'export-btn';
+    syncBtn.style.cssText = 'grid-column:1/-1;border-color:var(--accent);order:-1';
+    syncBtn.setAttribute('data-tooltip', 'Send directly to ArcGIS Pro');
+    syncBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">' +
+      '<path d="M12 19V5m0 0l-5 5m5-5l5 5"/></svg>' +
+      '<span class="fmt" style="color:var(--accent)">Send to ArcGIS Pro</span>' +
+      '<span class="desc">Direct sync to project GDB</span>';
+    syncBtn.onclick = sendToArcGIS;
+    exportGrid.insertBefore(syncBtn, exportGrid.firstChild);
+  }
+
+  // ── Check if ArcGIS Pro listener is alive ──
+  function checkConnection() {
+    fetch(SYNC_URL, { method: 'OPTIONS', mode: 'cors' })
+      .then(function() {
+        badge.classList.add('active');
+        badge.querySelector('span').textContent = 'Pro connected';
+      })
+      .catch(function() {
+        badge.classList.remove('active');
+        badge.querySelector('span').textContent = 'Pro offline';
+      });
+  }
+
+  checkConnection();
+  setInterval(checkConnection, 10000);
+
+  // ── Send GeoJSON to ArcGIS Pro ──
+  function sendToArcGIS() {
+    var data = getAllGeoJSONProjected();
+    if (!data.features.length) {
+      showToast('No features to send', 'error');
+      return;
+    }
+
+    // Add CRS info
+    if (state.currentCRS !== '4326') {
+      data.crs = {
+        type: 'name',
+        properties: { name: 'urn:ogc:def:crs:EPSG::' + state.currentCRS }
+      };
+    }
+
+    // Show sending state
+    var origHTML = syncBtn ? syncBtn.innerHTML : '';
+    if (syncBtn) {
+      syncBtn.innerHTML = '<span class="fmt" style="color:var(--accent)">Sending...</span>';
+      syncBtn.disabled = true;
+    }
+
+    fetch(SYNC_URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(resp) {
+      return resp.json().then(function(result) {
+        if (resp.ok && result.success) {
+          showToast('Synced to ArcGIS Pro \u2192 ' + result.layer, 'success');
+        } else {
+          showToast('Sync failed: ' + (result.error || 'Unknown error'), 'error');
+        }
+      });
+    })
+    .catch(function() {
+      showToast('Cannot reach ArcGIS Pro. Is it running?', 'error');
+      badge.classList.remove('active');
+      badge.querySelector('span').textContent = 'Pro offline';
+    })
+    .finally(function() {
+      if (syncBtn) {
+        syncBtn.innerHTML = origHTML;
+        syncBtn.disabled = false;
+      }
+    });
+  }
+})();
 
 // Remove loading screen
 setTimeout(() => {
@@ -3444,5 +4616,6 @@ setTimeout(() => {
 
 })();
 </script>
+
 </body>
 </html>
