@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="16x16" href="kga geoditizer.png">
 <link rel="icon" type="image/png" sizes="32x32" href="kga geoditizer.png">
-<link rel="shortcut icon" href="kga geoditizer.png">
+<link rel="shortcut icon" href="kga-logo-light.svg">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -336,7 +336,7 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
   <header class="topbar">
     <div class="logo">
       <img src="kga geoditizer.png" alt="KGA Logo" width="24" height="24">
-      <span><span class="kga">KGA</span> Geodigitizer Tool</span>
+      <span><span class="kga">KGA</span> Geodigitizer</span>
     </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-group">
@@ -638,12 +638,12 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
     <div class="panel-content" id="tabExport" style="display:none">
       <div class="panel-section">
         <div class="panel-section-title">Import Data</div>
-        <div class="import-zone" id="importZone" title="Click or drag & drop a GeoJSON, KML, or GPX file to import">
+        <div class="import-zone" id="importZone" title="Click or drag & drop a GeoJSON, KML, GPX, or Shapefile (.zip) file to import">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <p>Drop file or click to import</p>
-          <div class="formats">GeoJSON, KML, GPX</div>
+          <div class="formats">GeoJSON, KML, GPX, Shapefile (.zip)</div>
         </div>
-        <input type="file" id="importFile" accept=".geojson,.json,.kml,.gpx" style="display:none">
+        <input type="file" id="importFile" accept=".geojson,.json,.kml,.gpx,.shp,.zip" style="display:none">
       </div>
       <div class="panel-section">
         <div class="panel-section-title">Export Data</div>
@@ -700,6 +700,8 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
     <div id="mobExtraActions" style="display:none;gap:8px">
       <button class="btn-sm btn-ghost" id="mobBtnCoords" style="flex:1">Enter Coords</button>
       <button class="btn-sm btn-ghost" id="mobBtnDistBear" style="flex:1;display:none">Dist &amp; Bearing</button>
+      <button class="btn-sm btn-ghost" id="mobBtnSetRadius" style="flex:1;display:none">Enter Radius</button>
+      <button class="btn-sm btn-ghost" id="mobBtnRectDims" style="flex:1;display:none">Set Dimensions</button>
     </div>
   </div>
 
@@ -850,6 +852,13 @@ document.getElementById('crsSelect').addEventListener('change', e => {
   state.currentCRS = e.target.value;
   const def = crsDefs[state.currentCRS];
   document.getElementById('statusCRS').textContent = `${def.name} | EPSG:${state.currentCRS}`;
+  // Length, area, and perimeter are now computed in the selected CRS —
+  // update every existing feature's fields so the sidebar and labels refresh.
+  if (typeof recomputeAllGeometryFields === 'function') {
+    recomputeAllGeometryFields();
+    if (typeof updateLayerPanel === 'function') updateLayerPanel();
+    if (typeof updateLabels === 'function') updateLabels();
+  }
 });
 
 // ── Theme Toggle ──
@@ -1159,7 +1168,7 @@ map.pm.setGlobalOptions({
 function isMobileMode() {
   return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 932;
 }
-const mobileDraw = { active: false, tool: null, coords: [], preview: null, hint: null };
+const mobileDraw = { active: false, tool: null, coords: [], preview: null, hint: null, centerMark: null };
 
 function activateTool(tool) {
   state.currentTool = tool;
@@ -1175,7 +1184,7 @@ function activateTool(tool) {
   stopMobileDraw();
 
   if(['point','line','polygon','rectangle','circle'].includes(tool)) {
-    if(isMobileMode() && ['point','line','polygon'].includes(tool)) {
+    if(isMobileMode() && ['point','line','polygon','rectangle','circle'].includes(tool)) {
       startMobileDraw(tool);
     } else {
       activateDrawTool(tool);
@@ -1206,16 +1215,37 @@ function startMobileDraw(tool) {
 
   // Extra action row
   const extraRow = document.getElementById('mobExtraActions');
-  extraRow.style.display = 'flex';
-  document.getElementById('mobBtnCoords').style.display   = tool === 'point' ? 'block' : 'none';
-  document.getElementById('mobBtnDistBear').style.display = (tool === 'line' || tool === 'polygon') ? 'block' : 'none';
-  document.getElementById('mobBtnDistBear').style.opacity = '0.4'; // dim until first vertex
+  document.getElementById('mobBtnCoords').style.display     = tool === 'point' ? 'block' : 'none';
+  document.getElementById('mobBtnDistBear').style.display   = (tool === 'line' || tool === 'polygon') ? 'block' : 'none';
+  document.getElementById('mobBtnDistBear').style.opacity   = '0.4';
+  document.getElementById('mobBtnSetRadius').style.display  = 'none';
+  document.getElementById('mobBtnRectDims').style.display   = 'none';
+  extraRow.style.display = (tool === 'point' || tool === 'line' || tool === 'polygon') ? 'flex' : 'none';
 
   if(tool === 'point') {
     document.getElementById('mobBtnAdd').textContent = 'Add Point';
     document.getElementById('mobBtnAdd').style.display = 'block';
     document.getElementById('mobBtnUndo').style.display = 'none';
     document.getElementById('mobBtnFinish').style.display = 'none';
+  } else if(tool === 'rectangle') {
+    document.getElementById('mobDrawPrompt').textContent = 'Pan to rectangle center';
+    document.getElementById('mobBtnAdd').textContent = 'Set Center';
+    document.getElementById('mobBtnAdd').style.display = 'block';
+    document.getElementById('mobBtnUndo').style.display = 'none';
+    document.getElementById('mobBtnFinish').style.display = 'none';
+    const styleOpts = getStyle('Polygon');
+    const c = map.getCenter();
+    mobileDraw.preview = L.rectangle([c, c], { ...styleOpts, opacity: 0, fillOpacity: 0 }).addTo(map);
+    mobileDraw.hint = L.polyline([], { color: styleOpts.color, dashArray: '5,5', weight: styleOpts.weight || 2 }).addTo(map);
+  } else if(tool === 'circle') {
+    document.getElementById('mobDrawPrompt').textContent = 'Pan to circle center';
+    document.getElementById('mobBtnAdd').textContent = 'Set Center';
+    document.getElementById('mobBtnAdd').style.display = 'block';
+    document.getElementById('mobBtnUndo').style.display = 'none';
+    document.getElementById('mobBtnFinish').style.display = 'none';
+    const styleOpts = getStyle('Polygon');
+    mobileDraw.preview = L.circle([0, 0], { radius: 0, color: styleOpts.color, fillColor: styleOpts.fillColor, fillOpacity: styleOpts.fillOpacity, weight: styleOpts.weight || 2, opacity: 0 }).addTo(map);
+    mobileDraw.hint = L.polyline([], { color: styleOpts.color, dashArray: '5,5', weight: styleOpts.weight || 2 }).addTo(map);
   } else {
     document.getElementById('mobBtnAdd').textContent = 'Add Vertex';
     document.getElementById('mobBtnAdd').style.display = 'block';
@@ -1243,9 +1273,11 @@ function stopMobileDraw() {
   document.getElementById('mapCrosshair').style.display = 'none';
   document.getElementById('mobileDrawBar').style.display = 'none';
   document.getElementById('mobExtraActions').style.display = 'none';
+  document.getElementById('mobDrawPrompt').textContent = 'Move map to target';
   setTimeout(() => map.invalidateSize(), 50);
   if(mobileDraw.preview) { map.removeLayer(mobileDraw.preview); mobileDraw.preview = null; }
   if(mobileDraw.hint) { map.removeLayer(mobileDraw.hint); mobileDraw.hint = null; }
+  if(mobileDraw.centerMark) { map.removeLayer(mobileDraw.centerMark); mobileDraw.centerMark = null; }
 }
 
 function getMobileTargetLatLng() {
@@ -1273,7 +1305,31 @@ function updateMobileDrawHint() {
   if(!mobileDraw.active) return;
   const targetLatLng = getMobileTargetLatLng();
   document.getElementById('mobDrawCoord').textContent = `${targetLatLng.lat.toFixed(5)}, ${targetLatLng.lng.toFixed(5)}`;
-  if(mobileDraw.tool !== 'point' && mobileDraw.hint) {
+
+  if(mobileDraw.tool === 'rectangle') {
+    if(mobileDraw.coords.length === 1 && mobileDraw.preview) {
+      // Center-based: rectangle grows symmetrically from the stored center
+      const center = mobileDraw.coords[0];
+      const dx = Math.abs(targetLatLng.lng - center.lng);
+      const dy = Math.abs(targetLatLng.lat - center.lat);
+      if(dx > 0 || dy > 0) {
+        const sw = L.latLng(center.lat - dy, center.lng - dx);
+        const ne = L.latLng(center.lat + dy, center.lng + dx);
+        mobileDraw.preview.setBounds(L.latLngBounds(sw, ne));
+        const styleOpts = getStyle('Polygon');
+        mobileDraw.preview.setStyle({ opacity: 1, fillOpacity: styleOpts.fillOpacity });
+      }
+    }
+  } else if(mobileDraw.tool === 'circle') {
+    if(mobileDraw.coords.length === 1 && mobileDraw.preview) {
+      const radiusM = mobileDraw.coords[0].distanceTo(targetLatLng);
+      mobileDraw.preview.setLatLng(mobileDraw.coords[0]);
+      mobileDraw.preview.setRadius(Math.max(radiusM, 1));
+      const styleOpts = getStyle('Polygon');
+      mobileDraw.preview.setStyle({ opacity: 1, fillOpacity: styleOpts.fillOpacity });
+      if(mobileDraw.hint) mobileDraw.hint.setLatLngs([mobileDraw.coords[0], targetLatLng]);
+    }
+  } else if(mobileDraw.tool !== 'point' && mobileDraw.hint) {
     if(mobileDraw.coords.length > 0) {
       const last = mobileDraw.coords[mobileDraw.coords.length - 1];
       let hintCoords = [last, targetLatLng];
@@ -1294,6 +1350,26 @@ function updateMobileDrawButtons() {
     document.getElementById('mobBtnFinish').style.display = len >= 2 ? 'block' : 'none';
   } else if(mobileDraw.tool === 'polygon') {
     document.getElementById('mobBtnFinish').style.display = len >= 3 ? 'block' : 'none';
+  } else if(mobileDraw.tool === 'rectangle') {
+    document.getElementById('mobBtnFinish').style.display = 'none';
+    document.getElementById('mobBtnAdd').textContent = len === 0 ? 'Set Center' : 'Set Corner';
+    const prompt = document.getElementById('mobDrawPrompt');
+    if(prompt) prompt.textContent = len === 0 ? 'Pan to rectangle center' : 'Pan to corner';
+    // Show Set Dimensions button and extras row after 1st corner is placed
+    const rectDimsBtn = document.getElementById('mobBtnRectDims');
+    const extraRow = document.getElementById('mobExtraActions');
+    if(rectDimsBtn) rectDimsBtn.style.display = len >= 1 ? 'block' : 'none';
+    if(extraRow) extraRow.style.display = len >= 1 ? 'flex' : 'none';
+  } else if(mobileDraw.tool === 'circle') {
+    document.getElementById('mobBtnFinish').style.display = 'none';
+    document.getElementById('mobBtnAdd').textContent = len === 0 ? 'Set Center' : 'Set Radius Point';
+    const prompt = document.getElementById('mobDrawPrompt');
+    if(prompt) prompt.textContent = len === 0 ? 'Pan to circle center' : 'Pan to set radius';
+    // Show Enter Radius button and extras row after center is placed
+    const setRadBtn = document.getElementById('mobBtnSetRadius');
+    const extraRow = document.getElementById('mobExtraActions');
+    if(setRadBtn) setRadBtn.style.display = len >= 1 ? 'block' : 'none';
+    if(extraRow) extraRow.style.display = len >= 1 ? 'flex' : 'none';
   }
   // Enable D&B button once at least one vertex is placed
   const dbBtn = document.getElementById('mobBtnDistBear');
@@ -1311,8 +1387,17 @@ document.getElementById('mobBtnCancel').addEventListener('click', () => {
 document.getElementById('mobBtnUndo').addEventListener('click', () => {
   if(mobileDraw.coords.length > 0) {
     mobileDraw.coords.pop();
-    snapEngine.currentDrawVertices = [...mobileDraw.coords];
-    mobileDraw.preview.setLatLngs(mobileDraw.coords);
+    // Remove center dot when undoing step 1
+    if(mobileDraw.centerMark) { map.removeLayer(mobileDraw.centerMark); mobileDraw.centerMark = null; }
+    if(mobileDraw.tool === 'rectangle') {
+      if(mobileDraw.preview) mobileDraw.preview.setStyle({ opacity: 0, fillOpacity: 0 });
+      if(mobileDraw.hint) mobileDraw.hint.setLatLngs([]);
+    } else if(mobileDraw.tool === 'circle') {
+      if(mobileDraw.preview) mobileDraw.preview.setStyle({ opacity: 0, fillOpacity: 0 });
+      if(mobileDraw.hint) mobileDraw.hint.setLatLngs([]);
+    } else {
+      mobileDraw.preview.setLatLngs(mobileDraw.coords);
+    }
     updateMobileDrawHint();
     updateMobileDrawButtons();
   }
@@ -1323,9 +1408,45 @@ document.getElementById('mobBtnAdd').addEventListener('click', () => {
   if(mobileDraw.tool === 'point') {
     const layer = L.marker(targetLatLng, { icon: createMarkerIcon() }).addTo(map);
     map.fire('pm:create', { layer, shape: 'Marker' });
+  } else if(mobileDraw.tool === 'rectangle') {
+    if(mobileDraw.coords.length === 0) {
+      // Center placed — drop a center dot and wait for corner
+      mobileDraw.coords.push(targetLatLng);
+      mobileDraw.centerMark = L.circleMarker(targetLatLng, {
+        radius: 5, color: '#ff4444', fillColor: '#ff4444', fillOpacity: 1, weight: 2, pane: 'markerPane'
+      }).addTo(map);
+      updateMobileDrawHint();
+      updateMobileDrawButtons();
+    } else {
+      // Corner placed — create symmetric rectangle centered at coords[0]
+      const center = mobileDraw.coords[0];
+      const dx = Math.abs(targetLatLng.lng - center.lng);
+      const dy = Math.abs(targetLatLng.lat - center.lat);
+      const sw = L.latLng(center.lat - dy, center.lng - dx);
+      const ne = L.latLng(center.lat + dy, center.lng + dx);
+      const styleOpts = getStyle('Polygon');
+      const layer = L.rectangle([sw, ne], styleOpts).addTo(map);
+      map.fire('pm:create', { layer, shape: 'Rectangle' });
+    }
+  } else if(mobileDraw.tool === 'circle') {
+    if(mobileDraw.coords.length === 0) {
+      // Center placed — drop a center dot and wait for radius
+      mobileDraw.coords.push(targetLatLng);
+      mobileDraw.centerMark = L.circleMarker(targetLatLng, {
+        radius: 5, color: '#ff4444', fillColor: '#ff4444', fillOpacity: 1, weight: 2, pane: 'markerPane'
+      }).addTo(map);
+      updateMobileDrawHint();
+      updateMobileDrawButtons();
+    } else {
+      // Radius point — create circle
+      const center = mobileDraw.coords[0];
+      const radiusM = center.distanceTo(targetLatLng);
+      const styleOpts = getStyle('Polygon');
+      const layer = L.circle(center, { radius: radiusM, color: styleOpts.color, fillColor: styleOpts.fillColor, fillOpacity: styleOpts.fillOpacity, weight: styleOpts.weight || 2 }).addTo(map);
+      map.fire('pm:create', { layer, shape: 'Circle' });
+    }
   } else {
     mobileDraw.coords.push(targetLatLng);
-    snapEngine.currentDrawVertices = [...mobileDraw.coords];
     mobileDraw.preview.setLatLngs(mobileDraw.coords);
     updateMobileDrawHint();
     updateMobileDrawButtons();
@@ -1350,6 +1471,161 @@ document.getElementById('mobBtnDistBear').addEventListener('click', () => {
   if(mobileDraw.coords.length === 0) return;
   showMobileDistanceBearingDialog();
 });
+
+document.getElementById('mobBtnSetRadius').addEventListener('click', () => {
+  if(mobileDraw.tool !== 'circle' || mobileDraw.coords.length < 1) return;
+  showMobileCircleRadiusDialog(mobileDraw.coords[0]);
+});
+
+document.getElementById('mobBtnRectDims').addEventListener('click', () => {
+  if(mobileDraw.tool !== 'rectangle' || mobileDraw.coords.length < 1) return;
+  showRectangleDimensionsDialog(mobileDraw.coords[0]);
+});
+
+function showMobileCircleRadiusDialog(center) {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+
+  const unitOpts = RADIUS_UNITS.map(u =>
+    `<option value="${u.value}"${u.value === _radiusDialogUnit ? ' selected' : ''}>${u.label}</option>`
+  ).join('');
+
+  content.innerHTML = `
+    <h3>Set Circle Radius</h3>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px">
+      <input id="radiusValInput" type="number" min="0.01" step="any"
+        value="" placeholder="Enter radius"
+        style="flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+               color:var(--text);padding:8px 10px;font-size:14px;outline:none">
+      <select id="radiusUnitSel"
+        style="background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);
+               color:var(--text);padding:8px 10px;font-size:14px;cursor:pointer">
+        ${unitOpts}
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-ghost" id="radiusCancelBtn">Cancel</button>
+      <button class="btn-sm btn-primary" id="radiusApplyBtn">Apply</button>
+    </div>`;
+
+  overlay.classList.add('show');
+
+  function onBackdrop(ev) { if(ev.target === overlay) { overlay.classList.remove('show'); overlay.removeEventListener('click', onBackdrop); } }
+  overlay.addEventListener('click', onBackdrop);
+
+  const input = content.querySelector('#radiusValInput');
+  const unitSel = content.querySelector('#radiusUnitSel');
+  input.focus();
+
+  function applyRadius() {
+    const val = parseFloat(input.value);
+    if(isNaN(val) || val <= 0) { input.focus(); return; }
+    const unit = RADIUS_UNITS.find(u => u.value === unitSel.value) || RADIUS_UNITS[0];
+    _radiusDialogUnit = unit.value;
+    localStorage.setItem('circleRadiusUnit', unit.value);
+    const radiusM = val * unit.toM;
+    overlay.classList.remove('show');
+    const styleOpts = getStyle('Polygon');
+    const layer = L.circle(center, { radius: radiusM, color: styleOpts.color, fillColor: styleOpts.fillColor, fillOpacity: styleOpts.fillOpacity, weight: styleOpts.weight || 2 }).addTo(map);
+    map.fire('pm:create', { layer, shape: 'Circle' });
+  }
+
+  content.querySelector('#radiusApplyBtn').addEventListener('click', applyRadius);
+  content.querySelector('#radiusCancelBtn').addEventListener('click', () => overlay.classList.remove('show'));
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') applyRadius(); if(e.key === 'Escape') overlay.classList.remove('show'); });
+}
+
+function showRectangleDimensionsDialog(corner) {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+
+  const unitOpts = RADIUS_UNITS.map(u =>
+    `<option value="${u.value}"${u.value === _radiusDialogUnit ? ' selected' : ''}>${u.label}</option>`
+  ).join('');
+
+  const inputStyle = `flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:8px 10px;font-size:14px;outline:none`;
+  const labelStyle = `display:block;font-size:12px;color:var(--text-muted);margin-bottom:4px`;
+
+  content.innerHTML = `
+    <h3>Set Rectangle Dimensions</h3>
+    <div style="display:flex;gap:12px;margin-bottom:12px">
+      <div style="flex:1">
+        <label style="${labelStyle}">Width</label>
+        <input id="rectWidthInput" type="number" min="0.01" step="any" placeholder="Width"
+          style="${inputStyle}">
+      </div>
+      <div style="flex:1">
+        <label style="${labelStyle}">Height</label>
+        <input id="rectHeightInput" type="number" min="0.01" step="any" placeholder="Height"
+          style="${inputStyle}">
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="${labelStyle}">Unit</label>
+      <select id="rectUnitSel"
+        style="width:100%;background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:8px 10px;font-size:14px;cursor:pointer">
+        ${unitOpts}
+      </select>
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="${labelStyle}">Rotation (° clockwise from North, 0 = axis-aligned)</label>
+      <input id="rectRotInput" type="number" min="-360" max="360" step="any" value="0"
+        style="width:100%;box-sizing:border-box;${inputStyle}">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-ghost" id="rectDimsCancelBtn">Cancel</button>
+      <button class="btn-sm btn-primary" id="rectDimsApplyBtn">Apply</button>
+    </div>`;
+
+  overlay.classList.add('show');
+
+  function onBackdrop(ev) { if(ev.target === overlay) { overlay.classList.remove('show'); overlay.removeEventListener('click', onBackdrop); } }
+  overlay.addEventListener('click', onBackdrop);
+
+  const wInput = content.querySelector('#rectWidthInput');
+  const hInput = content.querySelector('#rectHeightInput');
+  const unitSel = content.querySelector('#rectUnitSel');
+  const rotInput = content.querySelector('#rectRotInput');
+  wInput.focus();
+
+  function applyDims() {
+    const w = parseFloat(wInput.value);
+    const h = parseFloat(hInput.value);
+    if(isNaN(w) || w <= 0) { wInput.focus(); return; }
+    if(isNaN(h) || h <= 0) { hInput.focus(); return; }
+    const rot = parseFloat(rotInput.value) || 0;
+    const unit = RADIUS_UNITS.find(u => u.value === unitSel.value) || RADIUS_UNITS[0];
+    _radiusDialogUnit = unit.value;
+    localStorage.setItem('circleRadiusUnit', unit.value);
+    const wM = w * unit.toM;
+    const hM = h * unit.toM;
+
+    // Rectangle is centered at `corner` (which is now the center point).
+    // Width runs east+rot, height runs north+rot. Move half-extents back from
+    // center to find the first corner, then build the other three.
+    const widthBearing  = (90 + rot + 360) % 360;
+    const heightBearing = (rot + 360) % 360;
+    const oppWidthBearing  = (widthBearing  + 180) % 360;
+    const oppHeightBearing = (heightBearing + 180) % 360;
+
+    const pTemp = geodesicDestination(corner.lat, corner.lng, wM / 2, oppWidthBearing);
+    const p1 = geodesicDestination(pTemp.lat, pTemp.lng, hM / 2, oppHeightBearing);
+    const p2 = geodesicDestination(p1.lat, p1.lng, wM, widthBearing);
+    const p3 = geodesicDestination(p2.lat, p2.lng, hM, heightBearing);
+    const p4 = geodesicDestination(p1.lat, p1.lng, hM, heightBearing);
+
+    overlay.classList.remove('show');
+    const styleOpts = getStyle('Polygon');
+    const layer = L.polygon([p1, p2, p3, p4], styleOpts).addTo(map);
+    map.fire('pm:create', { layer, shape: 'Rectangle' });
+  }
+
+  content.querySelector('#rectDimsApplyBtn').addEventListener('click', applyDims);
+  content.querySelector('#rectDimsCancelBtn').addEventListener('click', () => overlay.classList.remove('show'));
+  content.querySelector('#rectWidthInput').addEventListener('keydown', e => { if(e.key === 'Enter') hInput.focus(); if(e.key === 'Escape') overlay.classList.remove('show'); });
+  content.querySelector('#rectHeightInput').addEventListener('keydown', e => { if(e.key === 'Enter') applyDims(); if(e.key === 'Escape') overlay.classList.remove('show'); });
+  content.querySelector('#rectRotInput').addEventListener('keydown', e => { if(e.key === 'Enter') applyDims(); if(e.key === 'Escape') overlay.classList.remove('show'); });
+}
 
 // Re-enable a drawing tool without resetting the active button state
 function activateDrawTool(tool) {
@@ -2454,7 +2730,6 @@ function showMobileDistanceBearingDialog() {
     const dest = geodesicDestination(from.lat, from.lng, distM, bearing);
 
     mobileDraw.coords.push(dest);
-    snapEngine.currentDrawVertices = [...mobileDraw.coords];
     if(mobileDraw.preview) mobileDraw.preview.setLatLngs(mobileDraw.coords);
     updateMobileDrawHint();
     updateMobileDrawButtons();
@@ -2596,7 +2871,7 @@ function computeGeometryFields(feat) {
     cf['x_projected'] = (p.units === '°' ? p.x.toFixed(8) : p.x.toFixed(3));
     cf['y_projected'] = (p.units === '°' ? p.y.toFixed(8) : p.y.toFixed(3));
   } else if(g.type === 'LineString') {
-    const len = calcLineLength(g.coordinates);
+    const len = calcPlanarLength(g.coordinates, state.currentCRS);
     const bearing = g.coordinates.length >= 2 ? calcBearing(g.coordinates[0][1], g.coordinates[0][0], g.coordinates[g.coordinates.length-1][1], g.coordinates[g.coordinates.length-1][0]) : 0;
     cf['length_m'] = len.toFixed(2);
     cf['length_km'] = (len/1000).toFixed(4);
@@ -2604,8 +2879,8 @@ function computeGeometryFields(feat) {
     cf['vertices'] = String(g.coordinates.length);
   } else if(g.type === 'Polygon') {
     const ring = g.coordinates[0];
-    const area = calcPolygonArea(ring);
-    const perimeter = calcLineLength(ring);
+    const area = calcPlanarArea(ring, state.currentCRS);
+    const perimeter = calcPlanarLength(ring, state.currentCRS);
     cf['area_m2'] = area.toFixed(2);
     cf['area_ha'] = (area/1e4).toFixed(4);
     cf['area_km2'] = (area/1e6).toFixed(6);
@@ -2658,7 +2933,12 @@ function getLineLabelPlacements(layer, labelField) {
     
     let segText = null;
     if (labelField === 'length_m' || labelField === 'length_km') {
-       const segDist = latlngs[i].distanceTo(latlngs[i+1]);
+       // Use planar length in the selected CRS so segment labels agree
+       // with the total length shown in the sidebar.
+       const segDist = calcPlanarLength(
+         [[latlngs[i].lng, latlngs[i].lat], [latlngs[i+1].lng, latlngs[i+1].lat]],
+         state.currentCRS
+       );
        if (labelField === 'length_m') segText = segDist.toFixed(2);
        if (labelField === 'length_km') segText = (segDist/1000).toFixed(4);
     }
@@ -2678,7 +2958,10 @@ function getLineLabelPlacements(layer, labelField) {
     
     let segText = null;
     if (labelField === 'length_m' || labelField === 'length_km') {
-       const segDist = latlngs[i].distanceTo(latlngs[i+1]);
+       const segDist = calcPlanarLength(
+         [[latlngs[i].lng, latlngs[i].lat], [latlngs[i+1].lng, latlngs[i+1].lat]],
+         state.currentCRS
+       );
        if (labelField === 'length_m') segText = segDist.toFixed(2);
        if (labelField === 'length_km') segText = (segDist/1000).toFixed(4);
     }
@@ -3338,10 +3621,13 @@ function updatePropertiesPanel() {
         </div>`;
     } else if(g.type === 'LineString') {
       const coords = g.coordinates;
-      const len = calcLineLength(coords);
+      const len = calcPlanarLength(coords, state.currentCRS);
       const segments = [];
       for(let i = 1; i < coords.length; i++) {
-        const segLen = haversineDistance(coords[i-1][1], coords[i-1][0], coords[i][1], coords[i][0]);
+        const segLen = calcPlanarLength(
+          [[coords[i-1][0], coords[i-1][1]], [coords[i][0], coords[i][1]]],
+          state.currentCRS
+        );
         const bearing = calcBearing(coords[i-1][1], coords[i-1][0], coords[i][1], coords[i][0]);
         segments.push({ len: segLen, bearing });
       }
@@ -3361,8 +3647,8 @@ function updatePropertiesPanel() {
         </div>` : ''}`;
     } else if(g.type === 'Polygon') {
       const ring = g.coordinates[0];
-      const area = calcPolygonArea(ring);
-      const perimeter = calcLineLength(ring);
+      const area = calcPlanarArea(ring, state.currentCRS);
+      const perimeter = calcPlanarLength(ring, state.currentCRS);
       geomHtml = `
         <div class="panel-section-title" style="margin-top:8px">Geometry Properties</div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;font-family:'JetBrains Mono',monospace;font-size:11px;display:flex;flex-direction:column;gap:4px">
@@ -3710,8 +3996,11 @@ function buildShapefile(features, geomType) {
     return allNumeric ? 'N' : 'C';
   });
 
-  // Calculate bounding box
-  let xMin=180, yMin=90, xMax=-180, yMax=-90;
+  // Calculate bounding box. Initialize with Infinity so this works for any
+  // CRS (UTM meters, State Plane feet, or lat/lng degrees) — NOT the
+  // lat/lng-specific 180/90 sentinels, which leak into the output as
+  // "Left: 180, Bottom: 90" when every real coordinate is larger.
+  let xMin=Infinity, yMin=Infinity, xMax=-Infinity, yMax=-Infinity;
   features.forEach(f => {
     const ac = getAllCoords(f.geometry);
     ac.forEach(c => { xMin=Math.min(xMin,c[0]); yMin=Math.min(yMin,c[1]); xMax=Math.max(xMax,c[0]); yMax=Math.max(yMax,c[1]); });
@@ -3741,7 +4030,7 @@ function buildShapefile(features, geomType) {
         ring.forEach(c => allPts.push(c));
       });
 
-      let pxMin=180,pyMin=90,pxMax=-180,pyMax=-90;
+      let pxMin=Infinity,pyMin=Infinity,pxMax=-Infinity,pyMax=-Infinity;
       allPts.forEach(c => { pxMin=Math.min(pxMin,c[0]);pyMin=Math.min(pyMin,c[1]);pxMax=Math.max(pxMax,c[0]);pyMax=Math.max(pyMax,c[1]); });
 
       const contentLen = 4 + 32 + 4 + 4 + partOffsets.length * 4 + allPts.length * 16;
@@ -3831,6 +4120,11 @@ function buildDBF(features, fullKeys, shortKeys, fieldTypes) {
   const buf = new ArrayBuffer(totalLen);
   const view = new DataView(buf);
   const bytes = new Uint8Array(buf);
+  // Fill the records region with ASCII spaces (0x20). DBF uses space-padding
+  // for character and numeric fields; leaving unwritten bytes at 0x00 makes
+  // the file technically invalid and some readers (including older Python
+  // dbfread) return strings with trailing NULLs.
+  bytes.fill(0x20, headerLen, totalLen);
 
   // Header
   view.setUint8(0, 3);
@@ -3970,8 +4264,10 @@ async function exportGPKG() {
       const colDefs = propKeys.map(k => `"${k.replace(/"/g,'""')}" ${fieldTypes[k]}`).join(', ');
       db.run(`CREATE TABLE "${tableName}" (fid INTEGER PRIMARY KEY AUTOINCREMENT, geom ${gpkgGeomType}${colDefs ? ', ' + colDefs : ''})`);
 
-      // Bounds
-      let minX=180, minY=90, maxX=-180, maxY=-90;
+      // Bounds — initialize with Infinity so this works for any CRS (UTM
+      // meters, feet, degrees). Using 180/90 sentinels leaks them into
+      // gpkg_contents when coordinates are in a projected CRS.
+      let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
       feats.forEach(f => {
         getAllCoords(f.geometry).forEach(c => {
           minX=Math.min(minX,c[0]); minY=Math.min(minY,c[1]);
@@ -4236,12 +4532,310 @@ function importKML(text, sourceName) {
   }
 }
 
+// ── Shapefile Import ───────────────────────────────────────────────────
+//
+// Accepts two input forms:
+//   1. A .zip bundle containing .shp + .dbf + .prj (and optionally .shx) —
+//      this is the normal case and matches what we export.
+//   2. A bare .shp file — geometry only, no attributes, no CRS (assumed WGS84).
+//
+// Supported geometry types: Point (1), PolyLine (3), Polygon (5), and their
+// Z/M variants (11/13/15, 21/23/25) — Z and M values are parsed over but
+// dropped since the rest of the app is 2D only.
+//
+// If a .prj is present, its WKT is handed directly to proj4 so coordinates
+// reproject to WGS84 before being handed off to importGeoJSON (which
+// expects lat/lng because Leaflet is a 4326-only map).
+
+async function importSHPZip(file, sourceName) {
+  try {
+    if (!window.JSZip) {
+      showToast('Loading ZIP library...', 'success');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+    }
+    const zip = await JSZip.loadAsync(file);
+
+    // Group files in the zip by basename so we can handle multi-layer zips
+    // (e.g. our own export bundles points.shp + lines.shp + polygons.shp).
+    const byBase = {};
+    zip.forEach((path, entry) => {
+      if (entry.dir) return;
+      const name = path.split('/').pop();                 // strip folders
+      const dot = name.lastIndexOf('.');
+      if (dot < 0) return;
+      const base = name.substring(0, dot).toLowerCase();
+      const ext  = name.substring(dot + 1).toLowerCase();
+      if (!['shp','dbf','prj','cpg'].includes(ext)) return;
+      if (!byBase[base]) byBase[base] = {};
+      byBase[base][ext] = entry;
+    });
+
+    const bases = Object.keys(byBase).filter(b => byBase[b].shp);
+    if (bases.length === 0) {
+      showToast('No .shp file found in the zip', 'error');
+      return;
+    }
+
+    let totalFeatures = 0;
+    for (const base of bases) {
+      const parts = byBase[base];
+      const shpBuf = await parts.shp.async('arraybuffer');
+      const dbfBuf = parts.dbf ? await parts.dbf.async('arraybuffer') : null;
+      const prjWkt = parts.prj ? await parts.prj.async('string')      : null;
+      // .cpg tells us the DBF encoding. Default to UTF-8; fall back to latin1
+      // if the file says so (common with older ArcGIS exports).
+      const cpg    = parts.cpg ? (await parts.cpg.async('string')).trim() : '';
+      const encoding = /1252|latin|iso-8859/i.test(cpg) ? 'windows-1252' : 'utf-8';
+
+      // Multi-layer zips get a per-layer suffix so each becomes its own
+      // import group in the sidebar.
+      const layerSource = bases.length > 1 ? `${sourceName} — ${base}` : sourceName;
+      const n = parseSHPBundleToGeoJSON(shpBuf, dbfBuf, prjWkt, encoding, layerSource);
+      totalFeatures += n;
+    }
+    if (totalFeatures === 0) {
+      showToast('Shapefile contained no importable features', 'error');
+    }
+  } catch (err) {
+    console.error('Shapefile import error:', err);
+    showToast('Failed to read shapefile zip: ' + err.message, 'error');
+  }
+}
+
+function importSHPBare(file, sourceName) {
+  // A lone .shp with no sidecars — geometry only, WGS84 assumed.
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      parseSHPBundleToGeoJSON(e.target.result, null, null, 'utf-8', sourceName);
+      showToast('Imported .shp without .dbf/.prj — attributes and CRS unavailable', 'success');
+    } catch (err) {
+      console.error('Shapefile parse error:', err);
+      showToast('Failed to parse .shp: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseSHPBundleToGeoJSON(shpBuf, dbfBuf, prjWkt, encoding, sourceName) {
+  const geoms = parseSHP(shpBuf);
+  const attrs = dbfBuf ? parseDBF(dbfBuf, encoding) : null;
+
+  // Build a reprojector from whatever the .prj says → WGS84.
+  // proj4 accepts WKT strings directly, so we don't need to parse them.
+  let reproject = (x, y) => [x, y]; // identity — assume already 4326
+  if (prjWkt) {
+    try {
+      const from = proj4(prjWkt);
+      const to   = proj4('EPSG:4326');
+      reproject = (x, y) => {
+        const r = proj4(from, to, [x, y]);
+        return [r[0], r[1]]; // proj4 returns [lng, lat] which is GeoJSON order
+      };
+    } catch (e) {
+      console.warn('Could not initialize reprojection from .prj — assuming WGS84:', e);
+      showToast('Unknown .prj — coordinates assumed to be WGS84', 'error');
+    }
+  }
+
+  const features = [];
+  geoms.forEach((g, i) => {
+    if (!g) return; // null shape records
+    const props = attrs && attrs[i] ? attrs[i] : {};
+    const geom = reprojectGeometry(g, reproject);
+    features.push({ type: 'Feature', geometry: geom, properties: props });
+  });
+
+  if (features.length === 0) return 0;
+  importGeoJSON(JSON.stringify({ type: 'FeatureCollection', features }), sourceName);
+  return features.length;
+}
+
+function reprojectGeometry(g, fn) {
+  switch (g.type) {
+    case 'Point':
+      return { type: 'Point', coordinates: fn(g.coordinates[0], g.coordinates[1]) };
+    case 'MultiPoint':
+      return { type: 'MultiPoint', coordinates: g.coordinates.map(c => fn(c[0], c[1])) };
+    case 'LineString':
+      return { type: 'LineString', coordinates: g.coordinates.map(c => fn(c[0], c[1])) };
+    case 'MultiLineString':
+      return { type: 'MultiLineString',
+        coordinates: g.coordinates.map(line => line.map(c => fn(c[0], c[1]))) };
+    case 'Polygon':
+      return { type: 'Polygon',
+        coordinates: g.coordinates.map(ring => ring.map(c => fn(c[0], c[1]))) };
+    case 'MultiPolygon':
+      return { type: 'MultiPolygon',
+        coordinates: g.coordinates.map(poly => poly.map(ring => ring.map(c => fn(c[0], c[1])))) };
+  }
+  return g;
+}
+
+// Parse an ESRI .shp file (ArrayBuffer) into an array of GeoJSON geometries
+// (one per record; null for null-shape records). Supports shape types
+// 1/11/21 (Point / PointZ / PointM), 3/13/23 (PolyLine + variants), and
+// 5/15/25 (Polygon + variants). Z and M coordinate arrays at the end of
+// each record are ignored.
+function parseSHP(buf) {
+  const dv = new DataView(buf);
+  const fileCode = dv.getInt32(0, false);
+  if (fileCode !== 9994) throw new Error('Not a valid shapefile (bad file code)');
+  const fileLenWords = dv.getInt32(24, false); // length in 16-bit words
+  const fileLen = fileLenWords * 2;
+
+  const geoms = [];
+  let pos = 100; // skip 100-byte header
+  while (pos < fileLen) {
+    // Record header: 4 bytes record# + 4 bytes content length (big-endian, words)
+    const contentLenWords = dv.getInt32(pos + 4, false);
+    const contentLen = contentLenWords * 2;
+    const recStart = pos + 8;
+    const shapeType = dv.getInt32(recStart, true);
+
+    let geom = null;
+    if (shapeType === 0) {
+      // Null shape
+      geom = null;
+    } else if (shapeType === 1 || shapeType === 11 || shapeType === 21) {
+      // Point / PointZ / PointM
+      const x = dv.getFloat64(recStart + 4, true);
+      const y = dv.getFloat64(recStart + 12, true);
+      geom = { type: 'Point', coordinates: [x, y] };
+    } else if (shapeType === 3 || shapeType === 13 || shapeType === 23) {
+      // PolyLine / PolyLineZ / PolyLineM
+      geom = parsePolyParts(dv, recStart, 'line');
+    } else if (shapeType === 5 || shapeType === 15 || shapeType === 25) {
+      // Polygon / PolygonZ / PolygonM
+      geom = parsePolyParts(dv, recStart, 'poly');
+    } else if (shapeType === 8 || shapeType === 18 || shapeType === 28) {
+      // MultiPoint — array of x,y pairs after bbox + numPoints
+      const numPoints = dv.getInt32(recStart + 36, true);
+      const pts = [];
+      for (let i = 0; i < numPoints; i++) {
+        const o = recStart + 40 + i * 16;
+        pts.push([dv.getFloat64(o, true), dv.getFloat64(o + 8, true)]);
+      }
+      geom = { type: 'MultiPoint', coordinates: pts };
+    }
+    // Any other shape type is silently skipped — we just push null.
+
+    geoms.push(geom);
+    pos = recStart + contentLen;
+  }
+  return geoms;
+}
+
+// Shared PolyLine/Polygon record decoder. ESRI layout after shapeType:
+//   bbox (4 × f64), numParts (i32), numPoints (i32),
+//   partIndex (numParts × i32), points (numPoints × 2 × f64).
+function parsePolyParts(dv, recStart, kind) {
+  const numParts  = dv.getInt32(recStart + 36, true);
+  const numPoints = dv.getInt32(recStart + 40, true);
+  const parts = [];
+  for (let i = 0; i < numParts; i++) parts.push(dv.getInt32(recStart + 44 + i * 4, true));
+
+  const ptsStart = recStart + 44 + numParts * 4;
+  const readPt = i => [
+    dv.getFloat64(ptsStart + i * 16,     true),
+    dv.getFloat64(ptsStart + i * 16 + 8, true)
+  ];
+
+  // Split the flat point list into parts using the part indices.
+  const rings = [];
+  for (let p = 0; p < numParts; p++) {
+    const start = parts[p];
+    const end   = (p + 1 < numParts) ? parts[p + 1] : numPoints;
+    const seg = [];
+    for (let i = start; i < end; i++) seg.push(readPt(i));
+    rings.push(seg);
+  }
+
+  if (kind === 'line') {
+    return rings.length === 1
+      ? { type: 'LineString',      coordinates: rings[0] }
+      : { type: 'MultiLineString', coordinates: rings };
+  }
+  // Polygon: each part is a ring. ESRI shapefiles use ring orientation
+  // (CW = outer, CCW = inner) to distinguish shells from holes. Grouping
+  // holes with their correct shell requires a point-in-polygon test,
+  // which is more complexity than most imports need — we emit a simple
+  // Polygon (single outer + rest as holes) when there's only one outer,
+  // otherwise a MultiPolygon with each ring as its own shell. This
+  // matches what tools like ogr2ogr do when run without --force.
+  if (rings.length === 1) return { type: 'Polygon', coordinates: rings };
+  return { type: 'MultiPolygon', coordinates: rings.map(r => [r]) };
+}
+
+// Parse a .dbf (dBASE III) file to an array of attribute objects, one per
+// record, aligned with the shp record order.
+function parseDBF(buf, encoding) {
+  const dv = new DataView(buf);
+  const numRecords = dv.getUint32(4, true);
+  const headerLen  = dv.getUint16(8, true);
+  const recordLen  = dv.getUint16(10, true);
+
+  // Field descriptors start at byte 32, each 32 bytes long, terminated by 0x0D.
+  const fields = [];
+  let pos = 32;
+  while (pos < headerLen - 1) {
+    if (dv.getUint8(pos) === 0x0D) break;
+    // Field name is up to 11 bytes ASCII, null-terminated.
+    let name = '';
+    for (let i = 0; i < 11; i++) {
+      const b = dv.getUint8(pos + i);
+      if (b === 0) break;
+      name += String.fromCharCode(b);
+    }
+    const typeChar = String.fromCharCode(dv.getUint8(pos + 11)); // 'C','N','F','L','D',...
+    const length   = dv.getUint8(pos + 16);
+    fields.push({ name, typeChar, length });
+    pos += 32;
+  }
+
+  const decoder = new TextDecoder(encoding, { fatal: false });
+  const records = [];
+  for (let r = 0; r < numRecords; r++) {
+    const recStart = headerLen + r * recordLen;
+    // First byte is deletion flag: 0x20 = live, 0x2A = deleted
+    if (dv.getUint8(recStart) === 0x2A) { records.push(null); continue; }
+
+    const obj = {};
+    let off = recStart + 1;
+    fields.forEach(f => {
+      const slice = new Uint8Array(buf, off, f.length);
+      // Character fields are fixed-width and may be NULL-padded (0x00) or
+      // space-padded (0x20) depending on the writer. Trim both.
+      const raw = decoder.decode(slice).replace(/[\s\u0000]+$/, '');
+      let val = raw;
+      if (f.typeChar === 'N' || f.typeChar === 'F') {
+        const n = parseFloat(raw);
+        val = isNaN(n) ? null : n;
+      } else if (f.typeChar === 'L') {
+        val = /^[YyTt]$/.test(raw) ? true : /^[NnFf]$/.test(raw) ? false : null;
+      } else if (f.typeChar === 'D' && raw.length === 8) {
+        // YYYYMMDD
+        val = `${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`;
+      }
+      obj[f.name] = val;
+      off += f.length;
+    });
+    records.push(obj);
+  }
+  return records;
+}
+
 function handleImport(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const src = file.name;
+  // Shapefile bundles and bare .shp go through the binary path — they
+  // can't be read as text.
+  if (ext === 'zip') { importSHPZip(file, src); return; }
+  if (ext === 'shp') { importSHPBare(file, src); return; }
+
   const reader = new FileReader();
   reader.onload = e => {
     const text = e.target.result;
-    const ext = file.name.split('.').pop().toLowerCase();
-    const src = file.name;
     if(ext === 'geojson' || ext === 'json') importGeoJSON(text, src);
     else if(ext === 'kml') importKML(text, src);
     else showToast('Unsupported format', 'error');
@@ -4295,6 +4889,71 @@ function calcPolygonArea(ring) {
       (Math.sin(ring[i][1]*DEG2RAD) + Math.sin(ring[j][1]*DEG2RAD));
   }
   return Math.abs(area * EARTH_R * EARTH_R / 2);
+}
+
+// ── Planar measurement in the user-selected CRS ──
+// When the user picks a projected CRS (UTM, State Plane, etc.) we
+// project the vertices into that CRS's grid and run plain Euclidean /
+// Shoelace math on the projected coordinates. This matches ArcGIS Pro's
+// default "planar" measurement when the map is in the same projected CRS.
+// If the selected CRS is geographic (degrees), we fall back to the
+// spherical formulas above — Euclidean math on degrees is meaningless.
+//
+// crsCode is a string like "32648". coords are [lng, lat] pairs (GeoJSON order).
+// Returns length in METERS regardless of the CRS's native unit (feet are converted).
+
+const FT_TO_M = 0.3048;
+const US_FT_TO_M = 1200 / 3937;  // US survey foot, used by most State Plane zones
+
+function unitToMeters(units) {
+  if (units === 'm')  return 1;
+  if (units === 'ft') return US_FT_TO_M; // most of our ft CRS defs are US survey ft
+  return null; // degrees or unknown — caller should fall back
+}
+
+function projectPoint(lng, lat, crsCode) {
+  // proj4 expects [lng, lat] and returns [x, y] in the target CRS's units.
+  return proj4('EPSG:4326', `EPSG:${crsCode}`, [lng, lat]);
+}
+
+function calcPlanarLength(coords, crsCode) {
+  const def = crsDefs[crsCode];
+  const u = def ? unitToMeters(def.units) : null;
+  if (u === null) return calcLineLength(coords); // geographic CRS — fall back
+  try {
+    let total = 0;
+    let prev = projectPoint(coords[0][0], coords[0][1], crsCode);
+    for (let i = 1; i < coords.length; i++) {
+      const p = projectPoint(coords[i][0], coords[i][1], crsCode);
+      const dx = p[0] - prev[0];
+      const dy = p[1] - prev[1];
+      total += Math.sqrt(dx*dx + dy*dy);
+      prev = p;
+    }
+    return total * u; // convert to meters
+  } catch(e) {
+    return calcLineLength(coords); // proj4 failure — fall back
+  }
+}
+
+function calcPlanarArea(ring, crsCode) {
+  const def = crsDefs[crsCode];
+  const u = def ? unitToMeters(def.units) : null;
+  if (u === null) return calcPolygonArea(ring); // geographic CRS — fall back
+  try {
+    // Shoelace formula on projected coordinates
+    const pts = ring.map(c => projectPoint(c[0], c[1], crsCode));
+    let a = 0;
+    const n = pts.length;
+    // If ring is closed (first==last), the wrap-around term contributes 0 so no special case needed.
+    for (let i = 0; i < n; i++) {
+      const j = (i + 1) % n;
+      a += pts[i][0] * pts[j][1] - pts[j][0] * pts[i][1];
+    }
+    return Math.abs(a / 2) * u * u; // convert to square meters
+  } catch(e) {
+    return calcPolygonArea(ring); // proj4 failure — fall back
+  }
 }
 
 function formatLength(m) {
@@ -4351,7 +5010,7 @@ function measureClick(e) {
     if(measurePoints.length === 2) {
       const p1 = measurePoints[0], p2 = measurePoints[1];
       L.polyline([p1, p2], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
-      const dist = haversineDistance(p1.lat, p1.lng, p2.lat, p2.lng);
+      const dist = calcPlanarLength([[p1.lng, p1.lat], [p2.lng, p2.lat]], state.currentCRS);
       const bearing = calcBearing(p1.lat, p1.lng, p2.lat, p2.lng);
       const compassDir = getCompassDirection(bearing);
       const mid = L.latLng((p1.lat+p2.lat)/2, (p1.lng+p2.lng)/2);
@@ -4372,11 +5031,9 @@ function measureClick(e) {
     const prev = measurePoints[measurePoints.length - 2];
     const curr = measurePoints[measurePoints.length - 1];
     L.polyline([prev, curr], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
-    let totalDist = 0;
-    for(let i = 1; i < measurePoints.length; i++) {
-      totalDist += haversineDistance(measurePoints[i-1].lat, measurePoints[i-1].lng, measurePoints[i].lat, measurePoints[i].lng);
-    }
-    const segDist = haversineDistance(prev.lat, prev.lng, curr.lat, curr.lng);
+    const coords = measurePoints.map(p => [p.lng, p.lat]);
+    const totalDist = calcPlanarLength(coords, state.currentCRS);
+    const segDist = calcPlanarLength([[prev.lng, prev.lat], [curr.lng, curr.lat]], state.currentCRS);
     const bearing = calcBearing(prev.lat, prev.lng, curr.lat, curr.lng);
     L.marker(curr, {
       icon: L.divIcon({ className: 'measure-tooltip', html: `${formatLength(totalDist)} (seg: ${formatLength(segDist)}, ${bearing.toFixed(1)}°)`, iconSize: 'auto', iconAnchor: [-8, 12] })
@@ -4392,10 +5049,8 @@ function measureClick(e) {
 
 function measureDoubleClick(e) {
   if(measureMode === 'length' && measurePoints.length >= 2) {
-    let totalDist = 0;
-    for(let i = 1; i < measurePoints.length; i++) {
-      totalDist += haversineDistance(measurePoints[i-1].lat, measurePoints[i-1].lng, measurePoints[i].lat, measurePoints[i].lng);
-    }
+    const coords = measurePoints.map(p => [p.lng, p.lat]);
+    const totalDist = calcPlanarLength(coords, state.currentCRS);
     showToast(`Total length: ${formatLength(totalDist)}`, 'success');
     measurePoints = [];
   }
@@ -4405,8 +5060,8 @@ function measureDoubleClick(e) {
     L.polygon(measurePoints, { color: '#ffa94d', fillColor: '#ffa94d', fillOpacity: 0.15, weight: 2, dashArray: '6,4' }).addTo(measureLines);
     const ring = measurePoints.map(p => [p.lng, p.lat]);
     ring.push(ring[0]); // close
-    const area = calcPolygonArea(ring);
-    const perimeter = calcLineLength(ring);
+    const area = calcPlanarArea(ring, state.currentCRS);
+    const perimeter = calcPlanarLength(ring, state.currentCRS);
     const centroid = L.latLng(
       measurePoints.reduce((s,p)=>s+p.lat,0)/measurePoints.length,
       measurePoints.reduce((s,p)=>s+p.lng,0)/measurePoints.length
@@ -4509,7 +5164,12 @@ document.getElementById('btnExportTop').addEventListener('click', () => {
   // Desktop sync features — only when opened from ArcGIS Pro
   if (!isDesktopSync) return;
 
-  const SYNC_URL = 'http://localhost:5005/import';
+  // ArcGIS Pro passes the exact folder path it's watching. We display
+  // this in the first-run dialog so the user navigates to the right spot.
+  // If the URL doesn't carry it (older Pro add-in version), fall back to
+  // the default name.
+  const expectedSyncPath = params.get('syncDir') || '';
+  const expectedFolderName = (expectedSyncPath.split(/[\\/]/).filter(Boolean).pop() || 'KGA_Sync');
 
   // ── Sync indicator badge in topbar ──
   const badge = document.createElement('div');
@@ -4539,31 +5199,286 @@ document.getElementById('btnExportTop').addEventListener('click', () => {
     exportGrid.insertBefore(syncBtn, exportGrid.firstChild);
   }
 
-  // ── Check if ArcGIS Pro listener is alive ──
-  function checkConnection() {
-    fetch(SYNC_URL, { method: 'OPTIONS', mode: 'cors' })
-      .then(function() {
-        badge.classList.add('active');
-        badge.querySelector('span').textContent = 'Pro connected';
-      })
-      .catch(function() {
-        badge.classList.remove('active');
-        badge.querySelector('span').textContent = 'Pro offline';
+  // ── File-based sync via File System Access API ──────────────────────
+  //
+  // Chrome's Private Network Access blocks public websites from calling
+  // localhost, so we use a shared folder instead. The ArcGIS Pro add-in
+  // watches %USERPROFILE%\Documents\KGA_Sync\ for a payload file, and
+  // also writes a heartbeat file there once per second so we can tell
+  // whether Pro is running.
+  //
+  // The user grants permission to that folder once per session; we cache
+  // the directory handle in IndexedDB so subsequent sessions only need
+  // a single click to re-authorize (browser security requires a user
+  // gesture for re-activation, we can't do it silently).
+
+  var dirHandle = null;        // FileSystemDirectoryHandle once authorized
+  var isSending = false;
+
+  // --- IndexedDB helpers (store the directory handle across sessions) ---
+  const IDB_NAME = 'kga-sync';
+  const IDB_STORE = 'handles';
+  function idbOpen() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(IDB_STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  function idbGet(key) {
+    return idbOpen().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    }));
+  }
+  function idbSet(key, val) {
+    return idbOpen().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).put(val, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    }));
+  }
+
+  // Try to restore a previously-saved directory handle. Returns null if
+  // none saved, or if the user needs to re-grant permission, or if the
+  // saved folder no longer has a fresh Pro heartbeat (which means Pro
+  // was reinstalled, the path changed, or the wrong folder was saved
+  // before the verification check was added).
+  async function restoreDirHandle() {
+    try {
+      const h = await idbGet('syncDir');
+      if (!h) return null;
+      const perm = await h.queryPermission({ mode: 'readwrite' });
+      if (perm === 'granted') {
+        // Only trust a pre-granted handle if Pro's heartbeat is still in it.
+        const verified = await verifyFolder(h);
+        if (!verified.ok && verified.reason === 'missing') {
+          // The saved folder isn't Pro's watched folder any more. Clear
+          // the stale handle so the first-run dialog reappears.
+          try { await idbSet('syncDir', null); } catch (e) {}
+          return null;
+        }
+      }
+      return h;
+    } catch (e) { return null; }
+  }
+
+  // Ask the user to pick the sync folder. Must be called from a user
+  // gesture handler (e.g. button click). Saves the handle for next time.
+  // After picking, verifies the folder contains a fresh kga_sync.heartbeat
+  // — this catches the common mistake of picking the wrong folder.
+  async function pickDirHandle() {
+    if (!window.showDirectoryPicker) {
+      showToast('This browser does not support folder access. Use Chrome, Edge, or Brave.', 'error');
+      return null;
+    }
+    try {
+      const h = await window.showDirectoryPicker({
+        id: 'kga-sync',
+        mode: 'readwrite',
+        startIn: 'documents'
       });
+      // Verify this is really Pro's watched folder by checking for a
+      // fresh heartbeat. Without this check, picking the wrong folder
+      // causes silent sync failures that are very confusing.
+      const verified = await verifyFolder(h);
+      if (!verified.ok) {
+        await showWrongFolderDialog(verified.reason, h.name);
+        return null;
+      }
+      await idbSet('syncDir', h);
+      return h;
+    } catch (e) {
+      // User cancelled — not an error worth toasting.
+      return null;
+    }
+  }
+
+  // Check that the given folder contains a recent kga_sync.heartbeat
+  // written by ArcGIS Pro. Returns { ok: bool, reason: string }.
+  async function verifyFolder(handle) {
+    try {
+      const fh = await handle.getFileHandle('kga_sync.heartbeat');
+      const f = await fh.getFile();
+      if (Date.now() - f.lastModified > 10000) {
+        return { ok: false, reason: 'stale' }; // file exists but Pro isn't updating it
+      }
+      return { ok: true, reason: 'fresh' };
+    } catch (e) {
+      // Most common: NotFoundError — heartbeat file doesn't exist in
+      // this folder, so it's not the folder Pro is watching.
+      return { ok: false, reason: 'missing' };
+    }
+  }
+
+  // Show a clear error explaining that the wrong folder was picked.
+  // Returns a promise that resolves when the user dismisses the dialog.
+  function showWrongFolderDialog(reason, pickedName) {
+    return new Promise(resolve => {
+      const msg = reason === 'stale'
+        ? 'This folder has an old heartbeat file, which means ArcGIS Pro was pointed at this folder in the past but isn\u2019t running now. Make sure ArcGIS Pro is open, then click Send to ArcGIS Pro again.'
+        : 'This folder doesn\u2019t contain ArcGIS Pro\u2019s heartbeat file. That means it\u2019s not the folder Pro is watching.';
+      const overlay = document.createElement('div');
+      overlay.style.cssText =
+        'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);' +
+        'display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)';
+      const panel = document.createElement('div');
+      panel.style.cssText =
+        'background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius-lg);' +
+        'box-shadow:var(--shadow);padding:22px 24px;max-width:460px;width:calc(100% - 32px);' +
+        'color:var(--text);font-size:13px;line-height:1.55';
+      panel.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="var(--error,#e74c3c)" stroke-width="2" width="22" height="22">' +
+            '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' +
+          '</svg>' +
+          '<div style="font-size:15px;font-weight:600">Wrong folder</div>' +
+        '</div>' +
+        '<div style="margin-bottom:10px">You picked <code style="background:var(--bg-hover);padding:1px 6px;border-radius:4px">' + escHtml(pickedName) + '</code>. ' + escHtml(msg) + '</div>' +
+        '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;font-size:12px">' +
+          '<div style="color:var(--text-dim);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Pick this folder instead:</div>' +
+          '<div style="font-family:monospace;word-break:break-all;color:var(--accent);font-size:12px">' +
+            escHtml(expectedSyncPath || ('%USERPROFILE%\\Documents\\' + expectedFolderName)) +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+          '<button id="kgaWfOk" style="background:var(--accent);border:1px solid var(--accent);color:var(--bg-panel);padding:7px 16px;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer">Try again</button>' +
+        '</div>';
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+      panel.querySelector('#kgaWfOk').onclick = () => { overlay.remove(); resolve(); };
+      overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.remove(); resolve(); } });
+    });
+  }
+
+  // One-time explanation shown before the browser's folder picker fires,
+  // so the user understands *why* a picker is appearing and *what to
+  // click*. Returns true if the user wants to continue, false if they
+  // cancelled. After this the picker MUST open on the same user gesture
+  // chain (browsers won't allow showDirectoryPicker from a delayed
+  // async callback), so the "Continue" handler resolves the promise
+  // synchronously and the caller immediately invokes pickDirHandle().
+  function showFirstRunDialog() {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText =
+        'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);' +
+        'display:flex;align-items:center;justify-content:center;' +
+        'backdrop-filter:blur(2px)';
+      const panel = document.createElement('div');
+      panel.style.cssText =
+        'background:var(--bg-panel);border:1px solid var(--border);' +
+        'border-radius:var(--radius-lg);box-shadow:var(--shadow);' +
+        'padding:22px 24px;max-width:460px;width:calc(100% - 32px);' +
+        'color:var(--text);font-size:13px;line-height:1.55';
+      panel.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" width="22" height="22">' +
+            '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>' +
+          '</svg>' +
+          '<div style="font-size:15px;font-weight:600;color:var(--text)">One-time setup</div>' +
+        '</div>' +
+        '<div style="margin-bottom:10px">To keep your data secure, your browser will ask you to pick the sync folder once.</div>' +
+        '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:12px;font-size:12px">' +
+          '<div style="color:var(--text-dim);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Pick this exact folder:</div>' +
+          '<div style="font-family:monospace;word-break:break-all;color:var(--accent);font-size:12px;margin-bottom:4px">' +
+            escHtml(expectedSyncPath || ('%USERPROFILE%\\Documents\\' + expectedFolderName)) +
+          '</div>' +
+        '</div>' +
+        '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;font-size:12px">' +
+          '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px">' +
+            '<span style="color:var(--accent);font-weight:700;flex-shrink:0">1.</span>' +
+            '<span>The folder picker will open. Navigate to the path shown above.</span>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px">' +
+            '<span style="color:var(--accent);font-weight:700;flex-shrink:0">2.</span>' +
+            '<span>Click the <code style="background:var(--bg-hover);padding:1px 6px;border-radius:4px;color:var(--accent)">' + escHtml(expectedFolderName) + '</code> folder once to select it (do not open it).</span>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;align-items:flex-start">' +
+            '<span style="color:var(--accent);font-weight:700;flex-shrink:0">3.</span>' +
+            '<span>Click <b>Select Folder</b>, then <b>Allow</b> when asked for access.</span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="color:var(--text-dim);font-size:11px;margin-bottom:16px">You won\u2019t see this again on this browser. If you pick the wrong folder, the sync will fail with a clear message.</div>' +
+        '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+          '<button id="kgaFrCancel" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);padding:7px 14px;border-radius:var(--radius);font-size:12px;cursor:pointer">Cancel</button>' +
+          '<button id="kgaFrGo" style="background:var(--accent);border:1px solid var(--accent);color:var(--bg-panel);padding:7px 16px;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer">Continue</button>' +
+        '</div>';
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+
+      function cleanup(result) {
+        overlay.remove();
+        resolve(result);
+      }
+      panel.querySelector('#kgaFrGo').onclick     = () => cleanup(true);
+      panel.querySelector('#kgaFrCancel').onclick = () => cleanup(false);
+      // Clicking the overlay backdrop also cancels.
+      overlay.addEventListener('click', e => { if (e.target === overlay) cleanup(false); });
+    });
+  }
+
+  // Ensure we have a usable handle with readwrite permission. Must be
+  // called from a user gesture if the handle isn't already authorized.
+  async function ensureDirHandle() {
+    if (!dirHandle) dirHandle = await restoreDirHandle();
+    if (!dirHandle) {
+      // No saved handle at all — this is the user's first-ever sync on
+      // this browser. Show the explainer before the picker.
+      const ok = await showFirstRunDialog();
+      if (!ok) return null;
+      dirHandle = await pickDirHandle();
+    }
+    if (!dirHandle) return null;
+    const perm = await dirHandle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      const r = await dirHandle.requestPermission({ mode: 'readwrite' });
+      if (r !== 'granted') { dirHandle = null; return null; }
+    }
+    return dirHandle;
+  }
+
+  // --- Heartbeat check: is Pro alive? ---
+  // Pro writes kga_sync.heartbeat every second; we consider it alive if
+  // the file exists and its mtime is within the last 5 seconds.
+  async function heartbeatIsFresh() {
+    if (!dirHandle) return false;
+    try {
+      const fh = await dirHandle.getFileHandle('kga_sync.heartbeat');
+      const f = await fh.getFile();
+      return (Date.now() - f.lastModified) < 5000;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function checkConnection() {
+    if (isSending) return;
+    if (!dirHandle) dirHandle = await restoreDirHandle();
+    const alive = dirHandle ? await heartbeatIsFresh() : false;
+    if (alive) {
+      badge.classList.add('active');
+      badge.querySelector('span').textContent = 'Pro connected';
+    } else {
+      badge.classList.remove('active');
+      badge.querySelector('span').textContent = dirHandle ? 'Pro offline' : 'Click Send to pair';
+    }
   }
 
   checkConnection();
-  setInterval(checkConnection, 10000);
+  setInterval(checkConnection, 2000);
 
-  // ── Send GeoJSON to ArcGIS Pro ──
-  function sendToArcGIS() {
+  // --- Send: write payload + sentinel, poll for result ---
+  async function sendToArcGIS() {
     var data = getAllGeoJSONProjected();
     if (!data.features.length) {
       showToast('No features to send', 'error');
       return;
     }
-
-    // Add CRS info
     if (state.currentCRS !== '4326') {
       data.crs = {
         type: 'name',
@@ -4571,39 +5486,77 @@ document.getElementById('btnExportTop').addEventListener('click', () => {
       };
     }
 
-    // Show sending state
+    isSending = true;
     var origHTML = syncBtn ? syncBtn.innerHTML : '';
     if (syncBtn) {
-      syncBtn.innerHTML = '<span class="fmt" style="color:var(--accent)">Sending...</span>';
+      syncBtn.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" style="animation:spin 1s linear infinite"><path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4m-3.93 7.07l-2.83-2.83M7.76 7.76L4.93 4.93"/></svg>' +
+        '<span class="fmt" style="color:var(--accent)">Syncing...</span>';
       syncBtn.disabled = true;
     }
+    badge.querySelector('span').textContent = 'Syncing...';
 
-    fetch(SYNC_URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(function(resp) {
-      return resp.json().then(function(result) {
-        if (resp.ok && result.success) {
-          showToast('Synced to ArcGIS Pro \u2192 ' + result.layer, 'success');
-        } else {
-          showToast('Sync failed: ' + (result.error || 'Unknown error'), 'error');
-        }
-      });
-    })
-    .catch(function() {
-      showToast('Cannot reach ArcGIS Pro. Is it running?', 'error');
-      badge.classList.remove('active');
-      badge.querySelector('span').textContent = 'Pro offline';
-    })
-    .finally(function() {
+    try {
+      const h = await ensureDirHandle();
+      if (!h) {
+        showToast('Sync folder not selected', 'error');
+        return;
+      }
+
+      // Write payload. We use a temp name + rename (via delete+create)
+      // so Pro never sees a half-written file. But since the File System
+      // Access API has no rename, we instead signal "ready" with a
+      // sentinel file that Pro's watcher listens for.
+      // 1. Remove any stale result/sentinels from a previous run.
+      for (const n of ['kga_sync.result.json', 'kga_sync.ready']) {
+        try { await h.removeEntry(n); } catch (e) { /* not present */ }
+      }
+      // 2. Write payload.
+      const payloadFh = await h.getFileHandle('kga_sync.geojson', { create: true });
+      const ws = await payloadFh.createWritable();
+      await ws.write(JSON.stringify(data));
+      await ws.close();
+      // 3. Signal ready.
+      const readyFh = await h.getFileHandle('kga_sync.ready', { create: true });
+      const rs = await readyFh.createWritable();
+      await rs.write('1');
+      await rs.close();
+
+      // Poll for result (max 30s).
+      let result = null;
+      for (let i = 0; i < 60; i++) {
+        await new Promise(r => setTimeout(r, 500));
+        try {
+          const fh = await h.getFileHandle('kga_sync.result.json');
+          const f = await fh.getFile();
+          const text = await f.text();
+          result = JSON.parse(text);
+          try { await h.removeEntry('kga_sync.result.json'); } catch(e) {}
+          break;
+        } catch (e) { /* not ready yet */ }
+      }
+
+      if (!result) {
+        showToast('No response from ArcGIS Pro (is it running?)', 'error');
+        badge.classList.remove('active');
+        badge.querySelector('span').textContent = 'Pro offline';
+      } else if (result.success) {
+        showToast('Synced to ArcGIS Pro \u2192 ' + result.layer, 'success');
+        badge.classList.add('active');
+        badge.querySelector('span').textContent = 'Pro connected';
+      } else {
+        showToast('Sync failed: ' + (result.error || 'Unknown error'), 'error');
+      }
+    } catch (err) {
+      console.error('Sync error:', err);
+      showToast('Sync failed: ' + err.message, 'error');
+    } finally {
+      isSending = false;
       if (syncBtn) {
         syncBtn.innerHTML = origHTML;
         syncBtn.disabled = false;
       }
-    });
+    }
   }
 })();
 
