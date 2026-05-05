@@ -486,8 +486,365 @@
         </div>
 
       </div>
+
+      <!-- See All Tools Button -->
+      <div class="text-center mt-14 reveal">
+        <button onclick="openAllToolsPage()" class="inline-flex items-center gap-3 px-8 py-4 bg-brand-orange text-white font-display font-700 text-base rounded-xl orange-glow hover:bg-brand-orange-hover transition-all duration-300 group">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          See All Tools
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <p class="mt-3 text-sm text-brand-text/40 dark:text-gray-500 font-mono">146 individual tools across entire Addin</p>
+      </div>
     </div>
   </section>
+
+  <!-- ═══════════════ ALL TOOLS OVERLAY PAGE ═══════════════ -->
+  <div id="allToolsPage" class="fixed inset-0 z-[200] bg-brand-light dark:bg-[#0B1929] overflow-y-auto hidden" style="animation: none;">
+    <!-- Page Navbar -->
+    <div class="sticky top-0 z-10 nav-blur bg-white/90 dark:bg-[#0B1929]/90 border-b border-brand-blue/10 dark:border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="closeAllToolsPage()" class="w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors" aria-label="Close">
+            <svg class="w-5 h-5 text-brand-text dark:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+          <span class="font-display font-700 text-lg text-brand-text dark:text-white">All <span class="text-brand-orange">Tools</span></span>
+        </div>
+        <!-- Search bar -->
+        <div class="hidden sm:flex items-center gap-2 bg-brand-blue/5 dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-lg px-3 py-2 w-72">
+          <svg class="w-4 h-4 text-brand-text/40 dark:text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="toolSearch" type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
+        </div>
+        <div class="text-sm font-mono text-brand-text/40 dark:text-gray-500"><span id="toolCount">100+</span> tools</div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+      <!-- Mobile search -->
+      <div class="sm:hidden mb-6 flex items-center gap-2 bg-brand-blue/5 dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-lg px-3 py-2.5">
+        <svg class="w-4 h-4 text-brand-text/40 dark:text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
+      </div>
+
+      <!-- Category filter pills -->
+      <div class="flex flex-wrap gap-2 mb-10" id="categoryPills">
+        <button onclick="filterCategory('all')" class="cat-pill active px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all bg-brand-orange text-white border-brand-orange" data-cat="all">All</button>
+        <button onclick="filterCategory('Data Creation')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Data Creation">Data Creation</button>
+        <button onclick="filterCategory('Data Management')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Data Management">Data Management</button>
+        <button onclick="filterCategory('Necessary Tool')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Necessary Tool">Necessary Tool</button>
+        <button onclick="filterCategory('Geoprocessing')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Geoprocessing">Geoprocessing</button>
+        <button onclick="filterCategory('CRS')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="CRS">CRS</button>
+        <button onclick="filterCategory('Cadastral Tools')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Cadastral Tools">Cadastral Tools</button>
+        <button onclick="filterCategory('Topology Check')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Topology Check">Topology Check</button>
+        <button onclick="filterCategory('Spatial Analysis')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Spatial Analysis">Spatial Analysis</button>
+        <button onclick="filterCategory('Mapping')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Mapping">Mapping</button>
+      </div>
+
+      <!-- No results message -->
+      <div id="noResults" class="hidden text-center py-20">
+        <svg class="w-12 h-12 text-brand-text/20 dark:text-gray-700 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <p class="text-brand-text/40 dark:text-gray-500 font-mono text-sm">No tools match your search.</p>
+      </div>
+
+      <!-- Tools grid -->
+      <div id="allToolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Tools are injected by JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- All-Tools Page Styles -->
+  <style>
+    #allToolsPage { transition: opacity 0.25s ease; }
+    #allToolsPage.page-visible { opacity: 1; }
+    #allToolsPage.page-hidden { opacity: 0; }
+    .tool-row-card {
+      transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .tool-row-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px -8px rgba(36,76,143,0.14), 0 0 0 1px rgba(36,76,143,0.06);
+    }
+    .dark .tool-row-card:hover {
+      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,100,52,0.12);
+    }
+    .cat-badge {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+  </style>
+
+  <!-- All Tools Data & Logic -->
+  <script>
+    const ALL_TOOLS = [
+      // ── Data Creation ──
+      { cat: 'Data Creation', sub: '', name: 'Create Point Layer', desc: 'Create a point layer.' },
+      { cat: 'Data Creation', sub: '', name: 'Create Line Layer', desc: 'Create a line layer.' },
+      { cat: 'Data Creation', sub: '', name: 'Create Polygon Layer', desc: 'Create a polygon layer.' },
+      { cat: 'Data Creation', sub: '', name: 'Create LMAP', desc: 'Create a polygon layer using standard field format required by MLMUPC.' },
+      { cat: 'Data Creation', sub: 'Raster-Vector', name: 'Feature To Raster', desc: 'Convert vector feature to raster format for analysis and visualization.' },
+      { cat: 'Data Creation', sub: 'Raster-Vector', name: 'Raster To Polygon', desc: 'Convert raster data to polygon feature for vector analysis.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Point To Polygon', desc: 'Convert point feature to polygon feature.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Line To Polygon', desc: 'Convert polygon features by line features by creating polygon from closed line.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Polygon To Center Point', desc: 'Convert polygon features to their central point features.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Polygon To Line (Multiple)', desc: 'Convert polygon features to line features.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Polygon To Boundary Point', desc: 'Create boundary point from polygon features by using their vertices.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Polygon To Map Series', desc: 'Convert polygon features to point and line features for map series creation.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Layer To KML', desc: 'Convert GIS layers to KML format for using in Google Earth Pro or other application.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'KML To Layer', desc: 'Convert KML files to GIS layers for analysis and visualization.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'Feature Class To GPX', desc: 'Convert feature classes to GPX format for using in GPS device and other application.' },
+      { cat: 'Data Creation', sub: 'Conversion Tool', name: 'GPX To Feature Class', desc: 'Convert GPX file to GIS layers for analysis and visualization.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Polygon Layer', desc: 'Quick generate polygon features based on predefined template.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Line Layer', desc: 'Quick generate line features based on predefined template.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Point Layer', desc: 'Quick generate point features based on predefined template.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Add Basemap', desc: 'Add Google satellite layer or other satellite layer sources.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Clip Basemap By Boundary', desc: 'Clip Basemap based on specific boundary layer.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Generate Boundary Point', desc: 'Quickly generate boundary points based on a predefined template.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Generate Boundary Line', desc: 'Quickly generate boundary lines based on a predefined template.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Generate Polygon Center Point', desc: 'Quickly generate center points based on a predefined template.' },
+      { cat: 'Data Creation', sub: 'Quick Template', name: 'Copy Feature', desc: 'Quickly copy features from one layer to another based on a predefined template.' },
+      // ── Data Management ──
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Fields', desc: 'Open a view of the fields in the layer.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'New Field', desc: 'Create a new field in this table.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Attribute Rules', desc: 'Open a view of the attribute rules in the layer.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Continent Values', desc: 'Open a view of the continent values in the layer.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Domains', desc: 'Open a view of the domains in the layer.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Subtypes', desc: 'Open a view of the subtypes in the layer.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Bath Add Field', desc: 'Add field to multiple feature classes or table at once.' },
+      { cat: 'Data Management', sub: 'Attribute Fields', name: 'Select To Enter Value', desc: 'Quickly assign a value to a chosen field for selected records.' },
+      { cat: 'Data Management', sub: 'Export Table', name: 'Export Features', desc: 'Convert a shapefile or geodatabase feature classes to shapefile or geodatabase feature classes.' },
+      { cat: 'Data Management', sub: 'Export Table', name: 'Export Table', desc: 'Export current table to new table.' },
+      { cat: 'Data Management', sub: 'Export Table', name: 'ID-Based CSV Exporter', desc: 'Export attribute tables to separate CSV files based on ID field.' },
+      { cat: 'Data Management', sub: 'Export Table', name: 'Boundary XY to Excel', desc: 'Generate coordinates for parcel boundary points and open immediately in Microsoft Excel.' },
+      { cat: 'Data Management', sub: 'Query Features', name: 'Build Definition Query', desc: 'Enter a definition query expression to display only a subset of features in the layer or table.' },
+      { cat: 'Data Management', sub: 'Query Features', name: 'Generate Definition Query from Selection', desc: 'Create a definition query from the selected features or rows of the layer or table.' },
+      { cat: 'Data Management', sub: 'Symbology', name: 'Symbology', desc: 'Show symbology for the selected layer.' },
+      { cat: 'Data Management', sub: 'Symbology', name: 'Expression', desc: 'Set the label expression for the current label class.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'New Map', desc: 'Create a new map for displaying data on two dimension.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'New Global Scene', desc: 'Create a new global scene for displaying three dimensional data.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'New Local Scene', desc: 'Create a new local scene for displaying three dimension data.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'Content', desc: 'Show the content pane.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'Catalog Pane', desc: 'Show catalog pane.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'Geoprocessing', desc: 'Show geoprocessing pane.' },
+      { cat: 'Data Management', sub: 'Create/Open', name: 'Model Builder', desc: 'Create a new blank geoprocessing model and open it in Model builder.' },
+      { cat: 'Data Management', sub: 'Calculation', name: 'Calculate Field', desc: 'Calculate values or a field in a table or feature classes.' },
+      { cat: 'Data Management', sub: 'Calculation', name: 'Calculate Geometry', desc: 'Calculate geometric properties such as area, length, or coordinates for features.' },
+      { cat: 'Data Management', sub: 'Quick Label', name: 'Show Area', desc: 'Display the area of polygon features as label on the map.' },
+      { cat: 'Data Management', sub: 'Quick Label', name: 'Show Length', desc: 'Display the length of line features as label on the map.' },
+      { cat: 'Data Management', sub: 'Quick Label', name: 'Label Control', desc: 'Provide control over label visibility and placement for features on the map.' },
+      { cat: 'Data Management', sub: 'Quick Label', name: 'Display Area', desc: 'Quickly display area of polygon as label in map.'}
+      { cat: 'Data Management', sub: 'Quick Label', name: 'Display Length and Vertext', desc: 'Quickly display the edge length and vertex ID of polygon or line feature as label on map.'}
+      { cat: 'Data Management', sub: 'Maps', name: 'To Google Map', desc: 'Open the current map view in Google Maps for web-based visualization and sharing.' },
+      { cat: 'Data Management', sub: 'Maps', name: 'To Google Earth Pro', desc: 'Open the current map view in Google Earth Pro for advanced 3D visualization and analysis.' },
+      { cat: 'Data Management', sub: 'Maps', name: 'To Google Earth Web', desc: 'Open the current map view in Google Earth for 3D visualization and exploration.' },
+      { cat: 'Data Management', sub: 'Maps', name: 'To Google Street Map', desc: 'Open the current map view in Open Street Map for web-based visualization and sharing.' },
+      { cat: 'Data Management', sub: 'Maps', name: 'To Living Atlas', desc: 'Open ArcGIS Living Atlas or access to vast collection of authoritative maps and data.' },
+      { cat: 'Data Management', sub: 'Maps', name: 'To KGA-Geodigitizer', desc: 'Open the KGA-Geodigitizer website for quickly digitized that data.' },
+      // ── Necessary Tool ──
+      { cat: 'Necessary Tool', sub: 'Create', name: 'Create Features', desc: 'Show the create features pane to create new features in the current map using template.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Move', desc: 'Move the selected features.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Edit Vertices', desc: 'Add, Move, or Delete Vertices and segments for the selected feature.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Reshape', desc: 'Reshape an existing line or polygon feature by drawing the new shape.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Merge', desc: 'Merge two or more features into an existing features into a new feature.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Split', desc: 'Split Polyline or polygon features interactively by drawing a cutting line.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Divide', desc: 'Divide lines or polygon features.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Copy Parallel', desc: 'Create parallel offset copies of selected line features.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Sequential Numbering', desc: 'Sequentially number points, lines, or polygons along a sketch.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Extend or Trim', desc: 'Extend or Trim polyline features and terminate them where they touch another feature.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Line Intersection', desc: 'Split lines where they intersect.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Clip', desc: 'Clip all features or selected target features that touch or are within a buffered distance from selected features.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Buffer', desc: 'Buffer transverses each of the input feature\'s vertices and create buffer offsets.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Split Into CoGo Lines', desc: 'Split selected line features at each vertices.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Planarize', desc: 'Split selected line features where they intersect.' },
+      { cat: 'Necessary Tool', sub: 'Modify', name: 'Construct Polygon', desc: 'Create new polygons from the shapes of selected features.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Edit Table', desc: 'Open the attribute table of the selected layer for editing and analysis.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Edit in Excel', desc: 'Export the selected feature layer\'s attribute table to Excel for editing.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Apply Excel Edits', desc: 'Read the modified Excel file and push change back to the original feature class attribute.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Excel Setting', desc: 'Configure export options, temp directory, and validation rules.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Explore', desc: 'View pop up and pan, Zoom rotate/tilt (3D-only), Continuous.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Select', desc: 'Select features visible on map.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Clear', desc: 'Deselect all currently selected features.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Snapping', desc: 'Turn snapping on or off for interactive tools.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Attributes', desc: 'Show the attributes pane.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Measure Distance', desc: 'Draw a line to measure the straight line distance between two or more points.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Save', desc: 'Save all edit made since the last save.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Discard Edits', desc: 'Discard all unsaved edits.' },
+      { cat: 'Necessary Tool', sub: 'Edit Table', name: 'Delete', desc: 'Delete the selected features.' },
+      // ── Geoprocessing ──
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Clip', desc: 'Clip features from one layer using the features of another layer as the clipping boundary.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Merge', desc: 'Merge multiple datasets into a single dataset.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Intersect', desc: 'Find common areas and create a new layer with intersected features.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Dissolve', desc: 'Dissolve features based on specified attributes to create simplified geometries.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Buffer', desc: 'Create buffer zones around input features at a specified distance.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Erase', desc: 'Erase portions of features that overlap with features from another layer.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Union', desc: 'Combine features from multiple layers into a single layer, preserving all geometries.' },
+      { cat: 'Geoprocessing', sub: 'Vector Tool', name: 'Append', desc: 'Append features from one or more layers to an existing layer.' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Clip Raster', desc: 'Clip raster data using a specified boundary.' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Extract By Mask', desc: 'Extract raster by cell that fall within the area defined by mask layer.' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Build Raster Attribute', desc: 'Build or update raster attribute table for categorical raster datasets.' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Raster Calculator', desc: 'Perform map algebra operations on raster datasets using a calculator interface.' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Hillshade', desc: 'Create a hillshade raster from a digital elevation model (DEM) to visualize terrain.' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Slope', desc: 'Calculate the slope of the terrain from a digital elevation model (DEM).' },
+      { cat: 'Geoprocessing', sub: 'Raster Tool', name: 'Contour', desc: 'Generate contour lines from a digital elevation model (DEM).' },
+      { cat: 'Geoprocessing', sub: 'Coverage', name: 'Clip Multiple', desc: 'Clip multiple features classes by a single feature class.' },
+      { cat: 'Geoprocessing', sub: 'Coverage', name: 'Multi Ring Buffer', desc: 'Create multiple ring buffers around input features.' },
+      { cat: 'Geoprocessing', sub: 'Coverage', name: 'Percentage Coverage', desc: 'Calculate the percentage of coverage of one or more layers over another.' },
+      { cat: 'Geoprocessing', sub: 'Coverage', name: 'Create Thiessen Polygon', desc: 'Create thiessen (Voronoi) polygons from input point features.' },
+      // ── CRS ──
+      { cat: 'CRS', sub: '', name: 'Indian <-> WGS84 Converter', desc: 'Convert coordinates between Indian UTM and WGS84 geographic coordinate systems.' },
+      { cat: 'CRS', sub: '', name: 'Project Vector', desc: 'Project vector data from current coordinate system to a different coordinate system.' },
+      { cat: 'CRS', sub: '', name: 'Project Raster', desc: 'Project raster data from current coordinate system to a different coordinate system.' },
+      { cat: 'CRS', sub: '', name: 'Define Projection', desc: 'Change the spatial reference of the data source.' },
+      { cat: 'CRS', sub: '', name: 'Create Geographic Transform', desc: 'Create geographic transformations between different datums.' },
+      { cat: 'CRS', sub: 'Trim Parcel', name: 'Trim Parcel Using Buffer Method', desc: 'Trim parcel boundaries to the road edge by removing any overlapping portions using buffer method.' },
+      { cat: 'CRS', sub: 'Trim Parcel', name: 'Trim Parcel Using Parallel Method', desc: 'Trim parcel boundaries to align with road edges using parallel method.' },
+      // ── Cadastral Tools ──
+      { cat: 'Cadastral Tools', sub: '', name: 'Automatic Parcel Subdivision Optimizer', desc: 'Optimize parcel subdivisions automatically based on specified criteria.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Subdivision', desc: 'Facilitate the subdivision of parcels based on specified criteria and constraint.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Data Cleaning', desc: 'Perform data cleaning on parcel datasets to ensure accuracy and consistency.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Triangulation', desc: 'Generate triangulation lines for parcels to analyze spatial relationships and support subdivision.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Bearing and Distance Calculator', desc: 'Calculate bearing and distances for parcel boundaries.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Boundary Conflict Detector', desc: 'Detect conflicts in parcel boundaries to ensure data integrity.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Boundary Legal Description Generator', desc: 'Generate legal descriptions for parcel boundaries based on spatial data.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Boundary Line Generator', desc: 'Generate parcel boundary lines from land parcel polygon data.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Coordinate Listing Tool', desc: 'Generate a listing of parcel coordinates from land parcel polygon.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Corner Point Generator', desc: 'Generate corner point for parcels from land parcel polygon data.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Direction Analyzer', desc: 'Analyze the direction of parcel boundaries to identify orientation patterns.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Minimum Width Analyzer', desc: 'Analyze the minimum width of parcel to ensure compliance with regulations.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Network Graph Builder', desc: 'Build a network graphic of parcels to analyze spatial relationships and connectivity.' },
+      { cat: 'Cadastral Tools', sub: '', name: 'Parcel Shape Quality Checker', desc: 'Check the quality of parcel shapes to identify issues such as sliver polygons or irregular geometries.' },
+      // ── Topology Check ──
+      { cat: 'Topology Check', sub: '', name: 'Font Converter', desc: 'Convert text between different Khmer font encoding to ensure compatibility.' },
+      { cat: 'Topology Check', sub: '', name: 'Topology Checker', desc: 'Perform topology checks on spatial data to ensure topological integrity.' },
+      { cat: 'Topology Check', sub: '', name: 'Overlap Checker', desc: 'Check for overlapping parcels in the dataset to maintain data integrity.' },
+      { cat: 'Topology Check', sub: '', name: 'Add Feature Class To Topology', desc: 'Add feature classes to an existing topology for validation.' },
+      { cat: 'Topology Check', sub: '', name: 'Boundary Overlap', desc: 'Check for overlapping boundaries in the dataset to maintain data integrity.' },
+      { cat: 'Topology Check', sub: '', name: 'Point On Boundary', desc: 'Identify points that lie on the boundaries of features.' },
+      { cat: 'Topology Check', sub: 'Parcel Validation', name: 'Parcel Field Format', desc: 'Validate and standardize parcel field formats according to specifications.' },
+      { cat: 'Topology Check', sub: 'Parcel Validation', name: 'Parcel Number Analyzer', desc: 'Analyze parcel numbers for patterns and inconsistencies.' },
+      { cat: 'Topology Check', sub: 'Parcel Validation', name: 'Duplicate Number Finder', desc: 'Identify and locate duplicate parcel numbers within the dataset.' },
+      { cat: 'Topology Check', sub: 'Parcel Validation', name: 'Count Feature', desc: 'Count the number of features of input layers.' },
+      // ── Spatial Analysis ──
+      { cat: 'Spatial Analysis', sub: '', name: 'Cut Fill Tool', desc: 'Analyze terrain changes by calculating cut and fill volume between surfaces.' },
+      { cat: 'Spatial Analysis', sub: 'Profile', name: 'Elevation Profile From Line Path', desc: 'Generate elevation profiles along specified lines from a digital elevation model (DEM).' },
+      { cat: 'Spatial Analysis', sub: 'Profile', name: 'Elevation Profile From Point Path', desc: 'Generate elevation profiles along specified point path containing elevation field.' },
+      { cat: 'Spatial Analysis', sub: 'Profile', name: 'Spot Height Tool', desc: 'Extract spot height from a digital elevation model (DEM).' },
+      { cat: 'Spatial Analysis', sub: '', name: 'Point To Point Direction and Distance', desc: 'Calculate direction and distance between pairs of points.' },
+      // ── Mapping ──
+      { cat: 'Mapping', sub: '', name: 'Parcel Division', desc: 'Facilitate the division of parcels using a standardized form.' },
+      { cat: 'Mapping', sub: 'Quick Landplot', name: 'Quick Landplot1 (form2)', desc: 'Quick generate land plots based on input CSV table, point, line, or polygon.' },
+      { cat: 'Mapping', sub: 'Quick Landplot', name: 'Quick Landplot2 (form2)', desc: 'Quick generate land plots based on input CSV table, point, line, or polygon.' },
+    ];
+
+    const CAT_COLORS = {
+      'Data Creation':    '#3B82F6',
+      'Data Management':  '#8B5CF6',
+      'Necessary Tool':   '#F59E0B',
+      'Geoprocessing':    '#244C8F',
+      'CRS':              '#10B981',
+      'Cadastral Tools':  '#FF6434',
+      'Topology Check':   '#6366F1',
+      'Spatial Analysis': '#06B6D4',
+      'Mapping':          '#EC4899',
+    };
+
+    let activeCategory = 'all';
+    let searchTerm = '';
+
+    function renderTools() {
+      const grid = document.getElementById('allToolsGrid');
+      const noResults = document.getElementById('noResults');
+      const countEl = document.getElementById('toolCount');
+
+      const filtered = ALL_TOOLS.filter(t => {
+        const matchCat = activeCategory === 'all' || t.cat === activeCategory;
+        const matchSearch = !searchTerm ||
+          t.name.toLowerCase().includes(searchTerm) ||
+          t.desc.toLowerCase().includes(searchTerm) ||
+          t.cat.toLowerCase().includes(searchTerm) ||
+          (t.sub && t.sub.toLowerCase().includes(searchTerm));
+        return matchCat && matchSearch;
+      });
+
+      countEl.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+      noResults.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(t => {
+        const color = CAT_COLORS[t.cat] || '#244C8F';
+        const subHtml = t.sub
+          ? `<span class="inline-flex items-center gap-1 text-brand-text/40 dark:text-gray-500 text-xs font-mono"><svg class="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>${t.sub}</span>`
+          : '';
+        return `
+          <div class="tool-row-card bg-white dark:bg-white/5 rounded-xl border border-brand-blue/8 dark:border-white/8 p-4 group relative overflow-hidden flex flex-col gap-2">
+            <div class="absolute top-0 left-0 w-full h-0.5 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" style="background:${color}"></div>
+            <!-- Group + Sub-group row -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="cat-badge text-white flex-shrink-0" style="background:${color}">${t.cat}</span>
+              ${subHtml}
+            </div>
+            <!-- Tool name -->
+            <span class="font-display font-700 text-sm text-brand-text dark:text-white leading-snug">${t.name}</span>
+            <!-- Description -->
+            <p class="text-xs text-brand-text/55 dark:text-gray-400 leading-relaxed">${t.desc}</p>
+          </div>`;
+      }).join('');
+    }
+
+    function filterCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(p => {
+        const isActive = p.dataset.cat === cat;
+        p.classList.toggle('bg-brand-orange', isActive);
+        p.classList.toggle('text-white', isActive);
+        p.classList.toggle('border-brand-orange', isActive);
+        p.classList.toggle('border-brand-blue/15', !isActive);
+        p.classList.toggle('dark:border-white/10', !isActive);
+        p.classList.toggle('text-brand-text/60', !isActive);
+        p.classList.toggle('dark:text-gray-400', !isActive);
+      });
+      renderTools();
+    }
+
+    function filterTools(val) {
+      searchTerm = val.toLowerCase().trim();
+      renderTools();
+    }
+
+    function openAllToolsPage() {
+      const page = document.getElementById('allToolsPage');
+      page.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      renderTools();
+      requestAnimationFrame(() => page.classList.add('page-visible'));
+    }
+
+    function closeAllToolsPage() {
+      const page = document.getElementById('allToolsPage');
+      page.classList.remove('page-visible');
+      setTimeout(() => {
+        page.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 250);
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeAllToolsPage();
+    });
+  </script>
 
 
   <!-- ═══════════════ FEATURED TOOLS ═══════════════ -->
