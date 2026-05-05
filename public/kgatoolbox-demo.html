@@ -309,221 +309,21 @@
           </div>
 
           <!-- Post count -->
-          <p id="postCount" class="text-xs font-mono text-brand-text/30 dark:text-white/25 mb-6 reveal delay-1">Showing <span id="countNum">4</span> posts</p>
+          <p id="postCount" class="text-xs font-mono text-brand-text/30 dark:text-white/25 mb-6 reveal delay-1">Showing <span id="countNum">0</span> posts</p>
 
-          <!-- ─── Posts Grid ─── -->
-          <div id="postsGrid" class="flex flex-col gap-6">
+          <!-- ─── Posts Grid (dynamic from admin) ─── -->
+          <div id="postsGrid" class="flex flex-col gap-6"></div>
 
-            <!-- ══ POST 1 — Video ══ -->
-            <article class="post-card reveal delay-1 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="video" data-title="KGACadastral Full Workflow Demo">
-              <!-- Thumbnail / Video -->
-              <div class="video-wrap mx-4 mt-4 rounded-xl overflow-hidden bg-brand-blue/5 dark:bg-white/5">
-                <!--<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="KGACadastral Demo" allowfullscreen loading="lazy"></iframe>-->
-                <iframe width="2033" height="989" src="https://www.youtube.com/embed/CoGFlEnEmqc" title="Landplot map creation - Quick and Easy | KGA Toolbox" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-              </div>
-              <!-- Body -->
-              <div class="p-6">
-                <div class="flex flex-wrap items-center gap-2 mb-3">
-                  <span class="tag-badge tag-video">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-                    Video Demo
-                  </span>
-                  <span class="tag-badge tag-howto">How-To</span>
-                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
-                </div>
-                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">KGACadastral — Full Workflow Demo</h2>
-                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">
-                  Watch a complete end-to-end cadastral parcel workflow using the <code class="inline">KGACadastral</code> toolset. This video covers boundary splitting, parcel attribute population, and automated area calculation.
-                </p>
-                <!-- Tip block -->
-                <div class="tip-block px-4 py-3 mb-4">
-                  <p class="text-sm font-semibold text-brand-orange mb-1">💡 Pro Tip</p>
-                  <p class="text-sm text-brand-text/70 dark:text-gray-400">Always run <code class="inline">Topology Check</code> before splitting parcels to ensure there are no overlapping boundaries in your source dataset.</p>
-                </div>
-                <!-- Tags -->
-                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#cadastral</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#parcels</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#arcgis-pro</span>
-                  <button onclick="openPost('cadastral')" class="ml-auto text-xs font-semibold text-brand-orange hover:underline">Read full guide →</button>
-                </div>
-              </div>
-            </article>
-
-            <!-- ══ POST 2 — Tips & Tricks ══ -->
-            <article class="post-card reveal delay-2 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="tips" data-title="5 Tips to Speed Up Your CRS Conversion">
-              <div class="p-6">
-                <div class="flex flex-wrap items-center gap-2 mb-3">
-                  <span class="tag-badge tag-tips">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    Tips & Tricks
-                  </span>
-                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
-                </div>
-                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">5 Tips to Speed Up Your CRS Conversion</h2>
-                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-5">
-                  The <code class="inline">KGAConverter</code> module handles coordinate system transformations across dozens of projection systems. Here are the five workflow shortcuts every user should know.
-                </p>
-
-                <!-- Step List -->
-                <ol class="step-list flex flex-col gap-3 mb-5">
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
-                    <span class="mt-0.5"></span>
-                    <span>Pre-load your output CRS profile in the <code class="inline">Settings</code> tab — this saves 2 clicks per tool run.</span>
-                  </li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
-                    <span class="mt-0.5"></span>
-                    <span>Use <code class="inline">Batch Conversion</code> mode to process entire folders instead of individual layers.</span>
-                  </li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
-                    <span class="mt-0.5"></span>
-                    <span>Enable <strong>Preserve Original</strong> to keep source files intact in a <code class="inline">_backup</code> subfolder.</span>
-                  </li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
-                    <span class="mt-0.5"></span>
-                    <span>Select only the fields you need when exporting — this cuts file size by up to 40%.</span>
-                  </li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
-                    <span class="mt-0.5"></span>
-                    <span>Pin the Converter panel to your ArcGIS Pro sidebar for one-click access without reopening the toolbox.</span>
-                  </li>
-                </ol>
-
-                <!-- Info block -->
-                <div class="info-block px-4 py-3 mb-4">
-                  <p class="text-sm font-semibold text-brand-blue dark:text-blue-300 mb-1">ℹ️ Note</p>
-                  <p class="text-sm text-brand-text/70 dark:text-gray-400">The <code class="inline">KGAConverter</code> supports all EPSG-registered CRS codes. If your projection is missing, contact us via Telegram for a custom addition.</p>
-                </div>
-
-                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#crs</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#projection</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#converter</span>
-                  <button onclick="openPost('crs')" class="ml-auto text-xs font-semibold text-brand-orange hover:underline">Read full guide →</button>
-                </div>
-              </div>
-            </article>
-
-            <!-- ══ POST 3 — How-To + Video ══ -->
-            <article class="post-card reveal delay-3 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="howto" data-title="How to Run a Topology Check">
-              <!-- Featured Banner -->
-              <div class="px-4 pt-4">
-                <div class="relative rounded-xl overflow-hidden bg-gradient-to-r from-brand-blue to-brand-blue-dark p-5 flex items-center gap-4">
-                  <div class="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                  </div>
-                  <div>
-                    <p class="font-display font-700 text-white text-sm">Step-by-Step Guide</p>
-                    <p class="text-white/60 text-xs font-mono mt-0.5">KGATopology · 6-step workflow</p>
-                  </div>
-                  <span class="ml-auto tag-badge" style="background:rgba(255,255,255,0.15);color:white;">How-To</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="flex flex-wrap items-center gap-2 mb-3">
-                  <span class="tag-badge tag-howto">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    How-To
-                  </span>
-                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
-                </div>
-                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">How to Run a Topology Check on Your Parcel Layer</h2>
-                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-5">
-                  Topology errors are one of the most common causes of failed cadastral submissions. This guide walks you through using <code class="inline">KGATopology</code> to detect and fix errors before publishing.
-                </p>
-
-                <!-- Paragraph content -->
-                <div class="prose-content text-sm text-brand-text/70 dark:text-gray-400 mb-5">
-                  <h3 class="text-brand-text dark:text-white">What is a Topology Check?</h3>
-                  <p>A topology check validates the geometric relationships between features in your GIS dataset — ensuring parcels don't overlap, gaps don't exist between boundaries, and slivers are detected automatically.</p>
-                  <h3 class="text-brand-text dark:text-white">Why it Matters</h3>
-                  <p>Government agencies and land registry offices require clean topology for parcel submissions. Even a single overlapping vertex can cause a full rejection of your dataset. The <code class="inline">KGATopology</code> tool automates this check and generates an error report with visual highlights inside ArcGIS Pro.</p>
-                </div>
-
-                <!-- Steps -->
-                <ol class="step-list flex flex-col gap-3 mb-5">
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Open the <strong>KGA Toolbox</strong> in ArcGIS Pro and navigate to <code class="inline">KGATopology → Run Topology Check</code>.</span></li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Select your <strong>target feature class</strong> (e.g., <code class="inline">Parcel_Boundary</code>) as the input layer.</span></li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Choose the <strong>rule set</strong>: Must Not Overlap, Must Not Have Gaps, Must Be Covered By.</span></li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Set the <strong>cluster tolerance</strong> — use <code class="inline">0.001m</code> for cadastral-grade accuracy.</span></li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Click <strong>Run</strong>. The tool highlights errors directly in the map view with color-coded symbols.</span></li>
-                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Export the <strong>Error Report</strong> as a CSV or PDF for documentation.</span></li>
-                </ol>
-
-                <!-- Embed video inline -->
-                <div class="video-wrap mb-5">
-                  <!--<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Topology Check Demo" allowfullscreen loading="lazy"></iframe>-->
-                  <iframe width="2033" height="989" src="https://www.youtube.com/embed/CoGFlEnEmqc" title="Landplot map creation - Quick and Easy | KGA Toolbox" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-
-                <div class="tip-block px-4 py-3 mb-4">
-                  <p class="text-sm font-semibold text-brand-orange mb-1">💡 Pro Tip</p>
-                  <p class="text-sm text-brand-text/70 dark:text-gray-400">Run topology checks on a <strong>copy</strong> of your dataset first. This lets you review errors without modifying production data accidentally.</p>
-                </div>
-
-                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#topology</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#quality</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#parcels</span>
-                </div>
-              </div>
-            </article>
-
-            <!-- ══ POST 4 — Update ══ -->
-            <article class="post-card reveal delay-4 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="update" data-title="v2026.1.2 Release Notes">
-              <div class="p-6">
-                <div class="flex flex-wrap items-center gap-2 mb-3">
-                  <span class="tag-badge tag-update">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/></svg>
-                    Update
-                  </span>
-                  <span class="font-mono text-xs px-2 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">v2026.1.2</span>
-                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
-                </div>
-                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">Release Notes — v2026.1.2</h2>
-                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-5">
-                  This release focuses on performance improvements, bug fixes in the annotation engine, and two new tools added to the <code class="inline">KGASpatialAnalysis</code> category.
-                </p>
-
-                <!-- Changelog -->
-                <div class="space-y-2 mb-5">
-                  <div class="flex items-start gap-3 text-sm">
-                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5">NEW</span>
-                    <span class="text-brand-text/80 dark:text-gray-300">Added <code class="inline">Buffer By Attribute</code> tool to KGASpatialAnalysis — supports variable buffer distances per feature.</span>
-                  </div>
-                  <div class="flex items-start gap-3 text-sm">
-                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5">NEW</span>
-                    <span class="text-brand-text/80 dark:text-gray-300">Added <code class="inline">Nearest Neighbor Join</code> for point-to-polygon spatial joins with configurable tolerance.</span>
-                  </div>
-                  <div class="flex items-start gap-3 text-sm">
-                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue dark:text-blue-400 flex-shrink-0 mt-0.5">FIX</span>
-                    <span class="text-brand-text/80 dark:text-gray-300">Fixed annotation placement bug in <code class="inline">KGAAnnotation</code> when using rotated map frames.</span>
-                  </div>
-                  <div class="flex items-start gap-3 text-sm">
-                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue dark:text-blue-400 flex-shrink-0 mt-0.5">FIX</span>
-                    <span class="text-brand-text/80 dark:text-gray-300">Resolved null geometry crash in <code class="inline">KGAConverter</code> batch mode when source layer contains Z-values.</span>
-                  </div>
-                  <div class="flex items-start gap-3 text-sm">
-                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-orange/10 text-brand-orange flex-shrink-0 mt-0.5">PERF</span>
-                    <span class="text-brand-text/80 dark:text-gray-300"><code class="inline">KGATopology</code> check is now 3× faster on datasets with 50,000+ features thanks to spatial index optimization.</span>
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#release</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#changelog</span>
-                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#v2026</span>
-                </div>
-              </div>
-            </article>
-
-          </div><!-- /postsGrid -->
-
-          <!-- No results -->
+          <!-- Empty states -->
           <div id="noResults" class="hidden text-center py-20">
             <svg class="w-12 h-12 mx-auto text-brand-text/20 dark:text-white/15 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <p class="font-display font-600 text-brand-text/40 dark:text-white/30">No posts found</p>
+            <p class="font-display font-600 text-brand-text/40 dark:text-white/30">No posts match your search</p>
             <p class="text-sm text-brand-text/30 dark:text-white/20 mt-1">Try a different filter or search term</p>
+          </div>
+          <div id="emptyState" class="hidden text-center py-20">
+            <svg class="w-14 h-14 mx-auto text-brand-text/15 dark:text-white/10 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <p class="font-display font-600 text-brand-text/30 dark:text-white/20 mb-1">No demo posts yet</p>
+            <p class="text-sm text-brand-text/25 dark:text-white/15">Posts created in the admin panel will appear here.</p>
           </div>
 
         </div><!-- /posts column -->
@@ -643,9 +443,7 @@
     // ─── Dark Mode ───
     const html = document.documentElement;
     const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      html.classList.add('dark');
-    }
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) html.classList.add('dark');
     document.getElementById('darkToggle').addEventListener('click', () => {
       html.classList.toggle('dark');
       localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
@@ -653,15 +451,9 @@
 
     // ─── Mobile Menu ───
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenu   = document.getElementById('mobileMenu');
     mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-
-    // ─── Scroll Reveal ───
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // ─── Navbar Scroll Shadow ───
     const navbar = document.getElementById('navbar');
@@ -670,60 +462,181 @@
       navbar.classList.toggle('shadow-brand-blue/5', window.scrollY > 20);
     }, { passive: true });
 
-    // ─── Filter Pills ───
-    const pills = document.querySelectorAll('.filter-pill');
-    const posts = document.querySelectorAll('#postsGrid article');
-    const noResults = document.getElementById('noResults');
-    const countNum = document.getElementById('countNum');
+    // ─── Data ───
+    const POSTS_KEY = 'kga_posts';
+    function getPosts() { return JSON.parse(localStorage.getItem(POSTS_KEY) || '[]'); }
 
-    function applyFilter(filter, query = '') {
-      let visible = 0;
-      posts.forEach(post => {
-        const matchType = filter === 'all' || post.dataset.type === filter;
-        const matchQuery = !query || post.dataset.title.toLowerCase().includes(query.toLowerCase())
-          || post.innerText.toLowerCase().includes(query.toLowerCase());
-        const show = matchType && matchQuery;
-        post.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      countNum.textContent = visible;
-      noResults.classList.toggle('hidden', visible > 0);
+    // ─── Type metadata ───
+    function typeInfo(type) {
+      return {
+        video:  { label:'Video Demo',   cls:'tag-video',  icon:'<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>', fill:true },
+        tips:   { label:'Tips & Tricks',cls:'tag-tips',   icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>', fill:false },
+        howto:  { label:'How-To',       cls:'tag-howto',  icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>', fill:false },
+        update: { label:'Update',       cls:'tag-update', icon:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/>', fill:false },
+      }[type] || { label:'Post', cls:'tag-howto', icon:'', fill:false };
     }
 
+    // ─── Format date ───
+    function fmtDate(d) {
+      if (!d) return '';
+      const [y,m,day] = d.split('-');
+      return new Date(+y,+m-1,+day).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});
+    }
+
+    // ─── Render a single post card ───
+    function renderCard(post, delay) {
+      const t = typeInfo(post.type);
+      const svgFill = t.fill ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+
+      // Video section
+      const videoHTML = (post.type === 'video' && post.videoUrl)
+        ? `<div class="video-wrap mx-4 mt-4 rounded-xl overflow-hidden bg-brand-blue/5 dark:bg-white/5">
+             <iframe src="${post.videoUrl}" title="${post.title}" allowfullscreen loading="lazy"></iframe>
+           </div>`
+        : '';
+
+      // Tip / info callout
+      let calloutHTML = '';
+      if (post.tip && post.tipType && post.tipType !== 'none') {
+        if (post.tipType === 'tip') {
+          calloutHTML = `<div class="tip-block px-4 py-3 mb-4">
+            <p class="text-sm font-semibold text-brand-orange mb-1">💡 Pro Tip</p>
+            <p class="text-sm text-brand-text/70 dark:text-gray-400">${post.tip}</p>
+          </div>`;
+        } else {
+          calloutHTML = `<div class="info-block px-4 py-3 mb-4">
+            <p class="text-sm font-semibold text-brand-blue dark:text-blue-300 mb-1">ℹ️ Note</p>
+            <p class="text-sm text-brand-text/70 dark:text-gray-400">${post.tip}</p>
+          </div>`;
+        }
+      }
+
+      // Steps
+      let stepsHTML = '';
+      if (post.steps) {
+        const lines = post.steps.split('\n').filter(Boolean);
+        stepsHTML = `<ol class="step-list flex flex-col gap-3 mb-5">
+          ${lines.map(l => `<li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>${l}</span></li>`).join('')}
+        </ol>`;
+      }
+
+      // Body
+      const bodyHTML = post.body && post.body !== '<br>' && post.body !== ''
+        ? `<div class="prose-content text-sm text-brand-text/70 dark:text-gray-400 mb-4">${post.body}</div>`
+        : '';
+
+      // Tags
+      const tagsHTML = post.tags
+        ? post.tags.split(',').filter(Boolean).map(tg =>
+            `<span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#${tg.trim()}</span>`
+          ).join('')
+        : '';
+
+      return `
+        <article class="post-card reveal delay-${delay} bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden"
+          data-type="${post.type}" data-id="${post.id}"
+          data-title="${post.title.replace(/"/g,'&quot;')}">
+          ${videoHTML}
+          <div class="p-6">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="tag-badge ${t.cls}">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" ${svgFill}>${t.icon}</svg>
+                ${t.label}
+              </span>
+              <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">${fmtDate(post.date)}</span>
+            </div>
+            <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">${post.title}</h2>
+            <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">${post.excerpt}</p>
+            ${calloutHTML}
+            ${bodyHTML}
+            ${stepsHTML}
+            <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
+              ${tagsHTML}
+            </div>
+          </div>
+        </article>`;
+    }
+
+    // ─── All posts & filter state ───
+    let allPosts = [];
     let currentFilter = 'all';
+
+    function loadAndRender() {
+      allPosts = [...getPosts()].reverse(); // newest first
+      applyFilter(currentFilter, document.getElementById('searchInput').value);
+    }
+
+    function applyFilter(filter, query = '') {
+      currentFilter = filter;
+      const grid      = document.getElementById('postsGrid');
+      const noResults = document.getElementById('noResults');
+      const emptyState= document.getElementById('emptyState');
+      const countNum  = document.getElementById('countNum');
+
+      // If no posts at all
+      if (!allPosts.length) {
+        grid.innerHTML = '';
+        noResults.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        countNum.textContent = '0';
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      const q = query.toLowerCase();
+      const filtered = allPosts.filter(post => {
+        const matchType  = filter === 'all' || post.type === filter;
+        const matchQuery = !q || post.title.toLowerCase().includes(q)
+                              || (post.excerpt||'').toLowerCase().includes(q)
+                              || (post.tags||'').toLowerCase().includes(q)
+                              || (post.body||'').toLowerCase().includes(q);
+        return matchType && matchQuery;
+      });
+
+      countNum.textContent = filtered.length;
+
+      if (!filtered.length) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+      grid.innerHTML = filtered.map((p, i) => renderCard(p, (i % 6) + 1)).join('');
+
+      // Re-observe reveal elements
+      grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    }
+
+    // ─── Scroll Reveal ───
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ─── Filter Pills ───
+    const pills = document.querySelectorAll('.filter-pill');
     pills.forEach(pill => {
       pill.addEventListener('click', () => {
         pills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
-        currentFilter = pill.dataset.filter;
-        applyFilter(currentFilter, document.getElementById('searchInput').value);
+        applyFilter(pill.dataset.filter, document.getElementById('searchInput').value);
       });
     });
 
+    // ─── Search ───
     document.getElementById('searchInput').addEventListener('input', (e) => {
       applyFilter(currentFilter, e.target.value);
     });
 
-    // ─── Post modal (demo of "Read full guide") ───
-    function openPost(id) {
-      const demos = {
-        cadastral: {
-          title: 'KGACadastral — Full Workflow Guide',
-          content: `<p>This full guide covers the complete cadastral workflow using KGACadastral. Starting from raw survey data, you'll learn how to create parcel boundaries, populate land attributes, run automated area calculations, and export final datasets for land registry submission.</p>
-          <h3>Prerequisites</h3>
-          <ul><li>ArcGIS Pro 3.x or later</li><li>KGA Toolbox v2026 installed</li><li>Source survey data in DXF or CSV format</li></ul>
-          <h3>Step Overview</h3>
-          <p>The workflow consists of 8 main steps, from data import through final QA validation. Each step is covered in the video above with time-stamped chapters.</p>`
-        },
-        crs: {
-          title: 'CRS Conversion — Complete Reference',
-          content: `<p>The KGAConverter module supports all standard EPSG coordinate systems used in Southeast Asian cadastral work, including WGS84, UTM zones, and local datum systems.</p>
-          <h3>Supported Formats</h3>
-          <ul><li>Input: Shapefile, GeoJSON, File Geodatabase</li><li>Output: All major spatial formats</li><li>Datum shifts: Supported via custom transformation files</li></ul>`
-        }
-      };
-      alert(`📖 Full Guide: ${demos[id]?.title || 'Coming soon!'}\n\nThis would open a full-page article view in production.`);
-    }
+    // ─── Listen for admin updates (same browser tab via storage event) ───
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'kga_posts') loadAndRender();
+    });
+
+    // ─── Initial load ───
+    loadAndRender();
   </script>
 
 </body>
