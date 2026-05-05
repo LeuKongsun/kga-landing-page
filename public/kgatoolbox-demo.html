@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KGA Toolbox — Demo & Tutorials</title>
+  <link rel="icon" type="image/png" href="KGA_Toolbox_Logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#244C8F',
+              'blue-dark': '#1A3668',
+              'blue-deeper': '#0F2347',
+              orange: '#FF6434',
+              'orange-hover': '#E8551F',
+              text: '#1E2F4F',
+              light: '#F5F7FA',
+              muted: '#D9D9D9',
+            }
+          },
+          fontFamily: {
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
+            body: ['"DM Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-family: 'DM Sans', sans-serif; }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(36,76,143,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,76,143,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .dark .grid-bg {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    }
+
+    .hero-gradient {
+      background: linear-gradient(165deg, #e8edf5 0%, #dce4f0 35%, #cfd9eb 70%, #c5d0e3 100%);
+    }
+    .dark .hero-gradient {
+      background: linear-gradient(165deg, #244C8F 0%, #1A3668 35%, #0F2347 70%, #1E2F4F 100%);
+    }
+
+    .nav-blur {
+      backdrop-filter: blur(16px) saturate(1.6);
+      -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .orange-glow { box-shadow: 0 0 0 0 rgba(255,100,52,0); transition: box-shadow 0.3s ease; }
+    .orange-glow:hover { box-shadow: 0 4px 24px rgba(255,100,52,0.35); }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F5F7FA; }
+    ::-webkit-scrollbar-thumb { background: #244C8F; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-track { background: #0F2347; }
+    .dark ::-webkit-scrollbar-thumb { background: #FF6434; }
+
+    .delay-1 { transition-delay: 0.08s; }
+    .delay-2 { transition-delay: 0.16s; }
+    .delay-3 { transition-delay: 0.24s; }
+    .delay-4 { transition-delay: 0.32s; }
+    .delay-5 { transition-delay: 0.40s; }
+    .delay-6 { transition-delay: 0.48s; }
+
+    /* ─── Post Card ─── */
+    .post-card {
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -12px rgba(36,76,143,0.16), 0 0 0 1px rgba(36,76,143,0.06);
+    }
+    .dark .post-card:hover {
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,100,52,0.12);
+    }
+
+    /* ─── Sidebar sticky ─── */
+    .sidebar-sticky { position: sticky; top: 84px; }
+
+    /* ─── Tag badge ─── */
+    .tag-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 9999px; font-size: 11px;
+      font-family: 'JetBrains Mono', monospace; font-weight: 500;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .tag-video    { background: rgba(239,68,68,0.1);  color: #ef4444; }
+    .tag-tips     { background: rgba(255,100,52,0.1); color: #FF6434; }
+    .tag-howto    { background: rgba(36,76,143,0.1);  color: #244C8F; }
+    .tag-update   { background: rgba(34,197,94,0.1);  color: #22c55e; }
+    .dark .tag-howto { color: #7ba3e0; }
+
+    /* ─── Video Embed ─── */
+    .video-wrap {
+      position: relative; padding-bottom: 56.25%;
+      height: 0; overflow: hidden; border-radius: 12px;
+    }
+    .video-wrap iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; border: 0;
+    }
+
+    /* ─── Tip Block ─── */
+    .tip-block {
+      border-left: 3px solid #FF6434;
+      background: rgba(255,100,52,0.05);
+      border-radius: 0 8px 8px 0;
+    }
+    .dark .tip-block { background: rgba(255,100,52,0.08); }
+
+    /* ─── Info Block ─── */
+    .info-block {
+      border-left: 3px solid #244C8F;
+      background: rgba(36,76,143,0.05);
+      border-radius: 0 8px 8px 0;
+    }
+    .dark .info-block { border-color: #7ba3e0; background: rgba(36,76,143,0.08); }
+
+    /* ─── Code inline ─── */
+    code.inline {
+      background: rgba(36,76,143,0.08); color: #244C8F;
+      padding: 1px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.82em;
+    }
+    .dark code.inline { background: rgba(255,255,255,0.08); color: #7ba3e0; }
+
+    /* ─── Step list ─── */
+    .step-item { counter-increment: step-counter; }
+    .step-item::before {
+      content: counter(step-counter);
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #244C8F; color: white;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .dark .step-item::before { background: #FF6434; }
+    ol.step-list { counter-reset: step-counter; list-style: none; }
+
+    /* ─── Filter pill active ─── */
+    .filter-pill { transition: all 0.2s ease; }
+    .filter-pill.active {
+      background: #244C8F; color: white;
+      border-color: #244C8F;
+    }
+    .dark .filter-pill.active {
+      background: #FF6434; border-color: #FF6434;
+    }
+
+    /* ─── Modal overlay ─── */
+    #postModal {
+      transition: opacity 0.25s ease;
+    }
+    #postModal.hidden { display: none; }
+
+    /* ─── Prose content ─── */
+    .prose-content p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose-content h3 { font-weight: 700; font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+    .prose-content ul { margin: 0.75rem 0 1rem 1.25rem; }
+    .prose-content ul li { margin-bottom: 0.4rem; }
+
+    /* ─── Search Input ─── */
+    #searchInput {
+      color: #1E2F4F !important;
+      background: #ffffff !important;
+    }
+    #searchInput::placeholder { color: rgba(30,47,79,0.45); }
+    .dark #searchInput {
+      color: #ffffff !important;
+      background: #1A2F50 !important;
+      border-color: rgba(255,255,255,0.2) !important;
+    }
+    .dark #searchInput::placeholder { color: rgba(255,255,255,0.45); }
+
+    /* ─── Topo lines ─── */
+    .topo-lines {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='%23244C8F' stroke-width='0.5' opacity='0.06'/%3E%3Ccircle cx='100' cy='100' r='55' fill='none' stroke='%23244C8F' stroke-width='0.5' opacity='0.05'/%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23244C8F' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body class="bg-brand-light text-brand-text dark:bg-[#0B1929] dark:text-gray-100 transition-colors duration-500">
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur bg-white/80 dark:bg-[#0B1929]/80 border-b border-brand-blue/10 dark:border-white/5 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Logo -->
+        <a href="kga-toolbox.html" class="flex items-center gap-3 group">
+          <div class="w-9 h-9 rounded-lg overflow-hidden shadow-md group-hover:shadow-brand-blue/30 transition-shadow">
+            <img src="KGA_Toolbox_Logo.png" alt="KGA Toolbox Logo" class="w-full h-full object-cover" />
+          </div>
+          <span class="font-display font-800 text-lg tracking-tight text-brand-text dark:text-white">KGA <span class="text-brand-orange">Toolbox</span></span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="kga-toolbox.html#tools" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">Tools</a>
+          <a href="kga-toolbox.html#featured" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">Featured</a>
+          <a href="kga-toolbox.html#pricing" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">Pricing</a>
+          <a href="kga-toolbox.html#about" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 hover:text-brand-blue dark:hover:text-brand-orange transition-colors">About</a>
+          <a href="#" class="text-sm font-medium text-brand-blue dark:text-brand-orange border-b-2 border-brand-orange pb-0.5">Demo</a>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="flex items-center gap-3">
+          <button id="darkToggle" class="w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors" aria-label="Toggle dark mode">
+            <svg class="w-4.5 h-4.5 hidden dark:block text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="w-4.5 h-4.5 block dark:hidden text-brand-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <button id="mobileMenuBtn" class="md:hidden w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center" aria-label="Menu">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <a href="https://www.khmergrs.com/" target="_blank" rel="noopener" class="hidden md:inline-flex items-center gap-2 px-4 py-2 bg-brand-orange text-white text-sm font-semibold rounded-lg orange-glow hover:bg-brand-orange-hover transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Visit Us!
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-brand-blue/10 dark:border-white/5 bg-white/95 dark:bg-[#0B1929]/95 nav-blur">
+      <div class="px-4 py-4 flex flex-col gap-3">
+        <a href="kga-toolbox.html#tools" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">Tools</a>
+        <a href="kga-toolbox.html#featured" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">Featured</a>
+        <a href="kga-toolbox.html#pricing" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">Pricing</a>
+        <a href="kga-toolbox.html#about" class="text-sm font-medium text-brand-text/70 dark:text-gray-400 py-2">About</a>
+        <a href="#" class="text-sm font-medium text-brand-orange py-2">Demo</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section class="hero-gradient relative overflow-hidden pt-16">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/10 dark:bg-brand-orange/10 rounded-full text-xs font-mono font-600 text-brand-blue dark:text-brand-orange tracking-wider uppercase mb-6">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          Demos & Tutorials
+        </div>
+        <h1 class="font-display font-800 text-4xl sm:text-5xl text-brand-text dark:text-white leading-tight tracking-tight mb-5">
+          See KGA Toolbox <span class="text-brand-orange">in Action</span>
+        </h1>
+        <p class="text-lg text-brand-text/60 dark:text-white/60 max-w-2xl mx-auto leading-relaxed mb-8">
+          Watch real workflow demos, learn tips & tricks, and master each tool with step-by-step guides — all in one place.
+        </p>
+
+        <!-- Search -->
+        <div class="relative max-w-lg mx-auto z-10">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-brand-text/30 dark:text-white/30 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="searchInput" type="text" placeholder="Search demos, tutorials, tools…" class="w-full pl-11 pr-4 py-3.5 rounded-xl border text-sm font-medium focus:outline-none transition-all" />
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-brand-light dark:from-[#0B1929] to-transparent pointer-events-none"></div>
+  </section>
+
+
+  <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+  <main class="grid-bg topo-lines relative py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row gap-10">
+
+        <!-- ── Posts Column ── -->
+        <div class="flex-1 min-w-0">
+
+          <!-- Filter Bar -->
+          <div class="flex flex-wrap items-center gap-2 mb-8 reveal">
+            <span class="text-xs font-mono text-brand-text/40 dark:text-white/30 uppercase tracking-wider mr-1">Filter:</span>
+            <button class="filter-pill active px-4 py-1.5 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-medium text-brand-text dark:text-gray-300" data-filter="all">All Posts</button>
+            <button class="filter-pill px-4 py-1.5 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-medium text-brand-text/60 dark:text-gray-400" data-filter="video">
+              <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-red-400" viewBox="0 0 24 24" fill="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Video</span>
+            </button>
+            <button class="filter-pill px-4 py-1.5 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-medium text-brand-text/60 dark:text-gray-400" data-filter="tips">
+              <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Tips & Tricks</span>
+            </button>
+            <button class="filter-pill px-4 py-1.5 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-medium text-brand-text/60 dark:text-gray-400" data-filter="howto">
+              <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-brand-blue dark:text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> How-To</span>
+            </button>
+            <button class="filter-pill px-4 py-1.5 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-medium text-brand-text/60 dark:text-gray-400" data-filter="update">
+              <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/></svg> Updates</span>
+            </button>
+          </div>
+
+          <!-- Post count -->
+          <p id="postCount" class="text-xs font-mono text-brand-text/30 dark:text-white/25 mb-6 reveal delay-1">Showing <span id="countNum">4</span> posts</p>
+
+          <!-- ─── Posts Grid ─── -->
+          <div id="postsGrid" class="flex flex-col gap-6">
+
+            <!-- ══ POST 1 — Video ══ -->
+            <article class="post-card reveal delay-1 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="video" data-title="KGACadastral Full Workflow Demo">
+              <!-- Thumbnail / Video -->
+              <div class="video-wrap mx-4 mt-4 rounded-xl overflow-hidden bg-brand-blue/5 dark:bg-white/5">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="KGACadastral Demo" allowfullscreen loading="lazy"></iframe>
+              </div>
+              <!-- Body -->
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="tag-badge tag-video">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                    Video Demo
+                  </span>
+                  <span class="tag-badge tag-howto">How-To</span>
+                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
+                </div>
+                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">KGACadastral — Full Workflow Demo</h2>
+                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-4">
+                  Watch a complete end-to-end cadastral parcel workflow using the <code class="inline">KGACadastral</code> toolset. This video covers boundary splitting, parcel attribute population, and automated area calculation.
+                </p>
+                <!-- Tip block -->
+                <div class="tip-block px-4 py-3 mb-4">
+                  <p class="text-sm font-semibold text-brand-orange mb-1">💡 Pro Tip</p>
+                  <p class="text-sm text-brand-text/70 dark:text-gray-400">Always run <code class="inline">Topology Check</code> before splitting parcels to ensure there are no overlapping boundaries in your source dataset.</p>
+                </div>
+                <!-- Tags -->
+                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#cadastral</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#parcels</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#arcgis-pro</span>
+                  <button onclick="openPost('cadastral')" class="ml-auto text-xs font-semibold text-brand-orange hover:underline">Read full guide →</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- ══ POST 2 — Tips & Tricks ══ -->
+            <article class="post-card reveal delay-2 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="tips" data-title="5 Tips to Speed Up Your CRS Conversion">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="tag-badge tag-tips">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Tips & Tricks
+                  </span>
+                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
+                </div>
+                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">5 Tips to Speed Up Your CRS Conversion</h2>
+                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-5">
+                  The <code class="inline">KGAConverter</code> module handles coordinate system transformations across dozens of projection systems. Here are the five workflow shortcuts every user should know.
+                </p>
+
+                <!-- Step List -->
+                <ol class="step-list flex flex-col gap-3 mb-5">
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
+                    <span class="mt-0.5"></span>
+                    <span>Pre-load your output CRS profile in the <code class="inline">Settings</code> tab — this saves 2 clicks per tool run.</span>
+                  </li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
+                    <span class="mt-0.5"></span>
+                    <span>Use <code class="inline">Batch Conversion</code> mode to process entire folders instead of individual layers.</span>
+                  </li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
+                    <span class="mt-0.5"></span>
+                    <span>Enable <strong>Preserve Original</strong> to keep source files intact in a <code class="inline">_backup</code> subfolder.</span>
+                  </li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
+                    <span class="mt-0.5"></span>
+                    <span>Select only the fields you need when exporting — this cuts file size by up to 40%.</span>
+                  </li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300">
+                    <span class="mt-0.5"></span>
+                    <span>Pin the Converter panel to your ArcGIS Pro sidebar for one-click access without reopening the toolbox.</span>
+                  </li>
+                </ol>
+
+                <!-- Info block -->
+                <div class="info-block px-4 py-3 mb-4">
+                  <p class="text-sm font-semibold text-brand-blue dark:text-blue-300 mb-1">ℹ️ Note</p>
+                  <p class="text-sm text-brand-text/70 dark:text-gray-400">The <code class="inline">KGAConverter</code> supports all EPSG-registered CRS codes. If your projection is missing, contact us via Telegram for a custom addition.</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#crs</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#projection</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#converter</span>
+                  <button onclick="openPost('crs')" class="ml-auto text-xs font-semibold text-brand-orange hover:underline">Read full guide →</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- ══ POST 3 — How-To + Video ══ -->
+            <article class="post-card reveal delay-3 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="howto" data-title="How to Run a Topology Check">
+              <!-- Featured Banner -->
+              <div class="px-4 pt-4">
+                <div class="relative rounded-xl overflow-hidden bg-gradient-to-r from-brand-blue to-brand-blue-dark p-5 flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  </div>
+                  <div>
+                    <p class="font-display font-700 text-white text-sm">Step-by-Step Guide</p>
+                    <p class="text-white/60 text-xs font-mono mt-0.5">KGATopology · 6-step workflow</p>
+                  </div>
+                  <span class="ml-auto tag-badge" style="background:rgba(255,255,255,0.15);color:white;">How-To</span>
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="tag-badge tag-howto">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    How-To
+                  </span>
+                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
+                </div>
+                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">How to Run a Topology Check on Your Parcel Layer</h2>
+                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-5">
+                  Topology errors are one of the most common causes of failed cadastral submissions. This guide walks you through using <code class="inline">KGATopology</code> to detect and fix errors before publishing.
+                </p>
+
+                <!-- Paragraph content -->
+                <div class="prose-content text-sm text-brand-text/70 dark:text-gray-400 mb-5">
+                  <h3 class="text-brand-text dark:text-white">What is a Topology Check?</h3>
+                  <p>A topology check validates the geometric relationships between features in your GIS dataset — ensuring parcels don't overlap, gaps don't exist between boundaries, and slivers are detected automatically.</p>
+                  <h3 class="text-brand-text dark:text-white">Why it Matters</h3>
+                  <p>Government agencies and land registry offices require clean topology for parcel submissions. Even a single overlapping vertex can cause a full rejection of your dataset. The <code class="inline">KGATopology</code> tool automates this check and generates an error report with visual highlights inside ArcGIS Pro.</p>
+                </div>
+
+                <!-- Steps -->
+                <ol class="step-list flex flex-col gap-3 mb-5">
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Open the <strong>KGA Toolbox</strong> in ArcGIS Pro and navigate to <code class="inline">KGATopology → Run Topology Check</code>.</span></li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Select your <strong>target feature class</strong> (e.g., <code class="inline">Parcel_Boundary</code>) as the input layer.</span></li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Choose the <strong>rule set</strong>: Must Not Overlap, Must Not Have Gaps, Must Be Covered By.</span></li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Set the <strong>cluster tolerance</strong> — use <code class="inline">0.001m</code> for cadastral-grade accuracy.</span></li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Click <strong>Run</strong>. The tool highlights errors directly in the map view with color-coded symbols.</span></li>
+                  <li class="step-item flex items-start gap-3 text-sm text-brand-text/80 dark:text-gray-300"><span></span><span>Export the <strong>Error Report</strong> as a CSV or PDF for documentation.</span></li>
+                </ol>
+
+                <!-- Embed video inline -->
+                <div class="video-wrap mb-5">
+                  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Topology Check Demo" allowfullscreen loading="lazy"></iframe>
+                </div>
+
+                <div class="tip-block px-4 py-3 mb-4">
+                  <p class="text-sm font-semibold text-brand-orange mb-1">💡 Pro Tip</p>
+                  <p class="text-sm text-brand-text/70 dark:text-gray-400">Run topology checks on a <strong>copy</strong> of your dataset first. This lets you review errors without modifying production data accidentally.</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#topology</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#quality</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#parcels</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- ══ POST 4 — Update ══ -->
+            <article class="post-card reveal delay-4 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 overflow-hidden" data-type="update" data-title="v2026.1.2 Release Notes">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="tag-badge tag-update">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/></svg>
+                    Update
+                  </span>
+                  <span class="font-mono text-xs px-2 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">v2026.1.2</span>
+                  <span class="font-mono text-xs text-brand-text/30 dark:text-white/25 ml-auto">05 May 2026</span>
+                </div>
+                <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-2 leading-snug">Release Notes — v2026.1.2</h2>
+                <p class="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed mb-5">
+                  This release focuses on performance improvements, bug fixes in the annotation engine, and two new tools added to the <code class="inline">KGASpatialAnalysis</code> category.
+                </p>
+
+                <!-- Changelog -->
+                <div class="space-y-2 mb-5">
+                  <div class="flex items-start gap-3 text-sm">
+                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5">NEW</span>
+                    <span class="text-brand-text/80 dark:text-gray-300">Added <code class="inline">Buffer By Attribute</code> tool to KGASpatialAnalysis — supports variable buffer distances per feature.</span>
+                  </div>
+                  <div class="flex items-start gap-3 text-sm">
+                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5">NEW</span>
+                    <span class="text-brand-text/80 dark:text-gray-300">Added <code class="inline">Nearest Neighbor Join</code> for point-to-polygon spatial joins with configurable tolerance.</span>
+                  </div>
+                  <div class="flex items-start gap-3 text-sm">
+                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue dark:text-blue-400 flex-shrink-0 mt-0.5">FIX</span>
+                    <span class="text-brand-text/80 dark:text-gray-300">Fixed annotation placement bug in <code class="inline">KGAAnnotation</code> when using rotated map frames.</span>
+                  </div>
+                  <div class="flex items-start gap-3 text-sm">
+                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue dark:text-blue-400 flex-shrink-0 mt-0.5">FIX</span>
+                    <span class="text-brand-text/80 dark:text-gray-300">Resolved null geometry crash in <code class="inline">KGAConverter</code> batch mode when source layer contains Z-values.</span>
+                  </div>
+                  <div class="flex items-start gap-3 text-sm">
+                    <span class="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full bg-brand-orange/10 text-brand-orange flex-shrink-0 mt-0.5">PERF</span>
+                    <span class="text-brand-text/80 dark:text-gray-300"><code class="inline">KGATopology</code> check is now 3× faster on datasets with 50,000+ features thanks to spatial index optimization.</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pt-3 border-t border-brand-blue/6 dark:border-white/6">
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#release</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#changelog</span>
+                  <span class="text-xs font-mono px-2 py-1 rounded bg-brand-blue/6 dark:bg-white/6 text-brand-text/50 dark:text-white/40">#v2026</span>
+                </div>
+              </div>
+            </article>
+
+          </div><!-- /postsGrid -->
+
+          <!-- No results -->
+          <div id="noResults" class="hidden text-center py-20">
+            <svg class="w-12 h-12 mx-auto text-brand-text/20 dark:text-white/15 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <p class="font-display font-600 text-brand-text/40 dark:text-white/30">No posts found</p>
+            <p class="text-sm text-brand-text/30 dark:text-white/20 mt-1">Try a different filter or search term</p>
+          </div>
+
+        </div><!-- /posts column -->
+
+
+        <!-- ── Sidebar ── -->
+        <aside class="w-full lg:w-72 xl:w-80 flex-shrink-0">
+          <div class="sidebar-sticky flex flex-col gap-5">
+
+            <!-- Quick Links -->
+            <div class="reveal bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 p-5">
+              <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-4 flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Quick Access
+              </h3>
+              <div class="flex flex-col gap-2">
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors group">
+                  <div class="w-7 h-7 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-3.5 h-3.5 text-red-400" viewBox="0 0 24 24" fill="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                  </div>
+                  <span class="text-sm text-brand-text/70 dark:text-gray-400 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">Video Demos</span>
+                  <svg class="w-3.5 h-3.5 text-brand-text/20 ml-auto group-hover:text-brand-orange transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors group">
+                  <div class="w-7 h-7 rounded-lg bg-brand-orange/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-3.5 h-3.5 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  </div>
+                  <span class="text-sm text-brand-text/70 dark:text-gray-400 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">Tips & Tricks</span>
+                  <svg class="w-3.5 h-3.5 text-brand-text/20 ml-auto group-hover:text-brand-orange transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors group">
+                  <div class="w-7 h-7 rounded-lg bg-brand-blue/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-3.5 h-3.5 text-brand-blue dark:text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                  <span class="text-sm text-brand-text/70 dark:text-gray-400 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">How-To Guides</span>
+                  <svg class="w-3.5 h-3.5 text-brand-text/20 ml-auto group-hover:text-brand-orange transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors group">
+                  <div class="w-7 h-7 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-3.5 h-3.5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/></svg>
+                  </div>
+                  <span class="text-sm text-brand-text/70 dark:text-gray-400 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">Release Notes</span>
+                  <svg class="w-3.5 h-3.5 text-brand-text/20 ml-auto group-hover:text-brand-orange transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Tool Categories -->
+            <div class="reveal delay-1 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 p-5">
+              <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-4 flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-blue dark:text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Tool Categories
+              </h3>
+              <div class="flex flex-col gap-1.5">
+                <span class="text-xs font-mono text-brand-text/50 dark:text-white/40 hover:text-brand-blue dark:hover:text-brand-orange transition-colors cursor-pointer py-1">KGABasicDataCreation</span>
+                <span class="text-xs font-mono text-brand-text/50 dark:text-white/40 hover:text-brand-blue dark:hover:text-brand-orange transition-colors cursor-pointer py-1">KGACadastral</span>
+                <span class="text-xs font-mono text-brand-text/50 dark:text-white/40 hover:text-brand-blue dark:hover:text-brand-orange transition-colors cursor-pointer py-1">KGAConverter</span>
+                <span class="text-xs font-mono text-brand-text/50 dark:text-white/40 hover:text-brand-blue dark:hover:text-brand-orange transition-colors cursor-pointer py-1">KGATopology</span>
+                <span class="text-xs font-mono text-brand-text/50 dark:text-white/40 hover:text-brand-blue dark:hover:text-brand-orange transition-colors cursor-pointer py-1">KGASpatialAnalysis</span>
+                <span class="text-xs font-mono text-brand-text/50 dark:text-white/40 hover:text-brand-blue dark:hover:text-brand-orange transition-colors cursor-pointer py-1">KGAAnnotation</span>
+                <a href="kga-toolbox.html#tools" class="text-xs font-mono text-brand-orange mt-1 hover:underline">+ 5 more →</a>
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="reveal delay-2 rounded-2xl overflow-hidden" style="background: linear-gradient(135deg, #244C8F 0%, #1A3668 100%);">
+              <div class="p-5">
+                <p class="font-display font-700 text-white text-sm mb-1">Get Full Access</p>
+                <p class="text-white/60 text-xs mb-4 leading-relaxed">Unlock all 50+ tools and access private support on Telegram.</p>
+                <a href="https://t.me/khmergrsacademy" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-brand-orange text-white text-xs font-semibold rounded-lg orange-glow hover:bg-brand-orange-hover transition-colors w-full justify-center">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                  Purchase on Telegram
+                </a>
+              </div>
+            </div>
+
+            <!-- YouTube Subscribe -->
+            <div class="reveal delay-3 bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 p-5">
+              <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                Watch on YouTube
+              </h3>
+              <p class="text-xs text-brand-text/50 dark:text-gray-500 mb-3 leading-relaxed">New video tutorials every week — subscribe for updates.</p>
+              <a href="https://www.youtube.com/@Khmergisacademy" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-lg transition-colors w-full justify-center">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                Subscribe Now
+              </a>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="bg-[#0B1929] border-t border-white/5 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-white/30 text-xs font-mono">&copy; 2026 KGA Toolbox. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <span class="text-white/20 font-mono text-xs">v2026.1.2</span>
+          <span class="text-white/10">|</span>
+          <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Privacy Policy</a>
+          <span class="text-white/10">|</span>
+          <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════ SCRIPTS ═══════════════ -->
+  <script>
+    // ─── Dark Mode ───
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+    document.getElementById('darkToggle').addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // ─── Mobile Menu ───
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+    // ─── Scroll Reveal ───
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ─── Navbar Scroll Shadow ───
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('shadow-lg', window.scrollY > 20);
+      navbar.classList.toggle('shadow-brand-blue/5', window.scrollY > 20);
+    }, { passive: true });
+
+    // ─── Filter Pills ───
+    const pills = document.querySelectorAll('.filter-pill');
+    const posts = document.querySelectorAll('#postsGrid article');
+    const noResults = document.getElementById('noResults');
+    const countNum = document.getElementById('countNum');
+
+    function applyFilter(filter, query = '') {
+      let visible = 0;
+      posts.forEach(post => {
+        const matchType = filter === 'all' || post.dataset.type === filter;
+        const matchQuery = !query || post.dataset.title.toLowerCase().includes(query.toLowerCase())
+          || post.innerText.toLowerCase().includes(query.toLowerCase());
+        const show = matchType && matchQuery;
+        post.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      countNum.textContent = visible;
+      noResults.classList.toggle('hidden', visible > 0);
+    }
+
+    let currentFilter = 'all';
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.dataset.filter;
+        applyFilter(currentFilter, document.getElementById('searchInput').value);
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      applyFilter(currentFilter, e.target.value);
+    });
+
+    // ─── Post modal (demo of "Read full guide") ───
+    function openPost(id) {
+      const demos = {
+        cadastral: {
+          title: 'KGACadastral — Full Workflow Guide',
+          content: `<p>This full guide covers the complete cadastral workflow using KGACadastral. Starting from raw survey data, you'll learn how to create parcel boundaries, populate land attributes, run automated area calculations, and export final datasets for land registry submission.</p>
+          <h3>Prerequisites</h3>
+          <ul><li>ArcGIS Pro 3.x or later</li><li>KGA Toolbox v2026 installed</li><li>Source survey data in DXF or CSV format</li></ul>
+          <h3>Step Overview</h3>
+          <p>The workflow consists of 8 main steps, from data import through final QA validation. Each step is covered in the video above with time-stamped chapters.</p>`
+        },
+        crs: {
+          title: 'CRS Conversion — Complete Reference',
+          content: `<p>The KGAConverter module supports all standard EPSG coordinate systems used in Southeast Asian cadastral work, including WGS84, UTM zones, and local datum systems.</p>
+          <h3>Supported Formats</h3>
+          <ul><li>Input: Shapefile, GeoJSON, File Geodatabase</li><li>Output: All major spatial formats</li><li>Datum shifts: Supported via custom transformation files</li></ul>`
+        }
+      };
+      alert(`📖 Full Guide: ${demos[id]?.title || 'Coming soon!'}\n\nThis would open a full-page article view in production.`);
+    }
+  </script>
+
+</body>
+</html>
