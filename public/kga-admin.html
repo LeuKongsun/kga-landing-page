@@ -789,26 +789,29 @@
   // ─── Auth ───
   const ADMIN_KEY = 'kga_admin_auth';
   const CRED_KEY  = 'kga_admin_creds';
-  let _creds = null; // cached after fetch
+  let _users = []; // array of {username, password}
 
-  // Fetch credentials from admin-config.json (source of truth)
+  // Fetch credentials from admin-config.json
+  // Supports both a single object {} and an array [{}]
   async function loadCreds() {
     try {
       const res = await fetch('admin-config.json?t=' + Date.now());
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
-      if (!data.username || !data.password) throw new Error('invalid');
-      _creds = data;
-      // Keep localStorage in sync for session persistence
-      localStorage.setItem(CRED_KEY, JSON.stringify(_creds));
-      return _creds;
+      _users = Array.isArray(data) ? data : [data];
+      localStorage.setItem(CRED_KEY, JSON.stringify(_users));
+      return _users;
     } catch(e) {
-      // Fall back to localStorage if file not reachable (offline / local file://)
+      // Fall back to localStorage cache (offline / local file://)
       const stored = localStorage.getItem(CRED_KEY);
-      if (stored) { _creds = JSON.parse(stored); return _creds; }
-      // Last resort defaults
-      _creds = { username: 'admin', password: 'kga2026' };
-      return _creds;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        _users = Array.isArray(parsed) ? parsed : [parsed];
+        return _users;
+      }
+      // Last resort default
+      _users = [{ username: 'admin', password: 'kga2026' }];
+      return _users;
     }
   }
 
@@ -816,15 +819,18 @@
     const btn = document.querySelector('#authScreen button[onclick="doLogin()"]');
     if (btn) { btn.textContent = 'Signing in…'; btn.disabled = true; }
 
-    const creds = await loadCreds();
+    const users = await loadCreds();
 
     if (btn) { btn.textContent = 'Sign In to Admin Panel'; btn.disabled = false; }
 
     const u = document.getElementById('loginUser').value.trim();
     const p = document.getElementById('loginPass').value;
 
-    if (u === creds.username && p === creds.password) {
-      localStorage.setItem(ADMIN_KEY, 'true');
+    // Check against all users in the array
+    const match = users.find(user => user.username === u && user.password === p);
+
+    if (match) {
+      localStorage.setItem(ADMIN_KEY, u); // store username so we know who's logged in
       document.getElementById('authScreen').style.display = 'none';
       init();
     } else {
@@ -850,22 +856,24 @@
   document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-  // Check auth on load — re-validate against admin-config.json on each visit
-  if (localStorage.getItem(ADMIN_KEY) === 'true') {
-    loadCreds().then(creds => {
-      // If config file credentials changed, force re-login
-      const stored = localStorage.getItem(CRED_KEY);
-      if (stored) {
-        const old = JSON.parse(stored);
-        if (old.username !== creds.username || old.password !== creds.password) {
-          localStorage.removeItem(ADMIN_KEY);
-          location.reload();
-          return;
-        }
+  // Check auth on load
+  const _savedUser = localStorage.getItem(ADMIN_KEY);
+  if (_savedUser && _savedUser !== 'true') {
+    loadCreds().then(users => {
+      // Verify the saved username still exists in config
+      const stillValid = users.find(u => u.username === _savedUser);
+      if (!stillValid) {
+        localStorage.removeItem(ADMIN_KEY);
+        location.reload();
+        return;
       }
       document.getElementById('authScreen').style.display = 'none';
       init();
     });
+  } else if (_savedUser === 'true') {
+    // Legacy session (old format) — just let them in and update on next login
+    document.getElementById('authScreen').style.display = 'none';
+    init();
   }
 
   // ─── Dark Mode ───
@@ -910,11 +918,11 @@
 
   // ─── Init ───
   function init() {
-    defaultCreds();
-    const creds = JSON.parse(localStorage.getItem(CRED_KEY));
-    document.getElementById('sidebarUsername').textContent = creds.username;
-    document.getElementById('avatarLabel').textContent = creds.username.slice(0,2).toUpperCase();
-    document.getElementById('welcomeName').textContent = creds.username.charAt(0).toUpperCase() + creds.username.slice(1);
+    const loggedInUser = localStorage.getItem(ADMIN_KEY) || 'admin';
+    const displayName = loggedInUser === 'true' ? 'Admin' : loggedInUser;
+    document.getElementById('sidebarUsername').textContent = displayName;
+    document.getElementById('avatarLabel').textContent = displayName.slice(0,2).toUpperCase();
+    document.getElementById('welcomeName').textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
     document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
     document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
     showView('dashboard');
