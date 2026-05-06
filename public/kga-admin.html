@@ -812,37 +812,37 @@
 <script>
   // ─── Auth ───
   const ADMIN_KEY = 'kga_admin_auth';
-  const CRED_KEY  = 'kga_admin_creds';
-  let _users = []; // array of {username, password}
+  let _users = []; // loaded from admin-config.json
 
-  // Fetch credentials from admin-config.json
-  // Supports both a single object {} and an array [{}]
+  // Always fetch fresh from admin-config.json — never trust stale cache for login
   async function loadCreds() {
     try {
       const res = await fetch('admin-config.json?t=' + Date.now());
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
+      // Support both single object {} and array [{}]
       _users = Array.isArray(data) ? data : [data];
-      localStorage.setItem(CRED_KEY, JSON.stringify(_users));
       return _users;
     } catch(e) {
-      // Fall back to localStorage cache (offline / local file://)
-      const stored = localStorage.getItem(CRED_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        _users = Array.isArray(parsed) ? parsed : [parsed];
-        return _users;
-      }
-      // Last resort default
+      // File not reachable (local file:// dev) — use fallback
       _users = [{ username: 'admin', password: 'kga2026' }];
       return _users;
     }
+  }
+
+  function showLoginError(msg) {
+    const err = document.getElementById('authError');
+    document.getElementById('authErrorMsg').textContent = msg;
+    err.classList.remove('hidden');
+    document.querySelector('.auth-card').classList.add('shake');
+    setTimeout(() => document.querySelector('.auth-card').classList.remove('shake'), 500);
   }
 
   async function doLogin() {
     const btn = document.querySelector('#authScreen button[onclick="doLogin()"]');
     if (btn) { btn.textContent = 'Signing in…'; btn.disabled = true; }
 
+    // Always fetch fresh credentials on every login attempt
     const users = await loadCreds();
 
     if (btn) { btn.textContent = 'Sign In to Admin Panel'; btn.disabled = false; }
@@ -850,19 +850,16 @@
     const u = document.getElementById('loginUser').value.trim();
     const p = document.getElementById('loginPass').value;
 
-    // Check against all users in the array
+    if (!u || !p) { showLoginError('Please enter username and password.'); return; }
+
     const match = users.find(user => user.username === u && user.password === p);
 
     if (match) {
-      localStorage.setItem(ADMIN_KEY, u); // store username so we know who's logged in
+      localStorage.setItem(ADMIN_KEY, u);
       document.getElementById('authScreen').style.display = 'none';
       init();
     } else {
-      const err = document.getElementById('authError');
-      err.classList.remove('hidden');
-      document.getElementById('authErrorMsg').textContent = 'Incorrect username or password.';
-      document.querySelector('.auth-card').classList.add('shake');
-      setTimeout(() => document.querySelector('.auth-card').classList.remove('shake'), 500);
+      showLoginError('Incorrect username or password.');
     }
   }
 
@@ -880,25 +877,23 @@
   document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-  // Check auth on load
-  const _savedUser = localStorage.getItem(ADMIN_KEY);
-  if (_savedUser && _savedUser !== 'true') {
-    loadCreds().then(users => {
-      // Verify the saved username still exists in config
-      const stillValid = users.find(u => u.username === _savedUser);
-      if (!stillValid) {
-        localStorage.removeItem(ADMIN_KEY);
-        location.reload();
-        return;
-      }
+  // On page load — check if already logged in
+  (async () => {
+    const savedUser = localStorage.getItem(ADMIN_KEY);
+    if (!savedUser) return; // not logged in — show auth screen
+
+    // Re-verify against the live admin-config.json
+    const users = await loadCreds();
+    const stillValid = users.find(u => u.username === savedUser);
+
+    if (stillValid) {
       document.getElementById('authScreen').style.display = 'none';
       init();
-    });
-  } else if (_savedUser === 'true') {
-    // Legacy session (old format) — just let them in and update on next login
-    document.getElementById('authScreen').style.display = 'none';
-    init();
-  }
+    } else {
+      // Username no longer in config — force re-login
+      localStorage.removeItem(ADMIN_KEY);
+    }
+  })();
 
   // ─── Dark Mode ───
   const html = document.documentElement;
