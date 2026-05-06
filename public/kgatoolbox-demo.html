@@ -462,9 +462,21 @@
       navbar.classList.toggle('shadow-brand-blue/5', window.scrollY > 20);
     }, { passive: true });
 
-    // ─── Data ───
+    // ─── Data — fetch posts.json first, fall back to localStorage ───
     const POSTS_KEY = 'kga_posts';
-    function getPosts() { return JSON.parse(localStorage.getItem(POSTS_KEY) || '[]'); }
+
+    async function fetchPosts() {
+      try {
+        const res = await fetch('posts.json?t=' + Date.now());
+        if (!res.ok) throw new Error('not found');
+        const data = await res.json();
+        if (Array.isArray(data) && data.length) return data;
+        throw new Error('empty');
+      } catch(e) {
+        // Fall back to localStorage (local dev / admin on same origin)
+        return JSON.parse(localStorage.getItem(POSTS_KEY) || '[]');
+      }
+    }
 
     // ─── Type metadata ───
     function typeInfo(type) {
@@ -561,8 +573,9 @@
     let allPosts = [];
     let currentFilter = 'all';
 
-    function loadAndRender() {
-      allPosts = [...getPosts()].reverse(); // newest first
+    async function loadAndRender() {
+      const posts = await fetchPosts();
+      allPosts = [...posts].reverse(); // newest first
       applyFilter(currentFilter, document.getElementById('searchInput').value);
     }
 
@@ -630,7 +643,7 @@
       applyFilter(currentFilter, e.target.value);
     });
 
-    // ─── Listen for admin updates (same browser tab via storage event) ───
+    // ─── Listen for admin updates (same-origin localStorage fallback) ───
     window.addEventListener('storage', (e) => {
       if (e.key === 'kga_posts') loadAndRender();
     });

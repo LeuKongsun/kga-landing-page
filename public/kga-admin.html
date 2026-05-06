@@ -391,6 +391,14 @@
     </a>
 
     <div class="px-4 mt-4 mb-2">
+      <span class="font-mono text-xs uppercase tracking-widest" style="color:rgba(255,255,255,0.2);">Publish</span>
+    </div>
+    <a class="sidebar-link" onclick="exportJSON()" id="nav-export">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export posts.json
+    </a>
+
+    <div class="px-4 mt-4 mb-2">
       <span class="font-mono text-xs uppercase tracking-widest" style="color:rgba(255,255,255,0.2);">Settings</span>
     </div>
     <a class="sidebar-link" onclick="showView('settings')" id="nav-settings">
@@ -485,6 +493,30 @@
           <span class="font-mono text-xs text-brand-text/40 dark:text-white/30 uppercase tracking-wider">How-To / Update</span>
         </div>
         <div class="font-display font-800 text-2xl text-brand-text dark:text-white" id="statOther">0</div>
+      </div>
+    </div>
+
+    <!-- Publish Banner -->
+    <div class="rounded-2xl p-5 mb-6 flex flex-col sm:flex-row sm:items-center gap-4" style="background:linear-gradient(135deg,rgba(36,76,143,0.08),rgba(255,100,52,0.06));border:1.5px solid rgba(36,76,143,0.12);">
+      <div class="flex items-start gap-3 flex-1">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style="background:rgba(255,100,52,0.1);">
+          <svg class="w-4.5 h-4.5 text-brand-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div>
+          <p class="font-display font-700 text-sm text-brand-text dark:text-white mb-0.5">Ready to publish?</p>
+          <p class="text-xs text-brand-text/50 dark:text-gray-400 leading-relaxed">Click <strong>Export posts.json</strong> → save the file to your local repo folder → push to GitHub. Your demo page will update instantly.</p>
+        </div>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <button onclick="exportJSON()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-700 text-white transition-all" style="background:#FF6434;box-shadow:0 4px 16px rgba(255,100,52,0.25);">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export posts.json
+        </button>
+        <button onclick="document.getElementById('importFile').click()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-600 transition-all" style="border:1.5px solid rgba(36,76,143,0.2);color:#244C8F;">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Import
+        </button>
+        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)" />
       </div>
     </div>
 
@@ -666,6 +698,15 @@
   <div id="view-settings" class="p-6 hidden" style="max-width:600px;">
     <h2 class="font-display font-700 text-xl text-brand-text dark:text-white mb-6">Admin Settings</h2>
 
+    <!-- How credentials work -->
+    <div class="rounded-xl p-4 mb-5 flex gap-3" style="background:rgba(36,76,143,0.06);border:1.5px solid rgba(36,76,143,0.12);">
+      <svg class="w-4 h-4 text-brand-blue dark:text-blue-300 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        <p class="text-xs font-700 text-brand-blue dark:text-blue-300 mb-1">Credentials are stored in <code style="font-family:JetBrains Mono,monospace;font-size:11px;">admin-config.json</code></p>
+        <p class="text-xs text-brand-text/50 dark:text-gray-400 leading-relaxed">Changing username or password will download a new <code style="font-family:JetBrains Mono,monospace;font-size:11px;">admin-config.json</code>. Replace the file in your repo and push to GitHub — the new credentials take effect immediately.</p>
+      </div>
+    </div>
+
     <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 p-6 mb-5">
       <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-4">Change Password</h3>
       <div class="flex flex-col gap-4">
@@ -682,17 +723,37 @@
           <input id="confirmPass" type="password" class="form-input" placeholder="••••••••" />
         </div>
         <button onclick="changePassword()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-700 text-white w-fit" style="background:#244C8F;">
-          Update Password
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download new admin-config.json
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 p-6 mb-5">
+      <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-1">Change Username</h3>
+      <p class="text-xs text-brand-text/40 dark:text-white/30 mb-4">Downloads a new <code style="font-family:JetBrains Mono,monospace;font-size:11px;">admin-config.json</code> — push to GitHub to apply.</p>
+      <div class="flex gap-3">
+        <input id="newUsername" type="text" class="form-input flex-1" placeholder="New username" />
+        <button onclick="changeUsername()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-700 text-white flex-shrink-0" style="background:#244C8F;">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
         </button>
       </div>
     </div>
 
     <div class="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/6 p-6">
-      <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-1">Change Username</h3>
-      <p class="text-xs text-brand-text/40 dark:text-white/30 mb-4">This is your admin login name.</p>
-      <div class="flex gap-3">
-        <input id="newUsername" type="text" class="form-input flex-1" placeholder="New username" />
-        <button onclick="changeUsername()" class="px-5 py-2.5 rounded-xl text-sm font-700 text-white flex-shrink-0" style="background:#244C8F;">Save</button>
+      <h3 class="font-display font-700 text-sm text-brand-text dark:text-white mb-1">Export / Import Posts</h3>
+      <p class="text-xs text-brand-text/40 dark:text-white/30 mb-4 leading-relaxed">Export <code style="background:rgba(36,76,143,0.08);color:#244C8F;padding:1px 5px;border-radius:4px;font-size:11px;">posts.json</code> → put it in your GitHub repo → push. Import to restore posts from a backup file.</p>
+      <div class="flex flex-wrap gap-3">
+        <button onclick="exportJSON()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-700 text-white" style="background:#FF6434;">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export posts.json
+        </button>
+        <button onclick="document.getElementById('importFile2').click()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-600" style="border:1.5px solid rgba(36,76,143,0.2);color:#244C8F;">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Import posts.json
+        </button>
+        <input type="file" id="importFile2" accept=".json" class="hidden" onchange="importJSON(event)" />
       </div>
     </div>
   </div>
@@ -728,18 +789,40 @@
   // ─── Auth ───
   const ADMIN_KEY = 'kga_admin_auth';
   const CRED_KEY  = 'kga_admin_creds';
+  let _creds = null; // cached after fetch
 
-  function defaultCreds() {
-    if (!localStorage.getItem(CRED_KEY)) {
-      localStorage.setItem(CRED_KEY, JSON.stringify({ username: 'admin', password: 'kga2026' }));
+  // Fetch credentials from admin-config.json (source of truth)
+  async function loadCreds() {
+    try {
+      const res = await fetch('admin-config.json?t=' + Date.now());
+      if (!res.ok) throw new Error('not found');
+      const data = await res.json();
+      if (!data.username || !data.password) throw new Error('invalid');
+      _creds = data;
+      // Keep localStorage in sync for session persistence
+      localStorage.setItem(CRED_KEY, JSON.stringify(_creds));
+      return _creds;
+    } catch(e) {
+      // Fall back to localStorage if file not reachable (offline / local file://)
+      const stored = localStorage.getItem(CRED_KEY);
+      if (stored) { _creds = JSON.parse(stored); return _creds; }
+      // Last resort defaults
+      _creds = { username: 'admin', password: 'kga2026' };
+      return _creds;
     }
-    return JSON.parse(localStorage.getItem(CRED_KEY));
   }
 
-  function doLogin() {
-    const creds = defaultCreds();
+  async function doLogin() {
+    const btn = document.querySelector('#authScreen button[onclick="doLogin()"]');
+    if (btn) { btn.textContent = 'Signing in…'; btn.disabled = true; }
+
+    const creds = await loadCreds();
+
+    if (btn) { btn.textContent = 'Sign In to Admin Panel'; btn.disabled = false; }
+
     const u = document.getElementById('loginUser').value.trim();
     const p = document.getElementById('loginPass').value;
+
     if (u === creds.username && p === creds.password) {
       localStorage.setItem(ADMIN_KEY, 'true');
       document.getElementById('authScreen').style.display = 'none';
@@ -767,10 +850,22 @@
   document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-  // Check auth on load
+  // Check auth on load — re-validate against admin-config.json on each visit
   if (localStorage.getItem(ADMIN_KEY) === 'true') {
-    document.getElementById('authScreen').style.display = 'none';
-    init();
+    loadCreds().then(creds => {
+      // If config file credentials changed, force re-login
+      const stored = localStorage.getItem(CRED_KEY);
+      if (stored) {
+        const old = JSON.parse(stored);
+        if (old.username !== creds.username || old.password !== creds.password) {
+          localStorage.removeItem(ADMIN_KEY);
+          location.reload();
+          return;
+        }
+      }
+      document.getElementById('authScreen').style.display = 'none';
+      init();
+    });
   }
 
   // ─── Dark Mode ───
@@ -1087,32 +1182,75 @@
 
   // ─── Settings ───
   function changePassword() {
-    const creds = JSON.parse(localStorage.getItem(CRED_KEY));
     const cur = document.getElementById('currentPass').value;
     const nw  = document.getElementById('newPass').value;
     const cnf = document.getElementById('confirmPass').value;
-    if (cur !== creds.password) { showToast('Current password is incorrect.', 'error'); return; }
+    if (!_creds) { showToast('Credentials not loaded yet.', 'error'); return; }
+    if (cur !== _creds.password) { showToast('Current password is incorrect.', 'error'); return; }
     if (!nw) { showToast('New password cannot be empty.', 'error'); return; }
     if (nw !== cnf) { showToast('Passwords do not match.', 'error'); return; }
-    creds.password = nw;
-    localStorage.setItem(CRED_KEY, JSON.stringify(creds));
+    // Download updated admin-config.json for the user to push to GitHub
+    exportConfig({ username: _creds.username, password: nw });
     document.getElementById('currentPass').value = '';
     document.getElementById('newPass').value = '';
     document.getElementById('confirmPass').value = '';
-    showToast('Password updated successfully!');
+    showToast('New admin-config.json downloaded — push it to GitHub!');
   }
 
   function changeUsername() {
-    const creds = JSON.parse(localStorage.getItem(CRED_KEY));
     const nw = document.getElementById('newUsername').value.trim();
     if (!nw) { showToast('Username cannot be empty.', 'error'); return; }
-    creds.username = nw;
-    localStorage.setItem(CRED_KEY, JSON.stringify(creds));
-    document.getElementById('sidebarUsername').textContent = nw;
-    document.getElementById('avatarLabel').textContent = nw.slice(0,2).toUpperCase();
-    document.getElementById('welcomeName').textContent = nw.charAt(0).toUpperCase() + nw.slice(1);
+    if (!_creds) { showToast('Credentials not loaded yet.', 'error'); return; }
+    exportConfig({ username: nw, password: _creds.password });
     document.getElementById('newUsername').value = '';
-    showToast('Username updated!');
+    showToast('New admin-config.json downloaded — push it to GitHub!');
+  }
+
+  // Download a new admin-config.json file
+  function exportConfig(creds) {
+    const blob = new Blob([JSON.stringify(creds, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'admin-config.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ─── Export posts.json ───
+  function exportJSON() {
+    const posts = getPosts();
+    if (!posts.length) { showToast('No posts to export yet.', 'error'); return; }
+    const json = JSON.stringify(posts, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'posts.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Exported ${posts.length} post${posts.length > 1 ? 's' : ''} → posts.json`);
+  }
+
+  // ─── Import posts.json ───
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!Array.isArray(imported)) throw new Error('Invalid format');
+        savePosts(imported);
+        renderDashboard();
+        renderPostList();
+        showToast(`Imported ${imported.length} post${imported.length > 1 ? 's' : ''} successfully!`);
+      } catch(err) {
+        showToast('Invalid posts.json file.', 'error');
+      }
+      event.target.value = '';
+    };
+    reader.readAsText(file);
   }
 
   // ─── Toast ───
