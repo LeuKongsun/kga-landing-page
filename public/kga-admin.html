@@ -913,6 +913,34 @@
   function getPosts() { return JSON.parse(localStorage.getItem(POSTS_KEY) || '[]'); }
   function savePosts(posts) { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); }
 
+  // Fetch posts.json from repo and sync into localStorage
+  // Only overwrites if repo has more/newer posts than localStorage
+  async function syncPostsFromRepo() {
+    try {
+      const res = await fetch('posts.json?t=' + Date.now());
+      if (!res.ok) throw new Error('not found');
+      const remote = await res.json();
+      if (!Array.isArray(remote) || remote.length === 0) return;
+
+      const local = getPosts();
+      // If repo has posts and localStorage is empty or behind — use repo
+      if (local.length === 0) {
+        savePosts(remote);
+        return 'synced';
+      }
+      // Merge: add any remote posts not already in localStorage (by id)
+      const localIds = new Set(local.map(p => p.id));
+      const newPosts = remote.filter(p => !localIds.has(p.id));
+      if (newPosts.length > 0) {
+        savePosts([...local, ...newPosts]);
+        return 'merged';
+      }
+    } catch(e) {
+      // posts.json not available — use localStorage as-is
+    }
+    return 'unchanged';
+  }
+
   // ─── Views ───
   const views = ['dashboard','new','posts','settings'];
   let editingId = null;
@@ -936,7 +964,7 @@
   }
 
   // ─── Init ───
-  function init() {
+  async function init() {
     const loggedInUser = localStorage.getItem(ADMIN_KEY) || 'admin';
     const displayName = loggedInUser === 'true' ? 'Admin' : loggedInUser;
     document.getElementById('sidebarUsername').textContent = displayName;
@@ -944,6 +972,12 @@
     document.getElementById('welcomeName').textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
     document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
     document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+
+    // Auto-sync posts from posts.json before rendering dashboard
+    const syncResult = await syncPostsFromRepo();
+    if (syncResult === 'synced') showToast('Posts restored from posts.json ✓');
+    else if (syncResult === 'merged') showToast('New posts synced from posts.json ✓');
+
     showView('dashboard');
   }
 
