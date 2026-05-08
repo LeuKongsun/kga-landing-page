@@ -1,10 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import facebook from "../../../../public/icons/facebook.svg";
 import tiktok from "../../../../public/icons/tiktok.svg";
 import youtube from "../../../../public/icons/youtube.svg";
 import telegram from "../../../../public/icons/telegram.svg";
 import linkedIn from "../../../../public/icons/linkedin.svg";
-import Image from "next/image";
 
 const socialInfo = [
   {
@@ -29,43 +29,180 @@ const socialInfo = [
   },
   {
     icon: linkedIn,
-    href: "https://t.me/khmergisacademychannel",
+    href: "https://linkedin.com/company/khmer-grs-academy",
     label: "LinkedIn",
   },
 ];
 
+const coursesLinks = [
+  { label: "All Courses", href: "/#courses" },
+  { label: "Course Announcement", href: "/course-announcement" },
+  { label: "Toolkit", href: "/#toolkit" },
+];
+
+const productLinks = [
+  { label: "KGA Toolbox", href: "https://toolbox.khmergrs.com", external: true },
+  { label: "Blog", href: "/blog" },
+  { label: "Testimonials", href: "/#testimonials" },
+  { label: "Contact", href: "/#contact" },
+];
+
+const communityLinks = [
+  {
+    label: "Facebook Page",
+    href: "https://www.facebook.com/khmergisacademy",
+    icon: facebook,
+  },
+  {
+    label: "YouTube Channel",
+    href: "https://www.youtube.com/@Khmergisacademy",
+    icon: youtube,
+  },
+  {
+    label: "Telegram Channel",
+    href: "https://t.me/khmergisacademychannel",
+    icon: telegram,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/company/khmer-grs-academy",
+    icon: linkedIn,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@khmergrsacademy",
+    icon: tiktok,
+  },
+];
+
 const Footer = () => (
-  <footer className="relative mt-20 pb-12">
-    <div className="custom-screen">
-      <div className="pt-10 border-t border-white/10 flex flex-col items-center justify-between gap-8 sm:flex-row">
-        <div className="flex flex-col items-center sm:items-start gap-1">
-          <p className="text-xl font-display font-800 text-brand-blue dark:text-white">
-             Khmer GRS Academy
+  <footer className="bg-brand-blue-deeper dark:bg-[#060E1A] border-t border-white/5">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
+        {/* ───── Brand Column ───── */}
+        <div className="md:col-span-2">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="font-display font-800 text-lg text-white tracking-tight">
+              Khmer <span className="text-brand-orange">GRS</span> Academy
+            </span>
+          </div>
+          <p className="text-white/40 text-sm leading-relaxed max-w-sm mb-6 font-body">
+            វេទិកាសិក្សា GIS លំដាប់វិជ្ជាជីវៈជាភាសាខ្មែរ — ពីមូលដ្ឋានគ្រឹះរហូតដល់កម្រិតជឿនលឿន ដើម្បីផ្តល់សមត្ថភាពដល់អ្នកវិភាគទិន្នន័យលំហ។
           </p>
-          <p className="text-sm text-brand-text/60 dark:text-gray-400 font-body">
-            © 2026 Khmer GRS Academy. All rights reserved.
-          </p>
+
+          {/* Social media icons */}
+          <div className="flex items-center gap-2.5">
+            {socialInfo.map((item, idx) => (
+              <Link
+                key={idx}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={item.label}
+                className="w-9 h-9 rounded-lg bg-white/8 border border-white/8 flex items-center justify-center hover:border-brand-orange/30 hover:bg-brand-orange/10 transition-all group"
+              >
+                <Image
+                  src={item.icon}
+                  alt={item.label}
+                  width={16}
+                  height={16}
+                  className="opacity-40 group-hover:opacity-100 transition-opacity invert"
+                />
+              </Link>
+            ))}
+          </div>
         </div>
-        
+
+        {/* ───── Courses Column ───── */}
+        <div>
+          <h4 className="font-display font-700 text-white text-sm mb-4">
+            Courses
+          </h4>
+          <ul className="flex flex-col gap-2.5">
+            {coursesLinks.map((link, idx) => (
+              <li key={idx}>
+                <Link
+                  href={link.href}
+                  className="text-sm text-white/40 hover:text-brand-orange transition-colors font-body"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ───── Product Column ───── */}
+        <div>
+          <h4 className="font-display font-700 text-white text-sm mb-4">
+            Product
+          </h4>
+          <ul className="flex flex-col gap-2.5">
+            {productLinks.map((link, idx) => (
+              <li key={idx}>
+                <Link
+                  href={link.href}
+                  {...(link.external && {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  })}
+                  className="text-sm text-white/40 hover:text-brand-orange transition-colors font-body"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ───── Community Column ───── */}
+        <div>
+          <h4 className="font-display font-700 text-white text-sm mb-4">
+            Community
+          </h4>
+          <ul className="flex flex-col gap-2.5">
+            {communityLinks.map((link, idx) => (
+              <li key={idx}>
+                <Link
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/40 hover:text-brand-orange transition-colors font-body flex items-center gap-2"
+                >
+                  <Image
+                    src={link.icon}
+                    alt=""
+                    width={14}
+                    height={14}
+                    className="opacity-40 invert"
+                  />
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* ───── Bottom bar ───── */}
+      <div className="pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-white/30 text-xs font-mono">
+          © 2026 Khmer GRS Academy. All rights reserved.
+        </p>
         <div className="flex items-center gap-4">
-          {socialInfo.map((item, idx) => (
-            <Link
-              key={idx}
-              href={item.href}
-              aria-label={item.label}
-              target="_blank"
-              rel="noreferrer"
-              className="w-10 h-10 rounded-full border border-brand-blue/10 dark:border-white/10 flex items-center justify-center hover:scale-110 active:scale-95 transition-all hover:border-brand-orange/50 dark:hover:border-brand-orange/50 group"
-            >
-              <Image 
-                src={item.icon} 
-                alt={item.label}
-                width={18}
-                height={18}
-                className="opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 dark:invert"
-              />
-            </Link>
-          ))}
+          <Link
+            href="/privacy"
+            className="text-white/30 hover:text-white/60 text-xs transition-colors font-body"
+          >
+            Privacy Policy
+          </Link>
+          <span className="text-white/10">|</span>
+          <Link
+            href="/terms"
+            className="text-white/30 hover:text-white/60 text-xs transition-colors font-body"
+          >
+            Terms of Service
+          </Link>
         </div>
       </div>
     </div>
