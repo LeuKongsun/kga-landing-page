@@ -11,5 +11,18 @@
     "steps": "Choose Input type\nSpecify output workspace\nAdd map title (optional)\nAdd address sub-title (optional)\nSet grid interval\nChoose to open the map",
     "tags": "quick landplot, cadastral, kgatoolbox",
     "date": "2026-05-06"
+  },
+  {
+    "id": "1778212186382",
+    "type": "video",
+    "title": "Label Expression Builder - No Code need - Easy and Save time",
+    "excerpt": "The Label Control tool is a specialized feature within the KGA Toolbox for ArcGIS Pro. It transforms the way GIS professionals handle labeling by replacing manual Python, VBScript, or Arcade coding with an intuitive, \"no-code\" graphical user interface.",
+    "videoUrl": "https://www.youtube.com/embed/n5XbKnPsH9g",
+    "tipType": "tip",
+    "tip": "Select layer where label expression will be build, then click the button to open the tool.",
+    "body": "<h3 data-path-to-node=\"3\"><span data-path-to-node=\"3\" data-index-in-node=\"0\" style=\"\">Key Features &amp; Workflow</span></h3><b data-path-to-node=\"4,0,0\" data-index-in-node=\"0\">No-Code Label Generation</b>\nThe core value of this utility is its ability to generate complex label expressions through simple UI selections. Users can pick fields (e.g., Owner Name, Area) from a dropdown menu, eliminating the need to write syntax manually.<br><p data-path-to-node=\"4,1,0\" style=\"display: inline !important;\"><b data-path-to-node=\"4,1,0\" data-index-in-node=\"0\">Dynamic Formatting Controls&nbsp;</b></p><div><ul data-path-to-node=\"4,1,1\"><li><b data-path-to-node=\"4,1,1,0,0\" data-index-in-node=\"0\">- Font Customization:</b> Users can instantly adjust font sizes, colors, and styles (such as Bold or Italic) for individual parts of the label.</li><li><b data-path-to-node=\"4,1,1,1,0\" data-index-in-node=\"0\">- Multi-Line Labels:</b> The interface allows for the creation of multi-line labels, enabling different attributes to appear on separate lines with distinct formatting for each.</li></ul><p data-path-to-node=\"4,2,0\" style=\"display: inline !important;\"><b data-path-to-node=\"4,2,0\" data-index-in-node=\"0\">Real-Time Feedback Loop</b></p><b data-path-to-node=\"4,2,1,0,0\" data-index-in-node=\"0\">Expression Preview:</b> As users interact with the UI, the tool displays the \"Current Label Expression\" in real-time, showing the background code it is generating.<br><ul data-path-to-node=\"4,2,1\"><li><p data-path-to-node=\"4,2,1,1,0\"><b data-path-to-node=\"4,2,1,1,0\" data-index-in-node=\"0\">- Visual Preview:</b> A dedicated preview window shows exactly how the text will appear on the map, allowing for immediate adjustments before applying the changes.</p></li></ul><b data-path-to-node=\"4,3,0\" data-index-in-node=\"0\">Efficiency and Precision</b>\nBy automating the inclusion of separators and special characters—which are often prone to syntax errors when typed manually—the tool ensures the label expression is valid every time.<br><b data-path-to-node=\"4,4,0\" data-index-in-node=\"0\">Continuous Improvement</b>\nThis utility is part of an evolving ecosystem, with ongoing updates and feature expansions planned to further streamline GIS cartography and annotation tasks.</div>",
+    "steps": "",
+    "tags": "labelcontrol, expressionbuilder, kgatoolbox",
+    "date": "2026-05-08"
   }
 ]
