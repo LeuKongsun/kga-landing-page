@@ -19,18 +19,24 @@ const Navbar = () => {
   }, []);
 
   const navigation = [
-    { title: "មុខវិជ្ជា", path: "#courses" },
-    { title: "អំពីយើង", path: "#toolkit" },
-    { title: "សិស្សរបស់យើង", path: "#testimonials" },
-    { 
-      title: "សមិទ្ធផលរបស់យើង", 
-      submenu: [
-        { title: "KGA Toolbox", path: "/kga-toolbox", target: "_blank" },
-        { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
-      ]
-    },
-    // { title: "ឯកសារ", path: "http://doc.khmergrs.com" },
-  ];
+  {
+    title: "មុខវិជ្ជា",
+    submenu: [
+      { title: "មុខវិជ្ជាដែលយើងបង្រៀន", path: "/#courses" },
+      { title: "វគ្គសិក្សារបស់យើង", path: "/course-announcement" },
+    ],
+  },
+  { title: "អំពីយើង", path: "/#toolkit" },
+  { title: "សិស្សរបស់យើង", path: "/#testimonials" },
+  {
+    title: "សមិទ្ធផលរបស់យើង",
+    submenu: [
+      { title: "KGA Toolbox", path: "/kga-toolbox", target: "_blank" },
+      { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
+    ],
+  },
+  { title: "Blog", path: "/blog" },
+];
 
   const toggleMenu = () => {
     setState(!state);
@@ -51,7 +57,7 @@ const Navbar = () => {
                 <li key={idx} className="relative group">
                   {item.submenu ? (
                     <>
-                      <button 
+                      <button
                         className="text-foreground/70 group-hover:text-brand-orange transition-colors duration-200 relative flex items-center gap-1"
                       >
                         {item.title}
@@ -60,11 +66,11 @@ const Navbar = () => {
                         </svg>
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
                       </button>
-                      
+
                       <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                        <div className="glass rounded-xl shadow-lg border border-border/50 py-2 w-48 flex flex-col bg-background/80 backdrop-blur-xl">
+                        <div className="rounded-xl shadow-xl border border-brand-blue/10 dark:border-white/10 py-2 w-56 flex flex-col bg-white dark:bg-[#0B1929]">
                           {item.submenu.map((subItem, subIdx) => (
-                            <Link 
+                            <Link
                               key={subIdx}
                               href={subItem.path}
                               target={subItem.target}
@@ -77,8 +83,8 @@ const Navbar = () => {
                       </div>
                     </>
                   ) : (
-                    <Link 
-                      href={item.path} 
+                    <Link
+                      href={item.path}
                       className="text-foreground/70 hover:text-brand-orange transition-colors duration-200 relative flex items-center group pointer-events-auto"
                       target={item.target}
                     >
@@ -119,7 +125,7 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-        
+
         <AnimatePresence>
           {state && (
             <m.div
@@ -139,8 +145,8 @@ const Navbar = () => {
                         <ul className="flex flex-col space-y-3 pl-4 border-l-2 border-border/50 ml-2">
                           {item.submenu.map((subItem, subIdx) => (
                             <li key={subIdx}>
-                              <Link 
-                                href={subItem.path} 
+                              <Link
+                                href={subItem.path}
                                 className="block text-base font-medium text-foreground/70 hover:text-brand-orange"
                                 onClick={() => setState(false)}
                                 target={subItem.target}
@@ -152,8 +158,8 @@ const Navbar = () => {
                         </ul>
                       </>
                     ) : (
-                      <Link 
-                        href={item.path} 
+                      <Link
+                        href={item.path}
                         className="block text-lg font-medium text-foreground/80 hover:text-brand-orange"
                         onClick={() => setState(false)}
                         target={item.target}
