@@ -24,5 +24,18 @@
     "steps": "",
     "tags": "labelcontrol, expressionbuilder, kgatoolbox",
     "date": "2026-05-08"
+  },
+  {
+    "id": "1778233376902",
+    "type": "video",
+    "title": "Quick Feature Overlap Detection",
+    "excerpt": "Quick Overlap Detection Tool - Find Overlap \nAvailable in KGAToolbox Addin for ArcGIS Pro v2016.1.3",
+    "videoUrl": "https://www.youtube.com/embed/gf2DrxcCX6I",
+    "tipType": "tip",
+    "tip": "Select polygon layer in the content, click the button and you get the result.",
+    "body": "<b data-path-to-node=\"0\" data-index-in-node=\"28\">Find Overlap</b> tool, a new feature added to the <b data-path-to-node=\"0\" data-index-in-node=\"74\">KG Toolbox</b> for ArcGIS Pro designed to quickly identify boundary errors in spatial data. By selecting a layer and running the tool, the system automatically scans for overlapping polygons and generates visual error markers, even for tiny overlaps that are difficult to see manually.&nbsp;",
+    "steps": "",
+    "tags": "",
+    "date": "2026-05-08"
   }
 ]
