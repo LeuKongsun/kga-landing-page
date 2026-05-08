@@ -35,7 +35,7 @@ const Navbar = () => {
       { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
     ],
   },
-  { title: "Blog", path: "/blog" },
+  { title: "ប្លុក", path: "/blog" },
 ];
 
   const toggleMenu = () => {

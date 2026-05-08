@@ -9,14 +9,14 @@ const Contact = () => {
     {
       icon: <Phone className="w-5 h-5 text-brand-orange" />,
       title: "លេខទំនាក់ទំនង",
-      value: "012 345 678",
-      href: "tel:+85512345678"
+      value: "081 37 38 33",
+      href: "tel:+85581373833"
     },
     {
       icon: <Mail className="w-5 h-5 text-brand-orange" />,
       title: "អាស័យដ្ឋានអ៉ីម៉ែល",
-      value: "chanmolneang@gmail.com",
-      href: "mailto:chanmolneang@gmail.com"
+      value: "academy@khmergrs.com",
+      href: "mailto:academy@khmergrs.com"
     },
     {
       icon: <MapPin className="w-5 h-5 text-brand-orange" />,
