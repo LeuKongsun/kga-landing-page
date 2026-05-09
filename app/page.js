@@ -9,6 +9,7 @@ const ToolKit = dynamic(() => import("./components/ui/ToolKit"), { ssr: true });
 const Testimonials = dynamic(() => import("./components/ui/Testimonials"), { ssr: true });
 const Products = dynamic(() => import("./components/ui/Products"), { ssr: true });
 const BlogPreview = dynamic(() => import("./components/ui/Blog/BlogPreview"), { ssr: true });
+const OpenKGAPreview = dynamic(() => import("./components/ui/OpenKGA/OpenKGAPreview"), { ssr: true });
 const Contact = dynamic(() => import("./components/ui/Contact"), { ssr: true });
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
       </GradientWrapper>
       <Products />
       <BlogPreview />
+      <OpenKGAPreview />
       <Contact />
     </>
   );

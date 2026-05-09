@@ -35,7 +35,8 @@ const Navbar = () => {
       { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
     ],
   },
-  { title: "ប្លុក", path: "/blog" },
+  { title: "មាតិកា និងព័ត៌មាន", path: "/blog" },
+  { title: "ទិន្នន័យចំហ", path: "/openkga" }
 ];
 
   const toggleMenu = () => {
