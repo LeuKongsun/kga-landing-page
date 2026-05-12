@@ -29,8 +29,8 @@ const products = [
     description:
       "Web-GIS សម្រាប់គូសបង្កើតទិន្នន័យ GIS ដូចជា​ ចំនុច ខ្សែ និងពហុកោណ បានលឿន និងមានភាពងាយស្រួល",
     features: [
-      "AI-assisted digitizing",
-      "Speed up map creation",
+      "Digitizing Convinient",
+      "Fast Data Creation",
       "High accuracy output",
       "Easy to use interface",
     ],

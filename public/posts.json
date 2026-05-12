@@ -37,5 +37,18 @@
     "steps": "",
     "tags": "",
     "date": "2026-05-08"
+  },
+  {
+    "id": "1778566170664",
+    "type": "update",
+    "title": "KGA Toolbox v2026.1.3 — New Update Released!",
+    "excerpt": "This release includes major feature additions, workflow improvements, and bug fixes to enhance your ArcGIS Pro experience.",
+    "videoUrl": "",
+    "tipType": "info",
+    "tip": "This released Addin got improved with general bug fixes, performance optimization, and improved workflow stability",
+    "body": "<b>New &amp; Updated Features</b>",
+    "steps": "Generate Boundary Point\nGenerate Boundary Line\nGenerate Boundary Point and Line\nGenerate Polygon Central Point\nHandle KML file\nCopy Feature\nFind duplicate\nDetect Gap/Overlap\nDetect Overlap accross layer\nFilter selection\nDisplay Area\nDisplay Edge length and vertex ID\nDisplay Point XY and ID\nDisplay Line bearing and direction",
+    "tags": "kgatoolbox, khmergrsacademy, arcgisproAddin",
+    "date": "2026-05-12"
   }
 ]
