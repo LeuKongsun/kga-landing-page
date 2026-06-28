@@ -50,5 +50,18 @@
     "steps": "Generate Boundary Point\nGenerate Boundary Line\nGenerate Boundary Point and Line\nGenerate Polygon Central Point\nHandle KML file\nCopy Feature\nFind duplicate\nDetect Gap/Overlap\nDetect Overlap accross layer\nFilter selection\nDisplay Area\nDisplay Edge length and vertex ID\nDisplay Point XY and ID\nDisplay Line bearing and direction",
     "tags": "kgatoolbox, khmergrsacademy, arcgisproAddin",
     "date": "2026-05-12"
+  },
+  {
+    "id": "1782620877085",
+    "type": "update",
+    "title": "KGA Toolbox v2026.2.0 — New Update Released!",
+    "excerpt": "This release focuses on workflow improvements, new productivity tools, and expanded data management capabilities.",
+    "videoUrl": "",
+    "tipType": "info",
+    "tip": "To update this version, just open ArcGIS Pro software, then an update message is immediately open. Just click download and install. Enjoy the update!",
+    "body": "<h3>Key Improvements</h3>\n\n<p class=\"MsoNormal\"><ul><li>Reorganized internal framework</li><li>Improved Copy Feature export messages</li><li>Enhanced To Google Earth Pro tool</li><li>Fixed Copy Feature tool bug</li></ul><h3>New Features Added</h3><h3></h3><ul><li>Add Raster to Map</li><li>Default Value Filler</li><li>KML Handler</li><li>Generate Line Vertices</li><li>Database Structure Builder</li><li>VectorIQ Package (17 Tools)</li><li>Show Point ID</li><li>Detect Gap/Overlap (Within &amp; Across Layers)</li></ul><o:p></o:p></p>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<h3>New Toolboxes</h3>\n\n<p class=\"MsoNormal\"><ul><li>Migrate Data from MDB</li><li>Reference Point Direction Calculation</li></ul><o:p></o:p></p>\n\n",
+    "steps": "",
+    "tags": "kgatoolbox, v2026.2.0, khmergrsacademy",
+    "date": "2026-06-28"
   }
 ]
