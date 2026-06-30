@@ -9,7 +9,7 @@ export const TOPIC_CATEGORIES = [
   { slug: "hydrology", label: "ទន្លេ និងបឹង", color: "green" },
   { slug: "landuse", label: "ការប្រើប្រាស់ដី", color: "orange" },
   { slug: "demographics", label: "ប្រជាសាស្ត្រ", color: "red" },
-  { slug: "tool-solution", label: "Tool and Solution", color: "purple" },
+  { slug: "tool-solution", label: "ឧបករណ៍ និងដំណោះស្រាយ", color: "purple" },
 ];
 
 // File format filters
@@ -22,7 +22,8 @@ export const FORMATS = [
   { slug: "geotiff", label: "GeoTIFF" },
   { slug: "csv", label: "CSV" },
   { slug: "pdf", label: "PDF" },
-  { slug: "tool", label: "Tool" },
+  { slug: "gdb", label: "File Geodatabase" },
+  { slug: "tool", label: "ឧបករណ៍" },
 ];
 
 // Licenses (re-used in cards & detail page)
@@ -183,9 +184,9 @@ export const datasets = [
     slug: "mdb-to-gdb-without-arcmap",
     category: "tool-solution",
     format: "tool",
-    title: "MDB to GDB without opening ArcMap",
+    title: "បម្លែង MDB ទៅ GDB ដោយមិនចាំបាច់បើក ArcMap",
     excerpt:
-      "An open-source tool for converting MDB personal geodatabases to file geodatabases without opening ArcMap.",
+      "ឧបករណ៍ប្រភពបើកចំហសម្រាប់បម្លែង Personal Geodatabase ប្រភេទ MDB ទៅជា File Geodatabase ប្រភេទ GDB ដោយមិនចាំបាច់បើក ArcMap។",
     coverImage: "/SharedDataThumbnail/mdb to gdb without arcmap1.png",
     fileSize: "8 KB",
     fileFormat: "Tool package",
@@ -198,7 +199,7 @@ export const datasets = [
     description: [
       {
         type: "paragraph",
-        text: "Use this open-source tool to convert Microsoft Access Personal Geodatabase (.mdb) data to File Geodatabase (.gdb) format without opening ArcMap.",
+        text: "ប្រើឧបករណ៍ប្រភពបើកចំហនេះ ដើម្បីបម្លែងទិន្នន័យ Microsoft Access Personal Geodatabase (.mdb) ទៅជា File Geodatabase (.gdb) ដោយមិនចាំបាច់បើក ArcMap។",
       },
     ],
     tags: ["mdb", "gdb", "geodatabase", "conversion", "open source", "KGA"],
@@ -207,9 +208,9 @@ export const datasets = [
     slug: "create-point-from-csv-without-software",
     category: "tool-solution",
     format: "tool",
-    title: "Create Point from CSV without software",
+    title: "បង្កើតចំណុចពី CSV ដោយមិនចាំបាច់ប្រើកម្មវិធី",
     excerpt:
-      "An open-source tool for creating point data from CSV coordinates without installing GIS software.",
+      "ឧបករណ៍ប្រភពបើកចំហសម្រាប់បង្កើតទិន្នន័យចំណុចពីកូអរដោនេក្នុងឯកសារ CSV ដោយមិនចាំបាច់ដំឡើងកម្មវិធី GIS។",
     coverImage: "/SharedDataThumbnail/create point without software.png",
     fileSize: "7 KB",
     fileFormat: "Tool package",
@@ -222,10 +223,106 @@ export const datasets = [
     description: [
       {
         type: "paragraph",
-        text: "Use this open-source tool to create point data from coordinate fields in a CSV file without installing or opening GIS software.",
+        text: "ប្រើឧបករណ៍ប្រភពបើកចំហនេះ ដើម្បីបង្កើតទិន្នន័យចំណុចពីវាលកូអរដោនេក្នុងឯកសារ CSV ដោយមិនចាំបាច់ដំឡើង ឬបើកកម្មវិធី GIS។",
       },
     ],
     tags: ["csv", "point", "coordinates", "conversion", "open source", "KGA"],
+  },
+  {
+    slug: "google-satellite-basemap-layer",
+    category: "tool-solution",
+    format: "tool",
+    title: "Google Satellite Basemap layer",
+    excerpt:
+      "កញ្ចប់ឧបករណ៍ប្រភពបើកចំហសម្រាប់បន្ថែមស្រទាប់ផែនទីមូលដ្ឋាន Google Satellite ទៅក្នុងការងារ GIS។",
+    coverImage: "/SharedDataThumbnail/google satellite basemap.png",
+    fileSize: "4 KB",
+    fileFormat: "Tool package",
+    lastUpdated: "2026-06-30",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/18hDQdlZ7Dej8C-1nRDDuw9WNNtvkEblY/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "ប្រើកញ្ចប់ប្រភពបើកចំហនេះ ដើម្បីបន្ថែម និងប្រើប្រាស់ស្រទាប់ផែនទីមូលដ្ឋាន Google Satellite ក្នុងការងារ GIS របស់អ្នក។",
+      },
+    ],
+    tags: ["google satellite", "basemap", "imagery", "GIS", "open source", "KGA"],
+  },
+  {
+    slug: "osm-basemap-layer",
+    category: "tool-solution",
+    format: "tool",
+    title: "OSM Basemap Layer",
+    excerpt:
+      "កញ្ចប់ឧបករណ៍ប្រភពបើកចំហសម្រាប់បន្ថែមស្រទាប់ផែនទីមូលដ្ឋាន OpenStreetMap (OSM) ទៅក្នុងការងារ GIS។",
+    coverImage: "/SharedDataThumbnail/osm basemap.png",
+    fileSize: "6 KB",
+    fileFormat: "Tool package",
+    lastUpdated: "2026-06-30",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1Y6Cd-nl2AQL7-ebj68KyMpZnosBnWSt1/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "ប្រើកញ្ចប់ប្រភពបើកចំហនេះ ដើម្បីបន្ថែម និងប្រើប្រាស់ស្រទាប់ផែនទីមូលដ្ឋាន OpenStreetMap (OSM) ក្នុងការងារ GIS របស់អ្នក។",
+      },
+    ],
+    tags: ["OSM", "OpenStreetMap", "basemap", "GIS", "open source", "KGA"],
+  },
+  {
+    slug: "forest-cover-1993-2006",
+    category: "landuse",
+    format: "gdb",
+    title: "គម្របព្រៃឈើ ឆ្នាំ ១៩៩៣ - ២០០៦",
+    excerpt:
+      "ទិន្នន័យគម្របព្រៃឈើចន្លោះឆ្នាំ ១៩៩៣ ដល់ ២០០៦ ដែលផ្តល់ជាទម្រង់ File Geodatabase បានបង្ហាប់។",
+    coverImage: "/SharedDataThumbnail/forest cover.png",
+    fileSize: "45.4 MB",
+    fileFormat: "File Geodatabase (.gdb.zip)",
+    lastUpdated: "2026-06-30",
+    license: "not-specified",
+    downloadUrl: "https://drive.google.com/file/d/1A5Q0joat6qRKm7AiYO2K1YQ5QSsbfOAm/view?usp=sharing",
+    source: "N/A",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "សំណុំទិន្នន័យនេះមានព័ត៌មានគម្របព្រៃឈើសម្រាប់ឆ្នាំ ១៩៩៣–២០០៦ និងចែកចាយជា Esri File Geodatabase ដែលបានបង្ហាប់។",
+      },
+    ],
+    tags: ["forest cover", "land use", "1993", "2006", "file geodatabase"],
+  },
+  {
+    slug: "esri-landcover-2017-2025",
+    category: "landuse",
+    format: "raster",
+    title: "គម្របដី ESRI ឆ្នាំ ២០១៧ - ២០២៥",
+    excerpt:
+      "ទិន្នន័យរ៉ាស្ទ័រគម្របដីប្រចាំឆ្នាំរបស់ Esri ចាប់ពីឆ្នាំ ២០១៧ ដល់ ២០២៥ ដែលមានឯកសារ GeoTIFF ចំនួន ៩។",
+    coverImage: "/SharedDataThumbnail/Cambodia_LC_2022.jpg",
+    fileSize: "1.77 GB",
+    fileFormat: "GeoTIFF raster (.tif)",
+    lastUpdated: "2026-06-30",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1vzU10gW7VTSeZVyz-zlZmqKumPli3Ypp/view?usp=sharing",
+    source: "Esri",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "សំណុំទិន្នន័យនេះមានរ៉ាស្ទ័រគម្របដីប្រចាំឆ្នាំចំនួន ៩ សម្រាប់ឆ្នាំ ២០១៧–២០២៥ ជាទម្រង់ GeoTIFF និងមានភ្ជាប់ឯកសារកូដចំណាត់ថ្នាក់គម្របដី។",
+      },
+    ],
+    tags: ["Esri", "land cover", "raster", "GeoTIFF", "2017", "2025"],
   },
 ];
 
