@@ -234,7 +234,7 @@ const OpenKGADetail = ({ slug }) => {
                         </Link>
                       ) : (
                         <span className="text-brand-text/80 dark:text-gray-300 font-display font-600">
-                          {dataset.license}
+                          {license?.label || dataset.license}
                         </span>
                       )}
                     </dd>
