@@ -16,7 +16,7 @@ const CourseAnnouncement = () => {
     {
       icon: arcgisPro,
       alt: "arcgisPro",
-      title: "ArcGIS Pro",
+      title: "ArcGIS Pro Basic",
       tagline: "វគ្គសិក្សាជំនាញគ្រប់គ្រងទិន្នន័យភូមិសាស្ត្រ និងការផលិតផែនទី",
       batch: "ជំនាន់ថ្មី ឆ្នាំ២០២៦",
       status: "កំពុងបើកចុះឈ្មោះ",
@@ -90,11 +90,38 @@ const CourseAnnouncement = () => {
       },
     },
 
+    // ─── ArcGIS Pro Advanced ───
+    {
+      icon: arcgisPro,
+      alt: "arcgisProAdvanced",
+      title: "ArcGIS Pro Advanced",
+      tagline: "វគ្គសិក្សា ArcGIS Pro កម្រិតខ្ពស់",
+      batch: "វគ្គសិក្សាកម្រិតខ្ពស់",
+      status: "កំពុងបើកចុះឈ្មោះ",
+      statusType: "open",
+      startDate: "សូមទាក់ទង",
+      duration: "សូមទាក់ទង",
+      schedule: "ទាក់ទងសម្រាប់ព័ត៌មាន",
+      time: "ទាក់ទងសម្រាប់ព័ត៌មាន",
+      mode: "ទាក់ទងសម្រាប់ព័ត៌មាន",
+      seats: "កន្លែងមានកំណត់",
+      price: "សូមទាក់ទង",
+      poster: "/posters/arcgis-pro-advanced.png",
+      highlights: [
+        "ការរៀបចំ និងគ្រប់គ្រងទិន្នន័យកម្រិតខ្ពស់",
+        "ការវិភាគទិន្នន័យលំហកម្រិតខ្ពស់",
+        "ការបង្កើត Model និង workflow ជាមួយ ModelBuilder",
+        "ការប្រើប្រាស់ Arcade និង Script Tool",
+        "ការបង្កើតកម្មវិធីដោយភាសា Python",
+        "ការធ្វើស្វ័យប្រវត្តិកម្មលំហូរការងារ",
+      ],
+      detail: null,
+    },
     // ─── ArcGIS (placeholder - awaiting detail content) ───
     {
       icon: argis,
       alt: "argis",
-      title: "ArcGIS",
+      title: "ArcGIS Basic",
       batch: "ជំនាន់ថ្មី ឆ្នាំ២០២៦",
       status: "កំពុងបើកចុះឈ្មោះ",
       statusType: "open",
@@ -118,7 +145,7 @@ const CourseAnnouncement = () => {
     {
       icon: qgis,
       alt: "qgis",
-      title: "QGIS",
+      title: "QGIS Basic",
       batch: "ជំនាន់ថ្មី ឆ្នាំ២០២៦",
       status: "នឹងបើកចុះឈ្មោះ",
       statusType: "upcoming",
@@ -174,7 +201,7 @@ const CourseAnnouncement = () => {
 
           {/* ───── Announcement Cards ───── */}
           <div className="custom-screen w-full">
-            <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
               {announcements.map((item, idx) => (
                 <m.li
                   key={idx}
@@ -577,10 +604,25 @@ const PlaceholderContent = ({ course, statusStyles }) => (
     </div>
 
     <div className="w-12 h-1 bg-brand-orange rounded-full mb-6"></div>
+    {course.poster && (
+      <div className="mb-6 rounded-xl overflow-hidden border border-brand-blue/8 dark:border-white/8">
+        <Image
+          src={course.poster}
+          alt={`${course.title} poster`}
+          width={1080}
+          height={1080}
+          className="w-full h-auto"
+        />
+      </div>
+    )}
 
     <div className="bg-brand-blue/5 dark:bg-white/5 border border-dashed border-brand-blue/20 dark:border-white/10 rounded-xl p-6 text-center mb-6">
       <p className="text-sm font-body text-brand-text/60 dark:text-gray-400">
-        ខ្លឹមសារលម្អិតរបស់វគ្គសិក្សា <strong>{course.title}</strong> នឹងត្រូវបន្ថែមឆាប់ៗនេះ។
+        {course.poster ? (
+          "ព័ត៌មានសំខាន់ៗរបស់វគ្គសិក្សាមាននៅលើ Poster ខាងលើ។ សូមទាក់ទងមកយើងសម្រាប់កាលវិភាគ តម្លៃ និងការចុះឈ្មោះ។"
+        ) : (
+          <>ខ្លឹមសារលម្អិតរបស់វគ្គសិក្សា <strong>{course.title}</strong> នឹងត្រូវបន្ថែមឆាប់ៗនេះ។</>
+        )}
       </p>
     </div>
 

@@ -558,7 +558,7 @@
         <!-- Search bar -->
         <div class="hidden sm:flex items-center gap-2 bg-brand-blue/5 dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-lg px-3 py-2 w-72">
           <svg class="w-4 h-4 text-brand-text/40 dark:text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="toolSearch" type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
+          <input id="toolSearch" data-tool-search type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
         </div>
         <div class="flex items-center gap-2 sm:gap-3">
           <div class="language-selector" role="group" aria-label="Language">
@@ -576,32 +576,39 @@
       <!-- Mobile search -->
       <div class="sm:hidden mb-6 flex items-center gap-2 bg-brand-blue/5 dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-lg px-3 py-2.5">
         <svg class="w-4 h-4 text-brand-text/40 dark:text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
+        <input id="toolSearchMobile" data-tool-search type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
       </div>
 
-      <!-- Category filter pills -->
-      <div class="flex flex-wrap gap-2 mb-10" id="categoryPills">
-        <button onclick="filterCategory('all')" class="cat-pill active px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all bg-brand-orange text-white border-brand-orange" data-cat="all">All</button>
-        <button onclick="filterCategory('Data Creation')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Data Creation">Data Creation</button>
-        <button onclick="filterCategory('Data Management')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Data Management">Data Management</button>
-        <button onclick="filterCategory('Necessary Tool')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Necessary Tool">Necessary Tool</button>
-        <button onclick="filterCategory('Geoprocessing')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Geoprocessing">Geoprocessing</button>
-        <button onclick="filterCategory('CRS')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="CRS">CRS</button>
-        <button onclick="filterCategory('Cadastral Tools')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Cadastral Tools">Cadastral Tools</button>
-        <button onclick="filterCategory('Topology Check')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Topology Check">Topology Check</button>
-        <button onclick="filterCategory('Spatial Analysis')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Spatial Analysis">Spatial Analysis</button>
-        <button onclick="filterCategory('Mapping')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-mono font-600 border transition-all border-brand-blue/15 dark:border-white/10 text-brand-text/60 dark:text-gray-400 hover:border-brand-orange/50 hover:text-brand-orange" data-cat="Mapping">Mapping</button>
-      </div>
+      <!-- Master-detail tool explorer -->
+      <div id="toolExplorer" class="tool-explorer">
+        <section id="toolListPanel" class="tool-navigation-panel bg-white dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-2xl overflow-hidden" aria-label="Tool categories and tools">
+          <div class="px-5 py-4 border-b border-brand-blue/8 dark:border-white/8 flex items-center justify-between gap-3">
+            <div>
+              <p id="toolListEyebrow" class="text-[0.65rem] font-mono font-600 uppercase tracking-[0.16em] text-brand-orange">Tool library</p>
+              <h2 id="toolListHeading" class="font-display font-700 text-base text-brand-text dark:text-white mt-1">Browse by category</h2>
+            </div>
+            <span id="categoryCount" class="text-xs font-mono text-brand-text/40 dark:text-gray-500">9 categories</span>
+          </div>
 
-      <!-- No results message -->
-      <div id="noResults" class="hidden text-center py-20">
-        <svg class="w-12 h-12 text-brand-text/20 dark:text-gray-700 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p class="text-brand-text/40 dark:text-gray-500 font-mono text-sm">No tools match your search.</p>
-      </div>
+          <div id="noResults" class="hidden text-center px-5 py-16">
+            <svg class="w-10 h-10 text-brand-text/20 dark:text-gray-700 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <p id="noResultsText" class="text-brand-text/40 dark:text-gray-500 font-mono text-sm">No tools match your search.</p>
+          </div>
 
-      <!-- Tools grid -->
-      <div id="allToolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Tools are injected by JS -->
+          <div id="toolSidebar" class="tool-sidebar p-3" aria-labelledby="toolListHeading">
+            <!-- Category accordion or search results are injected by JS -->
+          </div>
+        </section>
+
+        <section id="toolDetailPanel" class="tool-detail-panel bg-white dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-2xl overflow-hidden" tabindex="-1" aria-live="polite" aria-label="Selected tool details">
+          <button id="backToToolsButton" type="button" onclick="showToolList()" class="mobile-tool-back w-full px-5 py-4 items-center gap-2 border-b border-brand-blue/8 dark:border-white/8 text-sm font-display font-700 text-brand-text dark:text-white hover:text-brand-orange transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span id="backToToolsText">Back to tools</span>
+          </button>
+          <div id="toolDetail" class="tool-detail-content">
+            <!-- Selected tool details are injected by JS -->
+          </div>
+        </section>
       </div>
 
     </div>
@@ -612,23 +619,140 @@
     #allToolsPage { transition: opacity 0.25s ease; }
     #allToolsPage.page-visible { opacity: 1; }
     #allToolsPage.page-hidden { opacity: 0; }
-    .tool-row-card {
-      transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s cubic-bezier(0.22,1,0.36,1);
+    .tool-explorer {
+      display: grid;
+      grid-template-columns: minmax(18rem, 24rem) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
     }
-    .tool-row-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 28px -8px rgba(36,76,143,0.14), 0 0 0 1px rgba(36,76,143,0.06);
+    .tool-navigation-panel,
+    .tool-detail-panel {
+      position: sticky;
+      top: 6rem;
+      max-height: calc(100vh - 8rem);
     }
-    .dark .tool-row-card:hover {
-      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,100,52,0.12);
+    .tool-navigation-panel {
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(36,76,143,0.25) transparent;
     }
-    .cat-badge {
+    .tool-detail-panel {
+      min-height: min(34rem, calc(100vh - 8rem));
+      overflow-y: auto;
+    }
+    .category-accordion + .category-accordion {
+      margin-top: 0.5rem;
+    }
+    .category-trigger,
+    .tool-nav-button {
+      width: 100%;
+      text-align: left;
+      border-radius: 0.75rem;
+      transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+    .category-trigger:focus-visible,
+    .tool-nav-button:focus-visible,
+    .mobile-tool-back:focus-visible {
+      outline: 2px solid #FF6434;
+      outline-offset: 2px;
+    }
+    .category-trigger:hover {
+      background: rgba(36,76,143,0.055);
+    }
+    .dark .category-trigger:hover {
+      background: rgba(255,255,255,0.055);
+    }
+    .category-trigger[aria-expanded="true"] .category-chevron {
+      transform: rotate(180deg);
+    }
+    .category-chevron {
+      transition: transform 0.2s ease;
+    }
+    .category-tools {
+      padding: 0.35rem 0 0.25rem 0.75rem;
+      margin-left: 0.85rem;
+      border-left: 1px solid rgba(36,76,143,0.12);
+    }
+    .dark .category-tools {
+      border-left-color: rgba(255,255,255,0.1);
+    }
+    .tool-nav-button {
+      position: relative;
+      padding: 0.65rem 0.75rem;
+      color: rgba(15,36,66,0.68);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .dark .tool-nav-button {
+      color: rgba(229,231,235,0.72);
+    }
+    .tool-nav-button:hover {
+      color: #244C8F;
+      background: rgba(36,76,143,0.06);
+      transform: translateX(2px);
+    }
+    .dark .tool-nav-button:hover {
+      color: white;
+      background: rgba(255,255,255,0.055);
+    }
+    .tool-nav-button[aria-pressed="true"] {
+      color: #0F2442;
+      background: rgba(255,100,52,0.1);
+      font-weight: 700;
+    }
+    .dark .tool-nav-button[aria-pressed="true"] {
+      color: white;
+      background: rgba(255,100,52,0.14);
+    }
+    .tool-nav-button[aria-pressed="true"]::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      bottom: 0.55rem;
+      width: 3px;
+      border-radius: 9999px;
+      background: var(--tool-color, #FF6434);
+    }
+    .tool-search-result + .tool-search-result {
+      margin-top: 0.35rem;
+    }
+    .tool-detail-content {
+      padding: clamp(1.5rem, 4vw, 3.5rem);
+    }
+    .tool-category-badge {
       font-size: 0.65rem;
-      padding: 2px 8px;
+      padding: 0.3rem 0.65rem;
       border-radius: 9999px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 600;
       letter-spacing: 0.03em;
+    }
+    .mobile-tool-back {
+      display: none;
+    }
+    @media (max-width: 767px) {
+      .tool-explorer {
+        display: block;
+      }
+      .tool-navigation-panel,
+      .tool-detail-panel {
+        position: static;
+        max-height: none;
+      }
+      .tool-detail-panel {
+        display: none;
+        min-height: 0;
+      }
+      .tool-explorer.mobile-detail-active .tool-navigation-panel {
+        display: none;
+      }
+      .tool-explorer.mobile-detail-active .tool-detail-panel {
+        display: block;
+      }
+      .mobile-tool-back {
+        display: flex;
+      }
     }
   </style>
 
@@ -946,8 +1070,9 @@
       "Quick generate land plots based on input CSV table, point, line, or polygon.": "បង្កើត land plot យ៉ាងរហ័សតាម input CSV table, point, line ឬ polygon។"
     });
 
-    ALL_TOOLS.forEach(tool => {
+    ALL_TOOLS.forEach((tool, index) => {
       tool.descKm = TOOL_DESCRIPTIONS_KM[tool.desc] || tool.desc;
+      tool.index = index;
     });
     const CAT_COLORS = {
       'Data Creation':    '#3B82F6',
@@ -961,78 +1086,241 @@
       'Mapping':          '#EC4899',
     };
 
-    let activeCategory = 'all';
+    const TOOL_UI = {
+      en: {
+        library: 'Tool library',
+        browse: 'Browse by category',
+        categories: 'categories',
+        searchResults: 'Search results',
+        tools: 'tools',
+        back: 'Back to tools',
+        details: 'Tool details',
+        description: 'Description',
+        subcategory: 'Subcategory',
+        noResults: 'No tools match your search.',
+        navigationLabel: 'Tool categories and tools',
+        detailLabel: 'Selected tool details'
+      },
+      km: {
+        library: 'បណ្ណាល័យឧបករណ៍',
+        browse: 'រុករកតាមប្រភេទ',
+        categories: 'ប្រភេទ',
+        searchResults: 'លទ្ធផលស្វែងរក',
+        tools: 'ឧបករណ៍',
+        back: 'ត្រឡប់ទៅឧបករណ៍',
+        details: 'ព័ត៌មានលម្អិតអំពីឧបករណ៍',
+        description: 'ការពិពណ៌នា',
+        subcategory: 'ប្រភេទរង',
+        noResults: 'រកមិនឃើញឧបករណ៍ដែលត្រូវនឹងការស្វែងរកទេ។',
+        navigationLabel: 'ប្រភេទ និងបញ្ជីឧបករណ៍',
+        detailLabel: 'ព័ត៌មានលម្អិតនៃឧបករណ៍ដែលបានជ្រើស'
+      }
+    };
+
+    const CATEGORY_NAMES = [...new Set(ALL_TOOLS.map(tool => tool.cat))];
+    let activeCategory = CATEGORY_NAMES[0];
+    let selectedToolIndex = 0;
     let searchTerm = '';
 
+    function getToolUi() {
+      return TOOL_UI[currentLanguage] || TOOL_UI.en;
+    }
+
+    function escapeToolHtml(value = '') {
+      return String(value).replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      })[character]);
+    }
+
+    function getFilteredTools() {
+      if (!searchTerm) return ALL_TOOLS;
+
+      return ALL_TOOLS.filter(tool =>
+        tool.name.toLowerCase().includes(searchTerm) ||
+        tool.desc.toLowerCase().includes(searchTerm) ||
+        (tool.descKm && tool.descKm.toLowerCase().includes(searchTerm)) ||
+        tool.cat.toLowerCase().includes(searchTerm) ||
+        (tool.sub && tool.sub.toLowerCase().includes(searchTerm))
+      );
+    }
+
+    function renderToolButton(tool, showContext = false) {
+      const color = CAT_COLORS[tool.cat] || '#244C8F';
+      const isSelected = selectedToolIndex === tool.index;
+      const context = showContext
+        ? `<span class="block mt-1 text-[0.66rem] font-mono text-brand-text/40 dark:text-gray-500">${escapeToolHtml(tool.cat)}${tool.sub ? ' · ' + escapeToolHtml(tool.sub) : ''}</span>`
+        : (tool.sub ? `<span class="block mt-1 text-[0.66rem] font-mono text-brand-text/35 dark:text-gray-600">${escapeToolHtml(tool.sub)}</span>` : '');
+
+      return `
+        <button type="button"
+          class="tool-nav-button ${showContext ? 'tool-search-result' : ''}"
+          data-tool-index="${tool.index}"
+          onclick="selectTool(${tool.index})"
+          aria-pressed="${isSelected}"
+          style="--tool-color:${color}">
+          <span class="block">${escapeToolHtml(tool.name)}</span>
+          ${context}
+        </button>`;
+    }
+
+    function renderToolDetail() {
+      const detail = document.getElementById('toolDetail');
+      const tool = ALL_TOOLS[selectedToolIndex] || ALL_TOOLS[0];
+      const ui = getToolUi();
+      const color = CAT_COLORS[tool.cat] || '#244C8F';
+      const description = currentLanguage === 'km' ? tool.descKm : tool.desc;
+      const subgroup = tool.sub
+        ? `<div class="inline-flex items-center gap-2 text-xs font-mono text-brand-text/45 dark:text-gray-500">
+             <span>${ui.subcategory}</span>
+             <span class="w-1 h-1 rounded-full bg-brand-orange"></span>
+             <span class="text-brand-text/70 dark:text-gray-300">${escapeToolHtml(tool.sub)}</span>
+           </div>`
+        : '';
+
+      detail.innerHTML = `
+        <div class="max-w-3xl">
+          <div class="flex items-start justify-between gap-6 mb-10">
+            <div>
+              <p class="text-[0.68rem] font-mono font-600 uppercase tracking-[0.16em] text-brand-orange mb-3">${ui.details}</p>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="tool-category-badge text-white" style="background:${color}">${escapeToolHtml(tool.cat)}</span>
+                ${subgroup}
+              </div>
+            </div>
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style="background:${color}18;color:${color}">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5-5L12 3.6 9.6 6 7.3 3.7a4 4 0 0 0 5 5l-8.6 8.6a2.1 2.1 0 0 0 3 3l8.6-8.6a4 4 0 0 0 5-5L17 10.4 14.6 8l2.3-2.3z"/></svg>
+            </div>
+          </div>
+
+          <h3 class="font-display font-800 text-3xl sm:text-4xl text-brand-text dark:text-white tracking-tight leading-tight mb-8">${escapeToolHtml(tool.name)}</h3>
+
+          <div class="border-l-2 pl-5 sm:pl-6" style="border-color:${color}">
+            <p class="text-[0.68rem] font-mono font-600 uppercase tracking-[0.14em] text-brand-text/40 dark:text-gray-500 mb-3">${ui.description}</p>
+            <p class="text-base sm:text-lg text-brand-text/65 dark:text-gray-300 leading-relaxed">${escapeToolHtml(description)}</p>
+          </div>
+        </div>`;
+    }
+
+    function updateToolExplorerChrome(filteredCount) {
+      const ui = getToolUi();
+      const searching = Boolean(searchTerm);
+      document.getElementById('toolListEyebrow').textContent = ui.library;
+      document.getElementById('toolListHeading').textContent = searching ? ui.searchResults : ui.browse;
+      document.getElementById('categoryCount').textContent = searching
+        ? `${filteredCount} ${ui.tools}`
+        : `${CATEGORY_NAMES.length} ${ui.categories}`;
+      document.getElementById('noResultsText').textContent = ui.noResults;
+      document.getElementById('backToToolsText').textContent = ui.back;
+      document.getElementById('toolListPanel').setAttribute('aria-label', ui.navigationLabel);
+      document.getElementById('toolDetailPanel').setAttribute('aria-label', ui.detailLabel);
+    }
+
     function renderTools() {
-      const grid = document.getElementById('allToolsGrid');
+      const sidebar = document.getElementById('toolSidebar');
       const noResults = document.getElementById('noResults');
       const countEl = document.getElementById('toolCount');
-
-      const filtered = ALL_TOOLS.filter(t => {
-        const matchCat = activeCategory === 'all' || t.cat === activeCategory;
-        const matchSearch = !searchTerm ||
-          t.name.toLowerCase().includes(searchTerm) ||
-          t.desc.toLowerCase().includes(searchTerm) ||
-          (t.descKm && t.descKm.toLowerCase().includes(searchTerm)) ||
-          t.cat.toLowerCase().includes(searchTerm) ||
-          (t.sub && t.sub.toLowerCase().includes(searchTerm));
-        return matchCat && matchSearch;
-      });
+      const filtered = getFilteredTools();
 
       countEl.textContent = filtered.length;
+      updateToolExplorerChrome(filtered.length);
+      renderToolDetail();
 
-      if (filtered.length === 0) {
-        grid.innerHTML = '';
+      if (!filtered.length) {
+        sidebar.innerHTML = '';
+        sidebar.classList.add('hidden');
         noResults.classList.remove('hidden');
         return;
       }
+
+      sidebar.classList.remove('hidden');
       noResults.classList.add('hidden');
 
-      grid.innerHTML = filtered.map(t => {
-        const color = CAT_COLORS[t.cat] || '#244C8F';
-        const subHtml = t.sub
-          ? `<span class="inline-flex items-center gap-1 text-brand-text/40 dark:text-gray-500 text-xs font-mono"><svg class="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>${t.sub}</span>`
-          : '';
+      if (searchTerm) {
+        sidebar.innerHTML = filtered.map(tool => renderToolButton(tool, true)).join('');
+        return;
+      }
+
+      sidebar.innerHTML = CATEGORY_NAMES.map((category, categoryIndex) => {
+        const tools = ALL_TOOLS.filter(tool => tool.cat === category);
+        const isOpen = activeCategory === category;
+        const color = CAT_COLORS[category] || '#244C8F';
+        const panelId = `category-panel-${categoryIndex}`;
+
         return `
-          <div class="tool-row-card bg-white dark:bg-white/5 rounded-xl border border-brand-blue/8 dark:border-white/8 p-4 group relative overflow-hidden flex flex-col gap-2">
-            <div class="absolute top-0 left-0 w-full h-0.5 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" style="background:${color}"></div>
-            <!-- Group + Sub-group row -->
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="cat-badge text-white flex-shrink-0" style="background:${color}">${t.cat}</span>
-              ${subHtml}
+          <div class="category-accordion">
+            <button type="button"
+              class="category-trigger flex items-center gap-3 px-3 py-3"
+              data-category-index="${categoryIndex}"
+              onclick="toggleCategory(${categoryIndex})"
+              aria-expanded="${isOpen}"
+              aria-controls="${panelId}">
+              <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:${color}"></span>
+              <span class="font-display font-700 text-sm text-brand-text dark:text-white flex-1">${escapeToolHtml(category)}</span>
+              <span class="text-[0.66rem] font-mono text-brand-text/40 dark:text-gray-500">${tools.length}</span>
+              <svg class="category-chevron w-4 h-4 text-brand-text/35 dark:text-gray-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="${panelId}" class="category-tools" ${isOpen ? '' : 'hidden'}>
+              ${tools.map(tool => renderToolButton(tool)).join('')}
             </div>
-            <!-- Tool name -->
-            <span class="font-display font-700 text-sm text-brand-text dark:text-white leading-snug">${t.name}</span>
-            <!-- Description -->
-            <p class="text-xs text-brand-text/55 dark:text-gray-400 leading-relaxed">${currentLanguage === 'km' ? t.descKm : t.desc}</p>
           </div>`;
       }).join('');
     }
 
-    function filterCategory(cat) {
-      activeCategory = cat;
-      document.querySelectorAll('.cat-pill').forEach(p => {
-        const isActive = p.dataset.cat === cat;
-        p.classList.toggle('bg-brand-orange', isActive);
-        p.classList.toggle('text-white', isActive);
-        p.classList.toggle('border-brand-orange', isActive);
-        p.classList.toggle('border-brand-blue/15', !isActive);
-        p.classList.toggle('dark:border-white/10', !isActive);
-        p.classList.toggle('text-brand-text/60', !isActive);
-        p.classList.toggle('dark:text-gray-400', !isActive);
-      });
+    function toggleCategory(categoryIndex) {
+      const category = CATEGORY_NAMES[categoryIndex];
+      activeCategory = activeCategory === category ? null : category;
       renderTools();
+      requestAnimationFrame(() => {
+        const trigger = document.querySelector(`[data-category-index="${categoryIndex}"]`);
+        if (trigger) trigger.focus();
+      });
     }
 
-    function filterTools(val) {
-      searchTerm = val.toLowerCase().trim();
+    function selectTool(toolIndex) {
+      if (!ALL_TOOLS[toolIndex]) return;
+      selectedToolIndex = toolIndex;
+      activeCategory = ALL_TOOLS[toolIndex].cat;
+      renderTools();
+
+      const explorer = document.getElementById('toolExplorer');
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        explorer.classList.add('mobile-detail-active');
+      }
+
+      requestAnimationFrame(() => document.getElementById('toolDetailPanel').focus({ preventScroll: true }));
+    }
+
+    function showToolList() {
+      document.getElementById('toolExplorer').classList.remove('mobile-detail-active');
+      requestAnimationFrame(() => {
+        const selectedButton = document.querySelector(`[data-tool-index="${selectedToolIndex}"]`);
+        if (selectedButton) selectedButton.focus({ preventScroll: true });
+      });
+    }
+
+    function filterTools(value) {
+      const wasSearching = Boolean(searchTerm);
+      searchTerm = value.toLowerCase().trim();
+
+      document.querySelectorAll('[data-tool-search]').forEach(input => {
+        if (input.value !== value) input.value = value;
+      });
+
+      if (wasSearching && !searchTerm) {
+        activeCategory = ALL_TOOLS[selectedToolIndex].cat;
+      }
+
       renderTools();
     }
 
     function openAllToolsPage() {
       const page = document.getElementById('allToolsPage');
       page.classList.remove('hidden');
+      document.getElementById('toolExplorer').classList.remove('mobile-detail-active');
       document.body.style.overflow = 'hidden';
       renderTools();
       requestAnimationFrame(() => page.classList.add('page-visible'));
@@ -1043,13 +1331,17 @@
       page.classList.remove('page-visible');
       setTimeout(() => {
         page.classList.add('hidden');
+        searchTerm = '';
+        document.querySelectorAll('[data-tool-search]').forEach(input => { input.value = ''; });
+        document.getElementById('toolExplorer').classList.remove('mobile-detail-active');
         document.body.style.overflow = '';
       }, 250);
     }
 
     // Close on Escape key
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeAllToolsPage();
+    document.addEventListener('keydown', event => {
+      const page = document.getElementById('allToolsPage');
+      if (event.key === 'Escape' && !page.classList.contains('hidden')) closeAllToolsPage();
     });
   </script>
 
@@ -1619,7 +1911,8 @@
           ? '<span class="text-brand-orange">ឧបករណ៍</span> ទាំងអស់'
           : 'All <span class="text-brand-orange">Tools</span>';
       }
-      if (document.getElementById('allToolsGrid').children.length) renderTools();
+      const toolExplorer = document.getElementById('toolExplorer');
+      if (toolExplorer && !document.getElementById('allToolsPage').classList.contains('hidden')) renderTools();
     }
 
     setLanguage(currentLanguage, false);
