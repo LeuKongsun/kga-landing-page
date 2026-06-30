@@ -3,12 +3,14 @@ import Footer from "./ui/Footer";
 import Navbar from "./ui/Navbar";
 import { ThemeProvider } from "next-themes";
 import { HeroUIProvider } from "@heroui/react";
+import { LanguageProvider } from "./LanguageProvider";
 
 import { LazyMotion, domAnimation } from "framer-motion";
 
 const Layout = ({ children }) => {
   return (
     <HeroUIProvider>
+      <LanguageProvider>
       <ThemeProvider attribute="class" defaultTheme="light">
         <LazyMotion features={domAnimation}>
           <div className="min-h-screen">
@@ -18,6 +20,7 @@ const Layout = ({ children }) => {
           </div>
         </LazyMotion>
       </ThemeProvider>
+      </LanguageProvider>
     </HeroUIProvider>
   );
 };

@@ -55,7 +55,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${fontHanuman.variable} ${fontJetbrains.variable}`}>
+    <html lang="km" suppressHydrationWarning className={`${fontHanuman.variable} ${fontJetbrains.variable}`}>
       <body className="font-body" suppressHydrationWarning>
         <Layout>{children}</Layout>
       </body>

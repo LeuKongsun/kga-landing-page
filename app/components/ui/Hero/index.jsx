@@ -51,9 +51,9 @@ const Hero = () => {
           className={isMobile ? "text-center" : ""}
         >
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-800 leading-[1.8] md:leading-[2] mb-8 text-brand-text dark:text-white">
-            <span className="block">សិក្សាលម្អិតទៅលើ</span>
+            <span className="hero-heading-white block">សិក្សាលម្អិតទៅលើ</span>
             <span className="text-brand-orange italic block py-4">ជំនាញគ្រប់គ្រងទិន្នន័យ</span>
-            <span className="block">ភូមិសាស្រ្ត និងផែនទី</span>
+            <span className="hero-heading-white block">ភូមិសាស្រ្ត និងផែនទី</span>
           </h1>
           <p className="text-lg md:text-xl text-brand-text/60 dark:text-white/60 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-body text-center lg:text-left">
             យើងផ្តល់ឲ្យនូវការបង្រៀនដែលយកចិត្តទុកដាក់ ប្រកបដោយគុណភាព និងទំនួលខុសត្រូវ។

@@ -23,7 +23,7 @@ const Brand = () => {
         alt="Kga logo"
         className="w-10 h-10"
       />
-      <span className="text-lg font-bold text-foreground">
+      <span className="hidden sm:inline text-lg font-bold text-foreground">
         Khmer GRS Academy
       </span>
     </Link>

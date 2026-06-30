@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -190,4 +192,19 @@ body {
 }
 .orange-glow:hover {
   box-shadow: 0 4px 24px rgba(255,100,52,0.35);
+}
+
+/* Keep the supporting hero lines quieter in English while preserving Khmer sizing. */
+html[lang="en"] .hero-heading-white {
+  font-size: 0.62em;
+  line-height: 1.3;
+}
+/* Match KGA Toolbox typography when English is selected. */
+html[lang="en"] body,
+html[lang="en"] .font-body {
+  font-family: "DM Sans", sans-serif !important;
+}
+
+html[lang="en"] .font-display {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
 }

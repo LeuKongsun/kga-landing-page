@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Brand from "../Brand";
 import NavLink from "../NavLink";
 import ThemeSwitcher from "../ThemeSwitcher";
+import LanguageSwitcher from "../LanguageSwitcher";
 import { m, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
@@ -35,8 +36,13 @@ const Navbar = () => {
       { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
     ],
   },
-  { title: "មាតិកា និងព័ត៌មាន", path: "/blog" },
-  { title: "ទិន្នន័យចំហ", path: "/openkga" }
+  {
+    title: "ធនធាន",
+    submenu: [
+      { title: "មាតិកា និងព័ត៌មាន", path: "/blog" },
+      { title: "ទិន្នន័យចំហ", path: "/openkga" },
+    ],
+  }
 ];
 
   const toggleMenu = () => {
@@ -97,6 +103,7 @@ const Navbar = () => {
               ))}
             </ul>
             <div className="flex items-center space-x-4 border-l pl-6 border-border">
+              <LanguageSwitcher />
               <ThemeSwitcher />
               <NavLink
                 href="https://t.me/khmergrsacademy"
@@ -106,7 +113,8 @@ const Navbar = () => {
               </NavLink>
             </div>
           </div>
-          <div className="md:hidden flex items-center space-x-4">
+          <div className="md:hidden flex items-center space-x-2">
+            <LanguageSwitcher />
             <ThemeSwitcher />
             <button
               role="button"

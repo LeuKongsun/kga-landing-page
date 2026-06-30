@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="km" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KGA Toolbox — Demo & Tutorials</title>
+  <title>KGA Toolbox — វីដេអូសាកល្បង និងមេរៀន</title>
   <link rel="icon" type="image/png" href="KGA_Toolbox_Logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    (() => {
+      const savedLanguage = localStorage.getItem('kga-language');
+      document.documentElement.lang = savedLanguage === 'en' ? 'en' : 'km';
+      if (savedLanguage === 'en') document.title = 'KGA Toolbox — Demo & Tutorials';
+    })();
+  </script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -27,8 +34,8 @@
             }
           },
           fontFamily: {
-            display: ['"Plus Jakarta Sans"', 'sans-serif'],
-            body: ['"DM Sans"', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', '"Noto Sans Khmer"', 'sans-serif'],
+            body: ['"DM Sans"', '"Noto Sans Khmer"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           }
         }
@@ -37,7 +44,38 @@
   </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { font-family: 'DM Sans', sans-serif; }
+    html { font-family: 'DM Sans', 'Noto Sans Khmer', sans-serif; }
+    html[lang="km"] { line-height: 1.65; }
+
+    .language-selector {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 0.625rem;
+      border: 1px solid rgba(36,76,143,0.15);
+      background: rgba(36,76,143,0.04);
+    }
+    .dark .language-selector {
+      border-color: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+    }
+    .language-option {
+      min-width: 2rem;
+      padding: 0.32rem 0.48rem;
+      border-radius: 0.45rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: rgba(30,47,79,0.55);
+      transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .dark .language-option { color: rgba(255,255,255,0.55); }
+    .language-option[aria-pressed="true"] {
+      background: #244C8F;
+      color: white;
+      box-shadow: 0 2px 8px rgba(36,76,143,0.22);
+    }
+    .dark .language-option[aria-pressed="true"] { background: #FF6434; }
+    @media (max-width: 400px) { .navbar-brand-text { display: none; } }
 
     .grid-bg {
       background-image:
@@ -214,7 +252,7 @@
           <div class="w-9 h-9 rounded-lg overflow-hidden shadow-md group-hover:shadow-brand-blue/30 transition-shadow">
             <img src="KGA_Toolbox_Logo.png" alt="KGA Toolbox Logo" class="w-full h-full object-cover" />
           </div>
-          <span class="font-display font-800 text-lg tracking-tight text-brand-text dark:text-white">KGA <span class="text-brand-orange">Toolbox</span></span>
+          <span class="navbar-brand-text font-display font-800 text-lg tracking-tight text-brand-text dark:text-white">KGA <span class="text-brand-orange">Toolbox</span></span>
         </a>
 
         <!-- Desktop Nav -->
@@ -228,6 +266,10 @@
 
         <!-- Right Actions -->
         <div class="flex items-center gap-3">
+          <div class="language-selector" role="group" aria-label="Language">
+            <button type="button" class="language-option" data-language="km" aria-pressed="true" onclick="setLanguage('km')">ខ្មែរ</button>
+            <button type="button" class="language-option" data-language="en" aria-pressed="false" onclick="setLanguage('en')">EN</button>
+          </div>
           <button id="darkToggle" class="w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors" aria-label="Toggle dark mode">
             <svg class="w-4.5 h-4.5 hidden dark:block text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             <svg class="w-4.5 h-4.5 block dark:hidden text-brand-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -440,6 +482,150 @@
 
   <!-- ═══════════════ SCRIPTS ═══════════════ -->
   <script>
+    const STATIC_TRANSLATIONS_KM = {
+      'Tools': 'ឧបករណ៍',
+      'Featured': 'ឧបករណ៍ពិសេស',
+      'Pricing': 'តម្លៃ',
+      'About': 'អំពីយើង',
+      'Demo': 'សាកល្បង',
+      'Visit Us!': 'ចូលមើលគេហទំព័រ!',
+      'Demos & Tutorials': 'វីដេអូសាកល្បង និងមេរៀន',
+      'See KGA Toolbox': 'មើលការប្រើប្រាស់ KGA Toolbox',
+      'in Action': 'ជាក់ស្តែង',
+      'Watch real workflow demos, learn tips & tricks, and master each tool with step-by-step guides — all in one place.': 'ទស្សនា workflow demo ជាក់ស្តែង ស្វែងយល់ពីគន្លឹះ និងរៀនប្រើឧបករណ៍នីមួយៗតាមការណែនាំជាជំហានៗ នៅកន្លែងតែមួយ។',
+      'Filter:': 'តម្រង៖',
+      'All Posts': 'អត្ថបទទាំងអស់',
+      'Video': 'វីដេអូ',
+      'Tips & Tricks': 'គន្លឹះប្រើប្រាស់',
+      'How-To': 'របៀបប្រើ',
+      'Updates': 'ព័ត៌មាន Update',
+      'Showing': 'កំពុងបង្ហាញ',
+      'posts': 'អត្ថបទ',
+      'No posts match your search': 'រកមិនឃើញអត្ថបទដែលត្រូវនឹងការស្វែងរកទេ',
+      'Try a different filter or search term': 'សូមសាកល្បងតម្រង ឬពាក្យស្វែងរកផ្សេងទៀត',
+      'No demo posts yet': 'មិនទាន់មានអត្ថបទ demo នៅឡើយទេ',
+      'Posts created in the admin panel will appear here.': 'អត្ថបទដែលបង្កើតក្នុង admin panel នឹងបង្ហាញនៅទីនេះ។',
+      'Quick Access': 'ចូលប្រើរហ័ស',
+      'Video Demos': 'វីដេអូ Demo',
+      'How-To Guides': 'ការណែនាំរបៀបប្រើ',
+      'Release Notes': 'កំណត់ត្រា Release',
+      'Tool Categories': 'ប្រភេទឧបករណ៍',
+      '+ 5 more →': '+ 5 ផ្សេងទៀត →',
+      'Get Full Access': 'ទទួលបានសិទ្ធិប្រើពេញលេញ',
+      'Unlock all 50+ tools and access private support on Telegram.': 'ប្រើឧបករណ៍ទាំង 50+ និងទទួលការគាំទ្រឯកជនតាម Telegram។',
+      'Purchase on Telegram': 'ទិញតាម Telegram',
+      'Watch on YouTube': 'ទស្សនាលើ YouTube',
+      'New video tutorials every week — subscribe for updates.': 'មានវីដេអូមេរៀនថ្មីរៀងរាល់សប្ដាហ៍ — សូម subscribe ដើម្បីទទួលព័ត៌មានថ្មីៗ។',
+      'Subscribe Now': 'Subscribe ឥឡូវនេះ',
+      '© 2026 KGA Toolbox. All rights reserved.': '© 2026 KGA Toolbox។ រក្សាសិទ្ធិគ្រប់យ៉ាង។',
+      'Privacy Policy': 'គោលការណ៍ឯកជនភាព',
+      'Terms of Service': 'លក្ខខណ្ឌប្រើប្រាស់',
+      'Video Demo': 'វីដេអូ Demo',
+      'Update': 'ព័ត៌មាន Update',
+      'Post': 'អត្ថបទ',
+      'Pro Tip': 'គន្លឹះសំខាន់',
+      'Note': 'ចំណាំ'
+    };
+
+    const ATTRIBUTE_TRANSLATIONS_KM = {
+      'Search demos, tutorials, tools…': 'ស្វែងរក demo, មេរៀន និងឧបករណ៍…',
+      'Toggle dark mode': 'ប្ដូរមុខងារងងឹត',
+      'Menu': 'ម៉ឺនុយ',
+      'Language': 'ភាសា'
+    };
+
+    const POST_TRANSLATIONS_KM = {
+      '1778033562122': {
+        title: 'ការបង្កើតផែនទី Landplot — រហ័ស និងងាយស្រួល',
+        excerpt: 'ឧបករណ៍ "Quickland Plot" ត្រូវបានបង្កើតតាមគោលគំនិត "Design Smarter, Work Faster"។ វាជួយអ្នកប្រើប្រាស់ ជាពិសេសអ្នកដែលមិនមែនជាអ្នកជំនាញ GIS software ស្មុគស្មាញ អាចបង្កើតផែនទីដីដែលមានគុណភាព និងស្តង់ដារបានរហ័ស ព្រមទាំងរក្សា data integrity ខ្ពស់។',
+        tip: 'Input data អាចជា polygon feature, line feature, boundary point ដែលមានស្រាប់ ឬ CSV table ដែលមាន XY coordinate របស់ boundary។',
+        body: `<p>ធុញនឹងការចំណាយពេលច្រើនសម្រាប់គូរ boundary ដាក់ label និងរៀបចំ map layout ដោយដៃមែនទេ? យើងមានដំណោះស្រាយសម្រាប់អ្នក! ក្នុងវីដេអូនេះ យើងណែនាំឧបករណ៍ <b>"Quickland Plot"</b> ដែលជាមុខងារដ៏មានអានុភាពរបស់ <b>KGA Toolbox</b> សម្រាប់ធ្វើ GIS workflow ដោយស្វ័យប្រវត្តិ និងសន្សំពេលវេលា។ ⏱️✨</p><p>✅ <b>ឧបករណ៍នេះអាចធ្វើអ្វីបានខ្លះ?</b></p><b>Automatic Geometry:</b> បម្លែង raw data (Point, Line ឬ Polygon) ទៅជាផែនទី land parcel ពេញលេញភ្លាមៗ។<div><b>One-Click Mapping:</b> គ្រាន់តែជ្រើស input ចុច "Run" ហើយទុកឱ្យ toolbox ធ្វើការងារដែលនៅសល់។</div><div><b>Professional Output:</b> បង្កើត layout, coordinate table និង symbology ប្រកបដោយភាពត្រឹមត្រូវខ្ពស់ដោយស្វ័យប្រវត្តិ។</div><div><b>Work Smarter:</b> រចនាឡើងសម្រាប់ទាំងអ្នកជំនាញ GIS និងអ្នកប្រើថ្មី ដើម្បីបង្កើតលទ្ធផលមានគុណភាពខ្ពស់។<p><br></p><p>ខាងក្រោមនេះជាការណែនាំជាជំហានៗសម្រាប់ប្រើឧបករណ៍នេះ</p></div>`,
+        steps: 'ជ្រើស Input type\nកំណត់ output workspace\nបន្ថែម map title (optional)\nបន្ថែម address sub-title (optional)\nកំណត់ grid interval\nជ្រើសបើក map'
+      },
+      '1778212186382': {
+        title: 'Label Expression Builder — មិនត្រូវការ Code ងាយស្រួល និងសន្សំពេល',
+        excerpt: 'ឧបករណ៍ Label Control គឺជាមុខងារឯកទេសក្នុង KGA Toolbox សម្រាប់ ArcGIS Pro។ វាផ្លាស់ប្ដូររបៀបដែលអ្នកជំនាញ GIS គ្រប់គ្រង labeling ដោយជំនួសការសរសេរ Python, VBScript ឬ Arcade ដោយដៃ ជាមួយ graphical user interface ប្រភេទ "no-code" ដែលងាយប្រើ។',
+        tip: 'ជ្រើស layer ដែលត្រូវបង្កើត label expression បន្ទាប់មកចុច button ដើម្បីបើកឧបករណ៍។',
+        body: `<h3><span>មុខងារ និង Workflow សំខាន់ៗ</span></h3><b>No-Code Label Generation</b> តម្លៃស្នូលរបស់ utility នេះគឺអាចបង្កើត label expression ស្មុគស្មាញតាម UI selection សាមញ្ញ។ អ្នកប្រើអាចជ្រើស field (ឧ. Owner Name, Area) ពី dropdown menu ដោយមិនចាំបាច់សរសេរ syntax ដោយដៃ។<br><p style="display:inline!important"><b>Dynamic Formatting Controls</b></p><div><ul><li><b>Font Customization:</b> អាចកែ font size, color និង style (ដូចជា Bold ឬ Italic) សម្រាប់ផ្នែកនីមួយៗនៃ label។</li><li><b>Multi-Line Labels:</b> Interface អនុញ្ញាតឱ្យបង្កើត label ច្រើនបន្ទាត់ ដោយបង្ហាញ attribute ផ្សេងៗនៅបន្ទាត់ដាច់ដោយឡែកជាមួយ formatting ខុសៗគ្នា។</li></ul><p style="display:inline!important"><b>Real-Time Feedback Loop</b></p><b>Expression Preview:</b> ពេលអ្នកប្រើធ្វើការជាមួយ UI ឧបករណ៍បង្ហាញ "Current Label Expression" ភ្លាមៗ ដើម្បីឃើញ code ដែលកំពុងបង្កើត។<br><ul><li><p><b>Visual Preview:</b> Preview window បង្ហាញរូបរាងអត្ថបទលើ map ដើម្បីអាចកែភ្លាមៗមុនអនុវត្ត។</p></li></ul><b>Efficiency and Precision</b> ការបន្ថែម separator និង special character ដោយស្វ័យប្រវត្តិជួយជៀសវាង syntax error និងធានាថា label expression ត្រឹមត្រូវរាល់ពេល។<br><b>Continuous Improvement</b> Utility នេះជាផ្នែកមួយនៃ ecosystem ដែលកំពុងអភិវឌ្ឍ ជាមួយ update និងការពង្រីកមុខងារបន្តបន្ទាប់សម្រាប់ GIS cartography និង annotation task។</div>`
+      },
+      '1778233376902': {
+        title: 'ការរក Feature Overlap យ៉ាងរហ័ស',
+        excerpt: 'ឧបករណ៍ Quick Overlap Detection — ស្វែងរក Overlap\nមាននៅក្នុង KGAToolbox Addin សម្រាប់ ArcGIS Pro v2016.1.3',
+        tip: 'ជ្រើស polygon layer ក្នុង Content ចុច button ហើយអ្នកនឹងទទួលបានលទ្ធផល។',
+        body: `<b>Find Overlap</b> គឺជាឧបករណ៍ថ្មីដែលបានបន្ថែមទៅ <b>KG Toolbox</b> សម្រាប់ ArcGIS Pro ដើម្បីស្វែងរក boundary error ក្នុង spatial data បានរហ័ស។ ដោយជ្រើស layer និងដំណើរការឧបករណ៍ ប្រព័ន្ធនឹង scan រក polygon ដែល overlap និងបង្កើត visual error marker ដោយស្វ័យប្រវត្តិ សូម្បីតែ overlap តូចៗដែលពិបាកមើលដោយភ្នែក។`
+      },
+      '1778566170664': {
+        title: 'KGA Toolbox v2026.1.3 — Update ថ្មីបានចេញហើយ!',
+        excerpt: 'Release នេះរួមមានមុខងារថ្មីសំខាន់ៗ ការកែលម្អ workflow និងការកែ bug ដើម្បីបង្កើនបទពិសោធន៍ ArcGIS Pro របស់អ្នក។',
+        tip: 'Addin release នេះត្រូវបានកែលម្អជាមួយការកែ bug ទូទៅ performance optimization និង workflow stability។',
+        body: '<b>មុខងារថ្មី និងមុខងារដែលបាន Update</b>',
+        steps: 'Generate Boundary Point\nGenerate Boundary Line\nGenerate Boundary Point and Line\nGenerate Polygon Central Point\nHandle KML file\nCopy Feature\nFind duplicate\nDetect Gap/Overlap\nDetect Overlap accross layer\nFilter selection\nDisplay Area\nDisplay Edge length and vertex ID\nDisplay Point XY and ID\nDisplay Line bearing and direction'
+      },
+      '1782620877085': {
+        title: 'KGA Toolbox v2026.2.0 — Update ថ្មីបានចេញហើយ!',
+        excerpt: 'Release នេះផ្ដោតលើការកែលម្អ workflow ឧបករណ៍ productivity ថ្មី និងពង្រីកសមត្ថភាព data management។',
+        tip: 'ដើម្បី Update version នេះ គ្រាន់តែបើក ArcGIS Pro software ហើយ update message នឹងបង្ហាញភ្លាមៗ។ ចុច download និង install រួចរីករាយជាមួយ Update ថ្មី!',
+        body: `<h3>ការកែលម្អសំខាន់ៗ</h3><p><ul><li>រៀបចំ internal framework ឡើងវិញ</li><li>កែលម្អ export message របស់ Copy Feature</li><li>ពង្រឹងឧបករណ៍ To Google Earth Pro</li><li>កែ bug របស់ឧបករណ៍ Copy Feature</li></ul><h3>មុខងារថ្មីដែលបានបន្ថែម</h3><ul><li>Add Raster to Map</li><li>Default Value Filler</li><li>KML Handler</li><li>Generate Line Vertices</li><li>Database Structure Builder</li><li>VectorIQ Package (17 Tools)</li><li>Show Point ID</li><li>Detect Gap/Overlap (Within & Across Layers)</li></ul></p><h3>Toolbox ថ្មី</h3><p><ul><li>Migrate Data from MDB</li><li>Reference Point Direction Calculation</li></ul></p>`
+      }
+    };
+
+    const originalTextNodes = new WeakMap();
+    let currentLanguage = document.documentElement.lang === 'en' ? 'en' : 'km';
+
+    function tr(key) {
+      return currentLanguage === 'km' && STATIC_TRANSLATIONS_KM[key] ? STATIC_TRANSLATIONS_KM[key] : key;
+    }
+
+    function localizePost(post) {
+      return currentLanguage === 'km' && POST_TRANSLATIONS_KM[post.id]
+        ? { ...post, ...POST_TRANSLATIONS_KM[post.id] }
+        : post;
+    }
+
+    function applyStaticTranslations(language) {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent || ['SCRIPT', 'STYLE', 'SVG'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      let node;
+      while ((node = walker.nextNode())) {
+        if (!originalTextNodes.has(node)) originalTextNodes.set(node, node.nodeValue);
+        const original = originalTextNodes.get(node);
+        const key = original.trim();
+        const translated = language === 'km' ? STATIC_TRANSLATIONS_KM[key] : null;
+        node.nodeValue = translated ? original.replace(key, translated) : original;
+      }
+      document.querySelectorAll('[placeholder], [aria-label]').forEach(element => {
+        ['placeholder', 'aria-label'].forEach(attribute => {
+          if (!element.hasAttribute(attribute)) return;
+          const dataKey = `original${attribute.replace('-', '')}`;
+          if (!element.dataset[dataKey]) element.dataset[dataKey] = element.getAttribute(attribute);
+          const original = element.dataset[dataKey];
+          element.setAttribute(attribute, language === 'km' && ATTRIBUTE_TRANSLATIONS_KM[original] ? ATTRIBUTE_TRANSLATIONS_KM[original] : original);
+        });
+      });
+    }
+
+    function setLanguage(language, persist = true) {
+      currentLanguage = language === 'en' ? 'en' : 'km';
+      document.documentElement.lang = currentLanguage;
+      document.title = currentLanguage === 'km'
+        ? 'KGA Toolbox — វីដេអូសាកល្បង និងមេរៀន'
+        : 'KGA Toolbox — Demo & Tutorials';
+      if (persist) localStorage.setItem('kga-language', currentLanguage);
+      document.querySelectorAll('[data-language]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.language === currentLanguage));
+      });
+      applyStaticTranslations(currentLanguage);
+      if (window.demoPostsReady) {
+        applyFilter(currentFilter, document.getElementById('searchInput').value);
+      }
+    }
+  </script>
+  <script>
     // ─── Dark Mode ───
     const html = document.documentElement;
     const saved = localStorage.getItem('theme');
@@ -481,22 +667,23 @@
     // ─── Type metadata ───
     function typeInfo(type) {
       return {
-        video:  { label:'Video Demo',   cls:'tag-video',  icon:'<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>', fill:true },
-        tips:   { label:'Tips & Tricks',cls:'tag-tips',   icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>', fill:false },
-        howto:  { label:'How-To',       cls:'tag-howto',  icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>', fill:false },
-        update: { label:'Update',       cls:'tag-update', icon:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/>', fill:false },
-      }[type] || { label:'Post', cls:'tag-howto', icon:'', fill:false };
+        video:  { label:tr('Video Demo'),   cls:'tag-video',  icon:'<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>', fill:true },
+        tips:   { label:tr('Tips & Tricks'),cls:'tag-tips',   icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>', fill:false },
+        howto:  { label:tr('How-To'),       cls:'tag-howto',  icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>', fill:false },
+        update: { label:tr('Update'),       cls:'tag-update', icon:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.28-6.87"/>', fill:false },
+      }[type] || { label:tr('Post'), cls:'tag-howto', icon:'', fill:false };
     }
 
     // ─── Format date ───
     function fmtDate(d) {
       if (!d) return '';
       const [y,m,day] = d.split('-');
-      return new Date(+y,+m-1,+day).toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});
+      return new Date(+y,+m-1,+day).toLocaleDateString(currentLanguage === 'km' ? 'km-KH' : 'en-US',{day:'numeric',month:'short',year:'numeric'});
     }
 
     // ─── Render a single post card ───
     function renderCard(post, delay) {
+      post = localizePost(post);
       const t = typeInfo(post.type);
       const svgFill = t.fill ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
 
@@ -512,12 +699,12 @@
       if (post.tip && post.tipType && post.tipType !== 'none') {
         if (post.tipType === 'tip') {
           calloutHTML = `<div class="tip-block px-4 py-3 mb-4">
-            <p class="text-sm font-semibold text-brand-orange mb-1">💡 Pro Tip</p>
+            <p class="text-sm font-semibold text-brand-orange mb-1">💡 ${tr('Pro Tip')}</p>
             <p class="text-sm text-brand-text/70 dark:text-gray-400">${post.tip}</p>
           </div>`;
         } else {
           calloutHTML = `<div class="info-block px-4 py-3 mb-4">
-            <p class="text-sm font-semibold text-brand-blue dark:text-blue-300 mb-1">ℹ️ Note</p>
+            <p class="text-sm font-semibold text-brand-blue dark:text-blue-300 mb-1">ℹ️ ${tr('Note')}</p>
             <p class="text-sm text-brand-text/70 dark:text-gray-400">${post.tip}</p>
           </div>`;
         }
@@ -576,6 +763,7 @@
     async function loadAndRender() {
       const posts = await fetchPosts();
       allPosts = [...posts].reverse(); // newest first
+      window.demoPostsReady = true;
       applyFilter(currentFilter, document.getElementById('searchInput').value);
     }
 
@@ -599,12 +787,13 @@
 
       const q = query.toLowerCase();
       const filtered = allPosts.filter(post => {
-        const matchType  = filter === 'all' || post.type === filter;
-        const matchQuery = !q || post.title.toLowerCase().includes(q)
-                              || (post.excerpt||'').toLowerCase().includes(q)
-                              || (post.tags||'').toLowerCase().includes(q)
-                              || (post.body||'').toLowerCase().includes(q);
-        return matchType && matchQuery;
+        const matchType = filter === 'all' || post.type === filter;
+        const translated = POST_TRANSLATIONS_KM[post.id] || {};
+        const searchable = [
+          post.title, post.excerpt, post.tags, post.body, post.tip, post.steps,
+          translated.title, translated.excerpt, translated.body, translated.tip, translated.steps
+        ].filter(Boolean).join(' ').toLowerCase();
+        return matchType && (!q || searchable.includes(q));
       });
 
       countNum.textContent = filtered.length;
@@ -649,6 +838,7 @@
     });
 
     // ─── Initial load ───
+    setLanguage(currentLanguage, false);
     loadAndRender();
   </script>
 

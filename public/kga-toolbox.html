@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="km" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KGA Toolbox — Engineering - Grade GIS Tools for ArcGIS Pro</title>
+  <title>KGA Toolbox — ឧបករណ៍ GIS កម្រិតវិស្វកម្មសម្រាប់ ArcGIS Pro</title>
   <link rel="icon" type="image/png" href="KGA_Toolbox_Logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    (() => {
+      const savedLanguage = localStorage.getItem('kga-language');
+      document.documentElement.lang = savedLanguage === 'en' ? 'en' : 'km';
+      if (savedLanguage === 'en') document.title = 'KGA Toolbox — Engineering-Grade GIS Tools for ArcGIS Pro';
+    })();
+  </script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -27,8 +34,8 @@
             }
           },
           fontFamily: {
-            display: ['"Plus Jakarta Sans"', 'sans-serif'],
-            body: ['"DM Sans"', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', '"Noto Sans Khmer"', 'sans-serif'],
+            body: ['"DM Sans"', '"Noto Sans Khmer"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           }
         }
@@ -38,7 +45,38 @@
   <style>
     /* ─── Base ─── */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { font-family: 'DM Sans', sans-serif; }
+    html { font-family: 'DM Sans', 'Noto Sans Khmer', sans-serif; }
+    html[lang="km"] { line-height: 1.65; }
+
+    .language-selector {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 0.625rem;
+      border: 1px solid rgba(36,76,143,0.15);
+      background: rgba(36,76,143,0.04);
+    }
+    .dark .language-selector {
+      border-color: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+    }
+    .language-option {
+      min-width: 2rem;
+      padding: 0.32rem 0.48rem;
+      border-radius: 0.45rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: rgba(30,47,79,0.55);
+      transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .dark .language-option { color: rgba(255,255,255,0.55); }
+    .language-option[aria-pressed="true"] {
+      background: #244C8F;
+      color: white;
+      box-shadow: 0 2px 8px rgba(36,76,143,0.22);
+    }
+    .dark .language-option[aria-pressed="true"] { background: #FF6434; }
+    @media (max-width: 400px) { .navbar-brand-text { display: none; } }
 
     /* ─── Grid Pattern Background ─── */
     .grid-bg {
@@ -193,7 +231,7 @@
           <div class="w-9 h-9 rounded-lg overflow-hidden shadow-md group-hover:shadow-brand-blue/30 transition-shadow">
             <img src="KGA_Toolbox_Logo.png" alt="KGA Toolbox Logo" class="w-full h-full object-cover" />
           </div>
-          <span class="font-display font-800 text-lg tracking-tight text-brand-text dark:text-white">KGA <span class="text-brand-orange">Toolbox</span></span>
+          <span class="navbar-brand-text font-display font-800 text-lg tracking-tight text-brand-text dark:text-white">KGA <span class="text-brand-orange">Toolbox</span></span>
         </a>
 
         <!-- Nav Links (desktop) -->
@@ -207,6 +245,11 @@
 
         <!-- Right Actions -->
         <div class="flex items-center gap-3">
+          <!-- Language selector -->
+          <div class="language-selector" role="group" aria-label="Language">
+            <button type="button" class="language-option" data-language="km" aria-pressed="true" onclick="setLanguage('km')">ខ្មែរ</button>
+            <button type="button" class="language-option" data-language="en" aria-pressed="false" onclick="setLanguage('en')">EN</button>
+          </div>
           <!-- Dark mode toggle -->
           <button id="darkToggle" class="w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors" aria-label="Toggle dark mode">
             <svg id="sunIcon" class="w-4.5 h-4.5 hidden dark:block text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -510,14 +553,20 @@
           <button onclick="closeAllToolsPage()" class="w-9 h-9 rounded-lg border border-brand-blue/15 dark:border-white/10 flex items-center justify-center hover:bg-brand-blue/5 dark:hover:bg-white/5 transition-colors" aria-label="Close">
             <svg class="w-5 h-5 text-brand-text dark:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           </button>
-          <span class="font-display font-700 text-lg text-brand-text dark:text-white">All <span class="text-brand-orange">Tools</span></span>
+          <span id="allToolsTitle" class="font-display font-700 text-lg text-brand-text dark:text-white">All <span class="text-brand-orange">Tools</span></span>
         </div>
         <!-- Search bar -->
         <div class="hidden sm:flex items-center gap-2 bg-brand-blue/5 dark:bg-white/5 border border-brand-blue/10 dark:border-white/10 rounded-lg px-3 py-2 w-72">
           <svg class="w-4 h-4 text-brand-text/40 dark:text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input id="toolSearch" type="text" placeholder="Search tools…" oninput="filterTools(this.value)" class="bg-transparent text-sm text-brand-text dark:text-white placeholder-brand-text/30 dark:placeholder-gray-600 outline-none w-full font-body" />
         </div>
-        <div class="text-sm font-mono text-brand-text/40 dark:text-gray-500"><span id="toolCount">100+</span> tools</div>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="language-selector" role="group" aria-label="Language">
+            <button type="button" class="language-option" data-language="km" aria-pressed="true" onclick="setLanguage('km')">ខ្មែរ</button>
+            <button type="button" class="language-option" data-language="en" aria-pressed="false" onclick="setLanguage('en')">EN</button>
+          </div>
+          <div class="text-sm font-mono text-brand-text/40 dark:text-gray-500"><span id="toolCount">100+</span> tools</div>
+        </div>
       </div>
     </div>
 
@@ -745,6 +794,161 @@
       { cat: 'Mapping', sub: 'Quick Landplot', name: 'Quick Landplot2 (form2)', desc: 'Quick generate land plots based on input CSV table, point, line, or polygon.' },
     ];
 
+    const TOOL_DESCRIPTIONS_KM = {
+      "Create a point layer.": "បង្កើត point layer។",
+      "Create a line layer.": "បង្កើត line layer។",
+      "Create a polygon layer.": "បង្កើត polygon layer។",
+      "Create a polygon layer using standard field format required by MLMUPC.": "បង្កើត polygon layer ដោយប្រើទ្រង់ទ្រាយ field ស្តង់ដារដែល MLMUPC តម្រូវ។",
+      "Convert vector feature to raster format for analysis and visualization.": "បម្លែង vector feature ទៅជាទ្រង់ទ្រាយ raster សម្រាប់ការវិភាគ និងការបង្ហាញទិន្នន័យ។",
+      "Convert raster data to polygon feature for vector analysis.": "បម្លែងទិន្នន័យ raster ទៅជា polygon feature សម្រាប់ការវិភាគ vector។",
+      "Convert point feature to polygon feature.": "បម្លែង point feature ទៅជា polygon feature។",
+      "Convert polygon features by line features by creating polygon from closed line.": "បម្លែង line feature ដែលបិទជិតទៅជា polygon feature។",
+      "Convert polygon features to their central point features.": "បម្លែង polygon feature ទៅជា point feature នៅចំណុចកណ្ដាល។",
+      "Convert polygon features to line features.": "បម្លែង polygon feature ទៅជា line feature។",
+      "Create boundary point from polygon features by using their vertices.": "បង្កើត boundary point ពី vertices របស់ polygon feature។",
+      "Convert polygon features to point and line features for map series creation.": "បម្លែង polygon feature ទៅជា point និង line feature សម្រាប់បង្កើត map series។",
+      "Convert GIS layers to KML format for using in Google Earth Pro or other application.": "បម្លែង GIS layer ទៅជាទ្រង់ទ្រាយ KML សម្រាប់ប្រើក្នុង Google Earth Pro ឬ application ផ្សេងទៀត។",
+      "Convert KML files to GIS layers for analysis and visualization.": "បម្លែង file KML ទៅជា GIS layer សម្រាប់ការវិភាគ និងការបង្ហាញទិន្នន័យ។",
+      "Convert feature classes to GPX format for using in GPS device and other application.": "បម្លែង feature class ទៅជាទ្រង់ទ្រាយ GPX សម្រាប់ប្រើក្នុងឧបករណ៍ GPS និង application ផ្សេងទៀត។",
+      "Convert GPX file to GIS layers for analysis and visualization.": "បម្លែង file GPX ទៅជា GIS layer សម្រាប់ការវិភាគ និងការបង្ហាញទិន្នន័យ។",
+      "Quick generate polygon features based on predefined template.": "បង្កើត polygon feature យ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Quick generate line features based on predefined template.": "បង្កើត line feature យ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Quick generate point features based on predefined template.": "បង្កើត point feature យ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Add Google satellite layer or other satellite layer sources.": "បន្ថែម Google satellite layer ឬប្រភព satellite layer ផ្សេងទៀត។",
+      "Clip Basemap based on specific boundary layer.": "Clip Basemap តាម boundary layer ដែលបានកំណត់។",
+      "Quickly generate boundary points based on a predefined template.": "បង្កើត boundary point យ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Quickly generate boundary lines based on a predefined template.": "បង្កើត boundary line យ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Quickly generate center points based on a predefined template.": "បង្កើត center point យ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Quickly copy features from one layer to another based on a predefined template.": "ចម្លង feature ពី layer មួយទៅ layer មួយទៀតយ៉ាងរហ័សតាម template ដែលបានកំណត់ជាមុន។",
+      "Open a view of the fields in the layer.": "បើកផ្ទាំងមើល field នៅក្នុង layer។",
+      "Create a new field in this table.": "បង្កើត field ថ្មីក្នុង table នេះ។",
+      "Open a view of the attribute rules in the layer.": "បើកផ្ទាំងមើល attribute rule នៅក្នុង layer។",
+      "Open a view of the continent values in the layer.": "បើកផ្ទាំងមើល contingent value នៅក្នុង layer។",
+      "Open a view of the domains in the layer.": "បើកផ្ទាំងមើល domain នៅក្នុង layer។",
+      "Open a view of the subtypes in the layer.": "បើកផ្ទាំងមើល subtype នៅក្នុង layer។",
+      "Add field to multiple feature classes or table at once.": "បន្ថែម field ទៅ feature class ឬ table ច្រើនក្នុងពេលតែមួយ។",
+      "Quickly assign a value to a chosen field for selected records.": "កំណត់តម្លៃយ៉ាងរហ័សទៅ field ដែលបានជ្រើសសម្រាប់ record ដែលបានជ្រើស។",
+      "Convert a shapefile or geodatabase feature classes to shapefile or geodatabase feature classes.": "បម្លែង shapefile ឬ geodatabase feature class ទៅជា shapefile ឬ geodatabase feature class។",
+      "Export current table to new table.": "នាំចេញ table បច្ចុប្បន្នទៅជា table ថ្មី។",
+      "Export attribute tables to separate CSV files based on ID field.": "នាំចេញ attribute table ទៅជា file CSV ដាច់ដោយឡែកតាម ID field។",
+      "Generate coordinates for parcel boundary points and open immediately in Microsoft Excel.": "បង្កើត coordinate សម្រាប់ parcel boundary point ហើយបើកភ្លាមៗក្នុង Microsoft Excel។",
+      "Enter a definition query expression to display only a subset of features in the layer or table.": "បញ្ចូល definition query expression ដើម្បីបង្ហាញតែផ្នែកមួយនៃ feature ក្នុង layer ឬ table។",
+      "Create a definition query from the selected features or rows of the layer or table.": "បង្កើត definition query ពី feature ឬ row ដែលបានជ្រើសក្នុង layer ឬ table។",
+      "Show symbology for the selected layer.": "បង្ហាញ symbology សម្រាប់ layer ដែលបានជ្រើស។",
+      "Set the label expression for the current label class.": "កំណត់ label expression សម្រាប់ label class បច្ចុប្បន្ន។",
+      "Create a new map for displaying data on two dimension.": "បង្កើត map ថ្មីសម្រាប់បង្ហាញទិន្នន័យពីរវិមាត្រ។",
+      "Create a new global scene for displaying three dimensional data.": "បង្កើត global scene ថ្មីសម្រាប់បង្ហាញទិន្នន័យបីវិមាត្រ។",
+      "Create a new local scene for displaying three dimension data.": "បង្កើត local scene ថ្មីសម្រាប់បង្ហាញទិន្នន័យបីវិមាត្រ។",
+      "Show the content pane.": "បង្ហាញ Content pane។",
+      "Show catalog pane.": "បង្ហាញ Catalog pane។",
+      "Show geoprocessing pane.": "បង្ហាញ Geoprocessing pane។",
+      "Create a new blank geoprocessing model and open it in Model builder.": "បង្កើត geoprocessing model ទទេថ្មី ហើយបើកក្នុង Model Builder។",
+      "Calculate values or a field in a table or feature classes.": "គណនាតម្លៃសម្រាប់ field ក្នុង table ឬ feature class។",
+      "Calculate geometric properties such as area, length, or coordinates for features.": "គណនាលក្ខណៈ geometry ដូចជា area, length ឬ coordinate សម្រាប់ feature។",
+      "Display the area of polygon features as label on the map.": "បង្ហាញ area របស់ polygon feature ជា label លើ map។",
+      "Display the length of line features as label on the map.": "បង្ហាញ length របស់ line feature ជា label លើ map។",
+      "Provide control over label visibility and placement for features on the map.": "គ្រប់គ្រងការបង្ហាញ និងទីតាំង label សម្រាប់ feature លើ map។",
+      "Quickly display area of polygon as label in map.": "បង្ហាញ area របស់ polygon ជា label លើ map យ៉ាងរហ័ស។",
+      "Quickly display the edge length and vertex ID of polygon or line feature as label on map.": "បង្ហាញ edge length និង vertex ID របស់ polygon ឬ line feature ជា label លើ map យ៉ាងរហ័ស។",
+      "Open the current map view in Google Maps for web-based visualization and sharing.": "បើក map view បច្ចុប្បន្នក្នុង Google Maps សម្រាប់មើល និងចែករំលែកតាម web។",
+      "Open the current map view in Google Earth Pro for advanced 3D visualization and analysis.": "បើក map view បច្ចុប្បន្នក្នុង Google Earth Pro សម្រាប់ការមើល 3D និងការវិភាគកម្រិតខ្ពស់។",
+      "Open the current map view in Google Earth for 3D visualization and exploration.": "បើក map view បច្ចុប្បន្នក្នុង Google Earth សម្រាប់មើល និងស្វែងយល់ជា 3D។",
+      "Open the current map view in Open Street Map for web-based visualization and sharing.": "បើក map view បច្ចុប្បន្នក្នុង Open Street Map សម្រាប់មើល និងចែករំលែកតាម web។",
+      "Open ArcGIS Living Atlas or access to vast collection of authoritative maps and data.": "បើក ArcGIS Living Atlas ដើម្បីប្រើ collection ផែនទី និងទិន្នន័យដែលអាចទុកចិត្តបានជាច្រើន។",
+      "Open the KGA-Geodigitizer website for quickly digitized that data.": "បើកគេហទំព័រ KGA-Geodigitizer ដើម្បី digitize ទិន្នន័យបានយ៉ាងរហ័ស។",
+      "Show the create features pane to create new features in the current map using template.": "បង្ហាញ Create Features pane ដើម្បីបង្កើត feature ថ្មីក្នុង map បច្ចុប្បន្នដោយប្រើ template។",
+      "Move the selected features.": "ផ្លាស់ទី feature ដែលបានជ្រើស។",
+      "Add, Move, or Delete Vertices and segments for the selected feature.": "បន្ថែម ផ្លាស់ទី ឬលុប vertex និង segment របស់ feature ដែលបានជ្រើស។",
+      "Reshape an existing line or polygon feature by drawing the new shape.": "កែទម្រង់ line ឬ polygon feature ដែលមានស្រាប់ដោយគូរទម្រង់ថ្មី។",
+      "Merge two or more features into an existing features into a new feature.": "Merge feature ពីរ ឬច្រើនទៅជា feature ថ្មីមួយ។",
+      "Split Polyline or polygon features interactively by drawing a cutting line.": "Split polyline ឬ polygon feature ដោយគូរ cutting line។",
+      "Divide lines or polygon features.": "ចែក line ឬ polygon feature។",
+      "Create parallel offset copies of selected line features.": "បង្កើតច្បាប់ចម្លង parallel offset របស់ line feature ដែលបានជ្រើស។",
+      "Sequentially number points, lines, or polygons along a sketch.": "ដាក់លេខរៀង point, line ឬ polygon តាម sketch។",
+      "Extend or Trim polyline features and terminate them where they touch another feature.": "Extend ឬ Trim polyline feature ហើយបញ្ចប់ត្រង់កន្លែងដែលប៉ះ feature ផ្សេង។",
+      "Split lines where they intersect.": "Split line ត្រង់កន្លែងដែលវា intersect។",
+      "Clip all features or selected target features that touch or are within a buffered distance from selected features.": "Clip feature ទាំងអស់ ឬ target feature ដែលបានជ្រើស ហើយប៉ះ ឬស្ថិតក្នុង buffer distance ពី feature ដែលបានជ្រើស។",
+      "Buffer transverses each of the input feature's vertices and create buffer offsets.": "បង្កើត Buffer ឆ្លងកាត់ vertex នីមួយៗរបស់ input feature និងបង្កើត buffer offset។",
+      "Split selected line features at each vertices.": "Split line feature ដែលបានជ្រើសនៅរាល់ vertex។",
+      "Split selected line features where they intersect.": "Split line feature ដែលបានជ្រើសត្រង់កន្លែងដែលវា intersect។",
+      "Create new polygons from the shapes of selected features.": "បង្កើត polygon ថ្មីពីទម្រង់របស់ feature ដែលបានជ្រើស។",
+      "Open the attribute table of the selected layer for editing and analysis.": "បើក attribute table របស់ layer ដែលបានជ្រើសសម្រាប់កែសម្រួល និងវិភាគ។",
+      "Export the selected feature layer's attribute table to Excel for editing.": "នាំចេញ attribute table របស់ feature layer ដែលបានជ្រើសទៅ Excel សម្រាប់កែសម្រួល។",
+      "Read the modified Excel file and push change back to the original feature class attribute.": "អាន file Excel ដែលបានកែ ហើយបញ្ចូលការផ្លាស់ប្ដូរត្រឡប់ទៅ attribute របស់ feature class ដើម។",
+      "Configure export options, temp directory, and validation rules.": "កំណត់ export option, temp directory និង validation rule។",
+      "View pop up and pan, Zoom rotate/tilt (3D-only), Continuous.": "មើល pop-up និង pan, zoom, rotate/tilt (សម្រាប់តែ 3D) និង continuous។",
+      "Select features visible on map.": "ជ្រើស feature ដែលមើលឃើញលើ map។",
+      "Deselect all currently selected features.": "ដោះការជ្រើស feature ទាំងអស់ដែលកំពុងបានជ្រើស។",
+      "Turn snapping on or off for interactive tools.": "បើក ឬបិទ snapping សម្រាប់ interactive tool។",
+      "Show the attributes pane.": "បង្ហាញ Attributes pane។",
+      "Draw a line to measure the straight line distance between two or more points.": "គូរ line ដើម្បីវាស់ចម្ងាយបន្ទាត់ត្រង់រវាង point ពីរ ឬច្រើន។",
+      "Save all edit made since the last save.": "រក្សាទុកការកែសម្រួលទាំងអស់ចាប់ពីការរក្សាទុកចុងក្រោយ។",
+      "Discard all unsaved edits.": "បោះបង់ការកែសម្រួលទាំងអស់ដែលមិនទាន់បានរក្សាទុក។",
+      "Delete the selected features.": "លុប feature ដែលបានជ្រើស។"
+    };
+    Object.assign(TOOL_DESCRIPTIONS_KM, {
+      "Clip features from one layer using the features of another layer as the clipping boundary.": "Clip feature ពី layer មួយដោយប្រើ feature របស់ layer មួយទៀតជា clipping boundary។",
+      "Merge multiple datasets into a single dataset.": "Merge dataset ច្រើនទៅជា dataset តែមួយ។",
+      "Find common areas and create a new layer with intersected features.": "រកតំបន់រួម ហើយបង្កើត layer ថ្មីជាមួយ feature ដែល intersect។",
+      "Dissolve features based on specified attributes to create simplified geometries.": "Dissolve feature តាម attribute ដែលបានកំណត់ ដើម្បីបង្កើត geometry សាមញ្ញ។",
+      "Create buffer zones around input features at a specified distance.": "បង្កើត buffer zone ជុំវិញ input feature តាមចម្ងាយដែលបានកំណត់។",
+      "Erase portions of features that overlap with features from another layer.": "Erase ផ្នែករបស់ feature ដែល overlap ជាមួយ feature ពី layer ផ្សេង។",
+      "Combine features from multiple layers into a single layer, preserving all geometries.": "បញ្ចូល feature ពី layer ច្រើនទៅជា layer តែមួយ ដោយរក្សា geometry ទាំងអស់។",
+      "Append features from one or more layers to an existing layer.": "Append feature ពី layer មួយ ឬច្រើនទៅ layer ដែលមានស្រាប់។",
+      "Clip raster data using a specified boundary.": "Clip ទិន្នន័យ raster ដោយប្រើ boundary ដែលបានកំណត់។",
+      "Extract raster by cell that fall within the area defined by mask layer.": "Extract raster cell ដែលស្ថិតក្នុងតំបន់កំណត់ដោយ mask layer។",
+      "Build or update raster attribute table for categorical raster datasets.": "បង្កើត ឬ update raster attribute table សម្រាប់ categorical raster dataset។",
+      "Perform map algebra operations on raster datasets using a calculator interface.": "អនុវត្ត map algebra លើ raster dataset ដោយប្រើ calculator interface។",
+      "Create a hillshade raster from a digital elevation model (DEM) to visualize terrain.": "បង្កើត hillshade raster ពី digital elevation model (DEM) ដើម្បីបង្ហាញសណ្ឋានដី។",
+      "Calculate the slope of the terrain from a digital elevation model (DEM).": "គណនា slope នៃសណ្ឋានដីពី digital elevation model (DEM)។",
+      "Generate contour lines from a digital elevation model (DEM).": "បង្កើត contour line ពី digital elevation model (DEM)។",
+      "Clip multiple features classes by a single feature class.": "Clip feature class ច្រើនដោយប្រើ feature class តែមួយ។",
+      "Create multiple ring buffers around input features.": "បង្កើត ring buffer ច្រើនជុំវិញ input feature។",
+      "Calculate the percentage of coverage of one or more layers over another.": "គណនាភាគរយ coverage របស់ layer មួយ ឬច្រើនលើ layer មួយទៀត។",
+      "Create thiessen (Voronoi) polygons from input point features.": "បង្កើត Thiessen (Voronoi) polygon ពី input point feature។",
+      "Convert coordinates between Indian UTM and WGS84 geographic coordinate systems.": "បម្លែង coordinate រវាង Indian UTM និង WGS84 geographic coordinate system។",
+      "Project vector data from current coordinate system to a different coordinate system.": "Project ទិន្នន័យ vector ពី coordinate system បច្ចុប្បន្នទៅ coordinate system ផ្សេង។",
+      "Project raster data from current coordinate system to a different coordinate system.": "Project ទិន្នន័យ raster ពី coordinate system បច្ចុប្បន្នទៅ coordinate system ផ្សេង។",
+      "Change the spatial reference of the data source.": "ផ្លាស់ប្ដូរ spatial reference របស់ប្រភពទិន្នន័យ។",
+      "Create geographic transformations between different datums.": "បង្កើត geographic transformation រវាង datum ផ្សេងៗ។",
+      "Trim parcel boundaries to the road edge by removing any overlapping portions using buffer method.": "Trim parcel boundary ទៅគែមផ្លូវ ដោយលុបផ្នែក overlap តាម buffer method។",
+      "Trim parcel boundaries to align with road edges using parallel method.": "Trim parcel boundary ឱ្យស្របនឹងគែមផ្លូវដោយប្រើ parallel method។",
+      "Optimize parcel subdivisions automatically based on specified criteria.": "ធ្វើឱ្យ parcel subdivision ប្រសើរឡើងដោយស្វ័យប្រវត្តិតាមលក្ខខណ្ឌដែលបានកំណត់។",
+      "Facilitate the subdivision of parcels based on specified criteria and constraint.": "ជួយបែងចែក parcel តាមលក្ខខណ្ឌ និង constraint ដែលបានកំណត់។",
+      "Perform data cleaning on parcel datasets to ensure accuracy and consistency.": "សម្អាតទិន្នន័យក្នុង parcel dataset ដើម្បីធានាភាពត្រឹមត្រូវ និងស៊ីសង្វាក់គ្នា។",
+      "Generate triangulation lines for parcels to analyze spatial relationships and support subdivision.": "បង្កើត triangulation line សម្រាប់ parcel ដើម្បីវិភាគ spatial relationship និងគាំទ្រ subdivision។",
+      "Calculate bearing and distances for parcel boundaries.": "គណនា bearing និងចម្ងាយសម្រាប់ parcel boundary។",
+      "Detect conflicts in parcel boundaries to ensure data integrity.": "រកឃើញភាពមិនស៊ីគ្នាក្នុង parcel boundary ដើម្បីធានា data integrity។",
+      "Generate legal descriptions for parcel boundaries based on spatial data.": "បង្កើត legal description សម្រាប់ parcel boundary តាម spatial data។",
+      "Generate parcel boundary lines from land parcel polygon data.": "បង្កើត parcel boundary line ពីទិន្នន័យ land parcel polygon។",
+      "Generate a listing of parcel coordinates from land parcel polygon.": "បង្កើតបញ្ជី parcel coordinate ពី land parcel polygon។",
+      "Generate corner point for parcels from land parcel polygon data.": "បង្កើត corner point សម្រាប់ parcel ពីទិន្នន័យ land parcel polygon។",
+      "Analyze the direction of parcel boundaries to identify orientation patterns.": "វិភាគទិសរបស់ parcel boundary ដើម្បីកំណត់ orientation pattern។",
+      "Analyze the minimum width of parcel to ensure compliance with regulations.": "វិភាគទទឹងអប្បបរមារបស់ parcel ដើម្បីធានាការអនុលោមតាមបទប្បញ្ញត្តិ។",
+      "Build a network graphic of parcels to analyze spatial relationships and connectivity.": "បង្កើត network graph របស់ parcel ដើម្បីវិភាគ spatial relationship និង connectivity។",
+      "Check the quality of parcel shapes to identify issues such as sliver polygons or irregular geometries.": "ពិនិត្យគុណភាពទម្រង់ parcel ដើម្បីរកបញ្ហាដូចជា sliver polygon ឬ geometry មិនទៀងទាត់។",
+      "Convert text between different Khmer font encoding to ensure compatibility.": "បម្លែងអត្ថបទរវាង Khmer font encoding ផ្សេងៗ ដើម្បីធានាភាពត្រូវគ្នា។",
+      "Perform topology checks on spatial data to ensure topological integrity.": "ពិនិត្យ topology លើ spatial data ដើម្បីធានា topological integrity។",
+      "Check for overlapping parcels in the dataset to maintain data integrity.": "ពិនិត្យ parcel ដែល overlap ក្នុង dataset ដើម្បីរក្សា data integrity។",
+      "Add feature classes to an existing topology for validation.": "បន្ថែម feature class ទៅ topology ដែលមានស្រាប់សម្រាប់ validation។",
+      "Check for overlapping boundaries in the dataset to maintain data integrity.": "ពិនិត្យ boundary ដែល overlap ក្នុង dataset ដើម្បីរក្សា data integrity។",
+      "Identify points that lie on the boundaries of features.": "កំណត់ point ដែលស្ថិតលើ boundary របស់ feature។",
+      "Validate and standardize parcel field formats according to specifications.": "ផ្ទៀងផ្ទាត់ និងធ្វើទ្រង់ទ្រាយ parcel field ឱ្យមានស្តង់ដារតាម specification។",
+      "Analyze parcel numbers for patterns and inconsistencies.": "វិភាគលេខ parcel ដើម្បីរក pattern និងភាពមិនស៊ីគ្នា។",
+      "Identify and locate duplicate parcel numbers within the dataset.": "កំណត់ និងស្វែងរកលេខ parcel ស្ទួនក្នុង dataset។",
+      "Count the number of features of input layers.": "រាប់ចំនួន feature របស់ input layer។",
+      "Analyze terrain changes by calculating cut and fill volume between surfaces.": "វិភាគការផ្លាស់ប្ដូរសណ្ឋានដីដោយគណនា cut និង fill volume រវាង surface។",
+      "Generate elevation profiles along specified lines from a digital elevation model (DEM).": "បង្កើត elevation profile តាម line ដែលបានកំណត់ពី digital elevation model (DEM)។",
+      "Generate elevation profiles along specified point path containing elevation field.": "បង្កើត elevation profile តាម point path ដែលមាន elevation field។",
+      "Extract spot height from a digital elevation model (DEM).": "Extract spot height ពី digital elevation model (DEM)។",
+      "Calculate direction and distance between pairs of points.": "គណនាទិស និងចម្ងាយរវាងគូ point។",
+      "Facilitate the division of parcels using a standardized form.": "ជួយបែងចែក parcel ដោយប្រើ form ស្តង់ដារ។",
+      "Quick generate land plots based on input CSV table, point, line, or polygon.": "បង្កើត land plot យ៉ាងរហ័សតាម input CSV table, point, line ឬ polygon។"
+    });
+
+    ALL_TOOLS.forEach(tool => {
+      tool.descKm = TOOL_DESCRIPTIONS_KM[tool.desc] || tool.desc;
+    });
     const CAT_COLORS = {
       'Data Creation':    '#3B82F6',
       'Data Management':  '#8B5CF6',
@@ -770,6 +974,7 @@
         const matchSearch = !searchTerm ||
           t.name.toLowerCase().includes(searchTerm) ||
           t.desc.toLowerCase().includes(searchTerm) ||
+          (t.descKm && t.descKm.toLowerCase().includes(searchTerm)) ||
           t.cat.toLowerCase().includes(searchTerm) ||
           (t.sub && t.sub.toLowerCase().includes(searchTerm));
         return matchCat && matchSearch;
@@ -800,7 +1005,7 @@
             <!-- Tool name -->
             <span class="font-display font-700 text-sm text-brand-text dark:text-white leading-snug">${t.name}</span>
             <!-- Description -->
-            <p class="text-xs text-brand-text/55 dark:text-gray-400 leading-relaxed">${t.desc}</p>
+            <p class="text-xs text-brand-text/55 dark:text-gray-400 leading-relaxed">${currentLanguage === 'km' ? t.descKm : t.desc}</p>
           </div>`;
       }).join('');
     }
@@ -1261,6 +1466,164 @@
 
 
   <!-- ═══════════════ SCRIPTS ═══════════════ -->
+  <script>
+    const STATIC_TRANSLATIONS_KM = {
+      'Tools': 'ឧបករណ៍',
+      'Featured': 'ឧបករណ៍ពិសេស',
+      'Pricing': 'តម្លៃ',
+      'About': 'អំពីយើង',
+      'Demo': 'សាកល្បង',
+      'Visit Us!': 'ចូលមើលគេហទំព័រ!',
+      'Engineering-Grade': 'កម្រិតវិស្វកម្ម',
+      'for': 'សម្រាប់',
+      'A comprehensive ArcGIS Pro Addin and Python toolbox with 11 specialized categories — from cadastral operations and CRS management to topology checks and spatial analysis.': 'ArcGIS Pro Addin និង Python toolbox ដ៏សម្បូរបែប ដែលមាន 11 ប្រភេទឯកទេស ចាប់ពីការងារ cadastral និងការគ្រប់គ្រង CRS រហូតដល់ការត្រួតពិនិត្យ topology និង spatial analysis។',
+      'Purchase Toolbox': 'ទិញ Toolbox',
+      'Explore Tools': 'ស្វែងយល់ពីឧបករណ៍',
+      'Categories': 'ប្រភេទ',
+      'Follow us': 'តាមដានយើង',
+      '11 Categories': '11 ប្រភេទ',
+      'Toolbox Categories': 'ប្រភេទ Toolbox',
+      'Each category groups related GIS operations into a focused, production-ready module designed for cadastral, engineering, and spatial workflows.': 'ប្រភេទនីមួយៗប្រមូលផ្តុំប្រតិបត្តិការ GIS ដែលពាក់ព័ន្ធទៅជាម៉ូឌុលច្បាស់លាស់ និងរួចរាល់សម្រាប់ការងារ cadastral វិស្វកម្ម និង spatial workflow។',
+      'Generate foundational GIS datasets including points, lines, polygons, and annotation layers from scratch.': 'បង្កើត GIS dataset មូលដ្ឋាន រួមមាន point, line, polygon និង annotation layer ចាប់ពីដំបូង។',
+      'Cadastral-specific tools for parcel management, boundary adjustments, and land survey data processing.': 'ឧបករណ៍សម្រាប់ការងារ cadastral ដើម្បីគ្រប់គ្រង parcel កែសម្រួល boundary និងដំណើរការទិន្នន័យវាស់វែងដី។',
+      'Convert between formats — shapefile, GeoJSON, KML, and geodatabase feature classes with precision.': 'បម្លែងទ្រង់ទ្រាយ shapefile, GeoJSON, KML និង geodatabase feature class បានយ៉ាងត្រឹមត្រូវ។',
+      'Coordinate Reference System tools — detect, assign, reproject, and harmonize spatial references across datasets.': 'ឧបករណ៍ Coordinate Reference System សម្រាប់ស្វែងរក កំណត់ reproject និងសម្រប spatial reference រវាង dataset។',
+      'Advanced data creation with schema templates, attribute population, and domain-driven feature generation.': 'បង្កើតទិន្នន័យកម្រិតខ្ពស់ដោយប្រើ schema template បំពេញ attribute និងបង្កើត feature តាម domain។',
+      'Manage geodatabases, feature classes, domains, subtypes, and attribute rules at enterprise scale.': 'គ្រប់គ្រង geodatabase, feature class, domain, subtype និង attribute rule សម្រាប់ការងារខ្នាតធំ។',
+      'Clip, buffer, dissolve, intersect, and merge operations with smart defaults and batch processing support.': 'អនុវត្ត Clip, Buffer, Dissolve, Intersect និង Merge ជាមួយការកំណត់លំនាំដើមឆ្លាតវៃ និងគាំទ្រ batch processing។',
+      'Automate map production — symbology, labeling, layout generation, and multi-page map series export.': 'ធ្វើស្វ័យប្រវត្តិកម្មការផលិតផែនទី រួមមាន symbology, labeling, layout និងការនាំចេញ map series ច្រើនទំព័រ។',
+      'Quality Control checks — validate attributes, geometry integrity, schema conformance, and data completeness.': 'ការត្រួតពិនិត្យ Quality Control សម្រាប់ attribute, geometry integrity, schema conformance និងភាពពេញលេញនៃទិន្នន័យ។',
+      'Proximity, overlay, direction-based selection, and spatial statistics for complex analytical workflows.': 'ផ្តល់ proximity, overlay, ការជ្រើសតាមទិស និង spatial statistics សម្រាប់ analytical workflow ស្មុគស្មាញ។',
+      'Detect gaps, overlaps, dangles, and self-intersections with automated topology rule validation.': 'រកឃើញ gap, overlap, dangle និង self-intersection ដោយការផ្ទៀងផ្ទាត់ topology rule ស្វ័យប្រវត្តិ។',
+      'See All Tools': 'មើលឧបករណ៍ទាំងអស់',
+      '146 individual tools across entire Addin': 'ឧបករណ៍ចំនួន 146 នៅក្នុង Addin ទាំងមូល',
+      'All': 'ទាំងអស់',
+      'tools': 'ឧបករណ៍',
+      'No tools match your search.': 'រកមិនឃើញឧបករណ៍ដែលត្រូវនឹងការស្វែងរកទេ។',
+      'Highlighted': 'បានជ្រើសរើស',
+      'Featured Tools': 'ឧបករណ៍ពិសេស',
+      'Hand-picked tools that solve the hardest, most common GIS problems in engineering and cadastral workflows.': 'ឧបករណ៍ដែលបានជ្រើសរើសសម្រាប់ដោះស្រាយបញ្ហា GIS ដែលពិបាក និងជួបញឹកញាប់ក្នុង workflow វិស្វកម្ម និង cadastral។',
+      'FEATURED': 'ពិសេស',
+      'Select features by compass direction relative to a reference point or feature. Perfect for regulatory compliance where directional context matters.': 'ជ្រើស feature តាមទិសត្រីវិស័យធៀបនឹង reference point ឬ feature។ សមស្របសម្រាប់ការអនុវត្តបទប្បញ្ញត្តិដែលទិសដៅមានសារៈសំខាន់។',
+      'Detect mismatched coordinate reference systems, batch-assign correct CRS, and reproject entire geodatabases in one operation.': 'រកឃើញ coordinate reference system ដែលមិនត្រូវគ្នា កំណត់ CRS ត្រឹមត្រូវជាបាច់ និង reproject geodatabase ទាំងមូលក្នុងប្រតិបត្តិការតែមួយ។',
+      'Populate missing attributes intelligently based on domain rules, spatial relationships, and configurable default value mappings.': 'បំពេញ attribute ដែលខ្វះដោយឆ្លាតវៃ តាម domain rule, spatial relationship និង default value mapping ដែលអាចកំណត់បាន។',
+      'Run comprehensive topology rules — gaps, overlaps, dangles, self-intersections — with detailed error reports and auto-fix suggestions.': 'ដំណើរការ topology rule គ្រប់ជ្រុងជ្រោយ រួមមាន gap, overlap, dangle និង self-intersection ជាមួយរបាយការណ៍កំហុសលម្អិត និងសំណើកែស្វ័យប្រវត្តិ។',
+      'License Packages': 'កញ្ចប់ License',
+      'License Package Available': 'កញ្ចប់ License ដែលមាន',
+      'All packages include full access to 50+ tools across 11 categories. Node-locked licenses tied to your device for maximum security.': 'គ្រប់កញ្ចប់អាចប្រើឧបករណ៍ជាង 50 ក្នុង 11 ប្រភេទបានពេញលេញ។ License ប្រភេទ node-locked ភ្ជាប់នឹងឧបករណ៍របស់អ្នកដើម្បីសុវត្ថិភាពខ្ពស់។',
+      'Student': 'សិស្ស/និស្សិត',
+      'For GIS students & learners': 'សម្រាប់សិស្ស និស្សិត និងអ្នកសិក្សា GIS',
+      '/ year': '/ ឆ្នាំ',
+      '1 device (node-locked)': '1 ឧបករណ៍ (node-locked)',
+      'All 11 categories (50+ tools)': 'ទាំង 11 ប្រភេទ (ឧបករណ៍ 50+)',
+      '1 year license duration': 'រយៈពេល License 1 ឆ្នាំ',
+      'Community support': 'ការគាំទ្រពីសហគមន៍',
+      'Free updates during license period': 'Update ឥតគិតថ្លៃក្នុងអំឡុងពេល License',
+      'Get Student License': 'ទទួល Student License',
+      'Most Popular': 'ពេញនិយមបំផុត',
+      'Individual': 'បុគ្គល',
+      'General Users': 'អ្នកប្រើប្រាស់ទូទៅ',
+      'For professionals & freelancers': 'សម្រាប់អ្នកជំនាញ និង freelancer',
+      'Priority email support': 'ការគាំទ្រតាម email អាទិភាព',
+      'Purchase License': 'ទិញ License',
+      'Team': 'ក្រុម',
+      'For teams & organizations': 'សម្រាប់ក្រុម និងស្ថាប័ន',
+      'Up to 3 devices (node-locked)': 'រហូតដល់ 3 ឧបករណ៍ (node-locked)',
+      'Priority email & Telegram support': 'ការគាំទ្រអាទិភាពតាម email និង Telegram',
+      'Get Team License': 'ទទួល Team License',
+      'Package': 'កញ្ចប់',
+      'Devices': 'ឧបករណ៍',
+      'License Type': 'ប្រភេទ License',
+      'Price (USD)': 'តម្លៃ (USD)',
+      'Duration': 'រយៈពេល',
+      '1 year': '1 ឆ្នាំ',
+      'Up to 3': 'រហូតដល់ 3',
+      'Accepted payment methods': 'វិធីបង់ប្រាក់ដែលទទួលយក',
+      'Cash / Bank Transfer / KHQR': 'សាច់ប្រាក់ / ផ្ទេរប្រាក់តាមធនាគារ / KHQR',
+      'Built for GIS Professionals': 'បង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS',
+      'KGA Toolbox is a Python-based ArcGIS Pro toolbox (.pyt) built by GIS engineers for GIS engineers. It eliminates repetitive tasks, enforces data quality standards, and accelerates production workflows in cadastral, infrastructure, and environmental mapping projects.': 'KGA Toolbox គឺជា ArcGIS Pro toolbox (.pyt) ដែលប្រើ Python និងបង្កើតដោយ GIS engineer សម្រាប់ GIS engineer។ វាកាត់បន្ថយការងារដដែលៗ ពង្រឹងស្តង់ដារគុណភាពទិន្នន័យ និងបង្កើនល្បឿន production workflow ក្នុងគម្រោង cadastral ហេដ្ឋារចនាសម្ព័ន្ធ និងផែនទីបរិស្ថាន។',
+      'Activate': 'ដំណើរការ',
+      'Purchase and Activate toolbox license and install to your ArcGIS Pro project.': 'ទិញ និង Activate toolbox license រួចដំឡើងក្នុង ArcGIS Pro project របស់អ្នក។',
+      'Configure': 'កំណត់រចនាសម្ព័ន្ធ',
+      'Set your workspace, CRS defaults, and QC thresholds in the config file.': 'កំណត់ workspace, CRS default និង QC threshold ក្នុង config file។',
+      'Execute': 'អនុវត្ត',
+      'Run tools directly from the Geoprocessing pane — all 50+ tools ready to go.': 'ដំណើរការឧបករណ៍ដោយផ្ទាល់ពី Geoprocessing pane ដោយឧបករណ៍ទាំង 50+ រួចរាល់សម្រាប់ប្រើប្រាស់។',
+      'Engineering-grade GIS tools built for ArcGIS Pro. From cadastral operations to topology validation — automate your spatial workflows.': 'ឧបករណ៍ GIS កម្រិតវិស្វកម្មដែលបង្កើតសម្រាប់ ArcGIS Pro។ ធ្វើ spatial workflow របស់អ្នកដោយស្វ័យប្រវត្តិ ចាប់ពីប្រតិបត្តិការ cadastral ដល់ topology validation។',
+      'Product': 'ផលិតផល',
+      'Tool Categories': 'ប្រភេទឧបករណ៍',
+      'Community': 'សហគមន៍',
+      'Facebook Page': 'ទំព័រ Facebook',
+      'YouTube Channel': 'ឆានែល YouTube',
+      'Telegram Channel': 'ឆានែល Telegram',
+      '© 2026 KGA Toolbox. All rights reserved.': '© 2026 KGA Toolbox។ រក្សាសិទ្ធិគ្រប់យ៉ាង។',
+      'Privacy Policy': 'គោលការណ៍ឯកជនភាព',
+      'Terms of Service': 'លក្ខខណ្ឌប្រើប្រាស់'
+    };
+
+    const ATTRIBUTE_TRANSLATIONS_KM = {
+      'Search tools…': 'ស្វែងរកឧបករណ៍…',
+      'Toggle dark mode': 'ប្ដូរមុខងារងងឹត',
+      'Menu': 'ម៉ឺនុយ',
+      'Close': 'បិទ',
+      'Language': 'ភាសា'
+    };
+
+    const originalTextNodes = new WeakMap();
+    let currentLanguage = document.documentElement.lang === 'en' ? 'en' : 'km';
+
+    function applyStaticTranslations(language) {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent || ['SCRIPT', 'STYLE', 'SVG'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+
+      let node;
+      while ((node = walker.nextNode())) {
+        if (!originalTextNodes.has(node)) originalTextNodes.set(node, node.nodeValue);
+        const original = originalTextNodes.get(node);
+        const key = original.trim();
+        const translated = language === 'km' ? STATIC_TRANSLATIONS_KM[key] : null;
+        node.nodeValue = translated ? original.replace(key, translated) : original;
+      }
+
+      document.querySelectorAll('[placeholder], [aria-label]').forEach(element => {
+        ['placeholder', 'aria-label'].forEach(attribute => {
+          if (!element.hasAttribute(attribute)) return;
+          const dataKey = `original${attribute.replace('-', '')}`;
+          if (!element.dataset[dataKey]) element.dataset[dataKey] = element.getAttribute(attribute);
+          const original = element.dataset[dataKey];
+          element.setAttribute(attribute, language === 'km' && ATTRIBUTE_TRANSLATIONS_KM[original] ? ATTRIBUTE_TRANSLATIONS_KM[original] : original);
+        });
+      });
+    }
+
+    function setLanguage(language, persist = true) {
+      currentLanguage = language === 'en' ? 'en' : 'km';
+      document.documentElement.lang = currentLanguage;
+      document.title = currentLanguage === 'km'
+        ? 'KGA Toolbox — ឧបករណ៍ GIS កម្រិតវិស្វកម្មសម្រាប់ ArcGIS Pro'
+        : 'KGA Toolbox — Engineering-Grade GIS Tools for ArcGIS Pro';
+      if (persist) localStorage.setItem('kga-language', currentLanguage);
+
+      document.querySelectorAll('[data-language]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.language === currentLanguage));
+      });
+
+      applyStaticTranslations(currentLanguage);
+      const allToolsTitle = document.getElementById('allToolsTitle');
+      if (allToolsTitle) {
+        allToolsTitle.innerHTML = currentLanguage === 'km'
+          ? '<span class="text-brand-orange">ឧបករណ៍</span> ទាំងអស់'
+          : 'All <span class="text-brand-orange">Tools</span>';
+      }
+      if (document.getElementById('allToolsGrid').children.length) renderTools();
+    }
+
+    setLanguage(currentLanguage, false);
+  </script>
   <script>
     // ─── Dark Mode Toggle ───
     const html = document.documentElement;
