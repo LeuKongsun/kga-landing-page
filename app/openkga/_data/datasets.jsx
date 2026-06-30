@@ -9,6 +9,7 @@ export const TOPIC_CATEGORIES = [
   { slug: "hydrology", label: "ទន្លេ និងបឹង", color: "green" },
   { slug: "landuse", label: "ការប្រើប្រាស់ដី", color: "orange" },
   { slug: "demographics", label: "ប្រជាសាស្ត្រ", color: "red" },
+  { slug: "tool-solution", label: "Tool and Solution", color: "purple" },
 ];
 
 // File format filters
@@ -21,6 +22,7 @@ export const FORMATS = [
   { slug: "geotiff", label: "GeoTIFF" },
   { slug: "csv", label: "CSV" },
   { slug: "pdf", label: "PDF" },
+  { slug: "tool", label: "Tool" },
 ];
 
 // Licenses (re-used in cards & detail page)
@@ -39,7 +41,7 @@ export const datasets = [
     slug: "cambodia-province-boundary-2026",
     category: "boundary",
     format: "shapefile",
-    title: "ព្រំដែនរាជធានី-ខេត្តកម្ពុជា ឆ្នាំ ២០២៦",
+    title: "ព្រំដែនរាជធានី-ខេត្តកម្ពុជា",
     excerpt:
       "ទិន្នន័យព្រំដែនរដ្ឋបាលថ្នាក់រាជធានី-ខេត្តនៃប្រទេសកម្ពុជា មាន ២៦ ប៉ូលីហ្គោន (រាជធានី-ខេត្ត ២៥ និងបឹងទន្លេសាប ១)។",
     coverImage: "/SharedDataThumbnail/cam_province_boundary.jpg",
@@ -63,7 +65,7 @@ export const datasets = [
     slug: "cambodia-district-commune-boundaries-2026",
     category: "boundary",
     format: "shapefile",
-    title: "ព្រំដែនស្រុក និងឃុំ-សង្កាត់កម្ពុជា ឆ្នាំ ២០២៦",
+    title: "ព្រំដែនស្រុក និងឃុំ-សង្កាត់កម្ពុជា",
     excerpt:
       "ទិន្នន័យព្រំដែនរដ្ឋបាលមាន ២១៧ ប៉ូលីហ្គោនថ្នាក់ស្រុក និង ១,៧៥៦ ប៉ូលីហ្គោនថ្នាក់ឃុំ។",
     coverImage: "/SharedDataThumbnail/cam_dist_com_boundary.jpg",
@@ -178,25 +180,52 @@ export const datasets = [
     tags: ["gazetteer", "administrative", "place names", "cambodia", "2023"],
   },
   {
-    slug: "cambodia-borders-kml",
-    category: "boundary",
-    format: "kml",
-    title: "ព្រំដែនកម្ពុជា (KML for Google Earth)",
+    slug: "mdb-to-gdb-without-arcmap",
+    category: "tool-solution",
+    format: "tool",
+    title: "MDB to GDB without opening ArcMap",
     excerpt:
-      "ឯកសារ KML ដែលអាចបើកដោយ Google Earth មានព្រំដែនជាតិ និងខេត្ត។",
-    coverImage: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&h=800&fit=crop",
-    fileSize: "1.8 MB",
-    fileFormat: "KML (.kml)",
-    lastUpdated: "2026-02-18",
-    license: "cc-zero",
-    downloadUrl: "https://example.com/downloads/cambodia-borders.kml",
-    source: "KGA",
-    crs: "WGS 84 (EPSG:4326)",
-    featureCount: 26,
+      "An open-source tool for converting MDB personal geodatabases to file geodatabases without opening ArcMap.",
+    coverImage: "/SharedDataThumbnail/mdb to gdb without arcmap1.png",
+    fileSize: "8 KB",
+    fileFormat: "Tool package",
+    lastUpdated: "2026-06-30",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1ZgoGxQwnhE3J2Lut-p1_-NSHdJ2j-53u/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
     description: [
-      { type: "paragraph", text: "ឯកសារ KML នេះអាចបើកដោយផ្ទាល់ក្នុង Google Earth ឬ Google My Maps។" },
+      {
+        type: "paragraph",
+        text: "Use this open-source tool to convert Microsoft Access Personal Geodatabase (.mdb) data to File Geodatabase (.gdb) format without opening ArcMap.",
+      },
     ],
-    tags: ["kml", "google earth", "boundary"],
+    tags: ["mdb", "gdb", "geodatabase", "conversion", "open source", "KGA"],
+  },
+  {
+    slug: "create-point-from-csv-without-software",
+    category: "tool-solution",
+    format: "tool",
+    title: "Create Point from CSV without software",
+    excerpt:
+      "An open-source tool for creating point data from CSV coordinates without installing GIS software.",
+    coverImage: "/SharedDataThumbnail/create point without software.png",
+    fileSize: "7 KB",
+    fileFormat: "Tool package",
+    lastUpdated: "2026-06-30",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1QN5ziaDef4bFVraM5l934LX30IVScMXi/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "Use this open-source tool to create point data from coordinate fields in a CSV file without installing or opening GIS software.",
+      },
+    ],
+    tags: ["csv", "point", "coordinates", "conversion", "open source", "KGA"],
   },
 ];
 

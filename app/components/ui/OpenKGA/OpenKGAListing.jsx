@@ -252,7 +252,7 @@ const OpenKGAListing = () => {
                   </div>
                 ) : (
                   <AnimatePresence mode="popLayout">
-                    <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                       {filteredDatasets.map((ds, idx) => {
                         const cat = getCategoryMeta(ds.category);
                         const license = LICENSES[ds.license];
