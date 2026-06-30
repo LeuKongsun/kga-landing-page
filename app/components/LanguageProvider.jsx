@@ -102,6 +102,7 @@ const TRANSLATION_ENTRIES = [
   ["ព្រំដែនរដ្ឋបាល", "Administrative Boundaries"],
   ["ផ្លូវ និងដឹកជញ្ជូន", "Roads & Transport"],
   ["ទន្លេ និងបឹង", "Rivers & Lakes"],
+  ["ផែនទីសណ្ឋានដី", "Topographic Maps"],
   ["ទាំងអស់", "All"],
   ["ការប្រើប្រាស់ដី", "Land Use"],
   ["ប្រជាសាស្ត្រ", "Demographics"],
@@ -156,6 +157,8 @@ const TRANSLATION_ENTRIES = [
   ["ប្រើកញ្ចប់ប្រភពបើកចំហនេះ ដើម្បីបន្ថែម និងប្រើប្រាស់ស្រទាប់ផែនទីមូលដ្ឋាន OpenStreetMap (OSM) ក្នុងការងារ GIS របស់អ្នក។", "Use this open-source package to add and access an OpenStreetMap (OSM) basemap layer in your GIS workflow."],
   ["សំណុំទិន្នន័យនេះមានព័ត៌មានគម្របព្រៃឈើសម្រាប់ឆ្នាំ ១៩៩៣–២០០៦ និងចែកចាយជា Esri File Geodatabase ដែលបានបង្ហាប់។", "This dataset contains forest-cover information for 1993–2006 and is distributed as a compressed Esri File Geodatabase."],
   ["សំណុំទិន្នន័យនេះមានរ៉ាស្ទ័រគម្របដីប្រចាំឆ្នាំចំនួន ៩ សម្រាប់ឆ្នាំ ២០១៧–២០២៥ ជាទម្រង់ GeoTIFF និងមានភ្ជាប់ឯកសារកូដចំណាត់ថ្នាក់គម្របដី។", "This collection contains nine annual land-cover rasters for 2017–2025 in GeoTIFF format, accompanied by a land-cover class-code file."],
+  ["ផែនទីសណ្ឋានដីកម្ពុជាមាត្រដ្ឋាន ១:១០០,០០០ ដែលផ្តល់ជាទិន្នន័យរ៉ាស្ទ័រ ECW ចំនួន ៣ ឯកសារ។", "A 1:100,000-scale topographic map of Cambodia supplied as three ECW raster files."],
+  ["សំណុំទិន្នន័យនេះមានផែនទីសណ្ឋានដីកម្ពុជាមាត្រដ្ឋាន ១:១០០,០០០ ចំនួន ៣ ឯកសារ ជាទម្រង់រ៉ាស្ទ័រ ECW។", "This dataset contains three 1:100,000-scale topographic maps of Cambodia in ECW raster format."],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],

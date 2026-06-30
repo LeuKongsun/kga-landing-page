@@ -7,6 +7,7 @@ export const TOPIC_CATEGORIES = [
   { slug: "boundary", label: "ព្រំដែនរដ្ឋបាល", color: "blue" },
   { slug: "transport", label: "ផ្លូវ និងដឹកជញ្ជូន", color: "purple" },
   { slug: "hydrology", label: "ទន្លេ និងបឹង", color: "green" },
+  { slug: "topography", label: "ផែនទីសណ្ឋានដី", color: "blue" },
   { slug: "landuse", label: "ការប្រើប្រាស់ដី", color: "orange" },
   { slug: "demographics", label: "ប្រជាសាស្ត្រ", color: "red" },
   { slug: "tool-solution", label: "ឧបករណ៍ និងដំណោះស្រាយ", color: "purple" },
@@ -29,6 +30,7 @@ export const FORMATS = [
 // Licenses (re-used in cards & detail page)
 export const LICENSES = {
   "open-source": { label: "Open Source", url: null },
+  "courtesy-aruna": { label: "Courtesy of Aruna Technology", url: null },
   "not-specified": { label: "Not specified", url: null },
   "copyright-2023": { label: "Copyright © 2023", url: null },
   "cc-by": { label: "CC BY 4.0", url: "https://creativecommons.org/licenses/by/4.0/" },
@@ -323,6 +325,30 @@ export const datasets = [
       },
     ],
     tags: ["Esri", "land cover", "raster", "GeoTIFF", "2017", "2025"],
+  },
+  {
+    slug: "cambodia-topographic-map-1-100000",
+    category: "topography",
+    format: "raster",
+    title: "Cambodia Topographic Map 1:100,000",
+    excerpt:
+      "ផែនទីសណ្ឋានដីកម្ពុជាមាត្រដ្ឋាន ១:១០០,០០០ ដែលផ្តល់ជាទិន្នន័យរ៉ាស្ទ័រ ECW ចំនួន ៣ ឯកសារ។",
+    coverImage: "/SharedDataThumbnail/cam_topo_1_100k.jpg",
+    fileSize: "1.2 GB",
+    fileFormat: "ECW raster (.ecw)",
+    lastUpdated: "2026-06-30",
+    license: "courtesy-aruna",
+    downloadUrl: "https://drive.google.com/file/d/1aWbne72hlFdDIWtQaqN72AH_Nu5D8b43/view?usp=sharing",
+    source: "Aruna Technology",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "សំណុំទិន្នន័យនេះមានផែនទីសណ្ឋានដីកម្ពុជាមាត្រដ្ឋាន ១:១០០,០០០ ចំនួន ៣ ឯកសារ ជាទម្រង់រ៉ាស្ទ័រ ECW។",
+      },
+    ],
+    tags: ["Cambodia", "topographic map", "1:100000", "raster", "ECW"],
   },
 ];
 
