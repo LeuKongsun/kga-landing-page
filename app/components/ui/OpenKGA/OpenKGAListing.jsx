@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { m, AnimatePresence } from "framer-motion";
@@ -19,6 +19,22 @@ const categoryStyles = {
   orange: "bg-brand-orange/15 text-brand-orange border-brand-orange/30",
 };
 
+const ITEMS_PER_PAGE = 12;
+
+const getPaginationItems = (currentPage, totalPages) => {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const items = [1];
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  if (start > 2) items.push("start-ellipsis");
+  for (let page = start; page <= end; page += 1) items.push(page);
+  if (end < totalPages - 1) items.push("end-ellipsis");
+  items.push(totalPages);
+
+  return items;
+};
 const formatDate = (iso) => {
   const d = new Date(iso);
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -28,6 +44,7 @@ const OpenKGAListing = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeFormat, setActiveFormat] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredDatasets = useMemo(() => {
     let result = datasets;
@@ -45,6 +62,23 @@ const OpenKGAListing = () => {
     return result;
   }, [activeCategory, activeFormat, searchQuery]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredDatasets.length / ITEMS_PER_PAGE));
+  const activePage = Math.min(currentPage, totalPages);
+  const paginatedDatasets = useMemo(() => {
+    const start = (activePage - 1) * ITEMS_PER_PAGE;
+    return filteredDatasets.slice(start, start + ITEMS_PER_PAGE);
+  }, [activePage, filteredDatasets]);
+  const paginationItems = getPaginationItems(activePage, totalPages);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, activeFormat, searchQuery]);
+
+  const changePage = (page) => {
+    if (page === activePage || page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    document.getElementById("openkga-datasets")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   const getCategoryMeta = (slug) =>
     TOPIC_CATEGORIES.find((c) => c.slug === slug) || TOPIC_CATEGORIES[0];
 
@@ -240,7 +274,7 @@ const OpenKGAListing = () => {
               </aside>
 
               {/* Datasets grid */}
-              <div>
+              <div id="openkga-datasets" className="scroll-mt-28">
                 {filteredDatasets.length === 0 ? (
                   <div className="bg-brand-blue/5 dark:bg-white/5 border border-dashed border-brand-blue/20 dark:border-white/10 rounded-2xl p-12 text-center">
                     <p className="text-base font-display font-600 text-brand-text/60 dark:text-gray-400 mb-2">
@@ -251,9 +285,10 @@ const OpenKGAListing = () => {
                     </p>
                   </div>
                 ) : (
-                  <AnimatePresence mode="popLayout">
-                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                      {filteredDatasets.map((ds, idx) => {
+                  <>
+                    <AnimatePresence mode="popLayout">
+                      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                      {paginatedDatasets.map((ds, idx) => {
                         const cat = getCategoryMeta(ds.category);
                         const license = LICENSES[ds.license];
                         return (
@@ -345,8 +380,63 @@ const OpenKGAListing = () => {
                           </m.article>
                         );
                       })}
-                    </div>
-                  </AnimatePresence>
+                      </div>
+                    </AnimatePresence>
+
+                    {totalPages > 1 && (
+                      <nav
+                        aria-label="Dataset pagination"
+                        className="mt-10 flex flex-wrap items-center justify-center gap-2"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => changePage(activePage - 1)}
+                          disabled={activePage === 1}
+                          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
+                        >
+                          <span aria-hidden="true">←</span>
+                          <span>មុន</span>
+                        </button>
+
+                        {paginationItems.map((item) =>
+                          typeof item === "number" ? (
+                            <button
+                              key={item}
+                              type="button"
+                              onClick={() => changePage(item)}
+                              aria-label={`Page ${item}`}
+                              aria-current={item === activePage ? "page" : undefined}
+                              className={`inline-flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm font-display font-700 transition-all ${
+                                item === activePage
+                                  ? "border-brand-orange bg-brand-orange text-white shadow-md shadow-brand-orange/20"
+                                  : "border-brand-blue/20 bg-white text-brand-text/70 hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
+                              }`}
+                            >
+                              {item}
+                            </button>
+                          ) : (
+                            <span
+                              key={item}
+                              aria-hidden="true"
+                              className="inline-flex h-10 min-w-8 items-center justify-center text-sm font-display font-700 text-brand-text/35 dark:text-gray-600"
+                            >
+                              …
+                            </span>
+                          )
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => changePage(activePage + 1)}
+                          disabled={activePage === totalPages}
+                          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
+                        >
+                          <span>បន្ទាប់</span>
+                          <span aria-hidden="true">→</span>
+                        </button>
+                      </nav>
+                    )}
+                  </>
                 )}
               </div>
             </div>
