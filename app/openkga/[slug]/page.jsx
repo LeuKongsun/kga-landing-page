@@ -11,7 +11,14 @@ export async function generateMetadata({ params }) {
   if (!dataset) {
     return { title: "Dataset not found | OpenKGA" };
   }
-  const socialImage = `/_next/image?url=${encodeURIComponent(dataset.coverImage)}&w=1200&q=82`;
+  const socialImage = dataset.socialImage || dataset.coverImage;
+  const socialImageMetadata = {
+    url: socialImage,
+    alt: dataset.title,
+    ...(dataset.socialImageWidth && { width: dataset.socialImageWidth }),
+    ...(dataset.socialImageHeight && { height: dataset.socialImageHeight }),
+    ...(dataset.socialImage && { type: "image/jpeg" }),
+  };
 
   return {
     title: `${dataset.title} | OpenKGA`,
@@ -24,12 +31,7 @@ export async function generateMetadata({ params }) {
       description: dataset.excerpt,
       url: `/openkga/${dataset.slug}`,
       siteName: "Khmer GRS Academy",
-      images: [
-        {
-          url: socialImage,
-          alt: dataset.title,
-        },
-      ],
+      images: [socialImageMetadata],
       locale: "km_KH",
       type: "website",
     },
