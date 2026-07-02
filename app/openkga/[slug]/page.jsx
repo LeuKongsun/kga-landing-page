@@ -11,13 +11,13 @@ export async function generateMetadata({ params }) {
   if (!dataset) {
     return { title: "Dataset not found | OpenKGA" };
   }
-  const socialImage = dataset.socialImage || dataset.coverImage;
+  const socialImage = `/SharedDataThumbnail/social/${dataset.slug}.jpg`;
   const socialImageMetadata = {
     url: socialImage,
     alt: dataset.title,
-    ...(dataset.socialImageWidth && { width: dataset.socialImageWidth }),
-    ...(dataset.socialImageHeight && { height: dataset.socialImageHeight }),
-    ...(dataset.socialImage && { type: "image/jpeg" }),
+    width: 1200,
+    height: 630,
+    type: "image/jpeg",
   };
 
   return {

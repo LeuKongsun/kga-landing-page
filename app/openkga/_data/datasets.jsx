@@ -358,9 +358,6 @@ export const datasets = [
     excerpt:
       "ផែនទីយោងក្រឡាចត្រង្គជាតិកម្ពុជា កំណែរបស់ Khmer GRS Academy (KGA) ដែលផ្តល់ជាឯកសារ PDF។",
     coverImage: "/SharedDataThumbnail/CAMBODIA.jpg",
-    socialImage: "/SharedDataThumbnail/CAMBODIA-social.jpg",
-    socialImageWidth: 1200,
-    socialImageHeight: 849,
     fileSize: "16.4 MB",
     fileFormat: "PDF (.pdf)",
     lastUpdated: "2026-07-02",

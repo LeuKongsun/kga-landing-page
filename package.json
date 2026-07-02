@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:openkga-social": "node scripts/generate-openkga-social-images.mjs",
+    "predev": "npm run generate:openkga-social",
     "dev": "next dev",
+    "prebuild": "npm run generate:openkga-social",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
