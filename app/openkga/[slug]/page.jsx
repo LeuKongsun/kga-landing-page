@@ -14,6 +14,29 @@ export async function generateMetadata({ params }) {
   return {
     title: `${dataset.title} | OpenKGA`,
     description: dataset.excerpt,
+    alternates: {
+      canonical: `/openkga/${dataset.slug}`,
+    },
+    openGraph: {
+      title: dataset.title,
+      description: dataset.excerpt,
+      url: `/openkga/${dataset.slug}`,
+      siteName: "Khmer GRS Academy",
+      images: [
+        {
+          url: dataset.coverImage,
+          alt: dataset.title,
+        },
+      ],
+      locale: "km_KH",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dataset.title,
+      description: dataset.excerpt,
+      images: [dataset.coverImage],
+    },
   };
 }
 

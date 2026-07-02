@@ -16,6 +16,7 @@ const fontJetbrains = JetBrains_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://www.khmergrs.com"),
   title: {
     default: "Khmer GRS Academy | ជំនាញគ្រប់គ្រងទិន្នន័យភូមិសាស្រ្ត និងផែនទី",
     template: "%s | Khmer GRS Academy",
