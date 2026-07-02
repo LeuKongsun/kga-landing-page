@@ -163,6 +163,8 @@ const TRANSLATION_ENTRIES = [
   ["បន្ទាប់", "Next"],
   ["មិនមានទិន្នន័យត្រូវនឹងលក្ខខណ្ឌស្វែងរក", "No datasets match your search criteria"],
   ["សូមព្យាយាមផ្លាស់ប្តូរពាក្យស្វែងរក ឬប្រភេទ។", "Try changing your search terms or filters."],
+  ["ផែនទីយោងក្រឡាចត្រង្គជាតិកម្ពុជា កំណែរបស់ Khmer GRS Academy (KGA) ដែលផ្តល់ជាឯកសារ PDF។", "The Cambodia National Grid Reference Map, KGA Edition, provided as a PDF document."],
+  ["ផែនទីនេះបង្ហាញក្រឡាចត្រង្គយោងជាតិសម្រាប់ប្រទេសកម្ពុជា និងត្រូវបានរៀបចំជាកំណែ KGA សម្រាប់ប្រើប្រាស់ជាឯកសារយោង។", "This map presents the national reference grid for Cambodia and was prepared as the KGA Edition for reference use."],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],

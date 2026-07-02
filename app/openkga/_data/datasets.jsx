@@ -350,6 +350,30 @@ export const datasets = [
     ],
     tags: ["Cambodia", "topographic map", "1:100000", "raster", "ECW"],
   },
+  {
+    slug: "cambodia-national-grid-reference-map-kga-edition",
+    category: "topography",
+    format: "pdf",
+    title: "Cambodia National Grid Reference Map (KGA Edition)",
+    excerpt:
+      "ផែនទីយោងក្រឡាចត្រង្គជាតិកម្ពុជា កំណែរបស់ Khmer GRS Academy (KGA) ដែលផ្តល់ជាឯកសារ PDF។",
+    coverImage: "/SharedDataThumbnail/CAMBODIA.jpg",
+    fileSize: "16.4 MB",
+    fileFormat: "PDF (.pdf)",
+    lastUpdated: "2026-07-02",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1BCvPOIsU1CGPOCJOiY6DxUJ11TG1pnPY/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "ផែនទីនេះបង្ហាញក្រឡាចត្រង្គយោងជាតិសម្រាប់ប្រទេសកម្ពុជា និងត្រូវបានរៀបចំជាកំណែ KGA សម្រាប់ប្រើប្រាស់ជាឯកសារយោង។",
+      },
+    ],
+    tags: ["Cambodia", "national grid", "reference map", "KGA", "PDF"],
+  },
 ];
 
 export const getDatasetBySlug = (slug) => datasets.find((d) => d.slug === slug);
