@@ -11,6 +11,8 @@ export async function generateMetadata({ params }) {
   if (!dataset) {
     return { title: "Dataset not found | OpenKGA" };
   }
+  const socialImage = `/_next/image?url=${encodeURIComponent(dataset.coverImage)}&w=1200&q=82`;
+
   return {
     title: `${dataset.title} | OpenKGA`,
     description: dataset.excerpt,
@@ -24,7 +26,7 @@ export async function generateMetadata({ params }) {
       siteName: "Khmer GRS Academy",
       images: [
         {
-          url: dataset.coverImage,
+          url: socialImage,
           alt: dataset.title,
         },
       ],
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: dataset.title,
       description: dataset.excerpt,
-      images: [dataset.coverImage],
+      images: [socialImage],
     },
   };
 }
