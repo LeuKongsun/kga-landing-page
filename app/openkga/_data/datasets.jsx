@@ -374,6 +374,30 @@ export const datasets = [
     ],
     tags: ["Cambodia", "national grid", "reference map", "KGA", "PDF"],
   },
+  {
+    slug: "kga-toolbox-check-overlap-feature",
+    category: "tool-solution",
+    format: "tool",
+    title: "KGA Toolbox - Check overlap feature",
+    excerpt:
+      "ឧបករណ៍ KGA Toolbox សម្រាប់ពិនិត្យរកលក្ខណៈដែលត្រួតស៊ីគ្នា (overlap) នៅក្នុងស្រទាប់ទិន្នន័យភូមិសាស្ត្រ។",
+    coverImage: "/SharedDataThumbnail/check overlap feature.png",
+    fileSize: "29.2 KB",
+    fileFormat: "ArcGIS Toolbox (.atbx)",
+    lastUpdated: "2026-07-04",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1ILa3tn0cfSCUK4lbXcr251WNv4M0zM2p/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "ឧបករណ៍នេះជួយស្វែងរក និងពិនិត្យលក្ខណៈដែលត្រួតស៊ីគ្នា ដើម្បីគាំទ្រការត្រួតពិនិត្យគុណភាព និងកែសម្អាតទិន្នន័យនៅក្នុង ArcGIS Pro។",
+      },
+    ],
+    tags: ["KGA Toolbox", "overlap", "data quality", "ArcGIS Pro", "ATBX"],
+  },
 ];
 
 export const getDatasetBySlug = (slug) => datasets.find((d) => d.slug === slug);

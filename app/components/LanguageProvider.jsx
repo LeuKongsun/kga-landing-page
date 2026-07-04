@@ -165,6 +165,8 @@ const TRANSLATION_ENTRIES = [
   ["សូមព្យាយាមផ្លាស់ប្តូរពាក្យស្វែងរក ឬប្រភេទ។", "Try changing your search terms or filters."],
   ["ផែនទីយោងក្រឡាចត្រង្គជាតិកម្ពុជា កំណែរបស់ Khmer GRS Academy (KGA) ដែលផ្តល់ជាឯកសារ PDF។", "The Cambodia National Grid Reference Map, KGA Edition, provided as a PDF document."],
   ["ផែនទីនេះបង្ហាញក្រឡាចត្រង្គយោងជាតិសម្រាប់ប្រទេសកម្ពុជា និងត្រូវបានរៀបចំជាកំណែ KGA សម្រាប់ប្រើប្រាស់ជាឯកសារយោង។", "This map presents the national reference grid for Cambodia and was prepared as the KGA Edition for reference use."],
+  ["ឧបករណ៍ KGA Toolbox សម្រាប់ពិនិត្យរកលក្ខណៈដែលត្រួតស៊ីគ្នា (overlap) នៅក្នុងស្រទាប់ទិន្នន័យភូមិសាស្ត្រ។", "A KGA Toolbox tool for checking overlapping features in geospatial data layers."],
+  ["ឧបករណ៍នេះជួយស្វែងរក និងពិនិត្យលក្ខណៈដែលត្រួតស៊ីគ្នា ដើម្បីគាំទ្រការត្រួតពិនិត្យគុណភាព និងកែសម្អាតទិន្នន័យនៅក្នុង ArcGIS Pro។", "This tool finds and checks overlapping features to support data quality control and cleanup in ArcGIS Pro."],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],
