@@ -398,6 +398,45 @@ export const datasets = [
     ],
     tags: ["KGA Toolbox", "overlap", "data quality", "ArcGIS Pro", "ATBX"],
   },
+  {
+    slug: "archive-tool",
+    category: "tool-solution",
+    format: "tool",
+    title: "Archive Tool",
+    excerpt:
+      "ឧបករណ៍ Batch សម្រាប់បង្កើត និងស្រង់ឯកសារបង្ហាប់ជាច្រើនក្នុងពេលតែមួយ ដោយប្រើការអូសនិងទម្លាក់ និងមិនចាំបាច់បើកកម្មវិធីបង្ហាប់។",
+    coverImage: "/SharedDataThumbnail/archiveTools.png",
+    fileSize: "125.9 KB",
+    fileFormat: "ZIP package (.zip)",
+    lastUpdated: "2026-07-06",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1_nVixROpD3K6Gg1MRWLYJ5CekVbSRk6C/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "Archive Tool មានឧបករណ៍ពីរ៖ ZipMultipleFilesAtOnce.bat សម្រាប់បង្កើត ZIP, 7Z ឬ RAR និង ExtractMultipleZipfileAtOnce.bat សម្រាប់ស្រង់ឯកសារបង្ហាប់ជាច្រើនក្នុងពេលតែមួយ។",
+      },
+      { type: "heading", text: "របៀបបង្កើតឯកសារបង្ហាប់" },
+      {
+        type: "paragraph",
+        text: "ចុចពីរដងលើ ZipMultipleFilesAtOnce.bat អូសឯកសារ ឬថតឯកសារចូលក្នុងផ្ទាំង Console ហើយចុច Enter។ ជ្រើស ZIP, 7Z ឬ RAR ជ្រើសបង្កើតជាឯកសាររួមមួយ ឬបំបែកតាមធាតុនីមួយៗ កំណត់ថតគោលដៅ រួចពិនិត្យសេចក្តីសង្ខេប និងចុច Enter ដើម្បីដំណើរការ។",
+      },
+      { type: "heading", text: "របៀបស្រង់ឯកសារចេញ" },
+      {
+        type: "paragraph",
+        text: "ចុចពីរដងលើ ExtractMultipleZipfileAtOnce.bat អូសឯកសារ ZIP, 7Z ឬ RAR ចូល ហើយចុច Enter។ ជ្រើសស្រង់នៅក្បែរឯកសារដើម ឬទៅថតដែលអ្នកកំណត់ បន្ទាប់មកជ្រើសថតរងដាច់ដោយឡែកសម្រាប់ឯកសារនីមួយៗ (បានណែនាំ) ឬស្រង់ផ្ទាល់ ហើយបញ្ជាក់ដើម្បីដំណើរការ។",
+      },
+      { type: "heading", text: "តម្រូវការកម្មវិធី" },
+      {
+        type: "paragraph",
+        text: "ZIP អាចប្រើបានជានិច្ចតាម Windows PowerShell។ ដំឡើង 7-Zip ដើម្បីបង្កើត និងស្រង់ 7Z និងស្រង់ RAR។ WinRAR ត្រូវការសម្រាប់ការបង្កើត RAR ប៉ុណ្ណោះ។",
+      },
+    ],
+    tags: ["archive", "ZIP", "7Z", "RAR", "batch tool", "KGA"],
+  },
 ];
 
 export const getDatasetBySlug = (slug) => datasets.find((d) => d.slug === slug);
