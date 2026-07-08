@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { m, AnimatePresence } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
 import DatasetStats from "./DatasetStats";
@@ -21,6 +22,11 @@ const categoryStyles = {
 };
 
 const ITEMS_PER_PAGE = 12;
+
+const parsePageNumber = (value) => {
+  const page = Number.parseInt(value ?? "1", 10);
+  return Number.isInteger(page) && page > 0 ? page : 1;
+};
 
 const getPaginationItems = (currentPage, totalPages) => {
   if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -42,10 +48,28 @@ const formatDate = (iso) => {
 };
 
 const OpenKGAListing = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeFormat, setActiveFormat] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() =>
+    parsePageNumber(searchParams.get("page"))
+  );
+  const previousFilters = useRef({ activeCategory, activeFormat, searchQuery });
+
+  const updatePageUrl = useCallback(
+    (page) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (page > 1) params.set("page", String(page));
+      else params.delete("page");
+
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router, searchParams]
+  );
 
   const filteredDatasets = useMemo(() => {
     let result = datasets;
@@ -72,12 +96,33 @@ const OpenKGAListing = () => {
   const paginationItems = getPaginationItems(activePage, totalPages);
 
   useEffect(() => {
+    const requestedPage = parsePageNumber(searchParams.get("page"));
+    const page = Math.min(requestedPage, totalPages);
+    setCurrentPage(page);
+
+    const rawPage = searchParams.get("page");
+    const isCanonical = page === 1 ? rawPage === null : rawPage === String(page);
+    if (!isCanonical) updatePageUrl(page);
+  }, [searchParams, totalPages, updatePageUrl]);
+
+  useEffect(() => {
+    const previous = previousFilters.current;
+    const filtersChanged =
+      previous.activeCategory !== activeCategory ||
+      previous.activeFormat !== activeFormat ||
+      previous.searchQuery !== searchQuery;
+
+    previousFilters.current = { activeCategory, activeFormat, searchQuery };
+    if (!filtersChanged) return;
+
     setCurrentPage(1);
-  }, [activeCategory, activeFormat, searchQuery]);
+    updatePageUrl(1);
+  }, [activeCategory, activeFormat, searchQuery, updatePageUrl]);
 
   const changePage = (page) => {
     if (page === activePage || page < 1 || page > totalPages) return;
     setCurrentPage(page);
+    updatePageUrl(page);
     document.getElementById("openkga-datasets")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   const getCategoryMeta = (slug) =>

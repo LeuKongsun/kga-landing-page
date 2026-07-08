@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import OpenKGAListing from "../components/ui/OpenKGA/OpenKGAListing";
 
 export const metadata = {
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function OpenKGAPage() {
-  return <OpenKGAListing />;
+  return (
+    <Suspense fallback={null}>
+      <OpenKGAListing />
+    </Suspense>
+  );
 }
