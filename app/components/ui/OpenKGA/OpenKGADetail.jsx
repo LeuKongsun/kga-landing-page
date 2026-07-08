@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
+import DatasetStats from "./DatasetStats";
 import {
   getDatasetBySlug,
   getRelatedDatasets,
@@ -103,6 +104,8 @@ const OpenKGADetail = ({ slug }) => {
                 <span>•</span>
                 <span>{dataset.fileFormat}</span>
               </div>
+
+              <DatasetStats slug={dataset.slug} className="mb-6" />
 
               <p className="text-base md:text-lg text-brand-text/70 dark:text-gray-300 leading-relaxed font-body mb-8">
                 {dataset.excerpt}
@@ -278,6 +281,7 @@ const OpenKGADetail = ({ slug }) => {
                         <h4 className="text-base font-display font-700 text-brand-text dark:text-white leading-snug group-hover:text-brand-orange transition-colors line-clamp-2">
                           {d.title}
                         </h4>
+                        <DatasetStats slug={d.slug} className="mt-3" compact />
                       </div>
                     </Link>
                   );

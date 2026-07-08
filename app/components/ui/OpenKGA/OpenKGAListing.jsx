@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { m, AnimatePresence } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
+import DatasetStats from "./DatasetStats";
 import {
   datasets,
   TOPIC_CATEGORIES,
@@ -332,6 +333,8 @@ const OpenKGAListing = () => {
                               <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body mb-4 line-clamp-2 flex-1">
                                 {ds.excerpt}
                               </p>
+
+                              <DatasetStats slug={ds.slug} className="mb-4" />
 
                               {/* Meta grid */}
                               <div className="grid grid-cols-2 gap-2 text-xs font-body mb-4 pb-4 border-b border-brand-blue/8 dark:border-white/8">
