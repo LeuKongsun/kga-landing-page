@@ -175,6 +175,9 @@ const TRANSLATION_ENTRIES = [
   ["ចុចពីរដងលើ ExtractMultipleZipfileAtOnce.bat អូសឯកសារ ZIP, 7Z ឬ RAR ចូល ហើយចុច Enter។ ជ្រើសស្រង់នៅក្បែរឯកសារដើម ឬទៅថតដែលអ្នកកំណត់ បន្ទាប់មកជ្រើសថតរងដាច់ដោយឡែកសម្រាប់ឯកសារនីមួយៗ (បានណែនាំ) ឬស្រង់ផ្ទាល់ ហើយបញ្ជាក់ដើម្បីដំណើរការ។", "Double-click ExtractMultipleZipfileAtOnce.bat, drag in ZIP, 7Z, or RAR files, and press Enter. Extract beside each archive or to a chosen folder, then use a separate subfolder per archive (recommended) or extract directly, and confirm to run."],
   ["តម្រូវការកម្មវិធី", "Software requirements"],
   ["ZIP អាចប្រើបានជានិច្ចតាម Windows PowerShell។ ដំឡើង 7-Zip ដើម្បីបង្កើត និងស្រង់ 7Z និងស្រង់ RAR។ WinRAR ត្រូវការសម្រាប់ការបង្កើត RAR ប៉ុណ្ណោះ។", "ZIP always works through Windows PowerShell. Install 7-Zip to create and extract 7Z and to extract RAR. WinRAR is required only to create RAR archives."],
+  ["ពុម្ពអក្សរ", "Font"],
+  ["ពុម្ពអក្សរខ្មែរ ESRI North ជាទម្រង់ TrueType សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រឯកសារ TTF។", "ESRI North Khmer is a TrueType font for installation and use in applications that support TTF files."],
+  ["កញ្ចប់នេះផ្តល់ពុម្ពអក្សរខ្មែរ ESRI North ជាឯកសារ TrueType (.ttf) សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រពុម្ពអក្សរ TTF។", "This package provides the ESRI North Khmer font as a TrueType (.ttf) file for installation and use in applications that support TTF fonts."],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],

@@ -24,6 +24,7 @@ export const FORMATS = [
   { slug: "csv", label: "CSV" },
   { slug: "pdf", label: "PDF" },
   { slug: "gdb", label: "File Geodatabase" },
+  { slug: "font", label: "ពុម្ពអក្សរ" },
   { slug: "tool", label: "ឧបករណ៍" },
 ];
 
@@ -436,6 +437,30 @@ export const datasets = [
       },
     ],
     tags: ["archive", "ZIP", "7Z", "RAR", "batch tool", "KGA"],
+  },
+  {
+    slug: "esri-north-khmer-font",
+    category: "tool-solution",
+    format: "font",
+    title: "ESRI North Khmer Font",
+    excerpt:
+      "ពុម្ពអក្សរខ្មែរ ESRI North ជាទម្រង់ TrueType សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រឯកសារ TTF។",
+    coverImage: "/SharedDataThumbnail/esri_north_khmer.png",
+    fileSize: "173 KB",
+    fileFormat: "TrueType font file (.ttf)",
+    lastUpdated: "2026-07-08",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1onlsxJGZxzMEht9ie0bSPDS7UVBGk-FJ/view?usp=sharing",
+    source: "N/A",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "កញ្ចប់នេះផ្តល់ពុម្ពអក្សរខ្មែរ ESRI North ជាឯកសារ TrueType (.ttf) សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រពុម្ពអក្សរ TTF។",
+      },
+    ],
+    tags: ["ESRI", "Khmer font", "TrueType", "TTF", "font"],
   },
 ];
 
