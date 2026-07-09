@@ -4,8 +4,9 @@ import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
 import BlogShareButton from "./BlogShareButton";
+import BlogStats from "./BlogStats";
 import { useLanguage } from "../../LanguageProvider";
-import { CATEGORIES, getLocalizedPost, getRelatedPosts } from "../../../blog/_data/posts";
+import { CATEGORIES, getLocalizedCategoryLabel, getLocalizedPost, getRelatedPosts } from "../../../blog/_data/posts";
 
 const categoryStyles = {
   red: "bg-red-500/15 text-red-500 border-red-500/30",
@@ -22,15 +23,17 @@ const formatDate = (iso, month = "short") => {
 
 const BlogPost = ({ post: sourcePost }) => {
   const { language } = useLanguage();
+  const isEnglish = language === "en";
   const post = getLocalizedPost(sourcePost, language);
   const showFullCoverImage = post.coverDisplay === "contain";
   const cat = CATEGORIES.find((c) => c.slug === post.category) || CATEGORIES[0];
   const related = getRelatedPosts(sourcePost.slug, sourcePost.category, 3).map((item) =>
     getLocalizedPost(item, language)
   );
+  const getCategoryLabel = (slug) => getLocalizedCategoryLabel(slug, language);
 
   return (
-    <main className="pt-24 md:pt-32">
+    <main key={language} data-language-switch className="pt-24 md:pt-32">
       <SectionWrapper>
         <div className="custom-screen">
           <Link
@@ -77,7 +80,7 @@ const BlogPost = ({ post: sourcePost }) => {
                 <span
                   className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-full border backdrop-blur-md ${categoryStyles[cat.color]}`}
                 >
-                  {cat.label}
+                  {getCategoryLabel(cat.slug)}
                 </span>
               </div>
 
@@ -246,6 +249,8 @@ const BlogPost = ({ post: sourcePost }) => {
                   className="w-full border-transparent bg-brand-orange px-4 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 hover:border-transparent hover:bg-brand-orange/90 hover:text-white hover:shadow-lg hover:shadow-brand-orange/30 dark:border-transparent dark:text-white dark:hover:border-transparent dark:hover:text-white mb-5"
                 />
 
+                <BlogStats slug={post.slug} views={post.views} shares={post.shares} className="mb-5" />
+
                 <h4 className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-3">
                   Article info
                 </h4>
@@ -259,7 +264,7 @@ const BlogPost = ({ post: sourcePost }) => {
                   <div>
                     <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">Category</dt>
                     <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
-                      {cat.label}
+                      {getCategoryLabel(cat.slug)}
                     </dd>
                   </div>
                   <div>
@@ -288,7 +293,7 @@ const BlogPost = ({ post: sourcePost }) => {
           {related.length > 0 && (
             <div className="mt-16 pt-12 border-t border-brand-blue/8 dark:border-white/8">
               <h3 className="text-2xl font-display font-700 text-brand-text dark:text-white mb-6">
-                អត្ថបទពាក់ព័ន្ធ
+                {isEnglish ? "Related Articles" : "អត្ថបទពាក់ព័ន្ធ"}
               </h3>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((rp) => {
@@ -312,18 +317,19 @@ const BlogPost = ({ post: sourcePost }) => {
                         <span
                           className={`absolute top-3 left-3 text-xs font-display font-600 px-2.5 py-1 rounded-full border backdrop-blur-md ${categoryStyles[rcat.color]}`}
                         >
-                          {rcat.label}
+                          {getCategoryLabel(rcat.slug)}
                         </span>
                       </div>
                       <div className="p-4">
                         <h4 className="text-base font-display font-700 text-brand-text dark:text-white leading-snug group-hover:text-brand-orange transition-colors line-clamp-2 mb-3">
                           {rp.title}
                         </h4>
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-brand-text/50 dark:text-gray-500 font-body">
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-brand-text/50 dark:text-gray-500 font-body mb-3">
                           <time>{formatDate(rp.publishedAt)}</time>
                           <span>•</span>
                           <span>{rp.readTime}</span>
                         </div>
+                        <BlogStats slug={rp.slug} views={rp.views} shares={rp.shares} compact />
                       </div>
                     </Link>
                   );

@@ -4,8 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../../SectionWrapper";
+import BlogStats from "../BlogStats";
 import { useLanguage } from "../../../LanguageProvider";
-import { getLocalizedPosts, CATEGORIES } from "../../../../blog/_data/posts";
+import { getLocalizedCategoryLabel, getLocalizedPosts, CATEGORIES } from "../../../../blog/_data/posts";
 
 const categoryStyles = {
   red: "bg-red-500/15 text-red-500 border-red-500/30",
@@ -25,6 +26,7 @@ const getCategoryMeta = (slug) =>
 
 const BlogPreview = () => {
   const { language } = useLanguage();
+  const isEnglish = language === "en";
   const latestPosts = useMemo(
     () =>
       getLocalizedPosts(language)
@@ -32,10 +34,11 @@ const BlogPreview = () => {
         .slice(0, 3),
     [language]
   );
+  const getCategoryLabel = (slug) => getLocalizedCategoryLabel(slug, language);
 
   return (
     <SectionWrapper>
-      <div className="custom-screen">
+      <div key={language} data-language-switch className="custom-screen">
         {/* ───── Section Header ───── */}
         <m.div
           initial={{ opacity: 0, y: 20 }}
@@ -48,11 +51,11 @@ const BlogPreview = () => {
             Blog
           </span>
           <h2 className="text-3xl md:text-4xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">
-            មាតិកាថ្មីៗ ពី KGA
+            {isEnglish ? "Latest Content from KGA" : "មាតិកាថ្មីៗ ពី KGA"}
           </h2>
           <div className="w-16 h-1.5 bg-brand-orange mx-auto rounded-full mb-6"></div>
           <p className="text-base md:text-lg text-brand-text/60 dark:text-gray-400 leading-relaxed font-body">
-            វីដេអូ tutorials, tips & tricks, និងព័ត៌មានថ្មីៗស្តីពីពិភព GIS។
+            {isEnglish ? "Video tutorials, tips and tricks, and the latest GIS news." : "វីដេអូ tutorials, tips & tricks, និងព័ត៌មានថ្មីៗស្តីពីពិភព GIS។"}
           </p>
         </m.div>
 
@@ -94,7 +97,7 @@ const BlogPreview = () => {
                     <span
                       className={`absolute top-3 left-3 text-xs font-display font-600 px-2.5 py-1 rounded-full border backdrop-blur-md ${categoryStyles[cat.color]}`}
                     >
-                      {cat.label}
+                      {getCategoryLabel(cat.slug)}
                     </span>
                   </div>
                 </Link>
@@ -116,11 +119,13 @@ const BlogPreview = () => {
                     {post.excerpt}
                   </p>
 
+                  <BlogStats slug={post.slug} views={post.views} shares={post.shares} className="mb-4" />
+
                   <Link
                     href={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-1.5 text-sm font-display font-600 text-brand-orange hover:gap-2.5 transition-all mt-auto"
                   >
-                    អានបន្ថែម
+                    {isEnglish ? "Read More" : "អានបន្ថែម"}
                     <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
@@ -143,7 +148,7 @@ const BlogPreview = () => {
             href="/blog"
             className="inline-flex items-center gap-2 px-6 py-3 bg-brand-orange text-white text-sm font-display font-600 rounded-full hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all"
           >
-            មើលអត្ថបទទាំងអស់
+            {isEnglish ? "View All Articles" : "មើលអត្ថបទទាំងអស់"}
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>

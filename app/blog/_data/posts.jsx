@@ -2703,6 +2703,2657 @@ const DATA_INFO_ARTICLE = {
   }
 };
 
+const MDB_GDB_ARTICLE = {
+  "km": {
+    "title": "បម្លែង MDB ទៅ GDB ដោយមិនចាំបាច់បើក ArcMap",
+    "excerpt": "អង្គភាព GIS ជាច្រើននៅតែរក្សាទុកទិន្នន័យជា Personal Geodatabase (.mdb) ដែលបង្កើតពី ArcMap។ កន្លងមក ការបម្លែងទៅជា File Geodatabase (.gdb) តម្រូវឱ្យបើក ArcMap សិន បន្ទាប់មកទើប Export និង Import ទិន្នន័យ។",
+    "readTime": "ប្រហែល ៥ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "វិធីថ្មីសម្រាប់បម្លែងទិន្នន័យចាស់ទៅ File Geodatabase"
+      },
+      {
+        "type": "paragraph",
+        "text": "អង្គភាព GIS ជាច្រើននៅតែរក្សាទុកទិន្នន័យជា Personal Geodatabase (.mdb) ដែលបង្កើតពី ArcMap។ កន្លងមក ការបម្លែងទៅជា File Geodatabase (.gdb) តម្រូវឱ្យបើក ArcMap សិន បន្ទាប់មកទើប Export និង Import ទិន្នន័យ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ដំណើរការនេះចំណាយពេល និងពឹងផ្អែកលើកម្មវិធីដែល Esri បានបញ្ឈប់ការអភិវឌ្ឍរួចហើយ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ថ្ងៃនេះ KGA Toolbox នាំមកនូវដំណោះស្រាយថ្មី។"
+      },
+      {
+        "type": "heading",
+        "text": "មុខងារថ្មី"
+      },
+      {
+        "type": "paragraph",
+        "text": "ឧបករណ៍ MDB to GDB អាចបម្លែង Personal Geodatabase ទៅជា File Geodatabase ដោយផ្ទាល់ ដោយមិនចាំបាច់បើក ArcMap។"
+      },
+      {
+        "type": "paragraph",
+        "text": "អ្នកគ្រាន់តែ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ជ្រើសរើសឯកសារ .mdb",
+          "កំណត់ទីតាំងរក្សាទុក",
+          "ចុច Convert"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "ឧបករណ៍នឹងបង្កើត File Geodatabase និងផ្ទេរទិន្នន័យដែលគាំទ្រដោយស្វ័យប្រវត្តិ។"
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វីវាសំខាន់?"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ArcMap ត្រូវបានបញ្ឈប់ការអភិវឌ្ឍ។",
+          "ArcGIS Pro មិនបង្កើត Personal Geodatabase ទៀតទេ។",
+          "គម្រោងចាស់ៗជាច្រើននៅតែប្រើ MDB។"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "ឧបករណ៍នេះជួយកាត់បន្ថយការងារដោយដៃ និងធ្វើឱ្យការផ្លាស់ប្តូរទៅ ArcGIS Pro កាន់តែងាយស្រួល។"
+      },
+      {
+        "type": "heading",
+        "text": "អត្ថប្រយោជន៍"
+      },
+      {
+        "type": "list",
+        "items": [
+          "✅ មិនចាំបាច់បើក ArcMap",
+          "✅ បម្លែងបានលឿន",
+          "✅ សាកសមសម្រាប់គម្រោងច្រើន",
+          "✅ ជួយផ្លាស់ប្តូរទៅ File Geodatabase បានងាយ",
+          "✅ សមស្របសម្រាប់ Workflow របស់ ArcGIS Pro"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "អាចប្រើសម្រាប់"
+      },
+      {
+        "type": "list",
+        "items": [
+          "បម្លែងទិន្នន័យ GIS ចាស់",
+          "រៀបចំទិន្នន័យសម្រាប់ ArcGIS Pro",
+          "ធ្វើស្តង់ដារមូលដ្ឋានទិន្នន័យរបស់អង្គភាព",
+          "រក្សាទុកទិន្នន័យក្នុងទម្រង់ទំនើប"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Workflow ថ្មី"
+      },
+      {
+        "type": "paragraph",
+        "text": "ជំនួសឱ្យ"
+      },
+      {
+        "type": "paragraph",
+        "text": "Open ArcMap → Export → Create GDB → Import"
+      },
+      {
+        "type": "paragraph",
+        "text": "ឥឡូវនេះ អ្នកគ្រាន់តែ"
+      },
+      {
+        "type": "paragraph",
+        "text": "Select MDB → Convert → Done"
+      },
+      {
+        "type": "paragraph",
+        "text": "ងាយ សាមញ្ញ និងចំណេញពេលវេលាជាងមុន។"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការផ្លាស់ប្តូរទិន្នន័យចាស់ទៅកាន់ File Geodatabase គឺជាជំហានសំខាន់សម្រាប់អង្គភាពដែលកំពុងប្រើ ArcGIS Pro។ ឧបករណ៍ MDB to GDB របស់ KGA Toolbox ត្រូវបានបង្កើតឡើងដើម្បីធ្វើឱ្យការងារនេះកាន់តែលឿន ងាយស្រួល និងអាចទុកចិត្តបាន។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ប្រសិនបើអ្នកនៅតែមានទិន្នន័យ MDB ចាស់ៗ នេះគឺជាពេលល្អបំផុតក្នុងការបម្លែងវាទៅកាន់ File Geodatabase។"
+      }
+    ]
+  },
+  "en": {
+    "title": "Convert MDB to GDB Without Opening ArcMap",
+    "excerpt": "If you still receive Microsoft Access Geodatabases (.mdb) from clients or legacy projects, you already know the usual workflow: install ArcMap, open the database, export the data, and finally migrate it into a File Geodatabase (.gdb).",
+    "readTime": "5 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "A Faster Way to Modernize Legacy Geodatabases"
+      },
+      {
+        "type": "paragraph",
+        "text": "If you still receive Microsoft Access Geodatabases (.mdb) from clients or legacy projects, you already know the usual workflow: install ArcMap, open the database, export the data, and finally migrate it into a File Geodatabase (.gdb)."
+      },
+      {
+        "type": "paragraph",
+        "text": "That process is slow, requires legacy software, and becomes increasingly difficult as ArcMap reaches the end of its lifecycle."
+      },
+      {
+        "type": "paragraph",
+        "text": "Today we're introducing a much simpler solution."
+      },
+      {
+        "type": "heading",
+        "text": "What's New?"
+      },
+      {
+        "type": "paragraph",
+        "text": "The new MDB to GDB tool in the KGA Toolbox converts an entire Personal Geodatabase directly into a File Geodatabase without opening ArcMap."
+      },
+      {
+        "type": "paragraph",
+        "text": "Simply:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Select the .mdb file.",
+          "Choose an output location.",
+          "Click Convert."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "The tool automatically creates a File Geodatabase and transfers the supported datasets."
+      },
+      {
+        "type": "heading",
+        "text": "Why This Matters"
+      },
+      {
+        "type": "paragraph",
+        "text": "Many organizations still maintain archives in MDB format. However:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ArcMap is retired and difficult to maintain.",
+          "ArcGIS Pro no longer creates Personal Geodatabases.",
+          "Migrating old projects is becoming an increasingly common task."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "This tool removes unnecessary manual steps and lets GIS professionals focus on their actual work."
+      },
+      {
+        "type": "heading",
+        "text": "Key Benefits"
+      },
+      {
+        "type": "list",
+        "items": [
+          "✅ No need to launch ArcMap",
+          "✅ Fast conversion workflow",
+          "✅ Batch-friendly for multiple projects",
+          "✅ Easy migration to modern GIS environments",
+          "✅ Works naturally within an ArcGIS Pro workflow"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Typical Use Cases"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Upgrading legacy GIS archives",
+          "Migrating historical land administration projects",
+          "Preparing old datasets for ArcGIS Pro",
+          "Standardizing organizational geodatabases"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "A Better Migration Workflow"
+      },
+      {
+        "type": "paragraph",
+        "text": "Instead of:"
+      },
+      {
+        "type": "paragraph",
+        "text": "Open ArcMap → Export → Create GDB → Import"
+      },
+      {
+        "type": "paragraph",
+        "text": "You can now use:"
+      },
+      {
+        "type": "paragraph",
+        "text": "Select MDB → Convert → Done"
+      },
+      {
+        "type": "paragraph",
+        "text": "That's fewer steps, less waiting, and a cleaner workflow."
+      },
+      {
+        "type": "heading",
+        "text": "Final Thoughts"
+      },
+      {
+        "type": "paragraph",
+        "text": "As the GIS industry moves fully toward ArcGIS Pro, modernizing old data formats becomes essential. The new MDB to GDB tool helps bridge that gap by making legacy data migration simple, fast, and reliable."
+      },
+      {
+        "type": "paragraph",
+        "text": "If your organization still stores valuable GIS data in MDB format, now is the perfect time to move forward."
+      }
+    ]
+  }
+};
+
+const LIFE_EXPECTANCY_ARTICLE = {
+  "km": {
+    "title": "ទស្សន៍ទាយអាយុសង្ឃឹមរស់ឆ្នាំ 2030៖ តើទិន្នន័យអាចមើលឃើញអនាគតបានទេ?",
+    "excerpt": "តើអាចទស្សន៍ទាយថា មនុស្សម្នាក់ ឬប្រជាជនក្នុងប្រទេសមួយ នឹងមានអាយុសង្ឃឹមរស់ប៉ុន្មានឆ្នាំនៅពេលអនាគតដែរឬទេ? ជាមួយបច្ចេកវិទ្យា Data Science និង Machine Learning ចម្លើយគឺ អាចប៉ាន់ស្មានបាន។",
+    "readTime": "ប្រហែល ៥ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "មូលដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "តើអាចទស្សន៍ទាយថា មនុស្សម្នាក់ ឬប្រជាជនក្នុងប្រទេសមួយ នឹងមានអាយុសង្ឃឹមរស់ប៉ុន្មានឆ្នាំនៅពេលអនាគតដែរឬទេ? ជាមួយបច្ចេកវិទ្យា Data Science និង Machine Learning ចម្លើយគឺ អាចប៉ាន់ស្មានបាន។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការទស្សន៍ទាយអាយុសង្ឃឹមរស់ ប្រើទិន្នន័យប្រវត្តិសាស្ត្រដូចជា សុខភាព សេដ្ឋកិច្ច ការអប់រំ និងកត្តាសង្គមផ្សេងៗ ដើម្បីបង្កើតគំរូសម្រាប់ព្យាករណ៍អនាគត។"
+      },
+      {
+        "type": "heading",
+        "text": "អាយុសង្ឃឹមរស់ជាអ្វី?"
+      },
+      {
+        "type": "paragraph",
+        "text": "អាយុសង្ឃឹមរស់ (Life Expectancy) គឺជាចំនួនឆ្នាំមធ្យមដែលទារកកើតថ្មី ត្រូវបានរំពឹងថានឹងរស់នៅ ប្រសិនបើលក្ខខណ្ឌអត្រាមរណភាពបច្ចុប្បន្ននៅដដែល។"
+      },
+      {
+        "type": "paragraph",
+        "text": "កត្តាសំខាន់ៗរួមមាន៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "គុណភាពសេវាសុខាភិបាល",
+          "សេដ្ឋកិច្ច និងប្រាក់ចំណូល",
+          "ការអប់រំ",
+          "អាហារូបត្ថម្ភ",
+          "អនាម័យ",
+          "ការចាក់វ៉ាក់សាំង",
+          "របៀបរស់នៅ",
+          "បរិស្ថាន"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វីព្យាករណ៍ដល់ឆ្នាំ 2030?"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការព្យាករណ៍ជួយឱ្យ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "រៀបចំផែនការសុខាភិបាល។",
+          "វាយតម្លៃគោលនយោបាយរយៈពេលវែង។",
+          "កំណត់តំបន់ដែលមានហានិភ័យ។",
+          "ព្យាករណ៍និន្នាការប្រជាជន។",
+          "គាំទ្រគោលដៅអភិវឌ្ឍន៍ប្រកបដោយចីរភាព។"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Machine Learning ដំណើរការយ៉ាងដូចម្តេច?"
+      },
+      {
+        "type": "paragraph",
+        "text": "លំហូរការងារទូទៅ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ប្រមូលទិន្នន័យប្រវត្តិសាស្ត្រ។",
+          "សម្អាត និងរៀបចំទិន្នន័យ។",
+          "វិភាគទិន្នន័យ (EDA)។",
+          "បណ្ដុះបណ្ដាលម៉ូដែល។",
+          "វាយតម្លៃលទ្ធផល។",
+          "ព្យាករណ៍សម្រាប់ឆ្នាំ 2030។"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "ម៉ូដែលពេញនិយមមាន Linear Regression, Random Forest, XGBoost និង Lasso Regression។"
+      },
+      {
+        "type": "heading",
+        "text": "ការព្យាករណ៍មិនមែនជាការទស្សន៍ទាយអនាគតពិតប្រាកដ"
+      },
+      {
+        "type": "paragraph",
+        "text": "Machine Learning រៀនពីនិន្នាការកន្លងមក។ ប្រសិនបើមានព្រឹត្តិការណ៍ធំៗដូចជា ជំងឺរាតត្បាត សង្គ្រាម ឬបច្ចេកវិទ្យាវេជ្ជសាស្ត្រថ្មី លទ្ធផលអាចខុសពីការពិត។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ដូច្នេះ វាគួរត្រូវបានប្រើជាឧបករណ៍ជួយសម្រេចចិត្ត មិនមែនជាការទស្សន៍ទាយដាច់ខាតទេ។"
+      },
+      {
+        "type": "heading",
+        "text": "ការប្រើប្រាស់ជាក់ស្តែង"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ការធ្វើផែនការសុខាភិបាល",
+          "វិស័យធានារ៉ាប់រង",
+          "ការព្យាករណ៍សេដ្ឋកិច្ច",
+          "គោលនយោបាយសង្គម",
+          "ការស្រាវជ្រាវ"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "Data Science មិនត្រឹមតែជួយយល់ពីអតីតកាលប៉ុណ្ណោះទេ ប៉ុន្តែជួយរៀបចំសម្រាប់អនាគតផងដែរ។ ការទស្សន៍ទាយអាយុសង្ឃឹមរស់ជាឧទាហរណ៍ល្អមួយនៃការប្រើ Machine Learning ដើម្បីបម្លែងទិន្នន័យទៅជាចំណេះដឹងដែលអាចជួយការសម្រេចចិត្ត។"
+      }
+    ]
+  },
+  "en": {
+    "title": "Predicting Life Expectancy in 2030: Can Data See the Future?",
+    "excerpt": "Can we estimate how long people will live in the future? With modern data science, the answer is yes—to a certain extent.",
+    "readTime": "5 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "Can we estimate how long people will live in the future? With modern data science, the answer is yes—to a certain extent."
+      },
+      {
+        "type": "paragraph",
+        "text": "Life expectancy prediction combines historical health, economic, and social indicators with machine learning models to estimate the average lifespan of a country's population. While no model can predict the future perfectly, predictive analytics helps governments and organizations make informed decisions."
+      },
+      {
+        "type": "heading",
+        "text": "What Is Life Expectancy?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Life expectancy is the average number of years a newborn is expected to live under current mortality conditions. It is widely used as an indicator of a country's health and development."
+      },
+      {
+        "type": "paragraph",
+        "text": "Factors affecting life expectancy include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Healthcare quality",
+          "Income and economic growth",
+          "Education",
+          "Nutrition",
+          "Sanitation",
+          "Vaccination",
+          "Lifestyle",
+          "Environmental conditions"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Why Predict 2030?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Forecasting life expectancy allows decision makers to:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Plan healthcare resources.",
+          "Evaluate long-term policies.",
+          "Detect countries at risk.",
+          "Estimate future population trends.",
+          "Support sustainable development goals."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "How Machine Learning Helps"
+      },
+      {
+        "type": "paragraph",
+        "text": "A typical workflow includes:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Collect historical datasets.",
+          "Clean and preprocess data.",
+          "Explore relationships using data analysis.",
+          "Train predictive models.",
+          "Evaluate prediction accuracy.",
+          "Generate forecasts for future years such as 2030."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Common algorithms include Linear Regression, Random Forest, XGBoost, and Lasso Regression."
+      },
+      {
+        "type": "heading",
+        "text": "Prediction Is Not Magic"
+      },
+      {
+        "type": "paragraph",
+        "text": "Machine learning identifies patterns from historical observations. If future conditions change dramatically—such as pandemics, wars, or major medical breakthroughs—the prediction may differ from reality."
+      },
+      {
+        "type": "paragraph",
+        "text": "Therefore, predictions should be viewed as decision-support tools, not absolute truth."
+      },
+      {
+        "type": "heading",
+        "text": "Real-World Applications"
+      },
+      {
+        "type": "paragraph",
+        "text": "Life expectancy prediction is valuable for:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Public health planning",
+          "Insurance analysis",
+          "Economic forecasting",
+          "Social policy",
+          "Academic research"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Final Thoughts"
+      },
+      {
+        "type": "paragraph",
+        "text": "Data science is not only about explaining the past—it also helps us prepare for the future. Predicting life expectancy demonstrates how statistical analysis and machine learning can transform historical data into meaningful insights for better planning."
+      }
+    ]
+  }
+};
+
+const KML_GIS_ARTICLE = {
+  "km": {
+    "title": "សន្សំពេលវេលាបានរហូតដល់ 80% ក្នុងការធ្វើការជាមួយ KML ដោយប្រើ KGA Toolbox",
+    "excerpt": "KML (Keyhole Markup Language) គឺជាទម្រង់ទិន្នន័យភូមិសាស្ត្រដែលត្រូវបានប្រើយ៉ាងទូលំទូលាយនៅក្នុង Google Earth។ អ្នកជំនាញ GIS ជាច្រើនទទួលទិន្នន័យដីធ្លី ព្រំប្រទល់គម្រោង ឬទិន្នន័យស្ទង់មតិជាទម្រង់ KML/KMZ ហើយត្រូវយកមកប្រើក្នុង ArcGIS Pro។",
+    "readTime": "ប្រហែល ៥ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "សេចក្តីផ្តើម"
+      },
+      {
+        "type": "paragraph",
+        "text": "KML (Keyhole Markup Language) គឺជាទម្រង់ទិន្នន័យភូមិសាស្ត្រដែលត្រូវបានប្រើយ៉ាងទូលំទូលាយនៅក្នុង Google Earth។ អ្នកជំនាញ GIS ជាច្រើនទទួលទិន្នន័យដីធ្លី ព្រំប្រទល់គម្រោង ឬទិន្នន័យស្ទង់មតិជាទម្រង់ KML/KMZ ហើយត្រូវយកមកប្រើក្នុង ArcGIS Pro។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការបម្លែង និងរៀបចំទិន្នន័យទាំងនេះដោយដៃអាចចំណាយពេលច្រើន។ ដើម្បីដោះស្រាយបញ្ហានេះ KGA Toolbox បានបន្ថែម KML Handler Tool ដែលអាចជួយកាត់បន្ថយការងារដដែលៗ និងធ្វើឱ្យដំណើរការលឿនជាងមុន។"
+      },
+      {
+        "type": "heading",
+        "text": "បញ្ហាដែលជួបប្រទះ"
+      },
+      {
+        "type": "paragraph",
+        "text": "វិធីធម្មតាត្រូវ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Import KML/KMZ ម្តងមួយៗ",
+          "រៀបចំ Feature Class ឡើងវិញ",
+          "បង្កើត Folder ដោយដៃ",
+          "ធ្វើដំណើរការដដែលៗសម្រាប់ឯកសារជាច្រើន"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "ការងារទាំងនេះចំណាយពេល និងងាយមានកំហុស។"
+      },
+      {
+        "type": "heading",
+        "text": "KGA Toolbox ជួយដូចម្តេច?"
+      },
+      {
+        "type": "paragraph",
+        "text": "KML Handler Tool ផ្តល់សមត្ថភាពដូចជា៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "គាំទ្រ KML និង KMZ",
+          "បម្លែងដោយផ្ទាល់ទៅ File Geodatabase",
+          "រក្សាទុក Folder Structure តាមដែលអាចធ្វើបាន",
+          "រៀបចំ Output ដោយស្វ័យប្រវត្តិ",
+          "កាត់បន្ថយការងារក្រោយការបម្លែង",
+          "អាចប្រើភ្លាមក្នុង ArcGIS Pro"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "សាកសមសម្រាប់ការងារអ្វីខ្លះ?"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ការគ្រប់គ្រងដីធ្លី",
+          "ការរៀបចំផែនការទីក្រុង",
+          "ការតាមដានបរិស្ថាន",
+          "ការស្ទង់មតិវិស្វកម្ម",
+          "Utility Mapping",
+          "អង្គភាពរដ្ឋ និងឯកជនដែលប្រើ Google Earth"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វីគួរប្រើ?"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការកាត់បន្ថយការងារដដែលៗ អនុញ្ញាតឱ្យអ្នកផ្តោតលើការវិភាគទិន្នន័យជំនួសការរៀបចំទិន្នន័យ។ វាក៏ជួយធ្វើឱ្យ Workflow មានស្តង់ដារ និងកាត់បន្ថយកំហុសក្នុងការងារផងដែរ។"
+      },
+      {
+        "type": "heading",
+        "text": "មើលវីដេអូសាកល្បង"
+      },
+      {
+        "type": "paragraph",
+        "text": "វីដេអូរយៈពេល 5:02 បង្ហាញពីការប្រើប្រាស់ KGA Toolbox – KML Handler Tool ចាប់ពីការនាំចូល KML រហូតដល់ទទួលបានទិន្នន័យដែលអាចប្រើបានក្នុង ArcGIS Pro។"
+      },
+      {
+        "type": "paragraph",
+        "text": "អ្នកនឹងឃើញ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "របៀប Import KML",
+          "ការរៀបចំទិន្នន័យដោយស្វ័យប្រវត្តិ",
+          "លទ្ធផលចុងក្រោយក្នុង ArcGIS Pro"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "ប្រសិនបើអ្នកធ្វើការជាមួយទិន្នន័យ Google Earth ជាប្រចាំ KML Handler Tool ក្នុង KGA Toolbox អាចជួយសន្សំពេលវេលា បង្កើនប្រសិទ្ធភាពការងារ និងធ្វើឱ្យការគ្រប់គ្រងទិន្នន័យកាន់តែងាយស្រួល។"
+      }
+    ]
+  },
+  "en": {
+    "title": "Save 80% of Your Time Working with KML Files in ArcGIS Pro using KGA Toolbox",
+    "excerpt": "KML (Keyhole Markup Language) is one of the most common formats used for sharing geographic data through Google Earth. Many GIS professionals receive land parcels, project boundaries, survey areas, or planning data as KML/KMZ files. Converting and organizing these datasets inside ArcGIS Pro can become repetitive and time-consuming.",
+    "readTime": "5 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "KML (Keyhole Markup Language) is one of the most common formats used for sharing geographic data through Google Earth. Many GIS professionals receive land parcels, project boundaries, survey areas, or planning data as KML/KMZ files. Converting and organizing these datasets inside ArcGIS Pro can become repetitive and time-consuming."
+      },
+      {
+        "type": "paragraph",
+        "text": "The KGA Toolbox includes a dedicated KML Handler Tool that simplifies this workflow and significantly reduces manual effort. In the demonstration video (5:02), the tool shows how to import KML data into ArcGIS Pro quickly while preserving a clean project structure."
+      },
+      {
+        "type": "heading",
+        "text": "The Challenge"
+      },
+      {
+        "type": "paragraph",
+        "text": "Traditional KML workflows often require users to:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Import each KML/KMZ file individually.",
+          "Reorganize feature classes after conversion.",
+          "Manage folders manually.",
+          "Repeat the same process for multiple datasets."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These repetitive tasks consume valuable production time."
+      },
+      {
+        "type": "heading",
+        "text": "How the KGA Toolbox Helps"
+      },
+      {
+        "type": "paragraph",
+        "text": "The KML Handler Tool automates much of the conversion process."
+      },
+      {
+        "type": "paragraph",
+        "text": "Key capabilities include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Import both KML and KMZ files.",
+          "Convert directly into a File Geodatabase.",
+          "Preserve folder hierarchy where possible.",
+          "Organize outputs automatically.",
+          "Reduce manual post-processing.",
+          "Produce ArcGIS Pro-ready datasets."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "The result is a cleaner, more efficient GIS workflow."
+      },
+      {
+        "type": "heading",
+        "text": "Practical Applications"
+      },
+      {
+        "type": "paragraph",
+        "text": "This tool is especially useful for:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Land administration projects",
+          "Urban planning",
+          "Environmental monitoring",
+          "Engineering surveys",
+          "Utility mapping",
+          "Government GIS departments"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "If your organization regularly exchanges Google Earth data, this tool can save considerable processing time."
+      },
+      {
+        "type": "heading",
+        "text": "Why It Matters"
+      },
+      {
+        "type": "paragraph",
+        "text": "Reducing repetitive GIS tasks allows professionals to focus on analysis instead of data preparation. Standardized import workflows also reduce human error and improve project consistency across teams."
+      },
+      {
+        "type": "paragraph",
+        "text": "For organizations processing dozens or hundreds of KML files, even saving a few minutes per dataset can translate into significant productivity gains."
+      },
+      {
+        "type": "heading",
+        "text": "Watch the Demo"
+      },
+      {
+        "type": "paragraph",
+        "text": "The accompanying 5:02 video demonstrates the complete workflow using the KGA Toolbox."
+      },
+      {
+        "type": "paragraph",
+        "text": "You will learn:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "How to import a KML file.",
+          "How the tool organizes the converted data.",
+          "The final output inside ArcGIS Pro."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "text": "The KGA Toolbox KML Handler Tool is designed to make KML data management faster, cleaner, and more reliable. If you frequently work with Google Earth datasets, this tool can dramatically simplify your daily workflow and help you spend more time on GIS analysis instead of repetitive conversion tasks."
+      }
+    ]
+  }
+};
+
+const WHY_GIS_INDUSTRY_ARTICLE = {
+  "km": {
+    "title": "ហេតុអ្វីបានជាគ្រប់វិស័យត្រូវការ GIS",
+    "excerpt": "Geographic Information System (GIS) គឺជាបច្ចេកវិទ្យាដែលភ្ជាប់ ទីតាំងភូមិសាស្ត្រ ជាមួយ ទិន្នន័យ ដើម្បីជួយអង្គភាពនានាធ្វើការវិភាគ មើលឃើញលំនាំ និងសម្រេចចិត្តបានកាន់តែប្រសើរ។",
+    "readTime": "១៥ នាទី",
+    "content": [
+      {
+        "type": "quote",
+        "text": "«បើអ្វីមួយមានទីតាំង GIS អាចជួយធ្វើឱ្យវាប្រសើរឡើងបាន»"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្ដីផ្តើម"
+      },
+      {
+        "type": "paragraph",
+        "text": "Geographic Information System (GIS) គឺជាបច្ចេកវិទ្យាដែលភ្ជាប់ ទីតាំងភូមិសាស្ត្រ ជាមួយ ទិន្នន័យ ដើម្បីជួយអង្គភាពនានាធ្វើការវិភាគ មើលឃើញលំនាំ និងសម្រេចចិត្តបានកាន់តែប្រសើរ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "មនុស្សជាច្រើនគិតថា GIS គ្រាន់តែជាកម្មវិធីគូរផែនទី ប៉ុន្តែការពិត GIS គឺជាវេទិកាវិភាគទិន្នន័យភូមិសាស្ត្រដ៏មានអានុភាព ដែលអាចឆ្លើយសំណួរដូចជា៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "តើអ្វីកំពុងកើតឡើង?",
+          "កើតឡើងនៅទីណា?",
+          "ហេតុអ្វីកើតឡើងនៅទីនោះ?",
+          "តំបន់ណាសមស្របបំផុតសម្រាប់ការអភិវឌ្ឍ?",
+          "តើអ្វីនឹងកើតឡើងនាពេលអនាគត?"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "មូលដ្ឋានសំខាន់របស់ GIS"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS រួមបញ្ចូលធាតុសំខាន់ ៣៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ទីតាំង (Location)",
+          "ទិន្នន័យ (Data)",
+          "ការយល់ដឹង (Insight)"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "ការរួមបញ្ចូលធាតុទាំងនេះធ្វើឱ្យ GIS អាចបង្ហាញទំនាក់ទំនង លំនាំ និងនិន្នាការដែលតារាងទិន្នន័យធម្មតាមិនអាចបង្ហាញបាន។"
+      },
+      {
+        "type": "heading",
+        "text": "ការប្រើប្រាស់ GIS ក្នុងវិស័យផ្សេងៗ"
+      },
+      {
+        "type": "heading3",
+        "text": "១. ការរៀបចំទីក្រុង និង Smart City"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ផែនការប្រើប្រាស់ដី",
+          "កំណត់តំបន់ប្រើប្រាស់",
+          "អភិវឌ្ឍហេដ្ឋារចនាសម្ព័ន្ធ",
+          "គ្រប់គ្រងទីក្រុងឆ្លាតវៃ"
+        ]
+      },
+      {
+        "type": "heading3",
+        "text": "២. ធនធានធម្មជាតិ និងបរិស្ថាន"
+      },
+      {
+        "type": "list",
+        "items": [
+          "តាមដានព្រៃឈើ",
+          "គ្រប់គ្រងអាងទឹក",
+          "អភិរក្សជីវចម្រុះ",
+          "វាយតម្លៃការប្រែប្រួលអាកាសធាតុ"
+        ]
+      },
+      {
+        "type": "heading3",
+        "text": "៣. កសិកម្មទំនើប"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយតាមដានសុខភាពដំណាំ វិភាគដី រៀបចំប្រព័ន្ធស្រោចស្រព និងបង្កើនប្រសិទ្ធភាពនៃការផលិត ខណៈកាត់បន្ថយការប្រើប្រាស់ធនធាន។"
+      },
+      {
+        "type": "heading3",
+        "text": "៤. ដឹកជញ្ជូន និងឡូជីស្ទិក"
+      },
+      {
+        "type": "list",
+        "items": [
+          "កំណត់ផ្លូវល្អបំផុត",
+          "គ្រប់គ្រងយានយន្ត",
+          "វិភាគចរាចរណ៍",
+          "បន្ថយថ្លៃដើមដឹកជញ្ជូន"
+        ]
+      },
+      {
+        "type": "heading3",
+        "text": "៥. សេវាសាធារណៈ និងហេដ្ឋារចនាសម្ព័ន្ធ"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយគ្រប់គ្រងបណ្តាញអគ្គិសនី ទឹក ទូរគមនាគមន៍ និងទ្រព្យសម្បត្តិសាធារណៈ ដោយធ្វើឱ្យការថែទាំងាយស្រួល និងមានប្រសិទ្ធភាព។"
+      },
+      {
+        "type": "heading3",
+        "text": "៦. ការគ្រប់គ្រងគ្រោះមហន្តរាយ"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ផែនទីហានិភ័យ",
+          "ប្រព័ន្ធព្រមានមុន",
+          "ផែនការជម្លៀសប្រជាជន",
+          "វាយតម្លៃការខូចខាត"
+        ]
+      },
+      {
+        "type": "heading3",
+        "text": "៧. សុខាភិបាល"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS អាចកំណត់តំបន់ជំងឺ រៀបចំទីតាំងមន្ទីរពេទ្យ វិភាគការចូលដំណើរការសេវាសុខាភិបាល និងគាំទ្រការឆ្លើយតបពេលមានការផ្ទុះជំងឺ។"
+      },
+      {
+        "type": "heading3",
+        "text": "៨. ពាណិជ្ជកម្ម និងអាជីវកម្ម"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ជ្រើសរើសទីតាំងសាខា",
+          "វិភាគទីផ្សារ",
+          "បែងចែកអតិថិជន",
+          "គ្រប់គ្រងតំបន់លក់"
+        ]
+      },
+      {
+        "type": "heading3",
+        "text": "៩. ទេសចរណ៍"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយរៀបចំផ្លូវទេសចរណ៍ គ្រប់គ្រងតំបន់ទាក់ទាញ ការពារធនធានធម្មជាតិ និងបង្កើនបទពិសោធន៍ភ្ញៀវទេសចរ។"
+      },
+      {
+        "type": "heading3",
+        "text": "១០. ការអប់រំ និងស្រាវជ្រាវ"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ត្រូវបានប្រើយ៉ាងទូលំទូលាយក្នុងការស្រាវជ្រាវវិទ្យាសាស្ត្រ សុខាភិបាល បរិស្ថាន វិស្វកម្ម និងវិទ្យាសាស្ត្រសង្គម។"
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វី GIS មានសារៈសំខាន់?"
+      },
+      {
+        "type": "list",
+        "items": [
+          "សម្រេចចិត្តបានល្អជាងមុន",
+          "កាត់បន្ថយពេលវេលា និងចំណាយ",
+          "គ្រប់គ្រងធនធានប្រកបដោយចីរភាព",
+          "បង្កើតនវានុវត្តន៍",
+          "បង្កើនគុណភាពជីវិតសហគមន៍"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "អនាគតរបស់ GIS"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS កំពុងរួមបញ្ចូលជាមួយ AI, Machine Learning, IoT, Drone, Cloud Computing, Digital Twin និងទិន្នន័យផ្កាយរណបកម្រិតខ្ពស់ ដែលនឹងធ្វើឱ្យការវិភាគទីតាំងកាន់តែមានភាពឆ្លាតវៃ។"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្ដីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "សំណួរមិនមែនថា «អ្នកណាប្រើ GIS?» ទៀតទេ ប៉ុន្តែគឺ «តើវិស័យណាអាចមិនប្រើ GIS បាន?»"
+      },
+      {
+        "type": "paragraph",
+        "text": "រាល់បញ្ហាដែលមានទីតាំង អាចទទួលបានអត្ថប្រយោជន៍ពី GIS។ ពីការរៀបចំទីក្រុង ការគ្រប់គ្រងធនធានធម្មជាតិ ការដឹកជញ្ជូន កសិកម្ម សុខាភិបាល រហូតដល់អាជីវកម្ម GIS បានក្លាយជាបច្ចេកវិទ្យាស្នូលសម្រាប់ការសម្រេចចិត្តដោយផ្អែកលើទិន្នន័យ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ទីតាំង + ទិន្នន័យ = ការសម្រេចចិត្តកាន់តែប្រសើរ"
+      }
+    ]
+  },
+  "en": {
+    "title": "Why Every Industry Needs GIS",
+    "excerpt": "Geographic Information Systems (GIS) have evolved from specialized mapping software into one of the most important decision-support technologies used across governments, businesses, researchers, and non-profit organizations. While many people associate GIS with creating maps, its real strength lies in integrating location with data to reveal patterns, relationships, and trends that are difficult to detect using spreadsheets or traditional databases alone.",
+    "readTime": "15 minutes",
+    "content": [
+      {
+        "type": "quote",
+        "text": "If it has a location, GIS can improve it."
+      },
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "Geographic Information Systems (GIS) have evolved from specialized mapping software into one of the most important decision-support technologies used across governments, businesses, researchers, and non-profit organizations. While many people associate GIS with creating maps, its real strength lies in integrating location with data to reveal patterns, relationships, and trends that are difficult to detect using spreadsheets or traditional databases alone."
+      },
+      {
+        "type": "paragraph",
+        "text": "Every object, event, customer, asset, or environmental phenomenon exists somewhere. Once location is added to information, organizations gain a powerful analytical capability. GIS answers questions such as:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Where is it happening?",
+          "Why is it happening there?",
+          "What is nearby?",
+          "What has changed?",
+          "What is likely to happen next?",
+          "What is the best location for future investment?"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "The infographic highlights ten major industries transformed by GIS. This article expands on each sector and explains why spatial thinking has become an essential skill in the modern world."
+      },
+      {
+        "type": "heading",
+        "text": "What Makes GIS Different?"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS combines three core components:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Location (Where) – coordinates, addresses, parcels, roads, administrative boundaries.",
+          "Data (What) – demographic information, environmental measurements, infrastructure, business records, sensor data, satellite imagery, and more.",
+          "Insight (Why it matters) – spatial analysis that supports better decisions."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Unlike ordinary databases, GIS understands spatial relationships such as distance, overlap, adjacency, connectivity, visibility, accessibility, and movement."
+      },
+      {
+        "type": "heading",
+        "text": "GIS Across Industries"
+      },
+      {
+        "type": "heading3",
+        "text": "1. Urban Planning and Smart Cities"
+      },
+      {
+        "type": "paragraph",
+        "text": "City planners use GIS to understand how cities grow and how infrastructure should evolve."
+      },
+      {
+        "type": "paragraph",
+        "text": "Applications include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Land-use planning",
+          "Zoning management",
+          "Transportation planning",
+          "Infrastructure investment",
+          "Utility coordination",
+          "Smart city dashboards"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Benefits:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Better public services",
+          "Reduced congestion",
+          "Sustainable urban growth",
+          "Evidence-based planning"
+        ]
+      },
+      {
+        "type": "heading3",
+        "text": "2. Natural Resources and Environment"
+      },
+      {
+        "type": "paragraph",
+        "text": "Environmental professionals rely heavily on GIS because ecosystems are inherently spatial."
+      },
+      {
+        "type": "paragraph",
+        "text": "Common applications:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Forest monitoring",
+          "Watershed management",
+          "Biodiversity conservation",
+          "Habitat analysis",
+          "Climate change assessment",
+          "Land degradation monitoring"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS integrates satellite imagery, drones, GPS surveys, and field observations into one analytical platform."
+      },
+      {
+        "type": "heading3",
+        "text": "3. Agriculture and Precision Farming"
+      },
+      {
+        "type": "paragraph",
+        "text": "Modern agriculture increasingly depends on precision management."
+      },
+      {
+        "type": "paragraph",
+        "text": "Farmers can use GIS to:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Monitor crop health",
+          "Analyze soil conditions",
+          "Plan irrigation",
+          "Optimize fertilizer application",
+          "Estimate yield",
+          "Detect disease early"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "The result is higher productivity with lower resource consumption."
+      },
+      {
+        "type": "heading3",
+        "text": "4. Transportation and Logistics"
+      },
+      {
+        "type": "paragraph",
+        "text": "Every delivery route has both time and space."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS supports:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Route optimization",
+          "Fleet management",
+          "Traffic analysis",
+          "Delivery planning",
+          "Warehouse location analysis",
+          "Emergency rerouting"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Companies save fuel, reduce travel time, and improve customer satisfaction."
+      },
+      {
+        "type": "heading3",
+        "text": "5. Utilities and Infrastructure"
+      },
+      {
+        "type": "paragraph",
+        "text": "Electricity, water, gas, telecommunications, and sewer networks all depend on accurate spatial data."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS helps utilities:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Manage assets",
+          "Detect outages",
+          "Plan maintenance",
+          "Track inspections",
+          "Prioritize replacement projects"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Digital asset management reduces downtime and improves reliability."
+      },
+      {
+        "type": "heading3",
+        "text": "6. Disaster Management and Public Safety"
+      },
+      {
+        "type": "paragraph",
+        "text": "Emergency response depends on knowing where people, hazards, and resources are located."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS enables:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Hazard mapping",
+          "Flood modeling",
+          "Wildfire monitoring",
+          "Evacuation planning",
+          "Emergency dispatch",
+          "Damage assessment"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Real-time mapping allows faster and more effective response during disasters."
+      },
+      {
+        "type": "heading3",
+        "text": "7. Healthcare and Public Health"
+      },
+      {
+        "type": "paragraph",
+        "text": "Healthcare decisions are strongly influenced by geography."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS supports:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Disease surveillance",
+          "Hospital accessibility studies",
+          "Vaccination planning",
+          "Ambulance optimization",
+          "Health equity analysis"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "During outbreaks, GIS helps identify hotspots and allocate medical resources efficiently."
+      },
+      {
+        "type": "heading3",
+        "text": "8. Retail and Business Intelligence"
+      },
+      {
+        "type": "paragraph",
+        "text": "Businesses increasingly compete using location intelligence."
+      },
+      {
+        "type": "paragraph",
+        "text": "Typical uses include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Site selection",
+          "Customer segmentation",
+          "Sales territory design",
+          "Market gap analysis",
+          "Competitor analysis"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS reduces business risk before investing in new stores."
+      },
+      {
+        "type": "heading3",
+        "text": "9. Tourism and Hospitality"
+      },
+      {
+        "type": "paragraph",
+        "text": "Tourism organizations use GIS to:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Design travel routes",
+          "Manage attractions",
+          "Protect natural resources",
+          "Analyze visitor behavior",
+          "Promote destinations"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Spatial analysis improves both visitor experience and conservation."
+      },
+      {
+        "type": "heading3",
+        "text": "10. Education and Research"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS is no longer limited to geography departments."
+      },
+      {
+        "type": "paragraph",
+        "text": "Researchers use GIS for:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Environmental science",
+          "Public health",
+          "Archaeology",
+          "Social science",
+          "Engineering",
+          "Climate studies"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Students also gain valuable analytical and technical skills applicable across industries."
+      },
+      {
+        "type": "heading",
+        "text": "Why GIS Matters"
+      },
+      {
+        "type": "paragraph",
+        "text": "Organizations adopt GIS because it improves:"
+      },
+      {
+        "type": "heading3",
+        "text": "Better Decisions"
+      },
+      {
+        "type": "paragraph",
+        "text": "Maps reveal patterns that tables cannot."
+      },
+      {
+        "type": "heading3",
+        "text": "Greater Efficiency"
+      },
+      {
+        "type": "paragraph",
+        "text": "Optimized workflows reduce cost and save time."
+      },
+      {
+        "type": "heading3",
+        "text": "Sustainability"
+      },
+      {
+        "type": "paragraph",
+        "text": "Resources can be managed more responsibly."
+      },
+      {
+        "type": "heading3",
+        "text": "Innovation"
+      },
+      {
+        "type": "paragraph",
+        "text": "Spatial analysis uncovers opportunities hidden in large datasets."
+      },
+      {
+        "type": "heading3",
+        "text": "Stronger Communities"
+      },
+      {
+        "type": "paragraph",
+        "text": "Governments provide better services using evidence-based planning."
+      },
+      {
+        "type": "heading",
+        "text": "The Future of GIS"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS is rapidly integrating with:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Artificial Intelligence (AI)",
+          "Machine Learning",
+          "Internet of Things (IoT)",
+          "Real-time sensors",
+          "Digital twins",
+          "Cloud computing",
+          "Drone mapping",
+          "High-resolution satellite imagery"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Location intelligence will become even more important as cities, businesses, and governments continue their digital transformation."
+      },
+      {
+        "type": "heading",
+        "text": "Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "text": "The question is no longer \"Who uses GIS?\""
+      },
+      {
+        "type": "paragraph",
+        "text": "Instead, it is \"Which industries can afford not to use GIS?\""
+      },
+      {
+        "type": "paragraph",
+        "text": "If a problem has a location, GIS can help visualize it, analyze it, and solve it more effectively. Whether improving agriculture, protecting forests, optimizing logistics, managing disasters, or growing businesses, GIS transforms raw geographic data into actionable knowledge."
+      },
+      {
+        "type": "paragraph",
+        "text": "Location + Data = Better Decisions"
+      }
+    ]
+  }
+};
+
+const IRRIGATION_GIS_ARTICLE = {
+  "km": {
+    "title": "ទិន្នន័យដែលប្រើក្នុង Irrigation GIS",
+    "excerpt": "ការគ្រប់គ្រងប្រព័ន្ធស្រោចស្រពសម័យទំនើប មិនអាចពឹងផ្អែកតែបទពិសោធន៍ប៉ុណ្ណោះទេ។ GIS ជួយបញ្ចូលទិន្នន័យជាច្រើនប្រភេទ ដើម្បីវិភាគ ការធ្វើផែនការ និងការគ្រប់គ្រងធនធានទឹកឱ្យមានប្រសិទ្ធភាព។",
+    "readTime": "១៥ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "សេចក្តីផ្តើម"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការគ្រប់គ្រងប្រព័ន្ធស្រោចស្រពសម័យទំនើប មិនអាចពឹងផ្អែកតែបទពិសោធន៍ប៉ុណ្ណោះទេ។ GIS ជួយបញ្ចូលទិន្នន័យជាច្រើនប្រភេទ ដើម្បីវិភាគ ការធ្វើផែនការ និងការគ្រប់គ្រងធនធានទឹកឱ្យមានប្រសិទ្ធភាព។"
+      },
+      {
+        "type": "paragraph",
+        "text": "រូបភាពខាងលើបង្ហាញទិន្នន័យសំខាន់ៗចំនួន ១០ ប្រភេទ ដែលត្រូវបានប្រើក្នុងគម្រោងស្រោចស្រព។ ទិន្នន័យទាំងនេះធ្វើការរួមគ្នា ដើម្បីជួយសម្រេចចិត្តបានត្រឹមត្រូវ និងប្រើប្រាស់ទឹកប្រកបដោយចីរភាព។"
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វី GIS មានសារៈសំខាន់?"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS អាចរួមបញ្ចូលព័ត៌មានពីដី ទឹក អាកាសធាតុ ដំណាំ និងហេដ្ឋារចនាសម្ព័ន្ធ ទៅក្នុងផែនទីតែមួយ។ វាជួយ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "រៀបចំផែនការស្រោចស្រព",
+          "បែងចែកទឹក",
+          "វាយតម្លៃតម្រូវការទឹករបស់ដំណាំ",
+          "គ្រប់គ្រងប្រឡាយ និងអាងស្តុកទឹក",
+          "តាមដានគ្រោះរាំងស្ងួត",
+          "គាំទ្រកសិកម្មឆ្លាតវៃ"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "១. DEM"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEM បង្ហាញកម្ពស់ផ្ទៃដី។"
+      },
+      {
+        "type": "paragraph",
+        "text": "វាត្រូវបានប្រើសម្រាប់៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "វិភាគជម្រាល",
+          "ទិសដៅលំហូរទឹក",
+          "កំណត់អាងទឹក",
+          "រចនាប្រព័ន្ធស្រោចស្រពដោយប្រើកម្លាំងទំនាញ"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "២. Soil Map"
+      },
+      {
+        "type": "paragraph",
+        "text": "ផែនទីដីបង្ហាញប្រភេទដី សមត្ថភាពរក្សាទឹក និងការជ្រាបទឹក។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ដីខ្សាច់ និងដីឥដ្ឋ មានតម្រូវការស្រោចស្រពខុសគ្នា ដូច្នេះព័ត៌មាននេះសំខាន់សម្រាប់កំណត់កាលវិភាគស្រោចស្រព។"
+      },
+      {
+        "type": "heading",
+        "text": "៣. Land Use"
+      },
+      {
+        "type": "paragraph",
+        "text": "បង្ហាញប្រភេទការប្រើប្រាស់ដី និងប្រភេទដំណាំ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS អាចគណនាតម្រូវការទឹកសរុប តាមប្រភេទដំណាំ និងផ្ទៃដីដាំដុះ។"
+      },
+      {
+        "type": "heading",
+        "text": "៤. Canal Network"
+      },
+      {
+        "type": "paragraph",
+        "text": "ជាបណ្តាញប្រឡាយ មេ ប្រឡាយរង និងសំណង់ស្រោចស្រព។"
+      },
+      {
+        "type": "paragraph",
+        "text": "វាជួយគ្រប់គ្រងការចែកចាយទឹក និងការថែទាំហេដ្ឋារចនាសម្ព័ន្ធ។"
+      },
+      {
+        "type": "heading",
+        "text": "៥. Rivers"
+      },
+      {
+        "type": "paragraph",
+        "text": "ទន្លេ និងអូរ ជាប្រភពទឹកធម្មជាតិសំខាន់។"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយវិភាគប្រភពទឹក កន្លែងទាញទឹក និងផលប៉ះពាល់ពីទឹកជំនន់។"
+      },
+      {
+        "type": "heading",
+        "text": "៦. Reservoirs"
+      },
+      {
+        "type": "paragraph",
+        "text": "អាងស្តុកទឹក ជួយរក្សាទុក និងគ្រប់គ្រងទឹកតាមរដូវ។"
+      },
+      {
+        "type": "heading",
+        "text": "៧. Rainfall"
+      },
+      {
+        "type": "paragraph",
+        "text": "ទិន្នន័យភ្លៀងជួយវាយតម្លៃភាពគ្រប់គ្រាន់នៃទឹក និងកំណត់តំបន់ដែលត្រូវការស្រោចស្រពបន្ថែម។"
+      },
+      {
+        "type": "heading",
+        "text": "៨. Temperature"
+      },
+      {
+        "type": "paragraph",
+        "text": "សីតុណ្ហភាពប៉ះពាល់ដល់ Evapotranspiration (ET) និងតម្រូវការទឹករបស់ដំណាំ។"
+      },
+      {
+        "type": "heading",
+        "text": "៩. Satellite Images"
+      },
+      {
+        "type": "paragraph",
+        "text": "រូបភាពផ្កាយរណបអាចតាមដាន៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "សុខភាពដំណាំ",
+          "NDVI",
+          "ភាពស្ងួត",
+          "ទឹកជំនន់",
+          "ការផ្លាស់ប្តូរការប្រើប្រាស់ដី"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "១០. GPS Survey"
+      },
+      {
+        "type": "paragraph",
+        "text": "GPS ផ្តល់ទីតាំងមានភាពត្រឹមត្រូវខ្ពស់សម្រាប់ប្រឡាយ សំណង់ និងព្រំដី។"
+      },
+      {
+        "type": "heading",
+        "text": "ការរួមបញ្ចូលទិន្នន័យ"
+      },
+      {
+        "type": "paragraph",
+        "text": "អត្ថប្រយោជន៍ពិតរបស់ GIS គឺការរួមបញ្ចូលទិន្នន័យទាំងអស់។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ឧទាហរណ៍៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "DEM បង្ហាញទិសទឹក។",
+          "Soil Map បង្ហាញការជ្រាបទឹក។",
+          "Land Use បង្ហាញតម្រូវការទឹក។",
+          "Canal Network ចែកចាយទឹក។",
+          "Reservoirs ផ្គត់ផ្គង់ទឹក។",
+          "Rainfall បង្ហាញការផ្គត់ផ្គង់ធម្មជាតិ។",
+          "Temperature គណនា ET។",
+          "Satellite តាមដានសុខភាពដំណាំ។",
+          "GPS ផ្ទៀងផ្ទាត់ទិន្នន័យទីតាំង។"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "អត្ថប្រយោជន៍"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ប្រើប្រាស់ទឹកមានប្រសិទ្ធភាព",
+          "បង្កើនទិន្នផលកសិកម្ម",
+          "កាត់បន្ថយការចំណាយ",
+          "គាំទ្រការសម្រេចចិត្ត",
+          "គ្រប់គ្រងធនធានប្រកបដោយចីរភាព"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "អនាគតនៃ Irrigation GIS"
+      },
+      {
+        "type": "paragraph",
+        "text": "បច្ចេកវិទ្យាថ្មីៗដូចជា Drone, IoT, AI, Cloud GIS និង Dashboard ពេលវេលាពិត កំពុងធ្វើឱ្យប្រព័ន្ធស្រោចស្រពកាន់តែឆ្លាតវៃ និងមានប្រសិទ្ធភាព។"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS សម្រាប់ការគ្រប់គ្រងស្រោចស្រព មិនមែនគ្រាន់តែជាការធ្វើផែនទីទេ ប៉ុន្តែជាប្រព័ន្ធសម្រេចចិត្តដែលរួមបញ្ចូលទិន្នន័យដី ទឹក អាកាសធាតុ ដំណាំ ហេដ្ឋារចនាសម្ព័ន្ធ និងព័ត៌មានពីផ្កាយរណប។ ទិន្នន័យដែលមានគុណភាព នាំទៅរកការសម្រេចចិត្តល្អ ការប្រើប្រាស់ទឹកមានប្រសិទ្ធភាព និងកសិកម្មប្រកបដោយចីរភាព។"
+      }
+    ]
+  },
+  "en": {
+    "title": "Data Used in Irrigation GIS",
+    "excerpt": "Water is one of the world's most valuable resources, and agriculture consumes around 70% of global freshwater withdrawals. Efficient irrigation is therefore essential for improving crop productivity while conserving water. Modern irrigation management is no longer based solely on field experience—it increasingly relies on Geographic Information Systems (GIS).",
+    "readTime": "15 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "Water is one of the world's most valuable resources, and agriculture consumes around 70% of global freshwater withdrawals. Efficient irrigation is therefore essential for improving crop productivity while conserving water. Modern irrigation management is no longer based solely on field experience—it increasingly relies on Geographic Information Systems (GIS)."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS integrates multiple datasets into a single environment, allowing irrigation engineers, planners, farmers, and government agencies to understand where water comes from, how it moves, where it is needed, and how efficiently it is being used. The infographic highlights ten of the most important GIS datasets used in irrigation planning. This article explains each dataset, its purpose, and how they work together."
+      },
+      {
+        "type": "heading",
+        "text": "Why GIS Matters in Irrigation"
+      },
+      {
+        "type": "paragraph",
+        "text": "Irrigation systems involve terrain, soil, climate, crops, infrastructure, and water resources. No single dataset can answer every question. GIS combines these layers to support:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Irrigation system design",
+          "Water allocation",
+          "Crop suitability analysis",
+          "Infrastructure planning",
+          "Drought monitoring",
+          "Climate adaptation",
+          "Asset management",
+          "Decision support"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "1. Digital Elevation Model (DEM)"
+      },
+      {
+        "type": "paragraph",
+        "text": "A DEM represents the Earth's surface elevation."
+      },
+      {
+        "type": "heading3",
+        "text": "Why it is important"
+      },
+      {
+        "type": "paragraph",
+        "text": "Water naturally flows downhill. DEMs allow engineers to identify slopes, watersheds, drainage paths, and suitable canal alignments."
+      },
+      {
+        "type": "heading3",
+        "text": "Typical applications"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Slope analysis",
+          "Flow direction",
+          "Watershed delineation",
+          "Gravity-fed irrigation planning",
+          "Reservoir site selection"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Without elevation information, irrigation design becomes inefficient and expensive."
+      },
+      {
+        "type": "heading",
+        "text": "2. Soil Map"
+      },
+      {
+        "type": "paragraph",
+        "text": "Different soils retain water differently."
+      },
+      {
+        "type": "paragraph",
+        "text": "A soil map provides information about:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Texture",
+          "Drainage",
+          "Water holding capacity",
+          "Permeability",
+          "Fertility"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "For example, clay soils retain water longer than sandy soils. This directly influences irrigation frequency and scheduling."
+      },
+      {
+        "type": "heading",
+        "text": "3. Land Use and Crop Distribution"
+      },
+      {
+        "type": "paragraph",
+        "text": "Land-use data identifies how land is being utilized."
+      },
+      {
+        "type": "paragraph",
+        "text": "Examples include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Rice fields",
+          "Vegetable farms",
+          "Orchards",
+          "Urban areas",
+          "Forests"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Each crop requires different amounts of water. GIS helps estimate total irrigation demand by combining crop type with cultivated area."
+      },
+      {
+        "type": "heading",
+        "text": "4. Canal Network"
+      },
+      {
+        "type": "paragraph",
+        "text": "The canal network represents irrigation infrastructure including:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Main canals",
+          "Secondary canals",
+          "Distributaries",
+          "Control structures"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS allows managers to locate damaged canals, estimate service areas, optimize maintenance, and evaluate expansion projects."
+      },
+      {
+        "type": "heading",
+        "text": "5. Rivers"
+      },
+      {
+        "type": "paragraph",
+        "text": "Rivers are the primary natural water source for many irrigation systems."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS helps determine:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Water availability",
+          "Catchment relationships",
+          "River connectivity",
+          "Intake locations",
+          "Flood impacts"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "River monitoring supports sustainable water extraction."
+      },
+      {
+        "type": "heading",
+        "text": "6. Reservoirs"
+      },
+      {
+        "type": "paragraph",
+        "text": "Reservoirs regulate seasonal water supply."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS stores information about:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Capacity",
+          "Water level",
+          "Storage volume",
+          "Distribution zones"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Combining reservoirs with rainfall forecasts improves drought preparedness."
+      },
+      {
+        "type": "heading",
+        "text": "7. Rainfall"
+      },
+      {
+        "type": "paragraph",
+        "text": "Rainfall is one of the most dynamic datasets."
+      },
+      {
+        "type": "paragraph",
+        "text": "Rainfall maps help answer:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Where is rainfall sufficient?",
+          "Which areas require supplemental irrigation?",
+          "Which regions are vulnerable to drought?"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Satellite rainfall products provide near real-time monitoring over large areas."
+      },
+      {
+        "type": "heading",
+        "text": "8. Temperature"
+      },
+      {
+        "type": "paragraph",
+        "text": "Temperature affects evapotranspiration (ET), which represents water lost through evaporation and plant transpiration."
+      },
+      {
+        "type": "paragraph",
+        "text": "Higher temperatures generally increase crop water demand."
+      },
+      {
+        "type": "paragraph",
+        "text": "Temperature maps are therefore essential for:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Irrigation scheduling",
+          "Crop water requirement estimation",
+          "Climate impact assessment"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "9. Satellite Imagery"
+      },
+      {
+        "type": "paragraph",
+        "text": "Satellite imagery provides continuous monitoring of agricultural land."
+      },
+      {
+        "type": "paragraph",
+        "text": "Common applications include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "NDVI vegetation monitoring",
+          "Crop stress detection",
+          "Crop growth assessment",
+          "Flood mapping",
+          "Land-use change detection"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Modern irrigation projects increasingly rely on free satellite missions such as Landsat and Sentinel."
+      },
+      {
+        "type": "heading",
+        "text": "10. GPS Survey"
+      },
+      {
+        "type": "paragraph",
+        "text": "GPS surveys provide accurate field observations."
+      },
+      {
+        "type": "paragraph",
+        "text": "Typical GPS datasets include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Canal centerlines",
+          "Water structures",
+          "Farm boundaries",
+          "Survey control points"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These datasets ensure GIS analyses match real-world conditions."
+      },
+      {
+        "type": "heading",
+        "text": "Integrating All Layers"
+      },
+      {
+        "type": "paragraph",
+        "text": "The real power of GIS comes from combining datasets rather than analyzing them individually."
+      },
+      {
+        "type": "paragraph",
+        "text": "Example workflow:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "DEM determines water flow.",
+          "Soil map estimates infiltration.",
+          "Land use estimates demand.",
+          "Canal network distributes water.",
+          "Reservoirs provide storage.",
+          "Rainfall updates supply.",
+          "Temperature estimates ET.",
+          "Satellite imagery monitors crop health.",
+          "GPS validates field conditions."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Together these datasets provide a complete decision-support system."
+      },
+      {
+        "type": "heading",
+        "text": "Benefits"
+      },
+      {
+        "type": "paragraph",
+        "text": "Organizations using GIS for irrigation can:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Improve water-use efficiency",
+          "Reduce operational costs",
+          "Increase crop productivity",
+          "Detect problems earlier",
+          "Support precision agriculture",
+          "Improve drought resilience",
+          "Plan infrastructure investments",
+          "Support sustainable resource management"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Future Trends"
+      },
+      {
+        "type": "paragraph",
+        "text": "Emerging technologies are transforming irrigation GIS:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "IoT water sensors",
+          "Drone imagery",
+          "AI-based irrigation prediction",
+          "Digital twins",
+          "Cloud GIS",
+          "Real-time dashboards"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These technologies enable smarter and more automated irrigation systems."
+      },
+      {
+        "type": "heading",
+        "text": "Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "text": "Irrigation GIS is much more than mapping canals. It integrates terrain, soils, climate, crops, infrastructure, satellite observations, and field surveys into a unified decision-support platform. Better data leads to better decisions, more efficient water use, higher agricultural productivity, and more sustainable irrigation management."
+      },
+      {
+        "type": "paragraph",
+        "text": "As agriculture faces climate change and increasing water scarcity, GIS will continue to play a central role in ensuring every drop of water is used wisely."
+      }
+    ]
+  }
+};
+
+const DEV_ELEVATION_ARTICLE = {
+  "km": {
+    "title": "DEV (Deviation from Mean Elevation)៖ ការវិភាគភូមិសាស្ត្រកម្ពស់សម្រាប់កសិកម្មឆ្លាតវៃ",
+    "excerpt": "DEM (Digital Elevation Model) គឺជាទិន្នន័យមូលដ្ឋានសំខាន់សម្រាប់ការវិភាគផ្ទៃដី។ ក្រៅពី Slope, Aspect និង Flow Accumulation នៅមានសូចនាករមួយទៀតដែលមានប្រយោជន៍ខ្លាំងគឺ Deviation from Mean Elevation (DEV)។",
+    "readTime": "១៥ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "សេចក្តីផ្តើម"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEM (Digital Elevation Model) គឺជាទិន្នន័យមូលដ្ឋានសំខាន់សម្រាប់ការវិភាគផ្ទៃដី។ ក្រៅពី Slope, Aspect និង Flow Accumulation នៅមានសូចនាករមួយទៀតដែលមានប្រយោជន៍ខ្លាំងគឺ Deviation from Mean Elevation (DEV)។"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV មិនវាស់កម្ពស់ដាច់ខាតទេ ប៉ុន្តែវាវាស់ថា តើទីតាំងនីមួយៗខ្ពស់ ឬទាបជាងតំបន់ជុំវិញខ្លួនប៉ុន្មាន។ ដូច្នេះវាអាចបង្ហាញលម្អិតអំពី Ridge, Valley និង Micro-topography ដែលមើលមិនសូវឃើញពី DEM ដើម។"
+      },
+      {
+        "type": "heading",
+        "text": "DEV ជាអ្វី?"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV គឺជា z-score នៃកម្ពស់ធៀបនឹងមធ្យមភាគកម្ពស់ក្នុង Neighborhood។"
+      },
+      {
+        "type": "paragraph",
+        "text": "រូបមន្ត៖"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV = (កម្ពស់ក្រឡា − មធ្យមកម្ពស់ជុំវិញ) / គម្លាតស្តង់ដារកម្ពស់"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការបកស្រាយ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "DEV > +2 = ខ្ពស់ជាងតំបន់ជុំវិញខ្លាំង",
+          "DEV ≈ 0 = ស្រដៀងតំបន់ជុំវិញ",
+          "DEV < -2 = ទាបជាងតំបន់ជុំវិញខ្លាំង"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វីមិនប្រើ Elevation តែមួយ?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Elevation ប្រាប់ថា \"កម្ពស់ពីនីវ៉ូសមុទ្រ\"។"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV ប្រាប់ថា \"ខ្ពស់ ឬទាបជាងតំបន់ជុំវិញ\"។"
+      },
+      {
+        "type": "paragraph",
+        "text": "នេះជាភាពខុសគ្នាសំខាន់សម្រាប់ការយល់ដឹងពីរចនាសម្ព័ន្ធផ្ទៃដី។"
+      },
+      {
+        "type": "heading",
+        "text": "របៀបដំណើរការ"
+      },
+      {
+        "type": "list",
+        "items": [
+          "បញ្ចូល DEM",
+          "កំណត់ Search Radius",
+          "គណនាមធ្យមកម្ពស់",
+          "គណនា Standard Deviation",
+          "គណនា DEV"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "លទ្ធផលគឺ Raster បង្ហាញតំបន់ខ្ពស់ និងទាបក្នុងលក្ខណៈប្រៀបធៀប។"
+      },
+      {
+        "type": "heading",
+        "text": "ការបកស្រាយលទ្ធផល"
+      },
+      {
+        "type": "heading",
+        "text": "DEV វិជ្ជមាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "បង្ហាញ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Ridge",
+          "Knoll",
+          "តំបន់ខ្ពស់"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "ជាទូទៅមានការបង្ហូរទឹកល្អ ប៉ុន្តែងាយរងការកាត់សំណឹក។"
+      },
+      {
+        "type": "heading",
+        "text": "DEV ស្មើសូន្យ"
+      },
+      {
+        "type": "paragraph",
+        "text": "បង្ហាញផ្ទៃដីដែលស្រដៀងនឹងតំបន់ជុំវិញ។"
+      },
+      {
+        "type": "heading",
+        "text": "DEV អវិជ្ជមាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "បង្ហាញ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Valley",
+          "Depression",
+          "តំបន់ប្រមូលទឹក"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "សមស្របសម្រាប់ការវិភាគការលិចទឹក និងការរៀបចំប្រព័ន្ធបង្ហូរទឹក។"
+      },
+      {
+        "type": "heading",
+        "text": "Search Radius"
+      },
+      {
+        "type": "paragraph",
+        "text": "Radius តូច៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "លម្អិតខ្ពស់",
+          "មើលឃើញ Micro-topography",
+          "Noise ច្រើន"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Radius ធំ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "លទ្ធផលរលូន",
+          "មើលទិដ្ឋភាពទូលំទូលាយ",
+          "លម្អិតតិចជាង"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "អត្ថប្រយោជន៍សម្រាប់ Precision Agriculture"
+      },
+      {
+        "type": "list",
+        "items": [
+          "កំណត់តំបន់ប្រមូលទឹក",
+          "រចនាប្រព័ន្ធបង្ហូរទឹក",
+          "Variable Rate Application",
+          "វាយតម្លៃហានិភ័យកាត់សំណឹក",
+          "ជ្រើសរើសទីតាំងផ្លូវ ស្រះ និងហេដ្ឋារចនាសម្ព័ន្ធ"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ប្រើរួមជាមួយទិន្នន័យផ្សេងៗ"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV គួរប្រើរួមជាមួយ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Slope",
+          "Curvature",
+          "Flow Accumulation",
+          "TWI",
+          "Soil Map",
+          "Land Cover",
+          "Satellite Imagery"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ការប្រើក្នុង WhiteboxTools"
+      },
+      {
+        "type": "paragraph",
+        "text": "ឧបករណ៍ DevFromMeanElev អនុញ្ញាតឱ្យគណនា DEV ដោយងាយ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "Workflow៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "រៀបចំ DEM",
+          "ជ្រើស DevFromMeanElev",
+          "កំណត់ Radius",
+          "Run",
+          "វិភាគ Raster លទ្ធផល"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Best Practices"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ប្រើ DEM ដែលមានគុណភាពល្អ",
+          "ជ្រើស Radius សមស្រប",
+          "សម្អាត DEM មុនវិភាគ",
+          "ផ្ទៀងផ្ទាត់ជាមួយទិន្នន័យវាល",
+          "ប្រើរួមជាមួយ Terrain Indices ផ្សេងៗ"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "កំហុសដែលជួបញឹកញាប់"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Radius មិនសមស្រប",
+          "យល់ថា DEV ជាកម្ពស់ពិត",
+          "មិនគិតពីគុណភាព DEM",
+          "បកស្រាយ DEV ដោយមិនគិតពី Neighborhood"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ឧទាហរណ៍អនុវត្ត"
+      },
+      {
+        "type": "paragraph",
+        "text": "កសិកម្ម៖ កំណត់តំបន់សើម កែលម្អប្រព័ន្ធស្រោចស្រព និងកាត់បន្ថយការប្រើជី។"
+      },
+      {
+        "type": "paragraph",
+        "text": "ធនធានទឹក៖ កំណត់ផ្លូវទឹក និងតំបន់ប្រមូលទឹក។"
+      },
+      {
+        "type": "paragraph",
+        "text": "វិស្វកម្ម៖ ជ្រើសរើសទីតាំងសាងសង់ និងគណនាការកែសម្រួលដី។"
+      },
+      {
+        "type": "paragraph",
+        "text": "បរិស្ថាន៖ សិក្សាការកាត់សំណឹក និងជម្រកធម្មជាតិ។"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV គឺជាសូចនាករដ៏មានអត្ថប្រយោជន៍សម្រាប់ការវិភាគភូមិសាស្ត្រផ្ទៃដី។ វាជួយបង្ហាញភាពខុសគ្នានៃកម្ពស់ក្នុងតំបន់ជុំវិញ ដែលមានសារៈសំខាន់សម្រាប់ការគ្រប់គ្រងទឹក ការកាត់សំណឹក ការរៀបចំដី និង Precision Agriculture។"
+      },
+      {
+        "type": "paragraph",
+        "text": "នៅពេលប្រើរួមជាមួយ DEM, Slope និង Terrain Indices ផ្សេងៗ DEV អាចផ្តល់ព័ត៌មានដ៏មានតម្លៃសម្រាប់ការសម្រេចចិត្តដែលផ្អែកលើទិន្នន័យ។"
+      }
+    ]
+  },
+  "en": {
+    "title": "Deviation from Mean Elevation (DEV): Unlocking Micro‑Topography for Precision Agriculture",
+    "excerpt": "Digital Elevation Models (DEMs) have become one of the most valuable datasets in modern GIS, remote sensing, environmental management, and precision agriculture. While slope, aspect, hillshade, and flow accumulation are commonly used terrain derivatives, another powerful yet often overlooked geomorphometric metric is Deviation from Mean Elevation (DEV).",
+    "readTime": "15 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "Digital Elevation Models (DEMs) have become one of the most valuable datasets in modern GIS, remote sensing, environmental management, and precision agriculture. While slope, aspect, hillshade, and flow accumulation are commonly used terrain derivatives, another powerful yet often overlooked geomorphometric metric is Deviation from Mean Elevation (DEV)."
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV highlights whether each location is relatively higher or lower than its surrounding neighborhood rather than its absolute elevation. This local perspective makes it exceptionally useful for identifying ridges, depressions, subtle drainage pathways, and micro-topographic variations that may not be visible in the DEM itself."
+      },
+      {
+        "type": "paragraph",
+        "text": "For farmers, engineers, hydrologists, and GIS professionals, DEV provides actionable insight into how water, sediment, and nutrients behave across a landscape."
+      },
+      {
+        "type": "heading",
+        "text": "What is DEV?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Deviation from Mean Elevation measures how different the elevation of one DEM cell is compared with the average elevation of nearby cells."
+      },
+      {
+        "type": "paragraph",
+        "text": "Mathematically:"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV = (Cell Elevation − Neighborhood Mean Elevation) / Neighborhood Standard Deviation"
+      },
+      {
+        "type": "paragraph",
+        "text": "This standardized z-score means that DEV is independent of the absolute elevation."
+      },
+      {
+        "type": "paragraph",
+        "text": "Examples:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "DEV > +2 → Much higher than surroundings",
+          "DEV around 0 → Similar to surrounding terrain",
+          "DEV < -2 → Much lower than surroundings"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Because the values are normalized, DEV works equally well in lowlands and mountains."
+      },
+      {
+        "type": "heading",
+        "text": "Why Not Just Use Elevation?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Absolute elevation answers:"
+      },
+      {
+        "type": "quote",
+        "text": "\"How high is this location above sea level?\""
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV answers:"
+      },
+      {
+        "type": "quote",
+        "text": "\"How different is this location compared with nearby terrain?\""
+      },
+      {
+        "type": "paragraph",
+        "text": "Two hills may both be 500 m above sea level. One could be a ridge while the other lies inside a broad plateau. DEV distinguishes these situations because it measures relative position rather than absolute height."
+      },
+      {
+        "type": "heading",
+        "text": "How DEV Works"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Start with a DEM.",
+          "Define a moving neighborhood (search radius).",
+          "Calculate the local mean elevation.",
+          "Calculate the local standard deviation.",
+          "Compute the standardized difference."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "The result is a raster highlighting local highs and lows."
+      },
+      {
+        "type": "heading",
+        "text": "Interpreting DEV"
+      },
+      {
+        "type": "heading",
+        "text": "Positive DEV"
+      },
+      {
+        "type": "paragraph",
+        "text": "Positive values represent local highs:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Ridges",
+          "Knolls",
+          "Small hills",
+          "Elevated field boundaries"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These areas often have:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Better drainage",
+          "Higher erosion risk",
+          "Shallower soil moisture"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Near Zero"
+      },
+      {
+        "type": "paragraph",
+        "text": "Areas close to zero have terrain similar to their neighbors."
+      },
+      {
+        "type": "paragraph",
+        "text": "These often represent:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Flat farmland",
+          "Gentle slopes",
+          "Stable surfaces"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Negative DEV"
+      },
+      {
+        "type": "paragraph",
+        "text": "Negative values represent local depressions:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Valleys",
+          "Small basins",
+          "Water accumulation zones",
+          "Local drainage channels"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These locations usually retain moisture longer."
+      },
+      {
+        "type": "heading",
+        "text": "Choosing the Right Search Radius"
+      },
+      {
+        "type": "paragraph",
+        "text": "Search radius strongly influences the output."
+      },
+      {
+        "type": "paragraph",
+        "text": "Small radius:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Captures tiny landforms",
+          "More detail",
+          "More noise"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Large radius:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Captures broad terrain patterns",
+          "Smoother result",
+          "Less local detail"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Choose the radius according to DEM resolution and project objectives."
+      },
+      {
+        "type": "heading",
+        "text": "Applications in Precision Agriculture"
+      },
+      {
+        "type": "heading",
+        "text": "Water Management"
+      },
+      {
+        "type": "paragraph",
+        "text": "Locate water accumulation areas before irrigation planning."
+      },
+      {
+        "type": "heading",
+        "text": "Drainage Design"
+      },
+      {
+        "type": "paragraph",
+        "text": "Identify depressions where artificial drainage may be required."
+      },
+      {
+        "type": "heading",
+        "text": "Variable Rate Farming"
+      },
+      {
+        "type": "paragraph",
+        "text": "Combine DEV with soil maps to optimize fertilizer application."
+      },
+      {
+        "type": "heading",
+        "text": "Erosion Assessment"
+      },
+      {
+        "type": "paragraph",
+        "text": "Positive DEV often corresponds to erosion-prone ridges."
+      },
+      {
+        "type": "heading",
+        "text": "Field Planning"
+      },
+      {
+        "type": "paragraph",
+        "text": "Support road alignment, terraces, ponds, and infrastructure placement."
+      },
+      {
+        "type": "heading",
+        "text": "Combining DEV with Other Terrain Products"
+      },
+      {
+        "type": "paragraph",
+        "text": "DEV becomes even more valuable when integrated with:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Slope",
+          "Curvature",
+          "Flow Accumulation",
+          "Topographic Wetness Index (TWI)",
+          "Land Cover",
+          "Soil Maps",
+          "Satellite Imagery"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "This multi-layer approach produces more reliable decisions than relying on a single terrain derivative."
+      },
+      {
+        "type": "heading",
+        "text": "WhiteboxTools Implementation"
+      },
+      {
+        "type": "paragraph",
+        "text": "WhiteboxTools includes the DevFromMeanElev tool."
+      },
+      {
+        "type": "paragraph",
+        "text": "Typical workflow:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Prepare a hydrologically sound DEM.",
+          "Select DevFromMeanElev.",
+          "Specify search radius.",
+          "Run the analysis.",
+          "Visualize the resulting z-score raster."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Experiment with different neighborhood sizes to determine which best represents your landscape."
+      },
+      {
+        "type": "heading",
+        "text": "Best Practices"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Use the highest-quality DEM available.",
+          "Match neighborhood size to mapping scale.",
+          "Remove DEM artifacts before analysis.",
+          "Validate with field observations.",
+          "Combine DEV with additional terrain indices."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Common Mistakes"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Using an unsuitable search radius.",
+          "Treating DEV as elevation.",
+          "Comparing DEV values from different neighborhood sizes without context.",
+          "Ignoring DEM quality."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Real-World Examples"
+      },
+      {
+        "type": "paragraph",
+        "text": "Agriculture:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Detect wet spots before planting.",
+          "Optimize irrigation.",
+          "Reduce fertilizer waste."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Hydrology:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Identify headwater channels.",
+          "Improve watershed mapping."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Engineering:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Select infrastructure locations.",
+          "Assess earthwork requirements."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Environmental Management:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Map microhabitats.",
+          "Study erosion and sediment transport."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "text": "Deviation from Mean Elevation is a simple yet powerful terrain analysis method. Rather than describing absolute height, it reveals the landscape's relative highs and lows, making subtle landforms immediately visible."
+      },
+      {
+        "type": "paragraph",
+        "text": "For precision agriculture, DEV supports better drainage planning, irrigation design, erosion management, and variable-rate farming. Combined with other terrain products, it becomes an indispensable component of modern GIS analysis."
+      },
+      {
+        "type": "paragraph",
+        "text": "Small variations in terrain often produce major differences in water movement and crop performance. DEV helps reveal those variations, enabling smarter and more data-driven decisions."
+      }
+    ]
+  }
+};
+
 export const CATEGORIES = [
   { slug: "all", label: "ទាំងអស់", color: "orange" },
   { slug: "video", label: "វីដេអូ", color: "red" },
@@ -2710,6 +5361,20 @@ export const CATEGORIES = [
   { slug: "tutorial", label: "Tutorial", color: "purple" },
   { slug: "news", label: "ព័ត៌មាន", color: "green" },
 ];
+
+const CATEGORY_EN_LABELS = {
+  all: "All",
+  video: "Videos",
+  tips: "Tips & Tricks",
+  tutorial: "Tutorial",
+  news: "News",
+};
+
+export const getLocalizedCategoryLabel = (slug, language = "km") => {
+  const category = CATEGORIES.find((item) => item.slug === slug);
+  if (language === "en") return CATEGORY_EN_LABELS[slug] || category?.label || slug;
+  return category?.label || slug;
+};
 
 export const posts = [
   {
@@ -2816,6 +5481,93 @@ export const posts = [
     tags: ["GIS Tip", "Data", "Information", "Decision Making"],
     locales: DATA_INFO_ARTICLE,
     content: DATA_INFO_ARTICLE.km.content,
+  },
+  {
+    slug: "convert-mdb-to-gdb-without-opening-arcmap",
+    category: "video",
+    title: MDB_GDB_ARTICLE.km.title,
+    excerpt: MDB_GDB_ARTICLE.km.excerpt,
+    coverImage: "/blog/mdb_gdb_without_arcmap.png",
+    coverDisplay: "cover",
+    youtubeId: "jU_uIzR-jV0",
+    publishedAt: "2026-03-20",
+    readTime: MDB_GDB_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["KGA Toolbox", "MDB", "GDB", "ArcMap", "ArcGIS Pro"],
+    locales: MDB_GDB_ARTICLE,
+    content: MDB_GDB_ARTICLE.km.content,
+  },
+  {
+    slug: "predicting-life-expectancy-in-2030",
+    category: "video",
+    title: LIFE_EXPECTANCY_ARTICLE.km.title,
+    excerpt: LIFE_EXPECTANCY_ARTICLE.km.excerpt,
+    coverImage: "/blog/life_expectancy_prediction.png",
+    coverDisplay: "cover",
+    youtubeId: "LdRSmPb7jho",
+    publishedAt: "2026-03-15",
+    readTime: LIFE_EXPECTANCY_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["Data Science", "Predictive Analytics", "Machine Learning", "Life Expectancy"],
+    locales: LIFE_EXPECTANCY_ARTICLE,
+    content: LIFE_EXPECTANCY_ARTICLE.km.content,
+  },
+  {
+    slug: "save-time-working-with-kml-files-in-arcgis-pro",
+    category: "video",
+    title: KML_GIS_ARTICLE.km.title,
+    excerpt: KML_GIS_ARTICLE.km.excerpt,
+    coverImage: "/blog/kml_to_gis.png",
+    coverDisplay: "cover",
+    youtubeId: "XhWyI9C-ykY",
+    publishedAt: "2026-03-10",
+    readTime: KML_GIS_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["KGA Toolbox", "KML", "KMZ", "ArcGIS Pro", "Google Earth"],
+    locales: KML_GIS_ARTICLE,
+    content: KML_GIS_ARTICLE.km.content,
+  },
+  {
+    slug: "why-every-industry-needs-gis",
+    category: "tips",
+    title: WHY_GIS_INDUSTRY_ARTICLE.km.title,
+    excerpt: WHY_GIS_INDUSTRY_ARTICLE.km.excerpt,
+    coverImage: "/blog/why_every_industry_needs_gis.jpg",
+    coverDisplay: "contain",
+    publishedAt: "2026-03-05",
+    readTime: WHY_GIS_INDUSTRY_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["GIS", "Location Intelligence", "Industry", "GIS Fundamentals"],
+    locales: WHY_GIS_INDUSTRY_ARTICLE,
+    content: WHY_GIS_INDUSTRY_ARTICLE.km.content,
+  },
+  {
+    slug: "data-used-in-irrigation-gis",
+    category: "tips",
+    title: IRRIGATION_GIS_ARTICLE.km.title,
+    excerpt: IRRIGATION_GIS_ARTICLE.km.excerpt,
+    coverImage: "/blog/irrigation_gis_data.jpg",
+    coverDisplay: "contain",
+    publishedAt: "2026-03-01",
+    readTime: IRRIGATION_GIS_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["GIS", "Irrigation", "Water Management", "Agriculture"],
+    locales: IRRIGATION_GIS_ARTICLE,
+    content: IRRIGATION_GIS_ARTICLE.km.content,
+  },
+  {
+    slug: "deviation-from-mean-elevation-dev",
+    category: "tips",
+    title: DEV_ELEVATION_ARTICLE.km.title,
+    excerpt: DEV_ELEVATION_ARTICLE.km.excerpt,
+    coverImage: "/blog/dev_deviation_from_mean_elevation.jpg",
+    coverDisplay: "contain",
+    publishedAt: "2026-02-25",
+    readTime: DEV_ELEVATION_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["GIS", "DEM", "DEV", "Precision Agriculture"],
+    locales: DEV_ELEVATION_ARTICLE,
+    content: DEV_ELEVATION_ARTICLE.km.content,
   },
 ];
 

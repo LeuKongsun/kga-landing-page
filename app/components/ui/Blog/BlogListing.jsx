@@ -6,8 +6,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { m, AnimatePresence } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
 import BlogShareButton from "./BlogShareButton";
+import BlogStats from "./BlogStats";
 import { useLanguage } from "../../LanguageProvider";
-import { getLocalizedPosts, CATEGORIES } from "../../../blog/_data/posts";
+import { getLocalizedCategoryLabel, getLocalizedPosts, CATEGORIES } from "../../../blog/_data/posts";
 
 const categoryStyles = {
   red: "bg-red-500/15 text-red-500 border-red-500/30",
@@ -46,6 +47,7 @@ const formatDate = (iso) => {
 
 const BlogListing = () => {
   const { language } = useLanguage();
+  const isEnglish = language === "en";
   const localizedPosts = useMemo(() => getLocalizedPosts(language), [language]);
   const router = useRouter();
   const pathname = usePathname();
@@ -122,9 +124,10 @@ const BlogListing = () => {
   };
 
   const getCategoryMeta = (slug) => CATEGORIES.find((c) => c.slug === slug) || CATEGORIES[0];
+  const getCategoryLabel = (slug) => getLocalizedCategoryLabel(slug, language);
 
   return (
-    <main className="pt-24 md:pt-32">
+    <main key={language} data-language-switch className="pt-24 md:pt-32">
       <SectionWrapper>
         <div className="flex flex-col items-center">
           <m.div
@@ -138,11 +141,11 @@ const BlogListing = () => {
               Blog
             </span>
             <h1 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">
-              មាតិកា និងព័ត៌មាន GIS
+              {isEnglish ? "Content & GIS News" : "មាតិកា និងព័ត៌មាន GIS"}
             </h1>
             <div className="w-16 h-1.5 bg-brand-orange mx-auto rounded-full mb-6"></div>
             <p className="text-base md:text-lg text-brand-text/60 dark:text-gray-400 leading-relaxed font-body">
-              វីដេអូ tutorials, tips & tricks, និងព័ត៌មានថ្មីៗស្តីពីពិភព GIS។
+              {isEnglish ? "Video tutorials, tips and tricks, and the latest GIS news." : "វីដេអូ tutorials, tips & tricks, និងព័ត៌មានថ្មីៗស្តីពីពិភព GIS។"}
             </p>
           </m.div>
 
@@ -160,7 +163,7 @@ const BlogListing = () => {
                         : "bg-brand-blue/8 dark:bg-white/5 text-brand-text/70 dark:text-gray-300 hover:bg-brand-blue/15 dark:hover:bg-white/10"
                     }`}
                   >
-                    {cat.label}
+                    {getCategoryLabel(cat.slug)}
                   </button>
                 );
               })}
@@ -172,14 +175,14 @@ const BlogListing = () => {
               <aside className="lg:sticky lg:top-28 lg:self-start space-y-6">
                 <div>
                   <label className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-2 block">
-                    ស្វែងរក
+                    {isEnglish ? "Search" : "ស្វែងរក"}
                   </label>
                   <div className="relative">
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="ស្វែងរកអត្ថបទ..."
+                      placeholder={isEnglish ? "Search articles..." : "ស្វែងរកអត្ថបទ..."}
                       className="w-full px-4 py-2.5 pl-10 text-sm bg-white dark:bg-white/5 border border-brand-blue/8 dark:border-white/8 rounded-xl text-brand-text dark:text-white placeholder:text-brand-text/40 dark:placeholder:text-gray-500 focus:outline-none focus:border-brand-orange/50 transition-colors font-body"
                     />
                     <svg
@@ -195,7 +198,7 @@ const BlogListing = () => {
 
                 <div>
                   <label className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-3 block">
-                    ប្រភេទ
+                    {isEnglish ? "Category" : "ប្រភេទ"}
                   </label>
                   <ul className="space-y-1">
                     {CATEGORIES.map((cat) => {
@@ -214,7 +217,7 @@ const BlogListing = () => {
                                 : "text-brand-text/70 dark:text-gray-400 hover:bg-brand-blue/8 dark:hover:bg-white/5"
                             }`}
                           >
-                            <span>{cat.label}</span>
+                            <span>{getCategoryLabel(cat.slug)}</span>
                             <span
                               className={`text-xs px-2 py-0.5 rounded-full ${
                                 isActive ? "bg-brand-orange/20" : "bg-brand-blue/8 dark:bg-white/8"
@@ -233,10 +236,10 @@ const BlogListing = () => {
                   <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-brand-orange/15 blur-2xl"></div>
                   <div className="relative">
                     <h4 className="text-base font-display font-700 text-white mb-2">
-                      ចូលរួមជាមួយយើង
+                      {isEnglish ? "Join Us" : "ចូលរួមជាមួយយើង"}
                     </h4>
                     <p className="text-xs text-white/70 mb-4 font-body leading-relaxed">
-                      តាមដានព័ត៌មានថ្មីៗតាមរយៈ Telegram
+                      {isEnglish ? "Follow the latest updates on Telegram" : "តាមដានព័ត៌មានថ្មីៗតាមរយៈ Telegram"}
                     </p>
                     <Link
                       href="https://t.me/khmergisacademychannel"
@@ -254,10 +257,10 @@ const BlogListing = () => {
                 {filteredPosts.length === 0 ? (
                   <div className="bg-brand-blue/5 dark:bg-white/5 border border-dashed border-brand-blue/20 dark:border-white/10 rounded-2xl p-12 text-center">
                     <p className="text-base font-display font-600 text-brand-text/60 dark:text-gray-400 mb-2">
-                      មិនមានអត្ថបទត្រូវនឹងលក្ខខណ្ឌស្វែងរក
+                      {isEnglish ? "No articles match your search criteria" : "មិនមានអត្ថបទត្រូវនឹងលក្ខខណ្ឌស្វែងរក"}
                     </p>
                     <p className="text-sm text-brand-text/40 dark:text-gray-500 font-body">
-                      សូមព្យាយាមផ្លាស់ប្តូរពាក្យស្វែងរក ឬប្រភេទ។
+                      {isEnglish ? "Try changing your search terms or category." : "សូមព្យាយាមផ្លាស់ប្តូរពាក្យស្វែងរក ឬប្រភេទ។"}
                     </p>
                   </div>
                 ) : (
@@ -299,7 +302,7 @@ const BlogListing = () => {
                                   <span
                                     className={`absolute top-3 left-3 text-xs font-display font-600 px-2.5 py-1 rounded-full border backdrop-blur-md ${categoryStyles[cat.color]}`}
                                   >
-                                    {cat.label}
+                                    {getCategoryLabel(cat.slug)}
                                   </span>
                                   <span className="absolute top-3 right-3 text-xs font-display font-600 px-2.5 py-1 rounded-md bg-black/60 text-white backdrop-blur-md">
                                     {post.youtubeId ? "Video" : "Article"}
@@ -317,6 +320,8 @@ const BlogListing = () => {
                                 <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body mb-4 line-clamp-2 flex-1">
                                   {post.excerpt}
                                 </p>
+
+                                <BlogStats slug={post.slug} views={post.views} shares={post.shares} className="mb-4" />
 
                                 <div className="grid grid-cols-2 gap-2 text-xs font-body mb-4 pb-4 border-b border-brand-blue/8 dark:border-white/8">
                                   <div>
@@ -361,7 +366,7 @@ const BlogListing = () => {
                       </div>
                     </AnimatePresence>
 
-                    {totalPages > 1 && (
+                    {filteredPosts.length > 0 && (
                       <nav
                         aria-label="Blog pagination"
                         className="mt-10 flex flex-wrap items-center justify-center gap-2"
@@ -373,7 +378,7 @@ const BlogListing = () => {
                           className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
                         >
                           <span aria-hidden="true">←</span>
-                          <span>មុន</span>
+                          <span>{isEnglish ? "Previous" : "មុន"}</span>
                         </button>
 
                         {paginationItems.map((item) =>
@@ -409,7 +414,7 @@ const BlogListing = () => {
                           disabled={activePage === totalPages}
                           className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
                         >
-                          <span>បន្ទាប់</span>
+                          <span>{isEnglish ? "Next" : "បន្ទាប់"}</span>
                           <span aria-hidden="true">→</span>
                         </button>
                       </nav>
