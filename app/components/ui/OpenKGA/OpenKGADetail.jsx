@@ -4,6 +4,7 @@ import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
 import DatasetStats from "./DatasetStats";
+import DatasetShareButton from "./DatasetShareButton";
 import {
   getDatasetBySlug,
   getRelatedDatasets,
@@ -177,6 +178,14 @@ const OpenKGADetail = ({ slug }) => {
                   Download ({dataset.fileSize})
                 </Link>
 
+
+                <DatasetShareButton
+                  slug={dataset.slug}
+                  title={dataset.title}
+                  showLabel
+                  buttonLabel="Share this dataset"
+                  className="mb-5 h-11 w-full bg-white px-4 py-3 text-sm font-display font-700 dark:bg-white/5"
+                />
                 <h4 className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-3">
                   ព័ត៌មានទិន្នន័យ
                 </h4>

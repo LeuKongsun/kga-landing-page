@@ -4,6 +4,7 @@ import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../../SectionWrapper";
 import DatasetStats from "../DatasetStats";
+import DatasetShareButton from "../DatasetShareButton";
 import {
   datasets,
   TOPIC_CATEGORIES,
@@ -142,6 +143,11 @@ const OpenKGAPreview = () => {
                       </svg>
                       Download
                     </Link>
+                    <DatasetShareButton
+                      slug={ds.slug}
+                      title={ds.title}
+                      className="h-10 w-10 shrink-0 bg-white dark:bg-white/5"
+                    />
                   </div>
                 </div>
               </m.article>
