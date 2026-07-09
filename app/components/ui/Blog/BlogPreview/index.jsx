@@ -1,9 +1,11 @@
 "use client";
+import { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../../SectionWrapper";
-import { posts, CATEGORIES } from "../../../../blog/_data/posts";
+import { useLanguage } from "../../../LanguageProvider";
+import { getLocalizedPosts, CATEGORIES } from "../../../../blog/_data/posts";
 
 const categoryStyles = {
   red: "bg-red-500/15 text-red-500 border-red-500/30",
@@ -22,10 +24,14 @@ const getCategoryMeta = (slug) =>
   CATEGORIES.find((c) => c.slug === slug) || CATEGORIES[0];
 
 const BlogPreview = () => {
-  // Latest 3 posts, sorted by publish date (newest first)
-  const latestPosts = [...posts]
-    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
-    .slice(0, 3);
+  const { language } = useLanguage();
+  const latestPosts = useMemo(
+    () =>
+      getLocalizedPosts(language)
+        .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+        .slice(0, 3),
+    [language]
+  );
 
   return (
     <SectionWrapper>
@@ -61,7 +67,8 @@ const BlogPreview = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 overflow-hidden group flex flex-col"
+                data-language-switch
+                              className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 overflow-hidden group flex flex-col"
               >
                 <Link href={`/blog/${post.slug}`} className="block">
                   <div className="relative aspect-[16/10] overflow-hidden bg-brand-blue/5 dark:bg-white/5">

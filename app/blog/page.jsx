@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import BlogListing from "../components/ui/Blog/BlogListing";
 
 export const metadata = {
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function BlogPage() {
-  return <BlogListing />;
+  return (
+    <Suspense fallback={null}>
+      <BlogListing />
+    </Suspense>
+  );
 }
