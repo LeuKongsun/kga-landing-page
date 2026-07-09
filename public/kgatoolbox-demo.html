@@ -65,10 +65,10 @@
       border-radius: 0.45rem;
       font-size: 0.68rem;
       font-weight: 700;
-      color: rgba(30,47,79,0.55);
+      color: rgba(30,47,79,0.68);
       transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
-    .dark .language-option { color: rgba(255,255,255,0.55); }
+    .dark .language-option { color: rgba(255,255,255,0.70); }
     .language-option[aria-pressed="true"] {
       background: #244C8F;
       color: white;
@@ -76,6 +76,43 @@
     }
     .dark .language-option[aria-pressed="true"] { background: #FF6434; }
     @media (max-width: 400px) { .navbar-brand-text { display: none; } }
+    /* Text contrast tuning: lift secondary/caption copy without changing the palette. */
+    .text-brand-text\/30 { color: rgb(30 47 79 / 0.44); }
+    .text-brand-text\/35 { color: rgb(30 47 79 / 0.48); }
+    .text-brand-text\/40 { color: rgb(30 47 79 / 0.54); }
+    .text-brand-text\/45 { color: rgb(30 47 79 / 0.58); }
+    .text-brand-text\/50 { color: rgb(30 47 79 / 0.64); }
+    .text-brand-text\/55 { color: rgb(30 47 79 / 0.68); }
+    .text-brand-text\/60 { color: rgb(30 47 79 / 0.72); }
+    .text-brand-text\/65 { color: rgb(30 47 79 / 0.76); }
+    .text-brand-text\/70 { color: rgb(30 47 79 / 0.80); }
+    .text-brand-text\/75 { color: rgb(30 47 79 / 0.84); }
+    .text-brand-text\/80 { color: rgb(30 47 79 / 0.88); }
+    .text-white\/20 { color: rgb(255 255 255 / 0.34); }
+    .text-white\/25 { color: rgb(255 255 255 / 0.38); }
+    .text-white\/30 { color: rgb(255 255 255 / 0.44); }
+    .text-white\/40 { color: rgb(255 255 255 / 0.56); }
+    .text-white\/50 { color: rgb(255 255 255 / 0.66); }
+    .text-white\/55 { color: rgb(255 255 255 / 0.70); }
+    .text-white\/60 { color: rgb(255 255 255 / 0.76); }
+    .text-white\/70 { color: rgb(255 255 255 / 0.82); }
+    .placeholder-brand-text\/30::placeholder { color: rgb(30 47 79 / 0.48); }
+    .placeholder-brand-text\/40::placeholder { color: rgb(30 47 79 / 0.56); }
+    .dark .dark\:text-white\/20 { color: rgb(255 255 255 / 0.34); }
+    .dark .dark\:text-white\/25 { color: rgb(255 255 255 / 0.38); }
+    .dark .dark\:text-white\/30 { color: rgb(255 255 255 / 0.44); }
+    .dark .dark\:text-white\/40 { color: rgb(255 255 255 / 0.56); }
+    .dark .dark\:text-white\/50 { color: rgb(255 255 255 / 0.66); }
+    .dark .dark\:text-white\/55 { color: rgb(255 255 255 / 0.70); }
+    .dark .dark\:text-white\/60 { color: rgb(255 255 255 / 0.76); }
+    .dark .dark\:text-white\/70 { color: rgb(255 255 255 / 0.82); }
+    .dark .dark\:text-gray-600 { color: rgb(156 163 175); }
+    .dark .dark\:text-gray-500 { color: rgb(186 194 207); }
+    .dark .dark\:text-gray-400 { color: rgb(209 216 228); }
+    .dark .dark\:text-gray-300 { color: rgb(226 232 240); }
+    .dark .dark\:text-gray-200 { color: rgb(241 245 249); }
+    .dark .dark\:placeholder-gray-600::placeholder { color: rgb(156 163 175); }
+    .dark .dark\:placeholder-gray-500::placeholder { color: rgb(186 194 207); }
 
     .grid-bg {
       background-image:
