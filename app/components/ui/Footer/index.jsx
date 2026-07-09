@@ -35,16 +35,16 @@ const socialInfo = [
 ];
 
 const coursesLinks = [
-  { label: "All Courses", href: "/#courses" },
+  { label: "All Courses", href: "/courses" },
   { label: "Course Announcement", href: "/course-announcement" },
-  { label: "Toolkit", href: "/#toolkit" },
+  { label: "About Us", href: "/about" },
 ];
 
 const productLinks = [
   { label: "KGA Toolbox", href: "https://toolbox.khmergrs.com", external: true },
   { label: "Blog", href: "/blog" },
-  { label: "Testimonials", href: "/#testimonials" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Our Students", href: "/our-student" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const communityLinks = [

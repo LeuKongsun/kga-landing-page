@@ -470,8 +470,8 @@ export const datasets = [
     excerpt:
       "ផែនទីកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំជាធនធានផែនទីសម្រាប់មើល ប្រើប្រាស់ និងចែករំលែក។",
     coverImage: "/SharedDataThumbnail/vintage cambodia.jpg",
-    fileSize: "N/A",
-    fileFormat: "Raster map",
+    fileSize: "12.3 MB",
+    fileFormat: "JPG image (.jpg)",
     lastUpdated: "2026-07-09",
     license: "open-source",
     downloadUrl: "https://drive.google.com/file/d/1ycCtEttHd9rTxpOVRYugPHa_0yvoPO5M/view?usp=sharing",

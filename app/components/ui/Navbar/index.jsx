@@ -23,12 +23,12 @@ const Navbar = () => {
   {
     title: "មុខវិជ្ជា",
     submenu: [
-      { title: "មុខវិជ្ជាដែលយើងបង្រៀន", path: "/#courses" },
+      { title: "មុខវិជ្ជាដែលយើងបង្រៀន", path: "/courses" },
       { title: "វគ្គសិក្សារបស់យើង", path: "/course-announcement" },
     ],
   },
-  { title: "អំពីយើង", path: "/#toolkit" },
-  { title: "សិស្សរបស់យើង", path: "/#testimonials" },
+  { title: "អំពីយើង", path: "/about" },
+  { title: "សិស្សរបស់យើង", path: "/our-student" },
   {
     title: "សមិទ្ធផលរបស់យើង",
     submenu: [

@@ -307,7 +307,7 @@ const OpenKGAListing = () => {
                       មានទិន្នន័យដែលចង់ចែករំលែក? ទាក់ទងមកយើង
                     </p>
                     <Link
-                      href="/#contact"
+                      href="/contact"
                       className="inline-flex items-center gap-1.5 text-xs font-display font-600 px-4 py-2 bg-brand-orange text-white rounded-full hover:bg-brand-orange/90 transition-colors"
                     >
                       ទាក់ទងយើង
