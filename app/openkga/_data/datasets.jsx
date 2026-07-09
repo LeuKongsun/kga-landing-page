@@ -462,6 +462,30 @@ export const datasets = [
     ],
     tags: ["ESRI", "Khmer font", "TrueType", "TTF", "font"],
   },
+  {
+    slug: "vintage-style-map-of-cambodia",
+    category: "topography",
+    format: "raster",
+    title: "Vintage style map of Cambodia",
+    excerpt:
+      "ផែនទីកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំជាធនធានផែនទីសម្រាប់មើល ប្រើប្រាស់ និងចែករំលែក។",
+    coverImage: "/SharedDataThumbnail/vintage cambodia.jpg",
+    fileSize: "N/A",
+    fileFormat: "Raster map",
+    lastUpdated: "2026-07-09",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1ycCtEttHd9rTxpOVRYugPHa_0yvoPO5M/view?usp=sharing",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "ធនធាននេះផ្តល់ផែនទីប្រទេសកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំដោយ Khmer GRS Academy (KGA) សម្រាប់ការមើល ឯកសារយោង និងការប្រើប្រាស់ទូទៅ។",
+      },
+    ],
+    tags: ["Cambodia", "vintage map", "raster", "KGA", "open source"],
+  },
 ];
 
 export const getDatasetBySlug = (slug) => datasets.find((d) => d.slug === slug);

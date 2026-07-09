@@ -178,6 +178,8 @@ const TRANSLATION_ENTRIES = [
   ["ពុម្ពអក្សរ", "Font"],
   ["ពុម្ពអក្សរខ្មែរ ESRI North ជាទម្រង់ TrueType សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រឯកសារ TTF។", "ESRI North Khmer is a TrueType font for installation and use in applications that support TTF files."],
   ["កញ្ចប់នេះផ្តល់ពុម្ពអក្សរខ្មែរ ESRI North ជាឯកសារ TrueType (.ttf) សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រពុម្ពអក្សរ TTF។", "This package provides the ESRI North Khmer font as a TrueType (.ttf) file for installation and use in applications that support TTF fonts."],
+  ["ផែនទីកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំជាធនធានផែនទីសម្រាប់មើល ប្រើប្រាស់ និងចែករំលែក។", "A vintage-style map of Cambodia prepared as a map resource for viewing, use, and sharing."],
+  ["ធនធាននេះផ្តល់ផែនទីប្រទេសកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំដោយ Khmer GRS Academy (KGA) សម្រាប់ការមើល ឯកសារយោង និងការប្រើប្រាស់ទូទៅ។", "This resource provides a vintage-style map of Cambodia prepared by Khmer GRS Academy (KGA) for viewing, reference, and general use."],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],
