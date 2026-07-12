@@ -15,16 +15,21 @@ const Brand = () => {
   if (!mounted) return null
 
   return (
-    <Link href="/" className="flex items-center gap-3">
+    <Link href="/" className="flex items-center gap-3.5">
       <Image
         src={theme === "light" ? "/kga-logo-dark.svg" : "/kga-logo-light.svg"}
-        width={40}
-        height={40}
-        alt="Kga logo"
-        className="w-10 h-10"
+        width={44}
+        height={44}
+        alt="KGA logo"
+        className="h-11 w-11 shrink-0"
       />
-      <span className="hidden sm:inline text-lg font-bold text-foreground">
-        Khmer GRS Academy
+      <span data-language-switch className="hidden sm:flex flex-col justify-center leading-none">
+        <span className="font-display text-[13px] font-800 text-foreground md:text-sm">
+          ខ្មែរ ជីអាអេស អាខាដឺមី
+        </span>
+        <span className="mt-1 font-display text-xs font-700 text-foreground/75 md:text-[13px]">
+          Khmer GRS Academy
+        </span>
       </span>
     </Link>
   )

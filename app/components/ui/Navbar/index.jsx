@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Brand from "../Brand";
-import NavLink from "../NavLink";
 import ThemeSwitcher from "../ThemeSwitcher";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { m, AnimatePresence } from "framer-motion";
@@ -20,30 +19,13 @@ const Navbar = () => {
   }, []);
 
   const navigation = [
-  {
-    title: "មុខវិជ្ជា",
-    submenu: [
-      { title: "មុខវិជ្ជាដែលយើងបង្រៀន", path: "/courses" },
-      { title: "វគ្គសិក្សារបស់យើង", path: "/course-announcement" },
-    ],
-  },
-  { title: "អំពីយើង", path: "/about" },
-  { title: "សិស្សរបស់យើង", path: "/our-student" },
-  {
-    title: "សមិទ្ធផលរបស់យើង",
-    submenu: [
-      { title: "KGA Toolbox", path: "/kga-toolbox", target: "_blank" },
-      { title: "KGA Geodigitizer", path: "/geodigitizer", target: "_blank" },
-    ],
-  },
-  {
-    title: "ធនធាន",
-    submenu: [
-      { title: "មាតិកា និងព័ត៌មាន", path: "/blog" },
-      { title: "ទិន្នន័យចំហ", path: "/openkga" },
-    ],
-  }
-];
+    { title: "វគ្គសិក្សា", path: "/courses" },
+    { title: "កម្មវិធី", path: "/program" },
+    { title: "ប្លុក", path: "/blog" },
+    { title: "ទិន្នន័យចំហ", path: "/openkga" },
+    { title: "ទំនាក់ទំនង", path: "/contact" },
+    { title: "អំពីយើង", path: "/about" },
+  ];
 
   const toggleMenu = () => {
     setState(!state);
@@ -105,12 +87,6 @@ const Navbar = () => {
             <div className="flex items-center space-x-4 border-l pl-6 border-border">
               <LanguageSwitcher />
               <ThemeSwitcher />
-              <NavLink
-                href="https://t.me/khmergrsacademy"
-                className="rounded-xl px-6 py-2 bg-brand-orange text-white text-sm font-display font-700 hover:bg-brand-orange-hover transition-all hover:scale-105 active:scale-95 orange-glow"
-              >
-                ទំនាក់ទំនង
-              </NavLink>
             </div>
           </div>
           <div className="md:hidden flex items-center space-x-2">
@@ -178,15 +154,6 @@ const Navbar = () => {
                     )}
                   </li>
                 ))}
-                <li>
-                  <NavLink
-                    href="https://t.me/khmergrsacademy"
-                    className="block w-full text-center rounded-xl py-3 bg-brand-orange text-white font-display font-700 orange-glow"
-                    onClick={() => setState(false)}
-                  >
-                    ទំនាក់ទំនង
-                  </NavLink>
-                </li>
               </ul>
             </m.div>
           )}

@@ -3,7 +3,7 @@ import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import NavLink from "../NavLink";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { 
   Modal, 
   ModalContent, 
@@ -68,14 +68,11 @@ const Hero = () => {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </NavLink>
             <NavLink
-              href="https://www.youtube.com/@Khmergisacademy"
-              className="flex items-center gap-2 rounded-xl px-7 py-3.5 border-2 border-brand-blue/25 dark:border-white/25 text-brand-text dark:text-white font-display font-700 hover:bg-brand-blue/10 dark:hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group"
-              scroll={false}
+              href="/courses"
+              className="flex items-center gap-2 rounded-xl px-7 py-3.5 bg-white/70 dark:bg-white/10 border-2 border-brand-orange/25 text-brand-orange font-display font-700 hover:bg-brand-orange/10 transition-all hover:scale-105 active:scale-95 group"
             >
-              <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Play className="w-4 h-4 text-white fill-current ml-0.5" />
-              </div>
-              YouTube
+              Explore Course
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </NavLink>
           </div>
         </m.div>

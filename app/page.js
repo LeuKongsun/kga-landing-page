@@ -4,7 +4,6 @@ import GradientWrapper from "./components/GradientWrapper";
 
 const Courses = dynamic(() => import("./components/ui/Courses"), { ssr: true });
 const CTA = dynamic(() => import("./components/ui/CTA"), { ssr: true });
-const ToolKit = dynamic(() => import("./components/ui/ToolKit"), { ssr: true });
 const Testimonials = dynamic(() => import("./components/ui/Testimonials"), { ssr: true });
 const Products = dynamic(() => import("./components/ui/Products"), { ssr: true });
 const BlogPreview = dynamic(() => import("./components/ui/Blog/BlogPreview"), { ssr: true });
@@ -19,13 +18,12 @@ export default function Home() {
         <Courses />
         <CTA />
       </GradientWrapper>
-      <ToolKit />
-      <GradientWrapper>
-        <Testimonials />
-      </GradientWrapper>
       <Products />
       <BlogPreview />
       <OpenKGAPreview />
+      <GradientWrapper>
+        <Testimonials />
+      </GradientWrapper>
       <Contact />
     </>
   );

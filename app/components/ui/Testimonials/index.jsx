@@ -1,4 +1,5 @@
 'use client'
+import { useState } from "react";
 import Image from "next/image";
 import SectionWrapper from "../../SectionWrapper";
 import sowathWilly from '../../../../public/students/sowath_willy.jpg'
@@ -8,7 +9,7 @@ import sreyJokjey from '../../../../public/students/srey_jokjey.jpg'
 import chhay from '../../../../public/students/chhay.jpeg'
 import veayo from '../../../../public/students/veayo.jpeg'
 import { m } from "framer-motion";
-import { Quote } from "lucide-react"
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
 
 const Testimonials = () => {
   const testimonials = [
@@ -50,6 +51,22 @@ const Testimonials = () => {
     },
   ];
 
+
+  const cardsPerPage = 3;
+  const pageCount = Math.ceil(testimonials.length / cardsPerPage);
+  const [activePage, setActivePage] = useState(0);
+  const visibleTestimonials = testimonials.slice(
+    activePage * cardsPerPage,
+    activePage * cardsPerPage + cardsPerPage
+  );
+
+  const showPrevious = () => {
+    setActivePage((currentPage) => (currentPage === 0 ? pageCount - 1 : currentPage - 1));
+  };
+
+  const showNext = () => {
+    setActivePage((currentPage) => (currentPage === pageCount - 1 ? 0 : currentPage + 1));
+  };
   return (
     <SectionWrapper id="testimonials">
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 relative pb-4">
@@ -69,42 +86,79 @@ const Testimonials = () => {
           </p>
         </div>
         <div className="mt-12">
-          <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((item, idx) => (
-              <m.div 
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="glass-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group"
+          <div className="relative">
+            <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {visibleTestimonials.map((item, idx) => (
+                <m.div 
+                  key={`${activePage}-${idx}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.08 }}
+                  className="glass-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group"
+                >
+                  <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-blue/10 dark:text-white/5" />
+                  <figure className="relative z-10">
+                    <div className="flex items-center gap-x-4 mb-6">
+                      <div className="relative">
+                          <Image
+                              src={item.avatar}
+                              className="w-14 h-14 object-cover rounded-full relative z-10 border border-brand-blue/10 dark:border-white/10"
+                              alt={item.name}
+                          />
+                      </div>
+                      <div>
+                        <span className="block text-lg font-display font-700 text-brand-text dark:text-white">
+                          {item.name}
+                        </span>
+                        <span className="block text-xs font-mono text-brand-orange mt-0.5">
+                          {item.title}
+                        </span>
+                      </div>
+                    </div>
+                    <blockquote>
+                      <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed italic font-body">&quot;{item.quote}&quot;</p>
+                    </blockquote>
+                  </figure>
+                </m.div>
+              ))}
+            </ul>
+
+            <div className="mt-8 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={showPrevious}
+                aria-label="Show previous student testimonials"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-blue/15 bg-white text-brand-text shadow-sm transition-all hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white"
               >
-                <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-blue/10 dark:text-white/5" />
-                <figure className="relative z-10">
-                  <div className="flex items-center gap-x-4 mb-6">
-                    <div className="relative">
-                        <Image
-                            src={item.avatar}
-                            className="w-14 h-14 object-cover rounded-full relative z-10 border border-brand-blue/10 dark:border-white/10"
-                            alt={item.name}
-                        />
-                    </div>
-                    <div>
-                      <span className="block text-lg font-display font-700 text-brand-text dark:text-white">
-                        {item.name}
-                      </span>
-                      <span className="block text-xs font-mono text-brand-orange mt-0.5">
-                        {item.title}
-                      </span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed italic font-body">&quot;{item.quote}&quot;</p>
-                  </blockquote>
-                </figure>
-              </m.div>
-            ))}
-          </ul>
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+
+              <div className="flex items-center gap-2">
+                {Array.from({ length: pageCount }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActivePage(idx)}
+                    aria-label={`Show student testimonial group ${idx + 1}`}
+                    className={`h-2.5 rounded-full transition-all ${
+                      activePage === idx
+                        ? "w-7 bg-brand-blue dark:bg-white"
+                        : "w-2.5 bg-brand-blue/25 hover:bg-brand-orange/50 dark:bg-white/25"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={showNext}
+                aria-label="Show next student testimonials"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-blue/15 bg-white text-brand-text shadow-sm transition-all hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </SectionWrapper>

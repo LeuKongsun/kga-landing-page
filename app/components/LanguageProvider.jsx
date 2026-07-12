@@ -10,14 +10,15 @@ const normalize = (value) => value.replace(/\s+/g, " ").trim();
 
 const TRANSLATION_ENTRIES = [
   // Shared navigation
-  ["មុខវិជ្ជា", "Courses"],
+  ["វគ្គសិក្សា", "Courses"],
   ["មុខវិជ្ជាដែលយើងបង្រៀន", "Subjects We Teach"],
   ["វគ្គសិក្សារបស់យើង", "Our Courses"],
   ["អំពីយើង", "About Us"],
   ["សិស្សរបស់យើង", "Our Students"],
   ["សមិទ្ធផលរបស់យើង", "Our Products"],
+  ["កម្មវិធី", "Program"],
   ["ធនធាន", "Resources"],
-  ["មាតិកា និងព័ត៌មាន", "Content & News"],
+  ["ប្លុក", "Blogs"],
   ["ទិន្នន័យចំហ", "Open Data"],
   ["ទំនាក់ទំនង", "Contact"],
 
@@ -74,8 +75,54 @@ const TRANSLATION_ENTRIES = [
   ["បន្ទាប់ពីខ្ញុំបានបញ្ចប់ ArcMap និង QGIS ជាមួយនឹងសាលា Khmer GRS Academy ខ្ញុំអាចយកវាមកធ្វើផែនទីផ្សេងៗទៅតាមតម្រូវការបាន។ នេះក៏ដោយសារតែការបង្រៀនរបស់លោកគ្រូនៅ Khmer GRS Academy បានបង្រៀនដោយយកចិត្តទុកដាក់ ពន្យល់ក្បោះក្បាយច្បាស់ល្អទៅលើ Tool និងមុខងារនីមួយៗនៅក្នុងកម្មវីធី ហើយក៏មានមេរៀនគ្រប់គាន់ក្នុងការបង្រៀនផងដែរ។ ក្នុងឱកាសនេះខ្ញុំបាទសូមអរគុណលោកគ្រូដែលបានបង្ហាត់បង្រៀនដល់រូបខ្ញុំ និងនិស្សិតផ្សេងៗទៀត។ សូមជួនពរលោកគ្រូនៅក្នុងសាលា Khmer GRS Academy ទាំងអស់ជួបតែសេចក្តីសុខសេចក្តីចម្រើន។", "After completing ArcMap and QGIS courses at Khmer GRS Academy, I can now create different maps for practical needs. The instructors teach attentively and explain every tool and function clearly, supported by comprehensive lessons. I am grateful to the instructors for teaching me and the other students."],
   ["ក្នុងនាមខ្ញុំជាកូនសិស្សដែលធ្លាប់បានសិក្សារៀនសូត្រនៅក្នុងសាលា Khmer GRS Academy ខ្ញុំពិតជាពេញចិត្តខ្លាំងណាស់សម្រាប់កាផ្ដល់ឱកាសឲ្យសិស្សានុសិស្សបានសិក្សាអំពីជំនាញ GIS ដែលជាជំនាញមួយដែលពេញនិយមនៅក្នុងវិស័យឌីជីថល។ នៅក្នុងកាបង្រៀនរបស់លោកគ្រូគឺពិតជាល្អក្នុងការពន្យល់មេរៀនយ៉ាងក្បោះក្បាយដល់សិស្សានុសិស្ស និងបានយកចិត្តទុកដាក់ដល់សិស្សានុសិស្សគ្រាប់ៗគ្នា មិនតែប៉ុណ្ណោះលោគ្រូក៏បានលើកទឹកចិត្តឲ្យកូនសិស្សប្រឹងសិក្សារៀនសូ្រត។ ជាចុងក្រោយខ្ញុំសូមអរគុណដល់លោកគ្រូ សូមឲ្យលោកគ្រូជួបតែសំណាងល្អនៅក្នុងជីវិត។", "As a former Khmer GRS Academy student, I greatly value the opportunity to learn GIS, an important skill in the digital field. The instructor explains lessons thoroughly, gives every student close attention, and encourages us to work hard. I am sincerely grateful for the teaching and support."],
 
+  ["កម្មវិធីរបស់ KGA សម្រាប់ការងារ GIS ជាក់ស្តែង", "KGA Programs for Real GIS Work"],
+  ["កម្មវិធី និងឧបករណ៍ដែលបង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS ដើម្បីបង្កើនល្បឿន ភាពងាយស្រួល និងគុណភាពការងារ។ ជ្រើសកម្មវិធីខាងក្រោម ដើម្បីមើលព័ត៌មានលម្អិតមុនចូលទៅកាន់ទំព័ររបស់កម្មវិធីនីមួយៗ។", "Programs and tools built for GIS professionals to work faster, easier, and with higher quality. Choose a program below to review the details before opening each program page."],
+  ["កម្មវិធីសកម្ម", "Active programs"],
+  ["ការងារ GIS", "GIS work"],
+  ["គោលដៅ", "Purpose"],
+  ["ប្រើប្រាស់ជាក់ស្តែង", "Practical use"],
+  ["ផលិតកម្ម", "Production"],
+  ["កំពុងមើល", "Now viewing"],
+  ["ទៅកាន់កម្មវិធី", "Open program"],
+  ["KGA Toolbox ជួយកាត់បន្ថយការងារដដែលៗ ពង្រឹងគុណភាពទិន្នន័យ និងបង្កើនល្បឿនការផលិតផែនទីសម្រាប់អ្នកជំនាញ GIS។", "KGA Toolbox reduces repetitive work, improves data quality, and speeds up map production for GIS professionals."],
+  ["កម្មវិធីនេះត្រូវបានបង្កើតឡើងសម្រាប់ការងារ GIS ប្រចាំថ្ងៃ និងការងារផលិតកម្មដែលត្រូវការភាពត្រឹមត្រូវ។ វាជួយសម្រួលលំហូរការងារផែនទីកាដាស្ត្រ ការត្រួតពិនិត្យ topology ការរៀបចំទិន្នន័យ និងការធ្វើស្វ័យប្រវត្តិកម្មក្នុង ArcGIS Pro។", "This program is built for daily GIS work and production tasks that require accuracy. It supports cadastral mapping workflows, topology checks, data preparation, and automation inside ArcGIS Pro."],
+  ["ផលិតផែនទីលឿនជាងមុន", "Produce maps faster"],
+  ["កាត់បន្ថយជំហានធ្វើដដែលៗក្នុងការរៀបចំទិន្នន័យ និង layout។", "Reduce repeated steps in data preparation and layout work."],
+  ["គ្រប់គ្រងគុណភាពទិន្នន័យ", "Control data quality"],
+  ["ជួយពិនិត្យកំហុស និងរក្សាស្តង់ដារទិន្នន័យ GIS។", "Help check errors and maintain GIS data standards."],
+  ["បង្កើត workflow ជាប្រព័ន្ធ", "Build consistent workflows"],
+  ["ធ្វើឱ្យក្រុមការងារអាចអនុវត្តលំហូរការងារដូចគ្នា។", "Help teams follow the same workflow."],
+  ["សម្រាប់អ្នកជំនាញ GIS", "For GIS professionals"],
+  ["រចនាសម្រាប់ការងារផលិតកម្ម ផែនទីដីធ្លី និងការវិភាគទិន្នន័យ។", "Designed for production work, land mapping, and data analysis."],
+  ["KGA Geodigitizer ផ្តល់ផ្ទាំង Web-GIS ងាយប្រើ សម្រាប់គូសបង្កើតទិន្នន័យចំណុច ខ្សែ និងពហុកោណ ដោយមិនចាំបាច់រៀបចំកម្មវិធីស្មុគស្មាញ។", "KGA Geodigitizer provides an easy Web-GIS interface for creating point, line, and polygon data without complex software setup."],
+  ["កម្មវិធីនេះសមស្របសម្រាប់អ្នកដែលត្រូវការបង្កើតទិន្នន័យ GIS ពី browser ដោយផ្តោតលើភាពងាយស្រួល ល្បឿន និងលទ្ធផលដែលអាចយកទៅប្រើបន្តក្នុងការងារ GIS។", "This program is suited for users who need to create GIS data from a browser, with a focus on ease of use, speed, and outputs that can continue into GIS workflows."],
+  ["ចាប់ផ្តើមបានលឿន", "Start quickly"],
+  ["បើកតាម browser ហើយចាប់ផ្តើមគូសទិន្នន័យបានភ្លាមៗ។", "Open it in a browser and start digitizing data right away."],
+  ["គាំទ្រទម្រង់ GIS សំខាន់ៗ", "Supports key GIS geometry"],
+  ["បង្កើតចំណុច ខ្សែ និងពហុកោណសម្រាប់ការងារផែនទី។", "Create points, lines, and polygons for mapping work."],
+  ["ងាយស្រួលសម្រាប់ក្រុមការងារ", "Easy for teams"],
+  ["ផ្ទាំងប្រើប្រាស់រៀបចំឱ្យងាយយល់សម្រាប់អ្នកប្រើថ្មី។", "The interface is organized to be easy for new users to understand."],
+  ["ប្រើបានក្នុងការងារជាក់ស្តែង", "Ready for practical work"],
+  ["ជួយប្រមូល និងរៀបចំទិន្នន័យដំបូងសម្រាប់គម្រោង GIS។", "Helps collect and prepare initial data for GIS projects."],
   // Products and previews
-  ["បណ្តុំឧបករណ៍សម្រាប់កម្មវិធី ArcGIS Pro — ពីការគ្រប់គ្រងទិន្នន័យធម្មតា រហូតដល់ការផលិតផែនទីកម្រិតជំនាញ។", "A collection of ArcGIS Pro tools for everything from routine data management to professional map production."],
+  ["កម្មវិធីរបស់ KGA", "KGA Programs"],
+  ["កម្មវិធី និងឧបករណ៍ដែលបង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS ដើម្បីបង្កើនល្បឿន ភាពងាយស្រួល និងគុណភាពការងារ។", "Programs and tools built for GIS professionals to work faster, easier, and with higher quality."],
+  ["មើលកម្មវិធីទាំងអស់", "View all programs"],
+  ["ឧបករណ៍ ArcGIS Pro", "ArcGIS Pro Tools"],
+  ["ឧបករណ៍ GIS កម្រិតវិស្វកម្មសម្រាប់ ArcGIS Pro", "Engineering-grade GIS tools for ArcGIS Pro"],
+  ["បណ្តុំឧបករណ៍សម្រាប់កម្មវិធី ArcGIS Pro ពីការគ្រប់គ្រងទិន្នន័យធម្មតា រហូតដល់ការផលិតផែនទីកម្រិតជំនាញ។", "A collection of ArcGIS Pro tools for everything from routine data management to professional map production."],
+  ["ការងារផែនទីកាដាស្ត្រ", "Cadastral mapping workflows"],
+  ["ពិនិត្យគុណភាពទិន្នន័យ", "Data quality checks"],
+  ["ស្វ័យប្រវត្តិកម្មលំហូរការងារ", "Workflow automation"],
+  ["ភ្ជាប់ជាមួយ ArcGIS Pro", "ArcGIS Pro integration"],
+  ["មើល KGA Toolbox", "View KGA Toolbox"],
+  ["គូសបង្កើតទិន្នន័យ GIS បានលឿន និងងាយស្រួល", "Create GIS data quickly and easily"],
+  ["Web-GIS សម្រាប់គូសបង្កើតទិន្នន័យ GIS ដូចជា ចំណុច ខ្សែ និងពហុកោណ បានលឿន និងមានភាពងាយស្រួល។", "A Web-GIS application for quickly and easily creating point, line, and polygon data."],
+  ["គូសទិន្នន័យបានងាយស្រួល", "Convenient digitizing"],
+  ["បង្កើតទិន្នន័យបានលឿន", "Fast data creation"],
+  ["លទ្ធផលមានភាពត្រឹមត្រូវ", "Accurate output"],
+  ["ផ្ទាំងប្រើប្រាស់ងាយយល់", "Easy-to-use interface"],
+  ["មើល KGA Geodigitizer", "View KGA Geodigitizer"],  ["បណ្តុំឧបករណ៍សម្រាប់កម្មវិធី ArcGIS Pro — ពីការគ្រប់គ្រងទិន្នន័យធម្មតា រហូតដល់ការផលិតផែនទីកម្រិតជំនាញ។", "A collection of ArcGIS Pro tools for everything from routine data management to professional map production."],
   ["Web-GIS សម្រាប់គូសបង្កើតទិន្នន័យ GIS ដូចជា​ ចំនុច ខ្សែ និងពហុកោណ បានលឿន និងមានភាពងាយស្រួល", "A Web-GIS application for quickly and easily creating point, line, and polygon data."],
   ["ផលិតផលរបស់យើង", "Our Products"],
   ["ឧបករណ៍ដែលបង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS ដើម្បីបង្កើនល្បឿន និងគុណភាពនៃការងារ។", "Tools built for GIS professionals to improve the speed and quality of their work."],
@@ -337,6 +384,10 @@ export function LanguageProvider({ children }) {
       document.title = language === "en"
         ? "Khmer GRS Academy | GIS Data Management and Mapping Skills"
         : "Khmer GRS Academy | ជំនាញគ្រប់គ្រងទិន្នន័យភូមិសាស្រ្ត និងផែនទី";
+    } else if (window.location.pathname === "/program") {
+      document.title = language === "en"
+        ? "Program | Khmer GRS Academy"
+        : "កម្មវិធី | Khmer GRS Academy";
     } else if (window.location.pathname === "/course-announcement") {
       document.title = language === "en"
         ? "Course Announcements | Khmer GRS Academy"
