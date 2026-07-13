@@ -104,6 +104,11 @@ const TRANSLATION_ENTRIES = [
   ["ផ្ទាំងប្រើប្រាស់រៀបចំឱ្យងាយយល់សម្រាប់អ្នកប្រើថ្មី។", "The interface is organized to be easy for new users to understand."],
   ["ប្រើបានក្នុងការងារជាក់ស្តែង", "Ready for practical work"],
   ["ជួយប្រមូល និងរៀបចំទិន្នន័យដំបូងសម្រាប់គម្រោង GIS។", "Helps collect and prepare initial data for GIS projects."],
+  ["នឹងមាននៅពេលអនាគត", "Available in the future"],
+  ["GeoLayout Studio នឹងមាននៅពេលអនាគត។", "GeoLayout Studio will be available in the future."],
+  ["GeoLayout Studio នឹងមាននៅពេលអនាគត។ ព័ត៌មានលម្អិតនឹងត្រូវបានបន្ថែមនៅពេលក្រោយ។", "GeoLayout Studio will be available in the future. Details will be added later."],
+  ["ព័ត៌មានលម្អិតនឹងត្រូវបានបន្ថែមនៅពេលក្រោយ។", "Details will be added later."],
+
   // Products and previews
   ["កម្មវិធីរបស់ KGA", "KGA Programs"],
   ["កម្មវិធី និងឧបករណ៍ដែលបង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS ដើម្បីបង្កើនល្បឿន ភាពងាយស្រួល និងគុណភាពការងារ។", "Programs and tools built for GIS professionals to work faster, easier, and with higher quality."],
@@ -122,7 +127,8 @@ const TRANSLATION_ENTRIES = [
   ["បង្កើតទិន្នន័យបានលឿន", "Fast data creation"],
   ["លទ្ធផលមានភាពត្រឹមត្រូវ", "Accurate output"],
   ["ផ្ទាំងប្រើប្រាស់ងាយយល់", "Easy-to-use interface"],
-  ["មើល KGA Geodigitizer", "View KGA Geodigitizer"],  ["បណ្តុំឧបករណ៍សម្រាប់កម្មវិធី ArcGIS Pro — ពីការគ្រប់គ្រងទិន្នន័យធម្មតា រហូតដល់ការផលិតផែនទីកម្រិតជំនាញ។", "A collection of ArcGIS Pro tools for everything from routine data management to professional map production."],
+  ["មើល KGA Geodigitizer", "View KGA Geodigitizer"],
+  ["បណ្តុំឧបករណ៍សម្រាប់កម្មវិធី ArcGIS Pro — ពីការគ្រប់គ្រងទិន្នន័យធម្មតា រហូតដល់ការផលិតផែនទីកម្រិតជំនាញ។", "A collection of ArcGIS Pro tools for everything from routine data management to professional map production."],
   ["Web-GIS សម្រាប់គូសបង្កើតទិន្នន័យ GIS ដូចជា​ ចំនុច ខ្សែ និងពហុកោណ បានលឿន និងមានភាពងាយស្រួល", "A Web-GIS application for quickly and easily creating point, line, and polygon data."],
   ["ផលិតផលរបស់យើង", "Our Products"],
   ["ឧបករណ៍ដែលបង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS ដើម្បីបង្កើនល្បឿន និងគុណភាពនៃការងារ។", "Tools built for GIS professionals to improve the speed and quality of their work."],

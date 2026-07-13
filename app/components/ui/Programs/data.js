@@ -85,4 +85,28 @@ export const programs = [
     cta: "មើល KGA Geodigitizer",
     primaryActionLabel: "មើល KGA Geodigitizer",
   },
+  {
+    id: "geolayout-studio",
+    name: "GeoLayout Studio",
+    accent: "GeoLayout Studio",
+    icon: "geolayout",
+    badge: "Web-GIS",
+    platform: "Web-GIS",
+    tagline: "នឹងមាននៅពេលអនាគត",
+    overview: "GeoLayout Studio នឹងមាននៅពេលអនាគត។",
+    description: "នឹងមាននៅពេលអនាគត។",
+    details: "GeoLayout Studio នឹងមាននៅពេលអនាគត។ ព័ត៌មានលម្អិតនឹងត្រូវបានបន្ថែមនៅពេលក្រោយ។",
+    features: ["នឹងមាននៅពេលអនាគត"],
+    highlights: [
+      {
+        title: "នឹងមាននៅពេលអនាគត",
+        description: "ព័ត៌មានលម្អិតនឹងត្រូវបានបន្ថែមនៅពេលក្រោយ។",
+      },
+    ],
+    image: null,
+    href: null,
+    cta: "នឹងមាននៅពេលអនាគត",
+    primaryActionLabel: "នឹងមាននៅពេលអនាគត",
+    isComingSoon: true,
+  },
 ];

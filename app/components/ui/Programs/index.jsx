@@ -6,9 +6,11 @@ import { useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
+  Clock3,
   ExternalLink,
   Layers3,
   Map,
+  PanelTop,
   Sparkles,
   Wrench,
 } from "lucide-react";
@@ -19,71 +21,132 @@ import { programs } from "./data";
 const iconMap = {
   toolbox: Wrench,
   geodigitizer: Map,
+  geolayout: PanelTop,
 };
 
-const ProgramCard = ({ program, index }) => (
-  <m.article
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay: index * 0.1 }}
-    viewport={{ once: true }}
-    className="tool-card group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-blue/8 bg-white dark:border-white/8 dark:bg-white/5"
-  >
-    <Link href={program.href} className="block" aria-label={program.cta}>
-      <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-brand-blue/5 to-brand-orange/5 dark:from-white/5 dark:to-white/10">
-        <Image
-          src={program.image}
-          alt={program.name}
-          fill
-          sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <span className="absolute left-3 top-3 rounded-full border border-brand-orange/30 bg-brand-orange/15 px-2.5 py-1 text-xs font-display font-600 text-brand-orange backdrop-blur-md">
-          {program.badge}
-        </span>
-      </div>
-    </Link>
-
-    <div className="flex flex-1 flex-col p-6">
-      <Link href={program.href}>
-        <h3 className="mb-2 text-2xl font-display font-800 leading-snug text-brand-text transition-colors group-hover:text-brand-orange dark:text-white">
-          KGA <span className="text-brand-orange">{program.accent}</span>
-        </h3>
-      </Link>
-
-      <p className="mb-3 text-sm font-display font-600 text-brand-text/80 dark:text-gray-300">
-        {program.tagline}
-      </p>
-
-      <p className="mb-5 text-sm leading-relaxed text-brand-text/60 dark:text-gray-400">
-        {program.description}
-      </p>
-
-      <ul className="mb-6 space-y-2">
-        {program.features.map((feature) => (
-          <li
-            key={feature}
-            className="flex items-start gap-2 text-sm text-brand-text/70 dark:text-gray-300"
-          >
-            <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" aria-hidden="true" />
-            {feature}
-          </li>
-        ))}
-      </ul>
-
-      <Link
-        href={program.href}
-        className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
-      >
-        {program.cta}
-        <ExternalLink className="h-4 w-4" aria-hidden="true" />
-      </Link>
-    </div>
-  </m.article>
+const ProgramTitle = ({ program, className = "" }) => (
+  <span className={className}>
+    {program.name.startsWith("KGA ") ? (
+      <>
+        KGA <span className="text-brand-orange">{program.accent}</span>
+      </>
+    ) : (
+      <>{program.name}</>
+    )}
+  </span>
 );
 
+const ProgramMedia = ({ program, priority = false, className = "" }) => {
+  if (program.image) {
+    return (
+      <Image
+        src={program.image}
+        alt={program.name}
+        fill
+        priority={priority}
+        sizes="(min-width: 1024px) 48vw, (min-width: 768px) 50vw, 100vw"
+        className={`object-cover ${className}`}
+      />
+    );
+  }
+
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-blue/10 via-white to-brand-orange/10 p-8 dark:from-white/10 dark:via-white/[0.03] dark:to-brand-orange/10">
+      <div className="text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-brand-orange/25 bg-brand-orange/10 text-brand-orange">
+          <Clock3 className="h-8 w-8" aria-hidden="true" />
+        </div>
+        <p className="mt-5 text-xl font-display font-900 text-brand-text dark:text-white">
+          {program.name}
+        </p>
+        <p className="mt-2 text-sm font-display font-700 text-brand-orange">
+          នឹងមាននៅពេលអនាគត
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const ProgramCard = ({ program, index }) => {
+  const cardMedia = (
+    <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-brand-blue/5 to-brand-orange/5 dark:from-white/5 dark:to-white/10">
+      <ProgramMedia program={program} className="transition-transform duration-500 group-hover:scale-105" />
+      <span className="absolute left-3 top-3 rounded-full border border-brand-orange/30 bg-brand-orange/15 px-2.5 py-1 text-xs font-display font-600 text-brand-orange backdrop-blur-md">
+        {program.badge}
+      </span>
+    </div>
+  );
+
+  return (
+    <m.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      viewport={{ once: true }}
+      className="tool-card group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-blue/8 bg-white dark:border-white/8 dark:bg-white/5"
+    >
+      {program.href ? (
+        <Link href={program.href} className="block" aria-label={program.cta}>
+          {cardMedia}
+        </Link>
+      ) : (
+        cardMedia
+      )}
+
+      <div className="flex flex-1 flex-col p-6">
+        {program.href ? (
+          <Link href={program.href}>
+            <h3 className="mb-2 text-2xl font-display font-800 leading-snug text-brand-text transition-colors group-hover:text-brand-orange dark:text-white">
+              <ProgramTitle program={program} />
+            </h3>
+          </Link>
+        ) : (
+          <h3 className="mb-2 text-2xl font-display font-800 leading-snug text-brand-text dark:text-white">
+            <ProgramTitle program={program} />
+          </h3>
+        )}
+
+        <p className="mb-3 text-sm font-display font-600 text-brand-text/80 dark:text-gray-300">
+          {program.tagline}
+        </p>
+
+        <p className="mb-5 text-sm leading-relaxed text-brand-text/60 dark:text-gray-400">
+          {program.description}
+        </p>
+
+        <ul className="mb-6 space-y-2">
+          {program.features.map((feature) => (
+            <li
+              key={feature}
+              className="flex items-start gap-2 text-sm text-brand-text/70 dark:text-gray-300"
+            >
+              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" aria-hidden="true" />
+              {feature}
+            </li>
+          ))}
+        </ul>
+
+        {program.href ? (
+          <Link
+            href={program.href}
+            className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
+          >
+            {program.cta}
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        ) : (
+          <span className="mt-auto inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/10 bg-brand-blue/5 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
+            {program.cta}
+            <Clock3 className="h-4 w-4" aria-hidden="true" />
+          </span>
+        )}
+      </div>
+    </m.article>
+  );
+};
+
 export const ProgramGrid = () => (
-  <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+  <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 xl:grid-cols-3">
     {programs.map((program, index) => (
       <ProgramCard key={program.name} program={program} index={index} />
     ))}
@@ -203,14 +266,7 @@ function ProgramShowcase() {
             <div className="absolute -inset-4 rounded-[2rem] bg-brand-orange/10 blur-3xl dark:bg-brand-orange/15" aria-hidden="true" />
             <div className="relative overflow-hidden rounded-3xl border border-brand-blue/10 bg-white shadow-2xl shadow-brand-blue/10 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/30">
               <div className="relative aspect-[16/10]">
-                <Image
-                  src={activeProgram.image}
-                  alt={activeProgram.name}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 48vw, 100vw"
-                  className="object-cover"
-                />
+                <ProgramMedia program={activeProgram} priority />
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3 border-t border-brand-blue/10 p-5 dark:border-white/10">
                 <div>
@@ -313,13 +369,20 @@ function ProgramShowcase() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={activeProgram.href}
-                className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
-              >
-                {activeProgram.primaryActionLabel}
-                <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              </Link>
+              {activeProgram.href ? (
+                <Link
+                  href={activeProgram.href}
+                  className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
+                >
+                  {activeProgram.primaryActionLabel}
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              ) : (
+                <span className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full border border-brand-blue/10 bg-white/70 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
+                  {activeProgram.primaryActionLabel}
+                  <Clock3 className="h-4 w-4" aria-hidden="true" />
+                </span>
+              )}
             </aside>
           </div>
         </m.section>
