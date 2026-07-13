@@ -1,15 +1,16 @@
 'use client'
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SectionWrapper from "../components/SectionWrapper";
 import argis from "../../public/logos/arcgis.png";
 import arcgisPro from "../../public/logos/arcgis-pro-single.png";
 import qgis from "../../public/logos/qgis.png";
 import Image from "next/image";
 import Link from "next/link";
-import { m, AnimatePresence } from "framer-motion";
+import { m } from "framer-motion";
 
 const CourseAnnouncement = () => {
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const tabRefs = useRef([]);
 
   const announcements = [
     // ─── ArcGIS Pro (full detail content provided) ───
@@ -174,6 +175,23 @@ const CourseAnnouncement = () => {
     closed: "bg-gray-500/15 text-gray-400 border-gray-500/30",
   };
 
+  const activeCourse = announcements[activeIndex] || announcements[0];
+
+  const handleKeyDown = (event, index) => {
+    const lastIndex = announcements.length - 1;
+    let nextIndex = index;
+
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = index === lastIndex ? 0 : index + 1;
+    else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = index === 0 ? lastIndex : index - 1;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = lastIndex;
+    else return;
+
+    event.preventDefault();
+    setActiveIndex(nextIndex);
+    tabRefs.current[nextIndex]?.focus();
+  };
+
   return (
     <main className="pt-24 md:pt-32">
       <SectionWrapper>
@@ -199,101 +217,121 @@ const CourseAnnouncement = () => {
             </p>
           </m.div>
 
-          {/* ───── Announcement Cards ───── */}
+          {/* Course tabs */}
           <div className="custom-screen w-full">
-            <ul className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
-              {announcements.map((item, idx) => (
-                <m.li
-                  key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  viewport={{ once: true }}
-                  className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6 relative overflow-hidden group flex flex-col"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-brand-blue dark:bg-brand-orange rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="grid items-stretch gap-6 lg:grid-cols-[1fr_360px]">
+              <div
+                role="tablist"
+                aria-label="Course announcements"
+                className="grid gap-4 md:grid-cols-2"
+              >
+                {announcements.map((item, idx) => {
+                  const active = activeIndex === idx;
 
-                  <div className="flex items-start justify-between mb-5">
-                    <div className="w-14 h-14 relative rounded-xl bg-brand-blue/8 dark:bg-brand-orange/10 flex items-center justify-center p-3">
-                      <Image src={item.icon} alt={item.alt} className="w-full h-full object-contain" />
-                    </div>
-                    <span
-                      className={`text-xs font-display font-600 px-3 py-1.5 rounded-full border ${statusStyles[item.statusType]}`}
+                  return (
+                    <button
+                      key={item.title}
+                      ref={(node) => {
+                        tabRefs.current[idx] = node;
+                      }}
+                      id={"course-tab-" + idx}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      aria-controls={"course-panel-" + idx}
+                      tabIndex={active ? 0 : -1}
+                      onClick={() => setActiveIndex(idx)}
+                      onKeyDown={(event) => handleKeyDown(event, idx)}
+                      className={[
+                        "group min-h-[188px] rounded-2xl border p-5 text-left transition-all focus:outline-none focus:ring-2 focus:ring-brand-orange/60",
+                        active
+                          ? "border-brand-orange/60 bg-white shadow-xl shadow-brand-orange/10 dark:border-brand-orange/70 dark:bg-white/10"
+                          : "border-brand-blue/8 bg-white/75 hover:border-brand-orange/30 hover:bg-white dark:border-white/8 dark:bg-white/[0.04] dark:hover:bg-white/[0.07]",
+                      ].join(" ")}
                     >
-                      {item.status}
+                      <span className="flex items-start justify-between gap-4">
+                        <span className="flex items-center gap-4">
+                          <span
+                            className={[
+                              "flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl p-3 transition-colors",
+                              active ? "bg-brand-orange/10" : "bg-brand-blue/8 dark:bg-brand-orange/10",
+                            ].join(" ")}
+                          >
+                            <Image src={item.icon} alt={item.alt} className="h-full w-full object-contain" />
+                          </span>
+                          <span>
+                            <span className="block text-lg font-display font-800 text-brand-text dark:text-white">
+                              {item.title}
+                            </span>
+                            <span className="mt-1 block text-sm text-brand-text/50 dark:text-gray-400">
+                              {item.batch}
+                            </span>
+                          </span>
+                        </span>
+                        <span className={["shrink-0 rounded-full border px-3 py-1.5 text-xs font-display font-600", statusStyles[item.statusType]].join(" ")}>
+                          {item.status}
+                        </span>
+                      </span>
+
+                      <div className="mt-5 grid gap-2 border-t border-brand-blue/8 pt-4 dark:border-white/8 sm:grid-cols-2">
+                        <InfoRow label="ថ្ងៃចាប់ផ្តើម" value={item.startDate} />
+                        <InfoRow label="ម៉ោងរៀន" value={item.time} />
+                        <InfoRow label="ទម្រង់រៀន" value={item.mode} />
+                        <InfoRow label="តម្លៃ" value={item.price} />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <m.aside
+                key={activeCourse.title}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="rounded-2xl border border-brand-blue/8 bg-white p-6 shadow-xl shadow-brand-blue/5 dark:border-white/8 dark:bg-white/[0.04] dark:shadow-black/20"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl bg-brand-blue/8 p-3 dark:bg-brand-orange/10">
+                    <Image src={activeCourse.icon} alt={activeCourse.alt} className="h-full w-full object-contain" />
+                  </div>
+                  <div>
+                    <span className={["inline-block rounded-full border px-3 py-1 text-xs font-display font-600", statusStyles[activeCourse.statusType]].join(" ")}>
+                      {activeCourse.status}
                     </span>
+                    <h2 className="mt-3 text-2xl font-display font-900 text-brand-text dark:text-white">
+                      {activeCourse.title}
+                    </h2>
                   </div>
+                </div>
+                <p className="mt-5 text-sm leading-relaxed text-brand-text/65 dark:text-gray-300">
+                  {activeCourse.tagline || activeCourse.batch}
+                </p>
+                <div className="mt-6 space-y-3 border-t border-brand-blue/8 pt-5 dark:border-white/8">
+                  <InfoRow label="ថ្ងៃរៀន" value={activeCourse.schedule} />
+                  <InfoRow label="ចំនួនកន្លែង" value={activeCourse.seats} />
+                  <InfoRow label="រយៈពេល" value={activeCourse.duration} />
+                </div>
+                <Link
+                  href="https://t.me/khmergrsacademy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={[
+                    "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-display font-700 transition-all duration-300",
+                    activeCourse.statusType === "open"
+                      ? "bg-brand-orange text-white shadow-md shadow-brand-orange/20 hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
+                      : "bg-brand-blue/10 text-brand-text hover:bg-brand-blue/15 dark:bg-white/8 dark:text-white dark:hover:bg-white/12",
+                  ].join(" ")}
+                >
+                  {activeCourse.statusType === "open" ? "ចុះឈ្មោះឥឡូវនេះ" : "កក់ទុក"}
+                  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </Link>
+              </m.aside>
+            </div>
 
-                  <h3 className="text-xl font-display font-700 mb-1 text-brand-text dark:text-white">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm font-body text-brand-text/50 dark:text-gray-500 mb-5">
-                    {item.batch}
-                  </p>
-
-                  <div className="space-y-3 mb-5 pb-5 border-b border-brand-blue/8 dark:border-white/8">
-                    <InfoRow label="ថ្ងៃចាប់ផ្តើម" value={item.startDate} />
-                    <InfoRow label="រយៈពេល" value={item.duration} />
-                    <InfoRow label="ថ្ងៃរៀន" value={item.schedule} />
-                    <InfoRow label="ម៉ោងរៀន" value={item.time} />
-                    <InfoRow label="ទម្រង់រៀន" value={item.mode} />
-                    <InfoRow label="ចំនួនកន្លែង" value={item.seats} />
-                  </div>
-
-                  <div className="mb-6">
-                    <p className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-3">
-                      អ្វីដែលអ្នកនឹងទទួលបាន
-                    </p>
-                    <ul className="space-y-2">
-                      {item.highlights.map((h, i) => (
-                        <li
-                          key={i}
-                          className="flex items-start gap-2 text-sm text-brand-text/70 dark:text-gray-400 font-body leading-relaxed"
-                        >
-                          <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-brand-orange" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="mt-auto space-y-4">
-                    <div>
-                      <p className="text-xs font-body text-brand-text/40 dark:text-gray-500">តម្លៃ</p>
-                      <p className="text-2xl font-display font-800 text-brand-text dark:text-white">
-                        {item.price}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedCourse(item)}
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-display font-600 text-sm bg-brand-blue/10 dark:bg-white/8 text-brand-text dark:text-white hover:bg-brand-blue/15 dark:hover:bg-white/12 transition-all duration-300"
-                      >
-                        មើលព័ត៌មានលម្អិត
-                      </button>
-                      <Link
-                        href="https://t.me/khmergrsacademy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-display font-600 text-sm transition-all duration-300 ${
-                          item.statusType === "open"
-                            ? "bg-brand-orange text-white hover:bg-brand-orange/90 hover:-translate-y-0.5 shadow-md shadow-brand-orange/20"
-                            : "bg-brand-blue/10 dark:bg-white/8 text-brand-text dark:text-white hover:bg-brand-blue/15 dark:hover:bg-white/12"
-                        }`}
-                      >
-                        {item.statusType === "open" ? "ចុះឈ្មោះ" : "កក់ទុក"}
-                        <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </Link>
-                    </div>
-                  </div>
-                </m.li>
-              ))}
-            </ul>
+            <CourseDetailPanel course={activeCourse} index={activeIndex} statusStyles={statusStyles} />
           </div>
 
           {/* ───── Bottom CTA Banner ───── */}
@@ -332,100 +370,29 @@ const CourseAnnouncement = () => {
         </div>
       </SectionWrapper>
 
-      {/* ───── Course Detail Modal ───── */}
-      <CourseDetailModal
-        course={selectedCourse}
-        onClose={() => setSelectedCourse(null)}
-        statusStyles={statusStyles}
-      />
     </main>
   );
 };
 
-/* ═════════════════════════════════════════════════════
-   MODAL
-   ═════════════════════════════════════════════════════ */
-const CourseDetailModal = ({ course, onClose, statusStyles }) => {
-  return (
-    <AnimatePresence>
-      {course && (
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-          onClick={onClose}
-        >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
-
-          {/* Modal panel */}
-          <m.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative bg-white dark:bg-[#0B1929] rounded-2xl border border-brand-blue/8 dark:border-white/8 shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
-          >
-            {/* Top accent bar */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-brand-orange z-10"></div>
-
-            {/* Close button */}
-            <button
-              onClick={onClose}
-              aria-label="Close"
-              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-brand-blue/10 dark:bg-white/8 backdrop-blur hover:bg-brand-blue/15 dark:hover:bg-white/15 text-brand-text dark:text-white flex items-center justify-center transition-all"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-
-            {/* Scrollable body */}
-            <div className="overflow-y-auto custom-scrollbar">
-              {course.detail ? (
-                <FullDetailContent course={course} statusStyles={statusStyles} />
-              ) : (
-                <PlaceholderContent course={course} statusStyles={statusStyles} />
-              )}
-            </div>
-
-            {/* Sticky footer */}
-            <div className="border-t border-brand-blue/8 dark:border-white/8 bg-white dark:bg-[#0B1929] p-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-body text-brand-text/40 dark:text-gray-500">តម្លៃ</p>
-                <p className="text-xl md:text-2xl font-display font-800 text-brand-text dark:text-white">
-                  {course.price}
-                </p>
-              </div>
-              <Link
-                href="https://t.me/khmergrsacademy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-display font-600 text-sm transition-all duration-300 ${
-                  course.statusType === "open"
-                    ? "bg-brand-orange text-white hover:bg-brand-orange/90 hover:-translate-y-0.5 shadow-md shadow-brand-orange/20"
-                    : "bg-brand-blue/10 dark:bg-white/8 text-brand-text dark:text-white hover:bg-brand-blue/15 dark:hover:bg-white/12"
-                }`}
-              >
-                {course.statusType === "open" ? "ចុះឈ្មោះឥឡូវនេះ" : "កក់ទុក"}
-                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </Link>
-            </div>
-          </m.div>
-        </m.div>
-      )}
-    </AnimatePresence>
-  );
-};
+const CourseDetailPanel = ({ course, index, statusStyles }) => (
+  <m.section
+    key={course.title}
+    id={"course-panel-" + index}
+    role="tabpanel"
+    aria-labelledby={"course-tab-" + index}
+    tabIndex={0}
+    initial={{ opacity: 0, y: 16 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.35 }}
+    className="mt-10 overflow-hidden rounded-3xl border border-brand-blue/10 bg-white shadow-xl shadow-brand-blue/5 outline-none dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/20"
+  >
+    {course.detail ? (
+      <FullDetailContent course={course} statusStyles={statusStyles} />
+    ) : (
+      <PlaceholderContent course={course} statusStyles={statusStyles} />
+    )}
+  </m.section>
+);
 
 /* ─── Full detail content (when course.detail exists) ─── */
 const FullDetailContent = ({ course, statusStyles }) => {
