@@ -5354,6 +5354,1210 @@ const DEV_ELEVATION_ARTICLE = {
   }
 };
 
+const CONTOUR_LABEL_ARTICLE = {
+  "km": {
+    "title": "របៀបបង្ហាញ Contour Index និង Label ដោយប្រើ Python ក្នុង Calculate Field",
+    "excerpt": "វីដេអូ Tutorial នេះបង្ហាញរបៀបប្រើ Python ក្នុង Calculate Field សម្រាប់ Contour Index និង Label ក្នុង ArcGIS Pro។",
+    "readTime": "វីដេអូ Tutorial",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "វីដេអូ Tutorial នេះណែនាំពីរបៀបប្រើ Python expression ក្នុង Calculate Field ដើម្បីរៀបចំ contour line និង label ឱ្យងាយអានក្នុង ArcGIS Pro។"
+      },
+      {
+        "type": "heading",
+        "text": "អ្វីដែលអ្នកនឹងរៀន"
+      },
+      {
+        "type": "list",
+        "items": [
+          "របៀបកំណត់ contour index សម្រាប់ខ្សែ contour សំខាន់ៗ",
+          "របៀបប្រើ Python ក្នុង Calculate Field",
+          "របៀបរៀបចំ label សម្រាប់ contour map",
+          "ធ្វើឱ្យផែនទី elevation ងាយអានជាងមុន"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "សាកសមសម្រាប់"
+      },
+      {
+        "type": "list",
+        "items": [
+          "អ្នកប្រើ ArcGIS Pro",
+          "ការងារ Topographic និង Elevation map",
+          "អ្នក GIS ដែលចង់សន្សំពេលជាមួយ Python expression"
+        ]
+      }
+    ]
+  },
+  "en": {
+    "title": "How to Display Contour Index and Label Using Python in Calculate Field",
+    "excerpt": "This video tutorial shows how to use Python in Calculate Field to display contour index values and labels clearly in ArcGIS Pro.",
+    "readTime": "Video tutorial",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "This video tutorial walks through using a Python expression in Calculate Field to manage contour index values and create clearer contour labeling in ArcGIS Pro."
+      },
+      {
+        "type": "heading",
+        "text": "What you will learn"
+      },
+      {
+        "type": "list",
+        "items": [
+          "How to identify important contour index lines",
+          "How to use Python in Calculate Field",
+          "How to prepare labels for contour maps",
+          "How to make elevation maps cleaner and easier to read"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Best for"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ArcGIS Pro users",
+          "Topographic and elevation map workflows",
+          "GIS users who want to save time with Python expressions"
+        ]
+      }
+    ]
+  }
+};
+
+const LANDSAT_GEE_ARTICLE = {
+  "km": {
+    "title": "របៀបទាញយករូបភាពផ្កាយរណប Landsat 9 ដោយប្រើ Google Earth Engine",
+    "excerpt": "វីដេអូនេះបង្ហាញរបៀបទាញយក Landsat 9 satellite image ដោយប្រើ Google Earth Engine សម្រាប់ការងារ remote sensing និង GIS។",
+    "readTime": "វីដេអូ Tutorial",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "វីដេអូ Tutorial នេះណែនាំពីរបៀបប្រើ Google Earth Engine (GEE) ដើម្បីស្វែងរក និងទាញយករូបភាពផ្កាយរណប Landsat 9 សម្រាប់ការវិភាគ remote sensing និង GIS។"
+      },
+      {
+        "type": "heading",
+        "text": "អ្វីដែលអ្នកនឹងរៀន"
+      },
+      {
+        "type": "list",
+        "items": [
+          "របៀបប្រើ Google Earth Engine សម្រាប់ Landsat 9",
+          "របៀបជ្រើសរើសតំបន់ និងពេលវេលាសម្រាប់រូបភាពផ្កាយរណប",
+          "គន្លឹះក្នុងការទាញយក satellite image សម្រាប់គម្រោង GIS",
+          "មូលដ្ឋានសម្រាប់ remote sensing workflow"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "សាកសមសម្រាប់"
+      },
+      {
+        "type": "list",
+        "items": [
+          "អ្នករៀន remote sensing",
+          "អ្នកប្រើ Google Earth Engine",
+          "អ្នក GIS ដែលចង់ប្រើ Landsat image ក្នុងការវិភាគ"
+        ]
+      }
+    ]
+  },
+  "en": {
+    "title": "How to Download Landsat 9 Satellite Image Using Google Earth Engine",
+    "excerpt": "This video tutorial shows how to download Landsat 9 satellite imagery using Google Earth Engine for remote sensing and GIS workflows.",
+    "readTime": "Video tutorial",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "This video tutorial introduces how to use Google Earth Engine (GEE) to find and download Landsat 9 satellite imagery for remote sensing and GIS analysis."
+      },
+      {
+        "type": "heading",
+        "text": "What you will learn"
+      },
+      {
+        "type": "list",
+        "items": [
+          "How to use Google Earth Engine for Landsat 9 imagery",
+          "How to choose an area and time range for satellite data",
+          "Key steps for downloading satellite images for GIS projects",
+          "Basic remote sensing workflow concepts"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Best for"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Remote sensing learners",
+          "Google Earth Engine users",
+          "GIS users who want to use Landsat imagery in analysis"
+        ]
+      }
+    ]
+  }
+};
+
+const SENTINEL_GEE_ARTICLE = {
+  "km": {
+    "title": "របៀបទាញយករូបភាពផ្កាយរណប Sentinel-2 ដោយប្រើ Google Earth Engine",
+    "excerpt": "វីដេអូនេះបង្ហាញរបៀបទាញយក Sentinel-2 satellite image ដោយប្រើ Google Earth Engine សម្រាប់ការងារ remote sensing និង GIS។",
+    "readTime": "វីដេអូ Tutorial",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "វីដេអូ Tutorial នេះណែនាំពីរបៀបប្រើ Google Earth Engine (GEE) ដើម្បីស្វែងរក និងទាញយករូបភាពផ្កាយរណប Sentinel-2 សម្រាប់ការវិភាគ remote sensing និង GIS។"
+      },
+      {
+        "type": "heading",
+        "text": "អ្វីដែលអ្នកនឹងរៀន"
+      },
+      {
+        "type": "list",
+        "items": [
+          "របៀបប្រើ Google Earth Engine សម្រាប់ Sentinel-2",
+          "របៀបជ្រើសរើសតំបន់ និងពេលវេលាសម្រាប់រូបភាពផ្កាយរណប",
+          "គន្លឹះក្នុងការទាញយក Sentinel-2 image សម្រាប់គម្រោង GIS",
+          "មូលដ្ឋានសម្រាប់ remote sensing workflow"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "សាកសមសម្រាប់"
+      },
+      {
+        "type": "list",
+        "items": [
+          "អ្នករៀន remote sensing",
+          "អ្នកប្រើ Google Earth Engine",
+          "អ្នក GIS ដែលចង់ប្រើ Sentinel-2 image ក្នុងការវិភាគ"
+        ]
+      }
+    ]
+  },
+  "en": {
+    "title": "How to Download Sentinel-2 Satellite Image Using Google Earth Engine",
+    "excerpt": "This video tutorial shows how to download Sentinel-2 satellite imagery using Google Earth Engine for remote sensing and GIS workflows.",
+    "readTime": "Video tutorial",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "This video tutorial introduces how to use Google Earth Engine (GEE) to find and download Sentinel-2 satellite imagery for remote sensing and GIS analysis."
+      },
+      {
+        "type": "heading",
+        "text": "What you will learn"
+      },
+      {
+        "type": "list",
+        "items": [
+          "How to use Google Earth Engine for Sentinel-2 imagery",
+          "How to choose an area and time range for satellite data",
+          "Key steps for downloading Sentinel-2 images for GIS projects",
+          "Basic remote sensing workflow concepts"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Best for"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Remote sensing learners",
+          "Google Earth Engine users",
+          "GIS users who want to use Sentinel-2 imagery in analysis"
+        ]
+      }
+    ]
+  }
+};
+
+const GIS_URBAN_PLANNING_ARTICLE = {
+  "km": {
+    "title": "GIS ក្នុងការរៀបចំផែនការទីក្រុង",
+    "excerpt": "ទីក្រុងសម័យទំនើបបង្កើតទិន្នន័យភូមិសាស្ត្រជាច្រើនជារៀងរាល់ថ្ងៃ។ ផ្លូវ អគ្គិសនី ប្រព័ន្ធលូ អគារ សួនច្បារ ប្រជាជន និងហានិភ័យទឹកជំនន់ សុទ្ធតែពាក់ព័ន្ធនឹងទីតាំង។ GIS ជួយបម្លែងទិន្នន័យទាំងនេះទៅជាព័ត៌មានសម្រាប់ការសម្រេចចិត្ត។",
+    "readTime": "១០ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "សេចក្តីផ្តើម"
+      },
+      {
+        "type": "paragraph",
+        "text": "ទីក្រុងសម័យទំនើបបង្កើតទិន្នន័យភូមិសាស្ត្រជាច្រើនជារៀងរាល់ថ្ងៃ។ ផ្លូវ អគ្គិសនី ប្រព័ន្ធលូ អគារ សួនច្បារ ប្រជាជន និងហានិភ័យទឹកជំនន់ សុទ្ធតែពាក់ព័ន្ធនឹងទីតាំង។ GIS ជួយបម្លែងទិន្នន័យទាំងនេះទៅជាព័ត៌មានសម្រាប់ការសម្រេចចិត្ត។"
+      },
+      {
+        "type": "heading",
+        "text": "GIS គឺជាអ្វី?"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS (Geographic Information System) គឺជាប្រព័ន្ធសម្រាប់ប្រមូល រក្សាទុក គ្រប់គ្រង វិភាគ និងបង្ហាញទិន្នន័យដែលមានទីតាំងភូមិសាស្ត្រ។ វាអាចឆ្លើយសំណួរដូចជា៖ - វាស្ថិតនៅទីណា? - ហេតុអ្វីកើតឡើងនៅទីនោះ? - តំបន់ណាសមស្របបំផុតសម្រាប់គម្រោងថ្មី?"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS មានសមាសធាតុសំខាន់ ៥ គឺ Hardware, Software, Data, People និង Methods។"
+      },
+      {
+        "type": "heading",
+        "text": "ហេតុអ្វី GIS សំខាន់សម្រាប់ការរៀបចំផែនការទីក្រុង"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការពង្រីកទីក្រុង ការកកស្ទះចរាចរណ៍ ការគ្រប់គ្រងដីធ្លី ការពង្រីកហេដ្ឋារចនាសម្ព័ន្ធ និងបញ្ហាបរិស្ថាន សុទ្ធតែជាបញ្ហាដែលពាក់ព័ន្ធនឹងទីតាំង។ GIS អនុញ្ញាតឱ្យអ្នករៀបចំផែនការយល់ដឹងពីទំនាក់ទំនងរវាងមនុស្ស បរិស្ថាន និងហេដ្ឋារចនាសម្ព័ន្ធ។"
+      },
+      {
+        "type": "heading",
+        "text": "ការប្រើប្រាស់សំខាន់ៗ"
+      },
+      {
+        "type": "heading3",
+        "text": "ការរៀបចំការប្រើប្រាស់ដី"
+      },
+      {
+        "type": "paragraph",
+        "text": "វិភាគការប្រើប្រាស់ដី ប៉ាន់ប្រមាណការលូតលាស់ និងគាំទ្រការអភិវឌ្ឍប្រកបដោយតុល្យភាព។"
+      },
+      {
+        "type": "heading3",
+        "text": "ការកំណត់តំបន់ (Zoning)"
+      },
+      {
+        "type": "paragraph",
+        "text": "បង្កើតផែនទីតំបន់ ត្រួតពិនិត្យការអនុវត្តច្បាប់ និងកាត់បន្ថយការប៉ះទង្គិចក្នុងការអភិវឌ្ឍ។"
+      },
+      {
+        "type": "heading3",
+        "text": "ហេដ្ឋារចនាសម្ព័ន្ធ"
+      },
+      {
+        "type": "paragraph",
+        "text": "រៀបចំផ្លូវ ប្រព័ន្ធទឹក ភ្លើង លូ និងបណ្តាញដឹកជញ្ជូនដោយប្រើ Spatial Analysis។"
+      },
+      {
+        "type": "heading3",
+        "text": "Smart City"
+      },
+      {
+        "type": "paragraph",
+        "text": "ភ្ជាប់ទិន្នន័យ Sensor និង IoT ដើម្បីគ្រប់គ្រងចរាចរណ៍ សេវាសាធារណៈ និងការឆ្លើយតបគ្រោះអាសន្ន។"
+      },
+      {
+        "type": "heading",
+        "text": "អត្ថប្រយោជន៍"
+      },
+      {
+        "type": "list",
+        "items": [
+          "សម្រេចចិត្តផ្អែកលើទិន្នន័យ",
+          "ប្រើប្រាស់ធនធានមានប្រសិទ្ធភាព",
+          "គាំទ្រការអភិវឌ្ឍប្រកបដោយចីរភាព",
+          "បង្កើនការចូលរួមរបស់សាធារណជន",
+          "សន្សំពេលវេលា និងថវិកា"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "លំហូរការងារ GIS"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ប្រមូលទិន្នន័យ",
+          "គ្រប់គ្រងទិន្នន័យ",
+          "វិភាគភូមិសាស្ត្រ",
+          "បង្ហាញលទ្ធផល",
+          "សម្រេចចិត្ត",
+          "តាមដាន និងធ្វើបច្ចុប្បន្នភាព"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ឧទាហរណ៍ជាក់ស្តែង"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ជ្រើសរើសទីតាំងមន្ទីរពេទ្យថ្មី",
+          "រៀបចំបណ្តាញដឹកជញ្ជូន",
+          "វាយតម្លៃហានិភ័យទឹកជំនន់",
+          "ពង្រីកបណ្តាញទឹក និងអគ្គិសនី",
+          "តាមដានការរីកចម្រើនរបស់ទីក្រុង"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "បញ្ហាប្រឈម"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការអនុវត្ត GIS ទាមទារទិន្នន័យមានគុណភាព អ្នកជំនាញ ស្តង់ដារទិន្នន័យ និងកិច្ចសហការរវាងស្ថាប័ន។"
+      },
+      {
+        "type": "heading",
+        "text": "អនាគត"
+      },
+      {
+        "type": "paragraph",
+        "text": "AI, IoT, Drone, Cloud GIS និង Digital Twin នឹងធ្វើឱ្យការរៀបចំផែនការទីក្រុងកាន់តែឆ្លាតវៃ និងមានប្រសិទ្ធភាព។"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS មិនមែនគ្រាន់តែជាឧបករណ៍បង្កើតផែនទីទេ ប៉ុន្តែជាប្រព័ន្ធគាំទ្រការសម្រេចចិត្តដែលជួយកសាងទីក្រុងឱ្យកាន់តែឆ្លាតវៃ មានភាពធន់ និងមានចីរភាព។"
+      },
+      {
+        "type": "paragraph",
+        "text": "បើវាមានទីតាំង GIS អាចជួយរៀបចំផែនការបាន។"
+      }
+    ]
+  },
+  "en": {
+    "title": "GIS in Urban Planning",
+    "excerpt": "Modern cities generate enormous amounts of spatial information every day. Roads, utilities, buildings, green spaces, transportation systems, population distribution, flood-prone areas, and land ownership all have one thing in common---they are tied to location. Geographic Information Systems (GIS) transform these locations into actionable intelligence that helps governments, planners, engineers, and communities make better decisions.",
+    "readTime": "10 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "Modern cities generate enormous amounts of spatial information every day. Roads, utilities, buildings, green spaces, transportation systems, population distribution, flood-prone areas, and land ownership all have one thing in common---they are tied to location. Geographic Information Systems (GIS) transform these locations into actionable intelligence that helps governments, planners, engineers, and communities make better decisions."
+      },
+      {
+        "type": "paragraph",
+        "text": "Urban planning is no longer limited to paper maps and manual surveys. GIS provides a digital platform for collecting, managing, analyzing, and visualizing geographic data, enabling cities to become smarter, more resilient, and more sustainable."
+      },
+      {
+        "type": "heading",
+        "text": "What is GIS?"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS is a computer-based system that captures, stores, manages, analyzes, and visualizes data with a geographic reference. Unlike ordinary databases, GIS answers questions such as:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Where is it?",
+          "Why is it happening there?",
+          "What will happen if conditions change?",
+          "Which location is most suitable?"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "A complete GIS combines five major components:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Hardware",
+          "Software"
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          "Data",
+          "People",
+          "Methods"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These components work together to support reliable spatial decision-making."
+      },
+      {
+        "type": "heading",
+        "text": "Why GIS Matters in Urban Planning"
+      },
+      {
+        "type": "paragraph",
+        "text": "Cities constantly face challenges:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Rapid population growth",
+          "Traffic congestion",
+          "Housing demand",
+          "Flooding",
+          "Environmental degradation",
+          "Infrastructure expansion"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Because these challenges are spatial in nature, GIS allows planners to understand relationships between people, infrastructure, and the environment instead of relying on assumptions."
+      },
+      {
+        "type": "heading",
+        "text": "Major Applications"
+      },
+      {
+        "type": "heading3",
+        "text": "1. Land Use Planning"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS helps planners evaluate existing land use, identify development opportunities, preserve agricultural land, and balance residential, commercial, industrial, and recreational areas."
+      },
+      {
+        "type": "heading3",
+        "text": "2. Zoning and Regulations"
+      },
+      {
+        "type": "paragraph",
+        "text": "Digital zoning maps improve transparency and simplify permit reviews. GIS makes it easy to detect conflicts between proposed developments and zoning regulations."
+      },
+      {
+        "type": "heading3",
+        "text": "3. Infrastructure Planning"
+      },
+      {
+        "type": "paragraph",
+        "text": "Water supply, sewer systems, electricity, telecommunications, and transportation networks can all be designed and managed using GIS. Network analysis identifies efficient routes and future expansion needs."
+      },
+      {
+        "type": "heading3",
+        "text": "4. Smart Cities"
+      },
+      {
+        "type": "paragraph",
+        "text": "Real-time sensor data integrated with GIS supports traffic monitoring, emergency response, public transportation optimization, waste collection, and energy management."
+      },
+      {
+        "type": "heading",
+        "text": "Benefits of GIS"
+      },
+      {
+        "type": "heading3",
+        "text": "Better Decisions"
+      },
+      {
+        "type": "paragraph",
+        "text": "Evidence-based planning reduces uncertainty by using accurate spatial information."
+      },
+      {
+        "type": "heading3",
+        "text": "Efficient Resource Management"
+      },
+      {
+        "type": "paragraph",
+        "text": "Governments can prioritize investments where they produce the greatest public benefit."
+      },
+      {
+        "type": "heading3",
+        "text": "Sustainable Development"
+      },
+      {
+        "type": "paragraph",
+        "text": "Environmental constraints, flood risk, biodiversity, and green infrastructure can all be incorporated into planning decisions."
+      },
+      {
+        "type": "heading3",
+        "text": "Public Participation"
+      },
+      {
+        "type": "paragraph",
+        "text": "Interactive web maps improve communication with citizens and increase transparency."
+      },
+      {
+        "type": "heading3",
+        "text": "Cost and Time Savings"
+      },
+      {
+        "type": "paragraph",
+        "text": "Early detection of spatial conflicts reduces redesign, delays, and construction costs."
+      },
+      {
+        "type": "heading",
+        "text": "GIS Workflow"
+      },
+      {
+        "type": "paragraph",
+        "text": "A typical urban planning workflow includes:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Data collection",
+          "Data management",
+          "Spatial analysis",
+          "Visualization",
+          "Decision making",
+          "Monitoring and updating"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "This continuous cycle supports adaptive planning as cities evolve."
+      },
+      {
+        "type": "heading",
+        "text": "Real-World Examples"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Selecting the best location for a new hospital.",
+          "Designing optimal public transport routes.",
+          "Identifying flood-risk neighborhoods.",
+          "Planning utility expansions.",
+          "Monitoring urban growth using satellite imagery.",
+          "Evaluating accessibility to schools and healthcare."
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Challenges"
+      },
+      {
+        "type": "paragraph",
+        "text": "Successful GIS implementation requires:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "High-quality and up-to-date data",
+          "Skilled professionals",
+          "Data standards",
+          "Inter-agency collaboration",
+          "Sustainable investment"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Poor data quality often leads to poor planning outcomes."
+      },
+      {
+        "type": "heading",
+        "text": "The Future of Urban GIS"
+      },
+      {
+        "type": "paragraph",
+        "text": "Emerging technologies such as AI, IoT, UAVs, cloud GIS, and digital twins are transforming urban planning. Future cities will rely increasingly on real-time spatial intelligence to support sustainable growth."
+      },
+      {
+        "type": "heading",
+        "text": "Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS is far more than digital mapping. It is a decision-support platform that connects location, data, and analysis. Whether planning roads, managing utilities, protecting the environment, or improving public services, GIS enables smarter, more resilient, and more livable cities."
+      },
+      {
+        "type": "paragraph",
+        "text": "If it has a location, GIS can help plan it."
+      }
+    ]
+  }
+};
+
+const GIS_DISASTER_MANAGEMENT_ARTICLE = {
+  "km": {
+    "title": "GIS ក្នុងការគ្រប់គ្រងគ្រោះមហន្តរាយ",
+    "excerpt": "គ្រោះមហន្តរាយធម្មជាតិកំពុងកើតមានញឹកញាប់ និងមានភាពធ្ងន់ធ្ងរឡើង។ ដើម្បីកាត់បន្ថយហានិភ័យ និងការបាត់បង់ជីវិត ការប្រើប្រាស់ Geographic Information Systems (GIS) បានក្លាយជាបច្ចេកវិទ្យាសំខាន់សម្រាប់ការគ្រប់គ្រងគ្រោះមហន្តរាយ។",
+    "readTime": "១២ នាទី",
+    "content": [
+      {
+        "type": "heading",
+        "text": "សេចក្តីផ្តើម"
+      },
+      {
+        "type": "paragraph",
+        "text": "គ្រោះមហន្តរាយធម្មជាតិកំពុងកើតមានញឹកញាប់ និងមានភាពធ្ងន់ធ្ងរឡើង។ ដើម្បីកាត់បន្ថយហានិភ័យ និងការបាត់បង់ជីវិត ការប្រើប្រាស់ Geographic Information Systems (GIS) បានក្លាយជាបច្ចេកវិទ្យាសំខាន់សម្រាប់ការគ្រប់គ្រងគ្រោះមហន្តរាយ។"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS មិនមែនគ្រាន់តែជាការធ្វើផែនទីប៉ុណ្ណោះទេ។ វាប្រមូល បញ្ចូល វិភាគ និងបង្ហាញទិន្នន័យភូមិសាស្ត្រដើម្បីជួយអ្នកសម្រេចចិត្តយល់ថា «តើអ្វីកំពុងកើតឡើង? កើតនៅទីណា? ហើយត្រូវឆ្លើយតបដូចម្តេច?»"
+      },
+      {
+        "type": "heading",
+        "text": "វដ្តនៃការគ្រប់គ្រងគ្រោះមហន្តរាយ"
+      },
+      {
+        "type": "heading",
+        "text": "១. ការកាត់បន្ថយហានិភ័យ"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយបង្កើតផែនទីហានិភ័យ វាយតម្លៃភាពងាយរងគ្រោះ វិភាគប្រជាជន និងហេដ្ឋារចនាសម្ព័ន្ធដែលអាចរងផលប៉ះពាល់។"
+      },
+      {
+        "type": "heading",
+        "text": "២. ការត្រៀមខ្លួន"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS គាំទ្រការរៀបចំផែនការជម្លៀស ប្រព័ន្ធស្នាក់នៅបណ្តោះអាសន្ន ផែនទីធនធាន និងការធ្វើសមុលកម្មសេណារីយ៉ូផ្សេងៗ។"
+      },
+      {
+        "type": "heading",
+        "text": "៣. ការឆ្លើយតប"
+      },
+      {
+        "type": "paragraph",
+        "text": "ពេលមានគ្រោះមហន្តរាយ GIS ប្រើទិន្នន័យពេលវេលាពិតពីផ្កាយរណប ដ្រូន GPS អាកាសធាតុ និងក្រុមការងារទីលាន ដើម្បីជួយចាត់ចែងធនធាន និងសង្គ្រោះបានលឿន។"
+      },
+      {
+        "type": "heading",
+        "text": "៤. ការស្តារឡើងវិញ"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយវាយតម្លៃការខូចខាត តាមដានការស្តារហេដ្ឋារចនាសម្ព័ន្ធ និងកំណត់អាទិភាពក្នុងការចែកចាយថវិកា និងធនធាន។"
+      },
+      {
+        "type": "heading",
+        "text": "៥. ការរៀនសូត្រ និងកែលម្អ"
+      },
+      {
+        "type": "paragraph",
+        "text": "ទិន្នន័យពីគ្រោះមហន្តរាយមុនៗត្រូវបានប្រើដើម្បីវិភាគ និងកែលម្អផែនការសម្រាប់អនាគត។"
+      },
+      {
+        "type": "heading",
+        "text": "ការអនុវត្ត GIS សម្រាប់គ្រោះមហន្តរាយ"
+      },
+      {
+        "type": "heading",
+        "text": "ទឹកជំនន់"
+      },
+      {
+        "type": "list",
+        "items": [
+          "ផែនទីហានិភ័យទឹកជំនន់",
+          "ការព្យាករណ៍តំបន់លិចទឹក",
+          "ប្រព័ន្ធជូនដំណឹងមុន",
+          "ផែនការជម្លៀស"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ភ្លើងឆេះព្រៃ"
+      },
+      {
+        "type": "list",
+        "items": [
+          "វាយតម្លៃហានិភ័យ",
+          "តាមដានការរាលដាល",
+          "ប្រើរូបភាពផ្កាយរណប និងដ្រូន",
+          "គ្រប់គ្រងធនធានពន្លត់អគ្គីភ័យ"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "បាក់ដី"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS រួមបញ្ចូលទិន្នន័យជម្រាលដី ភ្លៀង ភូគព្ភសាស្ត្រ ការប្រើប្រាស់ដី និងប្រភេទដី ដើម្បីបង្កើតផែនទីហានិភ័យ។"
+      },
+      {
+        "type": "heading",
+        "text": "ការជម្លៀសប្រជាពលរដ្ឋ"
+      },
+      {
+        "type": "paragraph",
+        "text": "Network Analysis ជួយរកផ្លូវលឿនបំផុត កំណត់ទីតាំងជម្រក និងបែងចែកធនធានសង្គ្រោះ។"
+      },
+      {
+        "type": "heading",
+        "text": "សមត្ថភាពសំខាន់ៗរបស់ GIS"
+      },
+      {
+        "type": "list",
+        "items": [
+          "បញ្ចូលទិន្នន័យពីប្រភពជាច្រើន",
+          "វិភាគលំហ (Spatial Analysis)",
+          "ផ្ទាំងតាមដានពេលវេលាពិត",
+          "សាកល្បងសេណារីយ៉ូ",
+          "សហការរវាងស្ថាប័ន"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "ប្រភពទិន្នន័យ"
+      },
+      {
+        "type": "list",
+        "items": [
+          "រូបភាពផ្កាយរណប",
+          "ដ្រូន",
+          "ទិន្នន័យអាកាសធាតុ",
+          "DEM និង Terrain",
+          "ការស្ទង់មតិទីលាន",
+          "GPS",
+          "មូលដ្ឋានទិន្នន័យរដ្ឋាភិបាល",
+          "ទិន្នន័យពីសាធារណជន"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "អត្ថប្រយោជន៍"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS ជួយ៖"
+      },
+      {
+        "type": "list",
+        "items": [
+          "កាត់បន្ថយការបាត់បង់ជីវិត",
+          "ការពារហេដ្ឋារចនាសម្ព័ន្ធ",
+          "សម្រេចចិត្តល្អប្រសើរ",
+          "ប្រើធនធានមានប្រសិទ្ធភាព",
+          "បង្កើនការសហការរវាងស្ថាប័ន",
+          "បង្កើតសហគមន៍ដែលមានភាពធន់"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "បញ្ហាប្រឈម"
+      },
+      {
+        "type": "paragraph",
+        "text": "ការគ្រប់គ្រងគុណភាពទិន្នន័យ ការខ្វះទិន្នន័យពេលវេលាពិត ការចែករំលែកទិន្នន័យ និងការខ្វះអ្នកជំនាញ នៅតែជាបញ្ហាសំខាន់ ប៉ុន្តែ Cloud GIS, AI និង Remote Sensing កំពុងជួយដោះស្រាយបញ្ហាទាំងនេះ។"
+      },
+      {
+        "type": "heading",
+        "text": "អនាគត"
+      },
+      {
+        "type": "paragraph",
+        "text": "AI, Machine Learning, Digital Twin, IoT, ដ្រូន និង Cloud GIS នឹងធ្វើឱ្យការគ្រប់គ្រងគ្រោះមហន្តរាយកាន់តែមានប្រសិទ្ធភាព និងអាចព្យាករណ៍បានមុន។"
+      },
+      {
+        "type": "heading",
+        "text": "សេចក្តីសន្និដ្ឋាន"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS គឺជាបច្ចេកវិទ្យាស្នូលសម្រាប់ការគ្រប់គ្រងគ្រោះមហន្តរាយសម័យទំនើប។ វាជួយចាប់ពីការកាត់បន្ថយហានិភ័យ ការត្រៀមខ្លួន ការឆ្លើយតប ការស្តារឡើងវិញ រហូតដល់ការកែលម្អជាបន្តបន្ទាប់។ ការវិនិយោគលើ GIS និងទិន្នន័យភូមិសាស្ត្រដែលមានគុណភាព គឺជាការវិនិយោគលើសុវត្ថិភាព និងភាពធន់របស់សហគមន៍។"
+      }
+    ]
+  },
+  "en": {
+    "title": "GIS in Disaster Management",
+    "excerpt": "Natural disasters are becoming more frequent and severe due to climate change, rapid urbanization, environmental degradation, and population growth. Floods, wildfires, landslides, droughts, storms, earthquakes, and coastal erosion threaten millions of people every year. Governments and organizations increasingly rely on Geographic Information Systems (GIS) to better understand risks, prepare for emergencies, coordinate response operations, and support long-term recovery.",
+    "readTime": "12 minutes",
+    "content": [
+      {
+        "type": "heading",
+        "text": "Introduction"
+      },
+      {
+        "type": "paragraph",
+        "text": "Natural disasters are becoming more frequent and severe due to climate change, rapid urbanization, environmental degradation, and population growth. Floods, wildfires, landslides, droughts, storms, earthquakes, and coastal erosion threaten millions of people every year. Governments and organizations increasingly rely on Geographic Information Systems (GIS) to better understand risks, prepare for emergencies, coordinate response operations, and support long-term recovery."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS is much more than digital mapping. It integrates geographic data from multiple sources, performs spatial analysis, visualizes complex situations, and helps decision-makers answer one critical question: Where?"
+      },
+      {
+        "type": "paragraph",
+        "text": "Whether identifying flood-prone communities, predicting wildfire spread, planning evacuation routes, or assessing disaster damage, GIS provides location intelligence that saves lives."
+      },
+      {
+        "type": "heading",
+        "text": "Understanding the Disaster Management Cycle"
+      },
+      {
+        "type": "paragraph",
+        "text": "Disaster management is typically divided into five continuous phases."
+      },
+      {
+        "type": "heading",
+        "text": "1. Mitigation and Risk Assessment"
+      },
+      {
+        "type": "paragraph",
+        "text": "Mitigation focuses on reducing disaster impacts before they occur."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS supports this stage by:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Hazard mapping",
+          "Vulnerability assessment",
+          "Population exposure analysis",
+          "Critical infrastructure mapping",
+          "Climate risk analysis"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Organizations combine DEMs, historical disaster records, rainfall, land cover, geology, and census data to identify high-risk areas."
+      },
+      {
+        "type": "heading",
+        "text": "2. Preparedness and Planning"
+      },
+      {
+        "type": "paragraph",
+        "text": "Preparation ensures communities know what to do before disasters happen."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS helps create:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Evacuation plans",
+          "Emergency shelter locations",
+          "Resource inventories",
+          "Emergency service coverage maps",
+          "Public awareness maps"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Scenario simulations allow planners to evaluate different emergency situations before they happen."
+      },
+      {
+        "type": "heading",
+        "text": "3. Response"
+      },
+      {
+        "type": "paragraph",
+        "text": "During an emergency, speed is critical."
+      },
+      {
+        "type": "paragraph",
+        "text": "Real-time GIS combines:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Satellite imagery",
+          "Drone observations",
+          "GPS tracking",
+          "Weather information",
+          "Field reports",
+          "IoT sensors"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Emergency operation centers monitor live dashboards to deploy rescue teams, optimize routes, and prioritize resources."
+      },
+      {
+        "type": "heading",
+        "text": "4. Recovery"
+      },
+      {
+        "type": "paragraph",
+        "text": "After the disaster, GIS supports rebuilding efforts through:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Damage assessment",
+          "Infrastructure inspection",
+          "Recovery progress monitoring",
+          "Reconstruction planning",
+          "Financial assistance prioritization"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Recovery maps help governments distribute limited resources more efficiently."
+      },
+      {
+        "type": "heading",
+        "text": "5. Learning and Improvement"
+      },
+      {
+        "type": "paragraph",
+        "text": "Every disaster provides lessons."
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS stores historical events and supports after-action analysis to improve future emergency plans, policies, and response strategies."
+      },
+      {
+        "type": "heading",
+        "text": "GIS Applications for Common Disasters"
+      },
+      {
+        "type": "heading",
+        "text": "Flood Management"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS supports:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Flood hazard mapping",
+          "Flood extent modeling",
+          "Early warning systems",
+          "River monitoring",
+          "Evacuation planning"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Hydrological models combined with DEMs predict inundation under different rainfall scenarios."
+      },
+      {
+        "type": "heading",
+        "text": "Wildfire Management"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS helps:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Identify fire risk zones",
+          "Monitor vegetation",
+          "Track fire perimeters",
+          "Predict spread",
+          "Allocate firefighting resources"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Satellite imagery provides near real-time fire detection."
+      },
+      {
+        "type": "heading",
+        "text": "Landslide Monitoring"
+      },
+      {
+        "type": "paragraph",
+        "text": "Important spatial factors include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Slope",
+          "Elevation",
+          "Geology",
+          "Rainfall",
+          "Land use",
+          "Soil type"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS combines these datasets into susceptibility maps for early warning."
+      },
+      {
+        "type": "heading",
+        "text": "Evacuation and Emergency Response"
+      },
+      {
+        "type": "paragraph",
+        "text": "Network analysis enables planners to:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Find fastest evacuation routes",
+          "Locate nearest shelters",
+          "Optimize ambulance dispatch",
+          "Avoid blocked roads",
+          "Estimate travel time"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Key GIS Capabilities"
+      },
+      {
+        "type": "heading",
+        "text": "Data Integration"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS combines:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Satellite imagery",
+          "Drone data",
+          "GPS observations",
+          "Survey data",
+          "Weather stations",
+          "Social media",
+          "Government databases"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Spatial Analysis"
+      },
+      {
+        "type": "paragraph",
+        "text": "Common analyses include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Overlay analysis",
+          "Buffer analysis",
+          "Network analysis",
+          "Suitability modeling",
+          "Hotspot analysis",
+          "Terrain analysis"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Real-Time Visualization"
+      },
+      {
+        "type": "paragraph",
+        "text": "Interactive dashboards provide situational awareness using live maps, charts, alerts, and key performance indicators."
+      },
+      {
+        "type": "heading",
+        "text": "Scenario Modeling"
+      },
+      {
+        "type": "paragraph",
+        "text": "\"What-if\" simulations allow agencies to test evacuation plans, flood scenarios, and resource allocation before disasters occur."
+      },
+      {
+        "type": "heading",
+        "text": "Collaboration"
+      },
+      {
+        "type": "paragraph",
+        "text": "Cloud GIS platforms enable multiple agencies to share the same data and coordinate operations simultaneously."
+      },
+      {
+        "type": "heading",
+        "text": "Important GIS Data Sources"
+      },
+      {
+        "type": "paragraph",
+        "text": "Successful disaster management depends on high-quality data."
+      },
+      {
+        "type": "paragraph",
+        "text": "Common sources include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Satellite imagery",
+          "Drone imagery",
+          "Weather services",
+          "DEM and terrain models",
+          "Field surveys",
+          "GPS",
+          "Government spatial databases",
+          "Crowdsourced information"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Benefits of GIS in Disaster Management"
+      },
+      {
+        "type": "paragraph",
+        "text": "Organizations using GIS can:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Reduce loss of life",
+          "Protect infrastructure",
+          "Improve decision-making",
+          "Allocate resources efficiently",
+          "Increase coordination",
+          "Improve communication",
+          "Support evidence-based recovery",
+          "Build resilient communities"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Challenges"
+      },
+      {
+        "type": "paragraph",
+        "text": "Despite its benefits, GIS faces challenges:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Data quality issues",
+          "Limited real-time data",
+          "Incomplete field information",
+          "High hardware costs",
+          "Skilled workforce shortages",
+          "Data sharing restrictions"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Modern cloud GIS, AI, remote sensing, and drones continue to reduce these limitations."
+      },
+      {
+        "type": "heading",
+        "text": "Future Trends"
+      },
+      {
+        "type": "paragraph",
+        "text": "Emerging technologies include:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Artificial Intelligence",
+          "Machine Learning",
+          "Digital Twins",
+          "IoT sensors",
+          "UAV automation",
+          "High-resolution satellite constellations",
+          "Cloud-native GIS",
+          "Predictive analytics"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "These technologies make disaster management increasingly proactive instead of reactive."
+      },
+      {
+        "type": "heading",
+        "text": "Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "text": "GIS has become one of the most important technologies for disaster management. It transforms large volumes of geographic information into actionable intelligence that supports mitigation, preparedness, emergency response, recovery, and continuous improvement."
+      },
+      {
+        "type": "paragraph",
+        "text": "As disasters become more complex, organizations that invest in GIS, accurate spatial data, and skilled professionals will be better prepared to protect lives, infrastructure, and communities. In disaster management, location truly matters—and GIS saves lives."
+      }
+    ]
+  }
+};
+
 export const CATEGORIES = [
   { slug: "all", label: "ទាំងអស់", color: "orange" },
   { slug: "video", label: "វីដេអូ", color: "red" },
@@ -5377,6 +6581,34 @@ export const getLocalizedCategoryLabel = (slug, language = "km") => {
 };
 
 export const posts = [
+  {
+    slug: "gis-in-disaster-management",
+    category: "tips",
+    title: GIS_DISASTER_MANAGEMENT_ARTICLE.km.title,
+    excerpt: GIS_DISASTER_MANAGEMENT_ARTICLE.km.excerpt,
+    coverImage: "/blog/gis_in_disaster_management.jpg",
+    coverDisplay: "cover",
+    publishedAt: "2026-07-14",
+    readTime: GIS_DISASTER_MANAGEMENT_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["GIS", "Disaster Management", "Risk Mapping", "Emergency Response"],
+    locales: GIS_DISASTER_MANAGEMENT_ARTICLE,
+    content: GIS_DISASTER_MANAGEMENT_ARTICLE.km.content,
+  },
+  {
+    slug: "gis-in-urban-planning",
+    category: "tips",
+    title: GIS_URBAN_PLANNING_ARTICLE.km.title,
+    excerpt: GIS_URBAN_PLANNING_ARTICLE.km.excerpt,
+    coverImage: "/blog/gis_in_urban.jpg",
+    coverDisplay: "cover",
+    publishedAt: "2026-07-14",
+    readTime: GIS_URBAN_PLANNING_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["GIS", "Urban Planning", "Smart City", "Spatial Analysis"],
+    locales: GIS_URBAN_PLANNING_ARTICLE,
+    content: GIS_URBAN_PLANNING_ARTICLE.km.content,
+  },
   {
     slug: "a-shapefile-isnt-one-file",
     category: "tips",
@@ -5568,6 +6800,51 @@ export const posts = [
     tags: ["GIS", "DEM", "DEV", "Precision Agriculture"],
     locales: DEV_ELEVATION_ARTICLE,
     content: DEV_ELEVATION_ARTICLE.km.content,
+  },
+  {
+    slug: "display-contour-index-and-label-using-python",
+    category: "video",
+    title: CONTOUR_LABEL_ARTICLE.km.title,
+    excerpt: CONTOUR_LABEL_ARTICLE.km.excerpt,
+    coverImage: "https://img.youtube.com/vi/NE9gajFAa4U/hqdefault.jpg",
+    coverDisplay: "cover",
+    youtubeId: "NE9gajFAa4U",
+    publishedAt: "2026-02-20",
+    readTime: CONTOUR_LABEL_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["ArcGIS Pro", "Python", "Calculate Field", "Contour", "Tutorial"],
+    locales: CONTOUR_LABEL_ARTICLE,
+    content: CONTOUR_LABEL_ARTICLE.km.content,
+  },
+  {
+    slug: "download-landsat-9-image-using-google-earth-engine",
+    category: "video",
+    title: LANDSAT_GEE_ARTICLE.km.title,
+    excerpt: LANDSAT_GEE_ARTICLE.km.excerpt,
+    coverImage: "https://img.youtube.com/vi/YOlu044H-yg/hqdefault.jpg",
+    coverDisplay: "cover",
+    youtubeId: "YOlu044H-yg",
+    publishedAt: "2026-02-15",
+    readTime: LANDSAT_GEE_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["Google Earth Engine", "Landsat 9", "Remote Sensing", "Satellite Imagery", "Tutorial"],
+    locales: LANDSAT_GEE_ARTICLE,
+    content: LANDSAT_GEE_ARTICLE.km.content,
+  },
+  {
+    slug: "download-sentinel-2-image-using-google-earth-engine",
+    category: "video",
+    title: SENTINEL_GEE_ARTICLE.km.title,
+    excerpt: SENTINEL_GEE_ARTICLE.km.excerpt,
+    coverImage: "https://img.youtube.com/vi/o-Xk4j69SIk/hqdefault.jpg",
+    coverDisplay: "cover",
+    youtubeId: "o-Xk4j69SIk",
+    publishedAt: "2026-02-10",
+    readTime: SENTINEL_GEE_ARTICLE.km.readTime,
+    author: { name: "KGA Team", avatar: null },
+    tags: ["Google Earth Engine", "Sentinel-2", "Remote Sensing", "Satellite Imagery", "Tutorial"],
+    locales: SENTINEL_GEE_ARTICLE,
+    content: SENTINEL_GEE_ARTICLE.km.content,
   },
 ];
 
