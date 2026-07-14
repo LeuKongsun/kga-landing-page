@@ -45,6 +45,8 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .topbar-group{display:flex;align-items:center;gap:6px}
 .basemap-select{background:var(--bg-card);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:var(--radius);font-family:inherit;font-size:12px;cursor:pointer;outline:none}
 .basemap-select:focus{border-color:var(--accent)}
+.basemap-control{position:relative;width:220px}
+.basemap-control .basemap-select{width:100%;background:var(--bg-panel);padding:7px 10px;font-size:13px;box-shadow:none}
 .topbar-btn{background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;border-radius:var(--radius);font-family:inherit;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:var(--transition)}
 .topbar-btn:hover{background:var(--bg-hover);color:var(--text);border-color:var(--border-light)}
 .topbar-btn.active{background:var(--accent);color:var(--bg-dark);border-color:var(--accent)}
@@ -186,9 +188,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .leaflet-popup-tip{background:var(--bg-panel)!important;border:1px solid var(--border)!important}
 .leaflet-popup-close-button{color:var(--text-dim)!important}
 
-/* Measurement Tooltip */
-.measure-tooltip{background:var(--bg-panel);color:var(--accent);padding:3px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid var(--border);box-shadow:var(--shadow);white-space:nowrap}
-
 /* Feature Labels */
 .feature-label{background:transparent!important;border:none!important}
 .feature-label span{background:rgba(0,0,0,0.7);color:#fff;padding:2px 6px;border-radius:3px;font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap;border:1px solid rgba(255,255,255,0.15)}
@@ -273,7 +272,9 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
   .topbar-btn{padding:4px 6px;font-size:10px;gap:3px;flex-shrink:0}
   .topbar-btn svg{width:12px;height:12px}
   .topbar-group .topbar-btn span:not(.kga){display:none}
-  .basemap-select,.crs-select{font-size:10px;padding:3px 6px;max-width:110px}
+  .crs-select{font-size:10px;padding:3px 6px;max-width:110px}
+  .basemap-control{width:160px}
+  .basemap-control .basemap-select{font-size:12px;padding:5px 8px}
 
   /* Left toolbar → bottom horizontal bar */
   .toolbar{grid-area:toolbar-bottom;flex-direction:row;border-right:none;border-top:1px solid var(--border);padding:4px 8px;gap:4px;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;-webkit-overflow-scrolling:touch}
@@ -515,20 +516,6 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
       </select>
     </div>
     <div class="topbar-divider"></div>
-    <div class="topbar-group">
-      <label style="font-size:11px;color:var(--text-muted)">Basemap:</label>
-      <select class="basemap-select" id="basemapSelect" data-tooltip="Change Basemap">
-        <option value="google_satellite" selected>Google Satellite</option>
-        <option value="google_hybrid">Google Hybrid</option>
-        <option value="google_road">Google Roads</option>
-        <option value="google_terrain">Google Terrain</option>
-        <option value="osm">OpenStreetMap (CARTO Voyager)</option>
-        <option value="satellite">Satellite (Esri)</option>
-        <option value="dark">Dark Mode</option>
-        <option value="topo">Topographic</option>
-      </select>
-    </div>
-    <div class="topbar-divider"></div>
     <div class="theme-toggle">
       <div class="theme-icons">
         <svg id="iconSun" class="icon-active" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -543,19 +530,6 @@ html.light .feature-label span{background:rgba(255,255,255,0.9);color:#1a2440;bo
     </div>
     <div class="topbar-divider"></div>
     <div class="topbar-group">
-      <div class="topbar-group" style="position:relative">
-        <button class="topbar-btn" id="btnMeasureLength" data-tooltip="Measure Length">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22L22 2"/><path d="M6 18l2-2"/><path d="M10 14l2-2"/><path d="M14 10l2-2"/><path d="M18 6l2-2"/></svg>
-          <span>Length</span>
-        </button>
-        <button class="topbar-btn" id="btnMeasureArea" data-tooltip="Measure Area">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 3v18" stroke-dasharray="2,2" opacity="0.4"/></svg>
-          <span>Area</span>
-        </button>
-        <button class="topbar-btn" id="btnMeasureDirection" data-tooltip="Measure Bearing">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="M12 12l4-6" stroke-width="2.5"/></svg>
-          <span>Bearing</span>
-        </button>
       <button class="topbar-btn" id="btnImport" data-tooltip="Import GeoJSON / KML">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span>Import</span>
@@ -754,8 +728,6 @@ const state = {
   pointCounter: 0,
   lineCounter: 0,
   polyCounter: 0,
-  measuring: false,
-  measureLayer: null,
   currentTool: 'pointer',
   currentCRS: '32648',
   isDark: true,
@@ -1012,6 +984,30 @@ const GeocoderControl = L.Control.extend({
 });
 new GeocoderControl({ position: 'topleft' }).addTo(map);
 
+const BasemapControl = L.Control.extend({
+  onAdd() {
+    const wrap = L.DomUtil.create('div', 'basemap-control');
+    L.DomEvent.disableClickPropagation(wrap);
+    L.DomEvent.disableScrollPropagation(wrap);
+
+    const select = L.DomUtil.create('select', 'basemap-select', wrap);
+    select.id = 'basemapSelect';
+    select.title = 'Change Basemap';
+    select.setAttribute('aria-label', 'Change basemap');
+    select.innerHTML = [
+      '<option value="google_satellite" selected>Google Satellite</option>',
+      '<option value="google_hybrid">Google Hybrid</option>',
+      '<option value="google_road">Google Roads</option>',
+      '<option value="google_terrain">Google Terrain</option>',
+      '<option value="satellite">Satellite (Esri)</option>',
+      '<option value="dark">Dark Mode</option>',
+      '<option value="topo">Topographic</option>'
+    ].join('');
+
+    return wrap;
+  }
+});
+new BasemapControl({ position: 'topright' }).addTo(map);
 // ── Basemaps ──
 const basemapAttribution = {
   google_satellite: '© Google',
@@ -3770,9 +3766,20 @@ map.on('mousemove', e => {
   const p = projectCoords(e.latlng.lat, e.latlng.lng);
   document.getElementById('projectedCoords').textContent = formatProjected(p);
 });
-map.on('zoomend', () => {
-  document.getElementById('zoomLevel').textContent = map.getZoom();
-});
+
+function formatMapScale() {
+  const zoom = map.getZoom();
+  const latRad = map.getCenter().lat * Math.PI / 180;
+  const metersPerPixel = 156543.03392 * Math.cos(latRad) / Math.pow(2, zoom);
+  const denominator = Math.max(1, Math.round(metersPerPixel * (96 / 0.0254)));
+  return `1:${denominator.toLocaleString('en-US')}`;
+}
+
+function updateZoomStatus() {
+  document.getElementById('zoomLevel').textContent = `${map.getZoom()} (${formatMapScale()})`;
+}
+
+map.on('zoomend moveend', updateZoomStatus);
 
 // ── Export ──
 function getAllGeoJSON() {
@@ -4967,118 +4974,6 @@ function formatArea(sqm) {
   return sqm.toFixed(2) + ' m²';
 }
 
-// ── Measurement Tools ──
-let measurePoints = [];
-let measureLines = L.layerGroup().addTo(map);
-let measureMode = null; // 'length', 'area', 'direction'
-
-function stopMeasure() {
-  measurePoints = [];
-  measureLines.clearLayers();
-  measureMode = null;
-  map.off('click', measureClick);
-  map.off('dblclick', measureDoubleClick);
-  document.getElementById('btnMeasureLength').classList.remove('active');
-  document.getElementById('btnMeasureArea').classList.remove('active');
-  document.getElementById('btnMeasureDirection').classList.remove('active');
-  map.doubleClickZoom.enable();
-}
-
-function startMeasure(mode) {
-  if(measureMode === mode) { stopMeasure(); return; }
-  stopMeasure();
-  measureMode = mode;
-  activateTool('pointer');
-  map.doubleClickZoom.disable();
-  map.on('click', measureClick);
-  map.on('dblclick', measureDoubleClick);
-  const btnId = mode === 'length' ? 'btnMeasureLength' : mode === 'area' ? 'btnMeasureArea' : 'btnMeasureDirection';
-  document.getElementById(btnId).classList.add('active');
-  const msgs = { length: 'Click to measure distance. Double-click to finish.', area: 'Click polygon vertices. Double-click to close & measure area.', direction: 'Click two points to measure bearing & direction.' };
-  showToast(msgs[mode], 'success');
-}
-
-document.getElementById('btnMeasureLength').addEventListener('click', () => startMeasure('length'));
-document.getElementById('btnMeasureArea').addEventListener('click', () => startMeasure('area'));
-document.getElementById('btnMeasureDirection').addEventListener('click', () => startMeasure('direction'));
-
-function measureClick(e) {
-  measurePoints.push(e.latlng);
-  L.circleMarker(e.latlng, { radius: 4, color: '#ffa94d', fillColor: '#ffa94d', fillOpacity: 1 }).addTo(measureLines);
-
-  if(measureMode === 'direction') {
-    if(measurePoints.length === 2) {
-      const p1 = measurePoints[0], p2 = measurePoints[1];
-      L.polyline([p1, p2], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
-      const dist = calcPlanarLength([[p1.lng, p1.lat], [p2.lng, p2.lat]], state.currentCRS);
-      const bearing = calcBearing(p1.lat, p1.lng, p2.lat, p2.lng);
-      const compassDir = getCompassDirection(bearing);
-      const mid = L.latLng((p1.lat+p2.lat)/2, (p1.lng+p2.lng)/2);
-      const label = `${formatLength(dist)} | ${bearing.toFixed(2)}° ${compassDir}`;
-      L.marker(mid, {
-        icon: L.divIcon({ className: 'measure-tooltip', html: label, iconSize: 'auto', iconAnchor: [-8, 12] })
-      }).addTo(measureLines);
-      // Draw N arrow at start
-      L.marker(p1, {
-        icon: L.divIcon({ className: 'measure-tooltip', html: `↑N  →${bearing.toFixed(1)}°`, iconSize: 'auto', iconAnchor: [-8, -8] })
-      }).addTo(measureLines);
-      measurePoints = [];
-    }
-    return;
-  }
-
-  if(measureMode === 'length' && measurePoints.length > 1) {
-    const prev = measurePoints[measurePoints.length - 2];
-    const curr = measurePoints[measurePoints.length - 1];
-    L.polyline([prev, curr], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
-    const coords = measurePoints.map(p => [p.lng, p.lat]);
-    const totalDist = calcPlanarLength(coords, state.currentCRS);
-    const segDist = calcPlanarLength([[prev.lng, prev.lat], [curr.lng, curr.lat]], state.currentCRS);
-    const bearing = calcBearing(prev.lat, prev.lng, curr.lat, curr.lng);
-    L.marker(curr, {
-      icon: L.divIcon({ className: 'measure-tooltip', html: `${formatLength(totalDist)} (seg: ${formatLength(segDist)}, ${bearing.toFixed(1)}°)`, iconSize: 'auto', iconAnchor: [-8, 12] })
-    }).addTo(measureLines);
-  }
-
-  if(measureMode === 'area' && measurePoints.length > 1) {
-    const prev = measurePoints[measurePoints.length - 2];
-    const curr = measurePoints[measurePoints.length - 1];
-    L.polyline([prev, curr], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
-  }
-}
-
-function measureDoubleClick(e) {
-  if(measureMode === 'length' && measurePoints.length >= 2) {
-    const coords = measurePoints.map(p => [p.lng, p.lat]);
-    const totalDist = calcPlanarLength(coords, state.currentCRS);
-    showToast(`Total length: ${formatLength(totalDist)}`, 'success');
-    measurePoints = [];
-  }
-  if(measureMode === 'area' && measurePoints.length >= 3) {
-    // Close polygon
-    L.polyline([measurePoints[measurePoints.length-1], measurePoints[0]], { color: '#ffa94d', weight: 2, dashArray: '6,4' }).addTo(measureLines);
-    L.polygon(measurePoints, { color: '#ffa94d', fillColor: '#ffa94d', fillOpacity: 0.15, weight: 2, dashArray: '6,4' }).addTo(measureLines);
-    const ring = measurePoints.map(p => [p.lng, p.lat]);
-    ring.push(ring[0]); // close
-    const area = calcPlanarArea(ring, state.currentCRS);
-    const perimeter = calcPlanarLength(ring, state.currentCRS);
-    const centroid = L.latLng(
-      measurePoints.reduce((s,p)=>s+p.lat,0)/measurePoints.length,
-      measurePoints.reduce((s,p)=>s+p.lng,0)/measurePoints.length
-    );
-    L.marker(centroid, {
-      icon: L.divIcon({ className: 'measure-tooltip', html: `Area: ${formatArea(area)}<br>Perimeter: ${formatLength(perimeter)}`, iconSize: 'auto', iconAnchor: [-8, 12] })
-    }).addTo(measureLines);
-    showToast(`Area: ${formatArea(area)} | Perimeter: ${formatLength(perimeter)}`, 'success');
-    measurePoints = [];
-  }
-}
-
-function getCompassDirection(deg) {
-  const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-  return dirs[Math.round(deg / 22.5) % 16];
-}
-
 // ── Utilities ──
 function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function escXml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;'); }
@@ -5102,7 +4997,7 @@ function loadScript(url) {
 }
 
 // ── Init ──
-document.getElementById('zoomLevel').textContent = map.getZoom();
+updateZoomStatus();
 activateTool('pointer');
 
 // ── Mobile Panel Toggle ──
