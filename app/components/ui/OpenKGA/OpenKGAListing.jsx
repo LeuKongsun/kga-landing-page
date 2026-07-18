@@ -48,6 +48,8 @@ const formatDate = (iso) => {
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 };
 
+const getUpdatedTime = (dataset) => new Date(dataset.lastUpdated).getTime() || 0;
+
 const OpenKGAListing = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -85,7 +87,7 @@ const OpenKGAListing = () => {
           d.tags?.some((t) => t.toLowerCase().includes(q))
       );
     }
-    return result;
+    return [...result].sort((a, b) => getUpdatedTime(b) - getUpdatedTime(a));
   }, [activeCategory, activeFormat, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filteredDatasets.length / ITEMS_PER_PAGE));

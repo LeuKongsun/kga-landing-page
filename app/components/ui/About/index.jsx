@@ -30,6 +30,7 @@ const copy = {
     logoAlt: "Khmer GRS Academy logo",
     ctaCourses: "Explore Courses",
     ctaOpen: "OpenKGA Resources",
+    ctaProject: "Recent Projects",
     ctaContact: "Contact KGA",
     stats: [
       ["2020", "Founded"],
@@ -76,6 +77,7 @@ const copy = {
     logoAlt: "ឡូហ្គោ Khmer GRS Academy",
     ctaCourses: "មើលវគ្គសិក្សា",
     ctaOpen: "ធនធាន OpenKGA",
+    ctaProject: "គម្រោងថ្មីៗ",
     ctaContact: "ទាក់ទង KGA",
     stats: [
       ["2020", "ឆ្នាំបង្កើត"],
@@ -166,9 +168,13 @@ export default function About() {
             </h1>
             <p className="mt-6 text-lg leading-9 text-brand-text/75 dark:text-gray-200">{text.lead}</p>
             <p className="mt-4 text-base leading-8 text-brand-text/65 dark:text-gray-300">{text.intro}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link href="/courses" className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-lg shadow-brand-orange/20 transition-all hover:bg-brand-orange-hover">
                 {text.ctaCourses}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link href="/project" className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-6 py-3 text-sm font-display font-700 text-brand-orange transition-colors hover:bg-brand-orange hover:text-white">
+                {text.ctaProject}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="/openkga" className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/15 bg-white/70 px-6 py-3 text-sm font-display font-700 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white">

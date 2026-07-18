@@ -25,6 +25,7 @@ const Navbar = () => {
     { title: "ទិន្នន័យចំហ", path: "/openkga" },
     { title: "ទំនាក់ទំនង", path: "/contact" },
     { title: "អំពីយើង", path: "/about" },
+    { title: "គម្រោង", path: "/project" },
   ];
 
   const toggleMenu = () => {

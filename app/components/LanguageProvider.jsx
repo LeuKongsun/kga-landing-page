@@ -10,6 +10,7 @@ const normalize = (value) => value.replace(/\s+/g, " ").trim();
 
 const TRANSLATION_ENTRIES = [
   // Shared navigation
+  ["គម្រោង", "Project"],
   ["វគ្គសិក្សា", "Courses"],
   ["មុខវិជ្ជាដែលយើងបង្រៀន", "Subjects We Teach"],
   ["វគ្គសិក្សារបស់យើង", "Our Courses"],
@@ -183,6 +184,13 @@ const TRANSLATION_ENTRIES = [
   ["គម្របដី ESRI ឆ្នាំ ២០១៧ - ២០២៥", "ESRI landcover 2017 - 2025"],
   ["ទិន្នន័យរ៉ាស្ទ័រគម្របដីប្រចាំឆ្នាំរបស់ Esri ចាប់ពីឆ្នាំ ២០១៧ ដល់ ២០២៥ ដែលមានឯកសារ GeoTIFF ចំនួន ៩។", "Annual Esri land-cover raster data for 2017–2025, supplied as nine GeoTIFF files."],
 
+  ["គំរូកម្ពស់ឌីជីថលកម្ពុជា (DEM) 30ម", "Cambodia Digital Elevation Model (DEM) 30m"],
+  ["ទិន្នន័យរ៉ាស្ទ័រ DEM សម្រាប់ប្រទេសកម្ពុជា ដកស្រង់ពី NASA SRTM កាត់តាមព្រំដែនកម្ពុជា និងមានទំហំក្រឡា 30 ម៉ែត្រ។", "Digital elevation model raster for Cambodia derived from NASA SRTM, clipped to the Cambodia boundary with 30 m cell size."],
+  ["រ៉ាស្ទ័រ DEM (30ម)", "Raster DEM (30m)"],
+  ["សំណុំទិន្នន័យនេះផ្តល់គំរូកម្ពស់ឌីជីថល (DEM) កម្រិត 30 ម៉ែត្រ សម្រាប់ប្រទេសកម្ពុជា ដែលដកស្រង់ពីទិន្នន័យកម្ពស់ NASA SRTM។", "This dataset provides a 30 m digital elevation model (DEM) raster for Cambodia, derived from NASA SRTM elevation data."],
+  ["ទិន្នន័យរ៉ាស្ទ័រនេះត្រូវបានកាត់តាមព្រំដែនប្រទេសកម្ពុជា និងប្រើប្រព័ន្ធកូអរដោនេ WGS 1984 / UTM Zone 48N។", "The raster has been clipped to the Cambodia boundary and uses WGS 1984 / UTM Zone 48N projection."],
+  ["ព័ត៌មានសំណុំទិន្នន័យ", "Dataset information"],
+  ["ប្រភេទទិន្នន័យ៖ Raster។ ទំហំក្រឡា៖ 30 ម៉ែត្រ។ ប្រភព៖ NASA SRTM។ អាជ្ញាបណ្ណ៖ ប្រភពបើកចំហ។", "Data type: Raster. Cell size: 30 m. Source: NASA SRTM. License: Open Source."],
   ["មិនរកឃើញទិន្នន័យ", "Dataset not found"],
   ["← ត្រលប់ទៅ OpenKGA", "← Back to OpenKGA"],
   ["ព័ត៌មានទិន្នន័យ", "Dataset Information"],

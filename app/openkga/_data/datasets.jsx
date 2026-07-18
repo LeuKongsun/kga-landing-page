@@ -328,6 +328,39 @@ export const datasets = [
     tags: ["Esri", "land cover", "raster", "GeoTIFF", "2017", "2025"],
   },
   {
+    slug: "cambodia-digital-elevation-model-dem-30m",
+    category: "topography",
+    format: "raster",
+    title: "គំរូកម្ពស់ឌីជីថលកម្ពុជា (DEM) 30ម",
+    excerpt:
+      "ទិន្នន័យរ៉ាស្ទ័រ DEM សម្រាប់ប្រទេសកម្ពុជា ដកស្រង់ពី NASA SRTM កាត់តាមព្រំដែនកម្ពុជា និងមានទំហំក្រឡា 30 ម៉ែត្រ។",
+    coverImage: "/SharedDataThumbnail/cambodia_elevmap.jpg",
+    fileSize: "767.5 MB",
+    fileFormat: "រ៉ាស្ទ័រ DEM (30ម)",
+    lastUpdated: "2026-07-18",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1GNqeYVsYo2E_aSOIM-aTyHEbM99Pyqm8/view?usp=sharing",
+    source: "NASA SRTM",
+    crs: "WGS 1984 / UTM Zone 48N",
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "សំណុំទិន្នន័យនេះផ្តល់គំរូកម្ពស់ឌីជីថល (DEM) កម្រិត 30 ម៉ែត្រ សម្រាប់ប្រទេសកម្ពុជា ដែលដកស្រង់ពីទិន្នន័យកម្ពស់ NASA SRTM។",
+      },
+      {
+        type: "paragraph",
+        text: "ទិន្នន័យរ៉ាស្ទ័រនេះត្រូវបានកាត់តាមព្រំដែនប្រទេសកម្ពុជា និងប្រើប្រព័ន្ធកូអរដោនេ WGS 1984 / UTM Zone 48N។",
+      },
+      { type: "heading", text: "ព័ត៌មានសំណុំទិន្នន័យ" },
+      {
+        type: "paragraph",
+        text: "ប្រភេទទិន្នន័យ៖ Raster។ ទំហំក្រឡា៖ 30 ម៉ែត្រ។ ប្រភព៖ NASA SRTM។ អាជ្ញាបណ្ណ៖ ប្រភពបើកចំហ។",
+      },
+    ],
+    tags: ["Cambodia", "DEM", "elevation", "SRTM", "raster", "30m", "topography"],
+  },
+  {
     slug: "cambodia-topographic-map-1-100000",
     category: "topography",
     format: "raster",
