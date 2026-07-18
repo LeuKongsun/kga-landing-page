@@ -331,7 +331,7 @@ export const datasets = [
     slug: "cambodia-digital-elevation-model-dem-30m",
     category: "topography",
     format: "raster",
-    title: "គំរូកម្ពស់ឌីជីថលកម្ពុជា (DEM) 30ម",
+    title: "ទិន្នន័យកម្ពស់ដីនៃកម្ពុជា (DEM)",
     excerpt:
       "ទិន្នន័យរ៉ាស្ទ័រ DEM សម្រាប់ប្រទេសកម្ពុជា ដកស្រង់ពី NASA SRTM កាត់តាមព្រំដែនកម្ពុជា និងមានទំហំក្រឡា 30 ម៉ែត្រ។",
     coverImage: "/SharedDataThumbnail/cambodia_elevmap.jpg",
