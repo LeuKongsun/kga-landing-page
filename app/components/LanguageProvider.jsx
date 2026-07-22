@@ -241,6 +241,10 @@ const TRANSLATION_ENTRIES = [
   ["កញ្ចប់នេះផ្តល់ពុម្ពអក្សរខ្មែរ ESRI North ជាឯកសារ TrueType (.ttf) សម្រាប់ដំឡើង និងប្រើប្រាស់ក្នុងកម្មវិធីដែលគាំទ្រពុម្ពអក្សរ TTF។", "This package provides the ESRI North Khmer font as a TrueType (.ttf) file for installation and use in applications that support TTF fonts."],
   ["ផែនទីកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំជាធនធានផែនទីសម្រាប់មើល ប្រើប្រាស់ និងចែករំលែក។", "A vintage-style map of Cambodia prepared as a map resource for viewing, use, and sharing."],
   ["ធនធាននេះផ្តល់ផែនទីប្រទេសកម្ពុជារចនាប័ទ្មបុរាណ ដែលរៀបចំដោយ Khmer GRS Academy (KGA) សម្រាប់ការមើល ឯកសារយោង និងការប្រើប្រាស់ទូទៅ។", "This resource provides a vintage-style map of Cambodia prepared by Khmer GRS Academy (KGA) for viewing, reference, and general use."],
+  ["ឧបករណ៍ KML Handler", "KML Handler tools"],
+  ["ឧបករណ៍ ArcGIS Toolbox ប្រភពបើកចំហពី Khmer GRS Academy (KGA) សម្រាប់គ្រប់គ្រងលំហូរការងារ KML និង KMZ ក្នុង ArcGIS Pro។", "Open-source ArcGIS toolbox tools from Khmer GRS Academy (KGA) for handling KML and KMZ workflows in ArcGIS Pro."],
+  ["ឧបករណ៍ KML Handler គឺជាកញ្ចប់ ArcGIS Toolbox (.atbx) ប្រភពបើកចំហពី Khmer GRS Academy (KGA) សម្រាប់ធ្វើការជាមួយទិន្នន័យ KML និង KMZ ក្នុង ArcGIS Pro។", "KML Handler tools is an open-source ArcGIS Toolbox (.atbx) package from Khmer GRS Academy (KGA) for working with KML and KMZ data in ArcGIS Pro."],
+  ["មើលវីដេអូបង្ហាញ", "Watch demo"],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],

@@ -390,7 +390,7 @@ const OpenKGAListing = () => {
                                   rel="noopener noreferrer"
                                   className="mb-4 inline-flex w-fit items-center gap-1.5 text-xs font-display font-700 text-brand-orange hover:underline"
                                 >
-                                  Watch demo
+                                  មើលវីដេអូបង្ហាញ
                                   <PlayCircle className="w-3.5 h-3.5" aria-hidden="true" />
                                 </Link>
                               )}

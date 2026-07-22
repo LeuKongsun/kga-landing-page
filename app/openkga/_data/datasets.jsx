@@ -436,9 +436,9 @@ export const datasets = [
     slug: "kml-handler-tools",
     category: "tool-solution",
     format: "tool",
-    title: "KML Handler tools",
+    title: "ឧបករណ៍ KML Handler",
     excerpt:
-      "Open-source ArcGIS toolbox tools from Khmer GRS Academy (KGA) for handling KML and KMZ workflows in ArcGIS Pro.",
+      "ឧបករណ៍ ArcGIS Toolbox ប្រភពបើកចំហពី Khmer GRS Academy (KGA) សម្រាប់គ្រប់គ្រងលំហូរការងារ KML និង KMZ ក្នុង ArcGIS Pro។",
     coverImage: "/SharedDataThumbnail/kml handler.png",
     fileSize: "47.3 KB",
     fileFormat: "ArcGIS Toolbox (.atbx)",
@@ -452,11 +452,11 @@ export const datasets = [
     description: [
       {
         type: "paragraph",
-        text: "KML Handler tools is an open-source ArcGIS Toolbox (.atbx) package from Khmer GRS Academy (KGA) for working with KML and KMZ data in ArcGIS Pro.",
+        text: "ឧបករណ៍ KML Handler គឺជាកញ្ចប់ ArcGIS Toolbox (.atbx) ប្រភពបើកចំហពី Khmer GRS Academy (KGA) សម្រាប់ធ្វើការជាមួយទិន្នន័យ KML និង KMZ ក្នុង ArcGIS Pro។",
       },
       {
         type: "link",
-        label: "Watch demo",
+        label: "មើលវីដេអូបង្ហាញ",
         url: "https://www.youtube.com/watch?v=0LVRzY4XifU",
       },
     ],

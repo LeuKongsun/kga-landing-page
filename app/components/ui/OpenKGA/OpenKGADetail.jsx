@@ -202,7 +202,7 @@ const OpenKGADetail = ({ slug }) => {
                     className="mb-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-display font-700 text-brand-text/80 dark:text-gray-300 hover:border-brand-orange/40 hover:text-brand-orange transition-all"
                   >
                     <PlayCircle className="w-4 h-4" aria-hidden="true" />
-                    Watch demo
+                    មើលវីដេអូបង្ហាញ
                   </Link>
                 )}
 
