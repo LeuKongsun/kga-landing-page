@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { m } from "framer-motion";
+import { PlayCircle } from "lucide-react";
 import SectionWrapper from "../../../SectionWrapper";
 import DatasetStats from "../DatasetStats";
 import DatasetShareButton from "../DatasetShareButton";
@@ -97,9 +98,21 @@ const OpenKGAPreview = () => {
                     </h3>
                   </Link>
 
-                  <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body mb-4 line-clamp-2 flex-1">
+                  <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body mb-3 line-clamp-2 flex-1">
                     {ds.excerpt}
                   </p>
+
+                  {ds.demoUrl && (
+                    <Link
+                      href={ds.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mb-4 inline-flex w-fit items-center gap-1.5 text-xs font-display font-700 text-brand-orange hover:underline"
+                    >
+                      Watch demo
+                      <PlayCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                    </Link>
+                  )}
 
                   <DatasetStats slug={ds.slug} className="mb-4" />
 

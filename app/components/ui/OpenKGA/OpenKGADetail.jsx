@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { m } from "framer-motion";
+import { PlayCircle } from "lucide-react";
 import SectionWrapper from "../../SectionWrapper";
 import DatasetStats from "./DatasetStats";
 import DatasetShareButton from "./DatasetShareButton";
@@ -136,6 +137,20 @@ const OpenKGADetail = ({ slug }) => {
                         </p>
                       );
                     }
+                    if (block.type === "link") {
+                      return (
+                        <Link
+                          key={idx}
+                          href={block.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-display font-700 text-brand-orange hover:underline"
+                        >
+                          {block.label}
+                          <PlayCircle className="w-4 h-4" aria-hidden="true" />
+                        </Link>
+                      );
+                    }
                     return null;
                   })}
                 </div>
@@ -178,6 +193,18 @@ const OpenKGADetail = ({ slug }) => {
                   Download ({dataset.fileSize})
                 </Link>
 
+
+                {dataset.demoUrl && (
+                  <Link
+                    href={dataset.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mb-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-display font-700 text-brand-text/80 dark:text-gray-300 hover:border-brand-orange/40 hover:text-brand-orange transition-all"
+                  >
+                    <PlayCircle className="w-4 h-4" aria-hidden="true" />
+                    Watch demo
+                  </Link>
+                )}
 
                 <DatasetShareButton
                   slug={dataset.slug}

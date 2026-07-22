@@ -433,6 +433,36 @@ export const datasets = [
     tags: ["KGA Toolbox", "overlap", "data quality", "ArcGIS Pro", "ATBX"],
   },
   {
+    slug: "kml-handler-tools",
+    category: "tool-solution",
+    format: "tool",
+    title: "KML Handler tools",
+    excerpt:
+      "Open-source ArcGIS toolbox tools from Khmer GRS Academy (KGA) for handling KML and KMZ workflows in ArcGIS Pro.",
+    coverImage: "/SharedDataThumbnail/kml handler.png",
+    fileSize: "47.3 KB",
+    fileFormat: "ArcGIS Toolbox (.atbx)",
+    lastUpdated: "2026-07-20",
+    license: "open-source",
+    downloadUrl: "https://drive.google.com/file/d/1a66xOMcIpiJRC-AnUkXiuVXrXevaFMTk/view?usp=sharing",
+    demoUrl: "https://www.youtube.com/watch?v=0LVRzY4XifU",
+    source: "Khmer GRS Academy (KGA)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "KML Handler tools is an open-source ArcGIS Toolbox (.atbx) package from Khmer GRS Academy (KGA) for working with KML and KMZ data in ArcGIS Pro.",
+      },
+      {
+        type: "link",
+        label: "Watch demo",
+        url: "https://www.youtube.com/watch?v=0LVRzY4XifU",
+      },
+    ],
+    tags: ["KML", "KMZ", "ArcGIS Pro", "ATBX", "KGA", "open source"],
+  },
+  {
     slug: "archive-tool",
     category: "tool-solution",
     format: "tool",
