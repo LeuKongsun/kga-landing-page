@@ -20,7 +20,7 @@ const TRANSLATION_ENTRIES = [
   ["កម្មវិធី", "Program"],
   ["ធនធាន", "Resources"],
   ["ប្លុក", "Blogs"],
-  ["ទិន្នន័យចំហ", "Open Data"],
+  ["ទិន្នន័យចំហ", "OpenKGA"],
   ["ទំនាក់ទំនង", "Contact"],
 
   // Hero and skills

@@ -1,271 +1,430 @@
 export const PROJECT_STATUSES = [
-  { slug: "all", label: { km: "ទាំងអស់", en: "All" }, color: "orange" },
-  { slug: "current", label: { km: "កំពុងដំណើរការ", en: "Current" }, color: "green" },
-  { slug: "completed", label: { km: "បានបញ្ចប់", en: "Completed" }, color: "blue" },
+  { slug: "all", label: { km: "ទាំងអស់", en: "All" } },
+  { slug: "current", label: { km: "កំពុងដំណើរការ", en: "Current" } },
+  { slug: "completed", label: { km: "បានបញ្ចប់", en: "Completed" } },
 ];
 
 export const PROJECT_CATEGORIES = [
-  { slug: "all", label: { km: "គម្រោងទាំងអស់", en: "All Projects" }, color: "orange" },
-  { slug: "gis-foundation", label: { km: "GIS មូលដ្ឋាន", en: "GIS Foundation" }, color: "blue" },
-  { slug: "professional-gis", label: { km: "GIS វិជ្ជាជីវៈ", en: "Professional GIS" }, color: "purple" },
-  { slug: "data-management", label: { km: "គ្រប់គ្រងទិន្នន័យ", en: "Data Management" }, color: "green" },
-  { slug: "organization-training", label: { km: "បណ្តុះបណ្តាលអង្គការ", en: "Organization Training" }, color: "red" },
+  { slug: "all", label: { km: "គម្រោងទាំងអស់", en: "All Projects" } },
+  { slug: "social-affairs", label: { km: "សង្គមកិច្ច", en: "Social Affairs" } },
+  { slug: "agriculture", label: { km: "កសិកម្ម", en: "Agriculture" } },
+  { slug: "land-administration", label: { km: "រដ្ឋបាលដីធ្លី", en: "Land Administration" } },
+  { slug: "infrastructure", label: { km: "ហេដ្ឋារចនាសម្ព័ន្ធ", en: "Infrastructure" } },
+  { slug: "logistics", label: { km: "ភស្តុភារ", en: "Logistics" } },
 ];
 
 export const projects = [
   {
-    slug: "arcgis-pro-foundation-organization-training",
+    slug: "mosvy-arcgis-pro-data-management-map-creation",
+    status: "completed",
+    sortDate: "2023-08-01",
+    category: "social-affairs",
+    coverImage:
+      "/kga_training_project/MoSVY_Training_pictures/photo_2026-07-29_14-45-50.jpg",
+    coverMode: "photo",
+    partnerOrClient:
+      "Ministry of Social Affairs, Veterans and Youth Rehabilitation (MoSVY)",
+    participantCount: 17,
+    deliveryMode: "on-site",
+    software: "ArcGIS Pro",
+    trainingTopics: [
+      "Spatial Data Management",
+      "Map Creation",
+      "Basic Spatial Analysis",
+      "Geodatabase Management",
+    ],
+    tags: ["ArcGIS Pro", "social affairs", "spatial data", "map production"],
+    km: {
+      title:
+        "មូលដ្ឋានគ្រឹះ ArcGIS Pro សម្រាប់ការគ្រប់គ្រងទិន្នន័យ និងការបង្កើតផែនទី",
+      partnerOrClient:
+        "ក្រសួងសង្គមកិច្ច អតីតយុទ្ធជន និងយុវនីតិសម្បទា (MoSVY)",
+      dateRange: "សីហា ២០២៣",
+      deliveryModeLabel: "បណ្តុះបណ្តាលផ្ទាល់",
+      excerpt:
+        "ការបណ្តុះបណ្តាលជាក់ស្តែងអំពីការគ្រប់គ្រងទិន្នន័យភូមិសាស្ត្រ ការបង្ហាញទិន្នន័យ និងការបង្កើតផែនទីសម្រាប់វិស័យសង្គមកិច្ច។",
+      overview:
+        "កម្មវិធីនេះជួយឱ្យមន្ត្រីជំនាញប្រើ ArcGIS Pro ដើម្បីរៀបចំ កែសម្រួល គ្រប់គ្រង និងវិភាគទិន្នន័យលំហ និងទិន្នន័យពិពណ៌នាដែលពាក់ព័ន្ធនឹងសេវាសង្គម និងសហគមន៍ងាយរងគ្រោះ។",
+      description: [
+        { type: "heading", text: "អំពីការបណ្តុះបណ្តាល" },
+        {
+          type: "paragraph",
+          text:
+            "អ្នកចូលរួមបានសិក្សាពីការបង្កើតផែនទីដែលមានគុណភាពវិជ្ជាជីវៈ ការគ្រប់គ្រងមូលដ្ឋានទិន្នន័យភូមិសាស្ត្រ និងការវិភាគលំហកម្រិតមូលដ្ឋាន ដើម្បីគាំទ្រការធ្វើផែនការ ការរាយការណ៍ និងការសម្រេចចិត្តផ្អែកលើភស្តុតាង។",
+        },
+        { type: "heading", text: "ការអនុវត្តក្នុងវិស័យសង្គមកិច្ច" },
+        {
+          type: "paragraph",
+          text:
+            "លំហាត់អនុវត្តផ្តោតលើទិន្នន័យសេវាសង្គម អ្នកទទួលផល និងព្រំប្រទល់រដ្ឋបាល ដើម្បីជួយកំណត់តំបន់អាទិភាព និងកែលម្អការបែងចែកធនធាន។",
+        },
+      ],
+      outcomes: [
+        "គ្រប់គ្រងទិន្នន័យលំហ និងទិន្នន័យពិពណ៌នាក្នុង ArcGIS Pro",
+        "បង្កើតផែនទីច្បាស់លាស់សម្រាប់ការធ្វើផែនការ និងរបាយការណ៍",
+        "អនុវត្តការវិភាគលំហមូលដ្ឋានដើម្បីកំណត់តំបន់ងាយរងគ្រោះ",
+        "បញ្ចូលព័ត៌មានភូមិសាស្ត្រទៅក្នុងការតាមដាន និងការសម្រេចចិត្ត",
+      ],
+    },
+    en: {
+      title: "Basic ArcGIS Pro for Data Management and Map Creation",
+      partnerOrClient:
+        "Ministry of Social Affairs, Veterans and Youth Rehabilitation (MoSVY)",
+      dateRange: "August 2023",
+      deliveryModeLabel: "On-site",
+      excerpt:
+        "Practical training in geospatial data management, visualization, and map creation for professionals working in the social affairs sector.",
+      overview:
+        "This program equipped professionals with practical ArcGIS Pro skills to organize, edit, manage, and analyze spatial and attribute data related to social services and vulnerable communities.",
+      description: [
+        { type: "heading", text: "Training Focus" },
+        {
+          type: "paragraph",
+          text:
+            "Participants learned to create professional maps, manage geospatial databases, and perform basic spatial analysis to support planning, reporting, and evidence-based decision-making.",
+        },
+        { type: "heading", text: "Social Affairs Application" },
+        {
+          type: "paragraph",
+          text:
+            "Hands-on exercises used data related to social services, beneficiaries, and administrative boundaries to identify priority areas and improve resource allocation.",
+        },
+      ],
+      outcomes: [
+        "Manage spatial and attribute data in ArcGIS Pro",
+        "Create clear maps for planning and reporting",
+        "Apply basic spatial analysis to identify vulnerable areas",
+        "Integrate geospatial information into monitoring and decision-making",
+      ],
+    },
+  },
+  {
+    slug: "sbk-arcgis-pro-agricultural-data-spatial-analysis",
+    status: "completed",
+    sortDate: "2024-02-01",
+    category: "agriculture",
+    coverImage: null,
+    coverMode: "online",
+    partnerOrClient: "Dau Tu Saigon Binh (SBK) Co., Ltd.",
+    participantCount: 5,
+    deliveryMode: "online",
+    software: "ArcGIS Pro",
+    trainingTopics: [
+      "Agricultural GIS",
+      "Spatial Analysis",
+      "Field Operations",
+      "Imagery and Remote Sensing",
+      "3D Visualization",
+    ],
+    tags: ["ArcGIS Pro", "agriculture", "remote sensing", "online training"],
+    km: {
+      title:
+        "មូលដ្ឋានគ្រឹះ ArcGIS Pro សម្រាប់ការគ្រប់គ្រងទិន្នន័យកសិកម្ម និងការវិភាគទិន្នន័យ",
+      partnerOrClient: "ក្រុមហ៊ុន Dau Tu Saigon Binh (SBK) Co., Ltd.",
+      dateRange: "កុម្ភៈ ២០២៤",
+      deliveryModeLabel: "បណ្តុះបណ្តាលតាមអនឡាញ",
+      excerpt:
+        "ការបណ្តុះបណ្តាលតាមអនឡាញអំពី ArcGIS Pro សម្រាប់ការធ្វើផែនការកសិកម្ម ការគ្រប់គ្រងដី និងការសម្រេចចិត្តដោយផ្អែកលើទិន្នន័យលំហ។",
+      overview:
+        "កម្មវិធីនេះផ្តល់ចំណេះដឹង និងជំនាញអនុវត្ត ArcGIS Pro ដល់អ្នកជំនាញផ្នែកអភិវឌ្ឍន៍កសិកម្ម ការគ្រប់គ្រងដី និងធនធានធម្មជាតិ។",
+      description: [
+        { type: "heading", text: "អំពីការបណ្តុះបណ្តាល" },
+        {
+          type: "paragraph",
+          text:
+            "អ្នកចូលរួមបានសិក្សាពីការរៀបចំមូលដ្ឋានទិន្នន័យភូមិសាស្ត្រ ការបង្កើតផែនទី ការវិភាគលំហ និងការប្រមូលទិន្នន័យទីវាលដោយប្រើបច្ចេកវិទ្យា GIS ចល័ត។",
+        },
+        { type: "heading", text: "ការអនុវត្តក្នុងវិស័យកសិកម្ម" },
+        {
+          type: "paragraph",
+          text:
+            "មាតិកាបានគ្របដណ្តប់លើការកែច្នៃរូបភាពផ្កាយរណប ការតាមដានដំណាំ ការធ្វើផែនការប្រើប្រាស់ដី ប្រព័ន្ធស្រោចស្រព និងការបង្ហាញទិន្នន័យជា 2D និង 3D។",
+        },
+      ],
+      outcomes: [
+        "គ្រប់គ្រងទិន្នន័យលំហ និងទិន្នន័យពិពណ៌នាសម្រាប់គម្រោងកសិកម្ម",
+        "អនុវត្តការវិភាគភាពសមស្របនៃដី និងការតាមដានធនធានកសិកម្ម",
+        "ប្រើ GIS ចល័តសម្រាប់ការប្រមូល និងធ្វើសមកាលកម្មទិន្នន័យទីវាល",
+        "វិភាគរូបភាពផ្កាយរណប និងបង្កើតការបង្ហាញទិន្នន័យ 3D",
+      ],
+    },
+    en: {
+      title:
+        "Basic ArcGIS Pro for Agricultural Data Management and Spatial Analysis",
+      partnerOrClient: "Dau Tu Saigon Binh (SBK) Co., Ltd.",
+      dateRange: "February 2024",
+      deliveryModeLabel: "Online",
+      excerpt:
+        "Online ArcGIS Pro training for agricultural planning, land management, and spatial-data-supported decision-making.",
+      overview:
+        "This program provided practical ArcGIS Pro knowledge for professionals involved in agricultural development, land management, and natural resource management.",
+      description: [
+        { type: "heading", text: "Training Focus" },
+        {
+          type: "paragraph",
+          text:
+            "Participants learned to organize geospatial databases, create maps, perform spatial analysis, and collect field data through mobile GIS workflows.",
+        },
+        { type: "heading", text: "Agricultural Application" },
+        {
+          type: "paragraph",
+          text:
+            "The modules covered satellite imagery, crop monitoring, land-use and irrigation planning, and agricultural visualization in 2D and 3D environments.",
+        },
+      ],
+      outcomes: [
+        "Manage spatial and attribute data for agricultural projects",
+        "Evaluate land suitability and monitor agricultural resources",
+        "Use mobile GIS for field data collection and synchronization",
+        "Analyze satellite imagery and create 3D visualizations",
+      ],
+    },
+  },
+  {
+    slug: "kampong-chhnang-arcgis-pro-land-administration",
+    status: "completed",
+    sortDate: "2025-05-01",
+    category: "land-administration",
+    coverImage:
+      "/kga_training_project/KCH_Government_training_pictures/photo_2026-07-29_15-04-38.jpg",
+    coverMode: "photo",
+    partnerOrClient: "Kampong Chhnang Provincial Administration",
+    participantCount: 15,
+    deliveryMode: "on-site",
+    software: "ArcGIS Pro",
+    trainingTopics: [
+      "Land Administration",
+      "Geodatabase Management",
+      "Data QA/QC",
+      "Operational Mapping",
+    ],
+    tags: ["ArcGIS Pro", "land administration", "cadastral data", "QA/QC"],
+    km: {
+      title:
+        "មូលដ្ឋានគ្រឹះ ArcGIS Pro សម្រាប់ការគ្រប់គ្រងទិន្នន័យក្នុងគម្រោងរដ្ឋបាលដីធ្លី",
+      partnerOrClient: "រដ្ឋបាលខេត្តកំពង់ឆ្នាំង",
+      dateRange: "ឧសភា ២០២៥",
+      deliveryModeLabel: "បណ្តុះបណ្តាលផ្ទាល់",
+      excerpt:
+        "ការបណ្តុះបណ្តាល ArcGIS Pro សម្រាប់ការបង្កើត កែសម្រួល និងត្រួតពិនិត្យគុណភាពទិន្នន័យដីធ្លី និងសុរិយោដី។",
+      overview:
+        "កម្មវិធីនេះពង្រឹងជំនាញ GIS សម្រាប់កម្មវិធីអនុវិស័យរដ្ឋបាលដីធ្លី ដោយផ្តោតលើលំហូរការងារទិន្នន័យលំហ និងគុណភាពព័ត៌មានសុរិយោដី។",
+      description: [
+        { type: "heading", text: "ការគ្រប់គ្រងទិន្នន័យដីធ្លី" },
+        {
+          type: "paragraph",
+          text:
+            "អ្នកចូលរួមបានអនុវត្តការបង្កើត feature ការកែសម្រួល attribute ការគ្រប់គ្រង geodatabase និងការផលិតផែនទីសម្រាប់គាំទ្រការចុះបញ្ជីដីធ្លី។",
+        },
+        { type: "heading", text: "ការធានា និងត្រួតពិនិត្យគុណភាព" },
+        {
+          type: "paragraph",
+          text:
+            "ការបណ្តុះបណ្តាលបានណែនាំការត្រួតពិនិត្យ topology, attribute, geometry, feature ស្ទួន ទំនាក់ទំនងលំហ និងភាពត្រឹមត្រូវនៃកូអរដោនេ។",
+        },
+      ],
+      outcomes: [
+        "បង្កើត និងថែទាំទិន្នន័យដីធ្លី និងសុរិយោដី",
+        "គ្រប់គ្រង geodatabase និងសំណុំទិន្នន័យ GIS តាមស្តង់ដារ",
+        "រកឃើញ និងកែកំហុសទិន្នន័យលំហ និង attribute",
+        "ផលិតផែនទីប្រតិបត្តិការប្រចាំថ្ងៃសម្រាប់ការងារទីវាល",
+      ],
+    },
+    en: {
+      title:
+        "Foundation of Using ArcGIS Pro for Data Management in Land Administration Projects",
+      partnerOrClient: "Kampong Chhnang Provincial Administration",
+      dateRange: "May 2025",
+      deliveryModeLabel: "On-site",
+      excerpt:
+        "ArcGIS Pro training for creating, editing, managing, and quality-checking land administration and cadastral data.",
+      overview:
+        "This program strengthened GIS skills for the Land Administration Sub-Sector Program, focusing on spatial-data workflows and the quality of cadastral information.",
+      description: [
+        { type: "heading", text: "Land Data Management" },
+        {
+          type: "paragraph",
+          text:
+            "Participants practiced feature creation, attribute editing, geodatabase management, and map production to support land registration activities.",
+        },
+        { type: "heading", text: "Quality Assurance and Control" },
+        {
+          type: "paragraph",
+          text:
+            "The training introduced topology, attribute, geometry, duplicate-feature, spatial-relationship, and coordinate-accuracy validation methods.",
+        },
+      ],
+      outcomes: [
+        "Create and maintain land administration and cadastral data",
+        "Manage geodatabases and standardized GIS datasets",
+        "Identify and correct spatial and attribute data errors",
+        "Produce daily operational maps for field activities",
+      ],
+    },
+  },
+  {
+    slug: "tcm-sewage-drainage-maintenance-gis-training",
     status: "current",
-    category: "professional-gis",
-    coverImage: "/gallery/1.jpg",
-    dateRange: "2026",
-    location: "Phnom Penh, Cambodia",
-    partnerOrClient: "Placeholder Organization Partner",
-    participantCount: 24,
-    trainingTopics: ["ArcGIS Pro", "Spatial Analysis", "Map Production", "GIS Data Management"],
-    tags: ["ArcGIS Pro", "training", "professional GIS", "map production"],
+    sortDate: "2026-07-05",
+    category: "infrastructure",
+    coverImage:
+      "/kga_training_project/TCM_Training_Pictures/photo_2026-07-30_08-48-05.jpg",
+    coverMode: "photo",
+    partnerOrClient: "TCM Engineering Company Ltd.",
+    participantCount: 5,
+    deliveryMode: "on-site",
+    software: "ArcGIS Pro",
+    trainingTopics: [
+      "Infrastructure Asset Management",
+      "Field Inspection",
+      "Preventive Maintenance",
+      "GIS Dashboards",
+    ],
+    tags: ["ArcGIS Pro", "sewage", "drainage", "asset management"],
     km: {
-      title: "គម្រោងបណ្តុះបណ្តាល ArcGIS Pro សម្រាប់អង្គការ",
+      title:
+        "វគ្គបណ្តុះបណ្តាលស្តីពីការថែទាំប្រព័ន្ធលូទឹកស្អុយ និងប្រព័ន្ធលូបង្ហូរទឹក ដោយប្រើ ArcGIS Pro",
+      partnerOrClient: "ក្រុមហ៊ុន TCM Engineering Company Ltd.",
+      dateRange: "៥ កក្កដា ២០២៦",
+      deliveryModeLabel: "បណ្តុះបណ្តាលផ្ទាល់",
       excerpt:
-        "គម្រោងបណ្តុះបណ្តាលជំនាញ ArcGIS Pro សម្រាប់ក្រុមការងារអង្គការ ដោយផ្តោតលើការផលិតផែនទី ការវិភាគទិន្នន័យ និងការគ្រប់គ្រងទិន្នន័យ GIS។",
+        "ការបណ្តុះបណ្តាល GIS និង ArcGIS Pro សម្រាប់ការគ្រប់គ្រង ការត្រួតពិនិត្យ និងការថែទាំទ្រព្យសម្បត្តិប្រព័ន្ធលូ និងបង្ហូរទឹក។",
       overview:
-        "គម្រោងនេះត្រូវបានរៀបចំឡើងដើម្បីជួយក្រុមការងារបង្កើនសមត្ថភាពប្រើប្រាស់ ArcGIS Pro ក្នុងការងារផែនទីប្រចាំថ្ងៃ និងការសម្រេចចិត្តផ្អែកលើទិន្នន័យភូមិសាស្ត្រ។",
+        "កម្មវិធីនេះបញ្ចូលគោលការណ៍ GIS ជាមួយលំហាត់អនុវត្ត ដើម្បីកែលម្អការគ្រប់គ្រងទ្រព្យសម្បត្តិហេដ្ឋារចនាសម្ព័ន្ធ និងការធ្វើផែនការថែទាំ។",
       description: [
-        { type: "heading", text: "គោលបំណងបណ្តុះបណ្តាល" },
+        { type: "heading", text: "លំហូរការងារ GIS សម្រាប់ហេដ្ឋារចនាសម្ព័ន្ធ" },
         {
           type: "paragraph",
           text:
-            "អ្នកចូលរួមរៀនពីការរៀបចំ project, ការគ្រប់គ្រង layer, ការបង្កើតផែនទីត្រឹមត្រូវ និងការប្រើប្រាស់ geoprocessing tools សំខាន់ៗសម្រាប់ការងារអនុវត្ត។",
+            "អ្នកចូលរួមបានអនុវត្តការបង្កើត និងកែសម្រួលទិន្នន័យ vector ការគ្រប់គ្រង attribute ការស្វែងរកទិន្នន័យ និងការធ្វើផែនទីបណ្តាញលូ និងបង្ហូរទឹក។",
         },
-        { type: "heading", text: "វិធីសាស្ត្របង្រៀន" },
+        { type: "heading", text: "ការត្រួតពិនិត្យ និងថែទាំ" },
         {
           type: "paragraph",
           text:
-            "ថ្នាក់រៀនប្រើការអនុវត្តជាក់ស្តែងជាចម្បង ដោយមានលំហាត់ផ្អែកលើទិន្នន័យគំរូ និង workflow ដែលស្រដៀងនឹងការងារពិតរបស់អ្នកចូលរួម។",
+            "មាតិកាបានគ្របដណ្តប់លើការត្រួតពិនិត្យទីវាល ការកំណត់បញ្ហាហេដ្ឋារចនាសម្ព័ន្ធ ការបញ្ចូលទិន្នន័យទៅមូលដ្ឋានទិន្នន័យកណ្ដាល និងការធ្វើផែនការថែទាំបង្ការ។",
         },
       ],
       outcomes: [
-        "បង្កើត និងរៀបចំផែនទីដោយប្រើ ArcGIS Pro",
-        "អនុវត្ត spatial analysis សម្រាប់សំណួរការងារជាក់ស្តែង",
-        "រៀបចំទិន្នន័យ GIS ឱ្យមានស្តង់ដារ និងងាយចែករំលែក",
+        "បង្កើត និងថែទាំទិន្នន័យទ្រព្យសម្បត្តិប្រព័ន្ធលូ និងបង្ហូរទឹក",
+        "អនុវត្តការត្រួតពិនិត្យទីវាល និងកំណត់បញ្ហាហេដ្ឋារចនាសម្ព័ន្ធ",
+        "បញ្ចូលទិន្នន័យទីវាលទៅមូលដ្ឋានទិន្នន័យ GIS កណ្ដាល",
+        "បង្កើតផែនទី dashboard និងរបាយការណ៍សម្រាប់ការថែទាំ",
       ],
     },
     en: {
-      title: "ArcGIS Pro Training Project for an Organization",
+      title: "On-Site Sewage & Drainage System Maintenance Training",
+      partnerOrClient: "TCM Engineering Company Ltd.",
+      dateRange: "5 July 2026",
+      deliveryModeLabel: "On-site",
       excerpt:
-        "A professional ArcGIS Pro training project for an organization team, focused on map production, spatial analysis, and GIS data management.",
+        "GIS and ArcGIS Pro training for managing, inspecting, and maintaining sewage and drainage system assets.",
       overview:
-        "This project helps a working team strengthen practical ArcGIS Pro skills for daily mapping tasks and geospatial data-driven decision making.",
+        "This program combined GIS fundamentals with practical exercises to improve infrastructure asset management and preventive-maintenance planning.",
       description: [
-        { type: "heading", text: "Training Objective" },
+        { type: "heading", text: "Infrastructure GIS Workflow" },
         {
           type: "paragraph",
           text:
-            "Participants learn project setup, layer management, accurate map production, and essential geoprocessing tools for practical GIS workflows.",
+            "Participants practiced vector-data creation and editing, attribute management, querying, and mapping for sewage and drainage network assets.",
         },
-        { type: "heading", text: "Teaching Approach" },
+        { type: "heading", text: "Inspection and Maintenance" },
         {
           type: "paragraph",
           text:
-            "The course is built around hands-on practice, sample datasets, and workflows similar to the participants' real operational needs.",
+            "The training covered field inspections, infrastructure fault identification, centralized database integration, and preventive-maintenance planning.",
         },
       ],
       outcomes: [
-        "Create and organize maps with ArcGIS Pro",
-        "Apply spatial analysis to practical work questions",
-        "Prepare standardized GIS data for sharing and reuse",
+        "Create and maintain sewage and drainage asset data",
+        "Conduct field inspections and identify infrastructure faults",
+        "Integrate field data into a centralized GIS database",
+        "Create maps, dashboards, and maintenance reports",
       ],
     },
   },
   {
-    slug: "qgis-foundation-university-students",
-    status: "completed",
-    category: "gis-foundation",
-    coverImage: "/gallery/4.jpg",
-    dateRange: "2025",
-    location: "Phnom Penh, Cambodia",
-    partnerOrClient: "Placeholder Student Cohort",
-    participantCount: 32,
-    trainingTopics: ["QGIS", "GIS Fundamentals", "Vector Data", "Cartography"],
-    tags: ["QGIS", "students", "GIS foundation", "cartography"],
+    slug: "jica-qgis-logistics-project-monitoring",
+    status: "current",
+    sortDate: "2026-07-29",
+    category: "logistics",
+    coverImage:
+      "/kga_training_project/JICA_Ttraining_Pictures/photo_2026-07-30_08-46-26.jpg",
+    coverMode: "photo",
+    partnerOrClient: "Oriental Consultants Global Co., Ltd.",
+    fundingAgency: "Japan International Cooperation Agency (JICA)",
+    participantCount: 7,
+    deliveryMode: "on-site",
+    software: "QGIS",
+    trainingTopics: [
+      "Logistics Infrastructure",
+      "Spatial Data Management",
+      "WKT Data Integration",
+      "Project Monitoring Dashboards",
+    ],
+    tags: ["QGIS", "JICA", "logistics", "project monitoring"],
     km: {
-      title: "គម្រោងបណ្តុះបណ្តាល QGIS មូលដ្ឋានសម្រាប់និស្សិត",
+      title:
+        "ការពង្រឹងសមត្ថភាពលើការប្រើប្រាស់ QGIS សម្រាប់ការគ្រប់គ្រងទិន្នន័យភូមិសាស្ត្រ និងការតាមដានគម្រោងភស្តុភារ",
+      partnerOrClient: "Oriental Consultants Global Co., Ltd.",
+      fundingAgency: "ទីភ្នាក់ងារសហប្រតិបត្តិការអន្តរជាតិជប៉ុន (JICA)",
+      dateRange: "២៩ កក្កដា ២០២៦",
+      deliveryModeLabel: "បណ្តុះបណ្តាលផ្ទាល់",
       excerpt:
-        "វគ្គបណ្តុះបណ្តាល QGIS មូលដ្ឋានសម្រាប់និស្សិត ដែលចាប់ផ្តើមពីគំនិត GIS រហូតដល់ការបង្កើតផែនទី និងការគ្រប់គ្រងទិន្នន័យ vector។",
+        "ការបណ្តុះបណ្តាល QGIS សម្រាប់ការគ្រប់គ្រងទិន្នន័យហេដ្ឋារចនាសម្ព័ន្ធដឹកជញ្ជូន និងការរៀបចំទិន្នន័យសម្រាប់ dashboard តាមដានគម្រោង។",
       overview:
-        "គម្រោងនេះជួយនិស្សិតចាប់ផ្តើមជាមួយ GIS ដោយប្រើ QGIS ដែលជាកម្មវិធីឥតគិតថ្លៃ និងអាចអនុវត្តបានក្នុងការសិក្សា និងការងារស្រាវជ្រាវ។",
+        "កម្មវិធីនេះពង្រឹងជំនាញ QGIS សម្រាប់ការគ្រប់គ្រងទិន្នន័យលំហ និងការតាមដានគម្រោងភស្តុភារ ដោយមានការគាំទ្រថវិកាពី JICA។",
       description: [
-        { type: "heading", text: "ខ្លឹមសារសំខាន់" },
+        { type: "heading", text: "ការគ្រប់គ្រងទិន្នន័យភស្តុភារ" },
         {
           type: "paragraph",
           text:
-            "មាតិកាគ្របដណ្តប់លើគោលការណ៍ GIS, coordinate reference systems, vector data, attribute table, symbology, labeling និង layout map។",
+            "អ្នកចូលរួមបានអនុវត្តការបង្កើត និងកែសម្រួលទិន្នន័យ vector ការគ្រប់គ្រង attribute ការស្វែងរក និងវិភាគលំហ និងការធ្វើផែនទីសម្រាប់ផ្លូវ ស្ពាន និងទីតាំងភស្តុភារ។",
         },
-        { type: "heading", text: "ការអនុវត្ត" },
+        { type: "heading", text: "ការតភ្ជាប់ទៅប្រព័ន្ធតាមដាន" },
         {
           type: "paragraph",
           text:
-            "អ្នកចូលរួមអនុវត្តលើលំហាត់តូចៗជាបន្តបន្ទាប់ ដើម្បីបង្កើតជំនាញពីមូលដ្ឋានទៅកាន់លទ្ធផលផែនទីដែលអាចប្រើប្រាស់បាន។",
+            "ការបណ្តុះបណ្តាលបានបង្ហាញពីការបម្លែង feature ទៅទម្រង់ WKT ការរៀបចំទិន្នន័យតាមស្តង់ដារ និងការតភ្ជាប់ជាមួយ Excel, Google Sheets និង dashboard តាមដានគម្រោង។",
         },
       ],
       outcomes: [
-        "យល់ពីគំនិត GIS និងប្រព័ន្ធកូអរដោនេ",
-        "បង្កើត និងកែសម្រួលទិន្នន័យ vector ក្នុង QGIS",
-        "ផលិតផែនទីមូលដ្ឋានសម្រាប់របាយការណ៍ និងការសិក្សា",
+        "បង្កើត និងថែទាំទិន្នន័យផ្លូវ ស្ពាន និងហេដ្ឋារចនាសម្ព័ន្ធភស្តុភារ",
+        "អនុវត្ត spatial query និង vector analysis សម្រាប់ការតាមដានគម្រោង",
+        "បម្លែងទិន្នន័យ GIS ទៅទម្រង់ WKT សម្រាប់ភ្ជាប់មូលដ្ឋានទិន្នន័យ",
+        "ផលិតផែនទីពីរភាសា និងសំណុំទិន្នន័យសម្រាប់ dashboard",
       ],
     },
     en: {
-      title: "QGIS Foundation Training Project for University Students",
+      title:
+        "Capacity Building on QGIS for Spatial Data Management and Logistics Project Monitoring",
+      partnerOrClient: "Oriental Consultants Global Co., Ltd.",
+      fundingAgency: "Japan International Cooperation Agency (JICA)",
+      dateRange: "29 July 2026",
+      deliveryModeLabel: "On-site",
       excerpt:
-        "A beginner-friendly QGIS training project for students, moving from GIS concepts to map creation and vector data management.",
+        "QGIS training for managing transportation infrastructure data and preparing dashboard-ready datasets for project monitoring.",
       overview:
-        "This project helps students begin practical GIS work with QGIS, a free platform they can continue using for study and research.",
+        "This JICA-funded program strengthened QGIS skills for spatial-data management and logistics project monitoring.",
       description: [
-        { type: "heading", text: "Core Content" },
+        { type: "heading", text: "Logistics Data Management" },
         {
           type: "paragraph",
           text:
-            "The training covers GIS principles, coordinate reference systems, vector data, attribute tables, symbology, labeling, and map layouts.",
+            "Participants practiced vector creation and editing, attribute management, spatial querying and analysis, and mapping for roads, bridges, and logistics facilities.",
         },
-        { type: "heading", text: "Practice" },
+        { type: "heading", text: "Monitoring-System Integration" },
         {
           type: "paragraph",
           text:
-            "Participants complete progressive exercises that build from basic concepts to usable map outputs.",
+            "The training covered WKT conversion, standardized data preparation, and integration with Excel, Google Sheets, and project-monitoring dashboards.",
         },
       ],
       outcomes: [
-        "Understand GIS concepts and coordinate systems",
-        "Create and edit vector data in QGIS",
-        "Produce basic maps for reports and study work",
-      ],
-    },
-  },
-  {
-    slug: "gis-data-management-public-sector",
-    status: "completed",
-    category: "data-management",
-    coverImage: "/gallery/7.jpg",
-    dateRange: "2024",
-    location: "Cambodia",
-    partnerOrClient: "Placeholder Public Sector Team",
-    participantCount: 18,
-    trainingTopics: ["Data Cleaning", "Geodatabase", "Topology", "Quality Control"],
-    tags: ["data management", "topology", "quality control", "geodatabase"],
-    km: {
-      title: "គម្រោងបណ្តុះបណ្តាលការគ្រប់គ្រងទិន្នន័យ GIS",
-      excerpt:
-        "គម្រោងបណ្តុះបណ្តាលសម្រាប់ក្រុមការងារផ្នែកសាធារណៈ ដោយផ្តោតលើការរៀបចំ សម្អាត និងត្រួតពិនិត្យគុណភាពទិន្នន័យ GIS។",
-      overview:
-        "គម្រោងនេះផ្តោតលើការកែលម្អ workflow គ្រប់គ្រងទិន្នន័យ ដើម្បីឱ្យទិន្នន័យមានភាពត្រឹមត្រូវ ស្របស្តង់ដារ និងងាយស្រួលប្រើបន្ត។",
-      description: [
-        { type: "heading", text: "បញ្ហាដែលត្រូវដោះស្រាយ" },
-        {
-          type: "paragraph",
-          text:
-            "ក្រុមការងារត្រូវការវិធីសាស្ត្រដែលច្បាស់លាស់សម្រាប់រៀបចំ dataset, ពិនិត្យ topology errors, បំពេញ attribute និងរៀបចំទិន្នន័យសម្រាប់ចែករំលែក។",
-        },
-        { type: "heading", text: "លំហូរការងារ" },
-        {
-          type: "paragraph",
-          text:
-            "ការបណ្តុះបណ្តាលបង្ហាញពីការរៀបចំ folder structure, naming convention, geodatabase, topology rules និង quality-control checklist។",
-        },
-      ],
-      outcomes: [
-        "រៀបចំ dataset ឱ្យមានស្តង់ដារច្បាស់លាស់",
-        "រកឃើញ និងកែសម្រួលកំហុស topology",
-        "បង្កើត checklist សម្រាប់ការត្រួតពិនិត្យគុណភាពទិន្នន័យ",
-      ],
-    },
-    en: {
-      title: "GIS Data Management Training Project",
-      excerpt:
-        "A public-sector training project focused on organizing, cleaning, and quality-checking GIS data.",
-      overview:
-        "This project improves data management workflows so spatial data becomes more accurate, standardized, and reusable.",
-      description: [
-        { type: "heading", text: "Problem to Solve" },
-        {
-          type: "paragraph",
-          text:
-            "The team needed a clearer method for organizing datasets, checking topology errors, completing attributes, and preparing data for sharing.",
-        },
-        { type: "heading", text: "Workflow" },
-        {
-          type: "paragraph",
-          text:
-            "The training introduces folder structures, naming conventions, geodatabases, topology rules, and quality-control checklists.",
-        },
-      ],
-      outcomes: [
-        "Organize datasets with clear standards",
-        "Find and correct topology errors",
-        "Create a checklist for GIS data quality control",
-      ],
-    },
-  },
-  {
-    slug: "remote-sensing-and-mapping-workshop",
-    status: "completed",
-    category: "organization-training",
-    coverImage: "/gallery/12.jpg",
-    dateRange: "2023",
-    location: "Cambodia",
-    partnerOrClient: "Placeholder Training Partner",
-    participantCount: 20,
-    trainingTopics: ["Remote Sensing", "Satellite Imagery", "Land Cover", "Map Layout"],
-    tags: ["remote sensing", "satellite imagery", "mapping", "land cover"],
-    km: {
-      title: "គម្រោងសិក្ខាសាលា Remote Sensing និងការផលិតផែនទី",
-      excerpt:
-        "សិក្ខាសាលាអនុវត្តស្តីពីការប្រើប្រាស់រូបភាពផ្កាយរណប ការបកស្រាយ land cover និងការផលិតផែនទីសម្រាប់ការងារគម្រោង។",
-      overview:
-        "គម្រោងនេះផ្តល់ការណែនាំជាក់ស្តែងដល់អ្នកចូលរួមក្នុងការយល់ពីទិន្នន័យ satellite image និងការប្រើប្រាស់វាសម្រាប់ការវិភាគ និងបង្ហាញលទ្ធផលផែនទី។",
-      description: [
-        { type: "heading", text: "មាតិកាសិក្ខាសាលា" },
-        {
-          type: "paragraph",
-          text:
-            "អ្នកចូលរួមរៀនពីប្រភពរូបភាពផ្កាយរណប ការរៀបចំ image, ការបកស្រាយ land cover និងការបង្កើត map layout សម្រាប់បង្ហាញលទ្ធផល។",
-        },
-        { type: "heading", text: "លទ្ធផលអនុវត្ត" },
-        {
-          type: "paragraph",
-          text:
-            "នៅចុងសិក្ខាសាលា អ្នកចូលរួមអាចរៀបចំផែនទីសាមញ្ញពីរូបភាពផ្កាយរណប និងពន្យល់អំពីលទ្ធផលដែលបានបង្ហាញ។",
-        },
-      ],
-      outcomes: [
-        "យល់ពីប្រភព និងប្រភេទរូបភាពផ្កាយរណប",
-        "អនុវត្តការបកស្រាយ land cover មូលដ្ឋាន",
-        "បង្កើតផែនទីសម្រាប់បង្ហាញលទ្ធផល remote sensing",
-      ],
-    },
-    en: {
-      title: "Remote Sensing and Map Production Workshop",
-      excerpt:
-        "A practical workshop on satellite imagery, land-cover interpretation, and project-ready map production.",
-      overview:
-        "This workshop introduces participants to satellite image data and how to use it for analysis and map-based communication.",
-      description: [
-        { type: "heading", text: "Workshop Content" },
-        {
-          type: "paragraph",
-          text:
-            "Participants learn about satellite imagery sources, image preparation, land-cover interpretation, and map layouts for communicating results.",
-        },
-        { type: "heading", text: "Practical Output" },
-        {
-          type: "paragraph",
-          text:
-            "By the end of the workshop, participants can prepare simple satellite-image maps and explain the information shown in them.",
-        },
-      ],
-      outcomes: [
-        "Understand common satellite imagery sources and types",
-        "Practice basic land-cover interpretation",
-        "Create maps for remote-sensing outputs",
+        "Create and maintain roads, bridges, and logistics infrastructure data",
+        "Apply spatial queries and vector analysis to project monitoring",
+        "Convert GIS features to WKT for database integration",
+        "Produce bilingual maps and dashboard-ready datasets",
       ],
     },
   },
@@ -281,7 +440,9 @@ export function getLocalizedProject(project, language = "km") {
 }
 
 export function getLocalizedProjects(language = "km") {
-  return projects.map((project) => getLocalizedProject(project, language));
+  return [...projects]
+    .sort((a, b) => b.sortDate.localeCompare(a.sortDate))
+    .map((project) => getLocalizedProject(project, language));
 }
 
 export function getProjectBySlug(slug) {
@@ -289,15 +450,27 @@ export function getProjectBySlug(slug) {
 }
 
 export function getRelatedProjects(slug, category, limit = 3) {
-  return projects
-    .filter((project) => project.slug !== slug && project.category === category)
-    .slice(0, limit);
+  const sameCategory = projects.filter(
+    (project) => project.slug !== slug && project.category === category
+  );
+  const otherProjects = projects.filter(
+    (project) => project.slug !== slug && project.category !== category
+  );
+
+  return [...sameCategory, ...otherProjects].slice(0, limit);
 }
 
 export function getProjectStatusLabel(slug, language = "km") {
-  return PROJECT_STATUSES.find((status) => status.slug === slug)?.label?.[language] || slug;
+  return (
+    PROJECT_STATUSES.find((status) => status.slug === slug)?.label?.[language] ||
+    slug
+  );
 }
 
 export function getProjectCategoryLabel(slug, language = "km") {
-  return PROJECT_CATEGORIES.find((category) => category.slug === slug)?.label?.[language] || slug;
+  return (
+    PROJECT_CATEGORIES.find((category) => category.slug === slug)?.label?.[
+      language
+    ] || slug
+  );
 }

@@ -1,36 +1,38 @@
-import { Suspense } from "react";
-import ProjectComingSoon from "../components/ui/Project/ProjectComingSoon";
+import ProjectListing from "../components/ui/Project/ProjectListing";
 
 export const metadata = {
-  title: "Project | Khmer GRS Academy",
+  title: "Professional Training Projects",
   description:
-    "KGA training project portfolio, available for display soon.",
+    "Explore professional GIS training projects delivered by Khmer GRS Academy for government institutions, private companies, and development partners.",
   alternates: {
     canonical: "/project",
   },
   openGraph: {
-    title: "Project | Khmer GRS Academy",
+    title: "Professional Training Projects | Khmer GRS Academy",
     description:
-      "KGA training project portfolio, available for display soon.",
+      "Explore professional GIS training projects delivered by Khmer GRS Academy for government institutions, private companies, and development partners.",
     url: "/project",
     siteName: "Khmer GRS Academy",
-    images: [{ url: "/cta-image.jpg", alt: "Khmer GRS Academy Project Portfolio" }],
+    images: [
+      {
+        url: "/kga_training_project/MoSVY_Training_pictures/photo_2026-07-29_14-45-50.jpg",
+        alt: "Khmer GRS Academy professional GIS training",
+      },
+    ],
     locale: "km_KH",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Project | Khmer GRS Academy",
+    title: "Professional Training Projects | Khmer GRS Academy",
     description:
-      "KGA training project portfolio, available for display soon.",
-    images: ["/cta-image.jpg"],
+      "Explore professional GIS training projects delivered by Khmer GRS Academy.",
+    images: [
+      "/kga_training_project/MoSVY_Training_pictures/photo_2026-07-29_14-45-50.jpg",
+    ],
   },
 };
 
 export default function ProjectPage() {
-  return (
-    <Suspense fallback={null}>
-      <ProjectComingSoon />
-    </Suspense>
-  );
+  return <ProjectListing />;
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { m } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
 import { useLanguage } from "../../LanguageProvider";
@@ -12,6 +11,7 @@ import {
   getProjectStatusLabel,
   getRelatedProjects,
 } from "../../../project/_data/projects";
+import ProjectCover from "./ProjectCover";
 
 const statusStyles = {
   current: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",
@@ -19,10 +19,16 @@ const statusStyles = {
 };
 
 const categoryStyles = {
-  "gis-foundation": "bg-brand-blue/15 text-brand-blue dark:text-blue-300 border-brand-blue/30 dark:border-blue-300/30",
-  "professional-gis": "bg-purple-500/15 text-purple-500 dark:text-purple-300 border-purple-500/30",
-  "data-management": "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",
-  "organization-training": "bg-red-500/15 text-red-500 border-red-500/30",
+  "social-affairs":
+    "border-sky-300/50 bg-sky-50/90 text-sky-700 dark:border-sky-300/25 dark:bg-sky-400/15 dark:text-sky-200",
+  agriculture:
+    "border-green-300/50 bg-green-50/90 text-green-700 dark:border-green-300/25 dark:bg-green-400/15 dark:text-green-200",
+  "land-administration":
+    "border-violet-300/50 bg-violet-50/90 text-violet-700 dark:border-violet-300/25 dark:bg-violet-400/15 dark:text-violet-200",
+  infrastructure:
+    "border-amber-300/50 bg-amber-50/90 text-amber-700 dark:border-amber-300/25 dark:bg-amber-400/15 dark:text-amber-200",
+  logistics:
+    "border-cyan-300/50 bg-cyan-50/90 text-cyan-700 dark:border-cyan-300/25 dark:bg-cyan-400/15 dark:text-cyan-200",
 };
 
 const ProjectDetail = ({ slug }) => {
@@ -54,6 +60,15 @@ const ProjectDetail = ({ slug }) => {
   const related = getRelatedProjects(project.slug, project.category, 3).map((item) =>
     getLocalizedProject(item, language)
   );
+  const summaryItems = [
+    project.dateRange,
+    project.location,
+    `${project.participantCount} ${
+      isEnglish ? "participants" : "អ្នកចូលរួម"
+    }`,
+    project.deliveryModeLabel,
+    project.software,
+  ].filter(Boolean);
 
   return (
     <main key={language} data-language-switch className="pt-24 md:pt-32">
@@ -78,15 +93,11 @@ const ProjectDetail = ({ slug }) => {
               data-language-switch
             >
               <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-6 bg-brand-blue/5 dark:bg-white/5 border border-brand-blue/8 dark:border-white/8">
-                {project.coverImage && (
-                  <Image
-                    src={project.coverImage}
-                    alt={project.title}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                )}
+                <ProjectCover
+                  project={project}
+                  priority
+                  sizes="(min-width: 1024px) 70vw, 100vw"
+                />
                 <span
                   className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-full border backdrop-blur-md ${categoryStyles[project.category]}`}
                 >
@@ -104,11 +115,12 @@ const ProjectDetail = ({ slug }) => {
               </h1>
 
               <div className="flex flex-wrap items-center gap-3 text-sm text-brand-text/50 dark:text-gray-500 font-body mb-6">
-                <span>{project.dateRange}</span>
-                <span>•</span>
-                <span>{project.location}</span>
-                <span>•</span>
-                <span>{project.participantCount} {isEnglish ? "participants" : "អ្នកចូលរួម"}</span>
+                {summaryItems.map((item, index) => (
+                  <span key={item} className="inline-flex items-center gap-3">
+                    {index > 0 ? <span aria-hidden="true">•</span> : null}
+                    <span>{item}</span>
+                  </span>
+                ))}
               </div>
 
               <p className="text-base md:text-lg text-brand-text/70 dark:text-gray-300 leading-relaxed font-body mb-8">
@@ -201,18 +213,22 @@ const ProjectDetail = ({ slug }) => {
                       {getProjectCategoryLabel(project.category, language)}
                     </dd>
                   </div>
-                  <div>
-                    <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Period" : "រយៈពេល"}</dt>
-                    <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
-                      {project.dateRange}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Location" : "ទីតាំង"}</dt>
-                    <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
-                      {project.location}
-                    </dd>
-                  </div>
+                  {project.dateRange ? (
+                    <div>
+                      <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Period" : "រយៈពេល"}</dt>
+                      <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                        {project.dateRange}
+                      </dd>
+                    </div>
+                  ) : null}
+                  {project.location ? (
+                    <div>
+                      <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Location" : "ទីតាំង"}</dt>
+                      <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                        {project.location}
+                      </dd>
+                    </div>
+                  ) : null}
                   <div>
                     <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Partner / Client" : "ដៃគូ / អតិថិជន"}</dt>
                     <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
@@ -225,6 +241,26 @@ const ProjectDetail = ({ slug }) => {
                       {project.participantCount}
                     </dd>
                   </div>
+                  <div>
+                    <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Delivery" : "ទម្រង់"}</dt>
+                    <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                      {project.deliveryModeLabel}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Software" : "កម្មវិធី"}</dt>
+                    <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                      {project.software}
+                    </dd>
+                  </div>
+                  {project.fundingAgency ? (
+                    <div>
+                      <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Funding Agency" : "ស្ថាប័នផ្តល់ថវិកា"}</dt>
+                      <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                        {project.fundingAgency}
+                      </dd>
+                    </div>
+                  ) : null}
                 </dl>
               </div>
 
@@ -260,14 +296,10 @@ const ProjectDetail = ({ slug }) => {
                     className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 overflow-hidden group flex flex-col"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden bg-brand-blue/5 dark:bg-white/5">
-                      {item.coverImage && (
-                        <Image
-                          src={item.coverImage}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      )}
+                      <ProjectCover
+                        project={item}
+                        imageClassName="transition-transform duration-500 group-hover:scale-105"
+                      />
                       <span
                         className={`absolute top-3 left-3 text-xs font-display font-600 px-2.5 py-1 rounded-full border backdrop-blur-md ${categoryStyles[item.category]}`}
                       >
@@ -279,7 +311,7 @@ const ProjectDetail = ({ slug }) => {
                         {item.title}
                       </h4>
                       <p className="text-xs text-brand-text/50 dark:text-gray-500 font-body">
-                        {item.dateRange} • {item.participantCount} {isEnglish ? "participants" : "អ្នកចូលរួម"}
+                        {item.software} • {item.participantCount} {isEnglish ? "participants" : "អ្នកចូលរួម"}
                       </p>
                     </div>
                   </Link>

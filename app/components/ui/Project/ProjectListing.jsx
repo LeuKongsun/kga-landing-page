@@ -1,336 +1,216 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Clock } from "lucide-react";
-import { m, AnimatePresence } from "framer-motion";
+import {
+  ArrowRight,
+  Building2,
+  CalendarDays,
+  Laptop,
+  Users,
+} from "lucide-react";
+import { m } from "framer-motion";
 import SectionWrapper from "../../SectionWrapper";
 import { useLanguage } from "../../LanguageProvider";
 import {
-  PROJECT_CATEGORIES,
-  PROJECT_STATUSES,
   getLocalizedProjects,
   getProjectCategoryLabel,
   getProjectStatusLabel,
   projects,
 } from "../../../project/_data/projects";
-
-const statusStyles = {
-  current: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",
-  completed: "bg-brand-blue/15 text-brand-blue dark:text-blue-300 border-brand-blue/30 dark:border-blue-300/30",
-};
+import ProjectCover from "./ProjectCover";
 
 const categoryStyles = {
-  "gis-foundation": "bg-brand-blue/15 text-brand-blue dark:text-blue-300 border-brand-blue/30 dark:border-blue-300/30",
-  "professional-gis": "bg-purple-500/15 text-purple-500 dark:text-purple-300 border-purple-500/30",
-  "data-management": "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",
-  "organization-training": "bg-red-500/15 text-red-500 border-red-500/30",
+  "social-affairs":
+    "border-sky-300/50 bg-sky-50/90 text-sky-700 dark:border-sky-300/25 dark:bg-sky-400/15 dark:text-sky-200",
+  agriculture:
+    "border-green-300/50 bg-green-50/90 text-green-700 dark:border-green-300/25 dark:bg-green-400/15 dark:text-green-200",
+  "land-administration":
+    "border-violet-300/50 bg-violet-50/90 text-violet-700 dark:border-violet-300/25 dark:bg-violet-400/15 dark:text-violet-200",
+  infrastructure:
+    "border-amber-300/50 bg-amber-50/90 text-amber-700 dark:border-amber-300/25 dark:bg-amber-400/15 dark:text-amber-200",
+  logistics:
+    "border-cyan-300/50 bg-cyan-50/90 text-cyan-700 dark:border-cyan-300/25 dark:bg-cyan-400/15 dark:text-cyan-200",
 };
-
-const availabilityMessage = "Available for display soon.";
 
 const ProjectListing = () => {
   const { language } = useLanguage();
   const isEnglish = language === "en";
-  const localizedProjects = useMemo(() => getLocalizedProjects(language), [language]);
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [activeStatus, setActiveStatus] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredProjects = useMemo(() => {
-    let result = localizedProjects;
-    if (activeCategory !== "all") result = result.filter((project) => project.category === activeCategory);
-    if (activeStatus !== "all") result = result.filter((project) => project.status === activeStatus);
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (project) =>
-          project.title.toLowerCase().includes(q) ||
-          project.excerpt.toLowerCase().includes(q) ||
-          project.partnerOrClient.toLowerCase().includes(q) ||
-          project.trainingTopics.some((topic) => topic.toLowerCase().includes(q)) ||
-          project.tags.some((tag) => tag.toLowerCase().includes(q))
-      );
-    }
-    return result;
-  }, [activeCategory, activeStatus, localizedProjects, searchQuery]);
-
+  const localizedProjects = getLocalizedProjects(language);
+  const participantTotal = projects.reduce(
+    (sum, project) => sum + project.participantCount,
+    0
+  );
+  const platformTotal = new Set(projects.map((project) => project.software)).size;
   const overviewStats = [
-    [isEnglish ? "Projects" : "គម្រោង", projects.length],
-    [isEnglish ? "Training Areas" : "ផ្នែកបណ្តុះបណ្តាល", PROJECT_CATEGORIES.length - 1],
-    [isEnglish ? "Participants" : "អ្នកចូលរួម", `${projects.reduce((sum, project) => sum + project.participantCount, 0)}+`],
+    [isEnglish ? "Training Projects" : "គម្រោងបណ្តុះបណ្តាល", projects.length],
+    [isEnglish ? "Participants" : "អ្នកចូលរួម", participantTotal],
+    [isEnglish ? "GIS Platforms" : "កម្មវិធី GIS", platformTotal],
   ];
 
   return (
-    <main key={language} data-language-switch className="pt-24 md:pt-32">
+    <main key={language} data-language-switch className="pt-24 pb-20 md:pt-32">
       <SectionWrapper>
-        <div className="flex flex-col items-center">
-          <m.div
+        <div className="custom-screen">
+          <m.header
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-10 max-w-3xl px-4"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto max-w-3xl px-4 text-center"
           >
-            <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-full bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
+            <span className="inline-block rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase text-brand-orange">
               {isEnglish ? "Project" : "គម្រោង"}
             </span>
-            <h1 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">
-              {isEnglish ? "Training Projects by KGA" : "គម្រោងបណ្តុះបណ្តាលរបស់ KGA"}
-            </h1>
-            <div className="w-16 h-1.5 bg-brand-orange mx-auto rounded-full mb-6"></div>
-            <p className="text-base md:text-lg text-brand-text/60 dark:text-gray-400 leading-relaxed font-body">
+            <h1 className="mt-5 text-3xl font-display font-800 leading-[1.4] text-brand-text dark:text-white md:text-5xl">
               {isEnglish
-                ? "An overview of current and previous training projects delivered by Khmer GRS Academy for students, professionals, and organizations."
-                : "ទំព័រនេះបង្ហាញសេចក្តីសង្ខេបអំពីគម្រោងបណ្តុះបណ្តាលដែល Khmer GRS Academy បាន និងកំពុងផ្តល់ជូនសិស្ស អ្នកជំនាញ និងអង្គការផ្សេងៗ។"}
+                ? "Professional Training Projects"
+                : "គម្រោងបណ្តុះបណ្តាលវិជ្ជាជីវៈ"}
+            </h1>
+            <div className="mx-auto mt-5 h-1.5 w-16 rounded-full bg-brand-orange" />
+            <p className="mt-6 text-base font-body leading-relaxed text-brand-text/65 dark:text-gray-300 md:text-lg">
+              {isEnglish
+                ? "Explore GIS training delivered by Khmer GRS Academy for government institutions, private companies, and development partners."
+                : "ស្វែងយល់ពីការបណ្តុះបណ្តាល GIS ដែល Khmer GRS Academy បានផ្តល់ជូនស្ថាប័នរដ្ឋ ក្រុមហ៊ុនឯកជន និងដៃគូអភិវឌ្ឍន៍។"}
             </p>
-          </m.div>
+          </m.header>
 
-          <div className="custom-screen w-full mb-10">
-            <div className="grid gap-3 sm:grid-cols-3">
-              {overviewStats.map(([label, value]) => (
-                <div
-                  key={label}
-                  className="rounded-2xl border border-brand-blue/8 bg-white p-5 text-center dark:border-white/8 dark:bg-white/5"
+          <m.dl
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.08 }}
+            className="mx-auto mt-10 grid max-w-4xl grid-cols-3 border-y border-brand-blue/10 py-5 dark:border-white/10"
+          >
+            {overviewStats.map(([label, value], index) => (
+              <div
+                key={label}
+                className={`px-2 text-center ${
+                  index > 0 ? "border-l border-brand-blue/10 dark:border-white/10" : ""
+                }`}
+              >
+                <dd className="text-2xl font-display font-900 text-brand-text dark:text-white md:text-3xl">
+                  {value}
+                </dd>
+                <dt className="mt-1 text-xs font-display font-700 text-brand-text/50 dark:text-gray-400 md:text-sm">
+                  {label}
+                </dt>
+              </div>
+            ))}
+          </m.dl>
+
+          <section
+            aria-label={isEnglish ? "Training projects" : "គម្រោងបណ្តុះបណ្តាល"}
+            className="mt-12"
+          >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {localizedProjects.map((project, index) => (
+                <m.article
+                  key={project.slug}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  data-language-switch
+                  className="min-w-0"
                 >
-                  <div className="text-2xl font-display font-900 text-brand-text dark:text-white">
-                    {value}
-                  </div>
-                  <div className="mt-1 text-xs font-display font-700 uppercase tracking-wider text-brand-text/45 dark:text-gray-500">
-                    {label}
-                  </div>
-                </div>
+                  <Link
+                    href={`/project/${project.slug}`}
+                    aria-label={`${isEnglish ? "View details for" : "មើលព័ត៌មានលម្អិតអំពី"} ${project.title}`}
+                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-blue/10 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-brand-orange/30 hover:shadow-lg hover:shadow-brand-blue/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 dark:border-white/10 dark:bg-white/5 dark:hover:border-brand-orange/40 dark:hover:shadow-black/20"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-brand-blue/5 dark:bg-white/5">
+                      <ProjectCover
+                        project={project}
+                        imageClassName="transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <span
+                        className={`absolute left-3 top-3 rounded-full border px-2.5 py-1 text-xs font-display font-700 backdrop-blur-md ${
+                          categoryStyles[project.category]
+                        }`}
+                      >
+                        {getProjectCategoryLabel(project.category, language)}
+                      </span>
+                      <span className="absolute right-3 top-3 rounded-md border border-white/40 bg-brand-blue/80 px-2.5 py-1 text-xs font-display font-700 text-white backdrop-blur-md dark:border-white/20">
+                        {getProjectStatusLabel(project.status, language)}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-5">
+                      <div className="flex items-center justify-between gap-3 text-xs font-display font-700">
+                        <span className="inline-flex items-center gap-2 text-brand-orange">
+                          <Laptop
+                            className="h-4 w-4 flex-none"
+                            aria-hidden="true"
+                          />
+                          <span>{project.software}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 text-brand-text/50 dark:text-gray-400">
+                          <CalendarDays
+                            className="h-4 w-4 flex-none"
+                            aria-hidden="true"
+                          />
+                          <span>{project.dateRange}</span>
+                        </span>
+                      </div>
+
+                      <h2 className="mt-3 line-clamp-2 text-lg font-display font-800 leading-[1.45] text-brand-text transition-colors group-hover:text-brand-orange dark:text-white">
+                        {project.title}
+                      </h2>
+
+                      <p className="mt-3 line-clamp-2 text-sm font-body leading-relaxed text-brand-text/60 dark:text-gray-400">
+                        {project.excerpt}
+                      </p>
+
+                      <div className="mt-5 space-y-3 border-t border-brand-blue/8 pt-4 text-sm dark:border-white/8">
+                        <div className="flex items-start gap-2.5">
+                          <Building2
+                            className="mt-0.5 h-4 w-4 flex-none text-brand-text/40 dark:text-gray-500"
+                            aria-hidden="true"
+                          />
+                          <div className="min-w-0">
+                            <p className="text-xs font-body text-brand-text/40 dark:text-gray-500">
+                              {isEnglish ? "Client" : "អតិថិជន"}
+                            </p>
+                            <p className="line-clamp-2 font-display font-600 leading-snug text-brand-text/75 dark:text-gray-300">
+                              {project.partnerOrClient}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center gap-2">
+                            <Users
+                              className="h-4 w-4 flex-none text-brand-text/40 dark:text-gray-500"
+                              aria-hidden="true"
+                            />
+                            <div>
+                              <p className="text-xs font-body text-brand-text/40 dark:text-gray-500">
+                                {isEnglish ? "Participants" : "អ្នកចូលរួម"}
+                              </p>
+                              <p className="font-display font-700 text-brand-text/80 dark:text-gray-300">
+                                {project.participantCount}
+                              </p>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-xs font-body text-brand-text/40 dark:text-gray-500">
+                              {isEnglish ? "Delivery" : "ទម្រង់"}
+                            </p>
+                            <p className="font-display font-700 text-brand-text/80 dark:text-gray-300">
+                              {project.deliveryModeLabel}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-4 py-2.5 text-sm font-display font-700 text-white shadow-sm shadow-brand-orange/20 transition-colors group-hover:bg-brand-orange/90">
+                        {isEnglish ? "Details" : "មើលព័ត៌មានលម្អិត"}
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </Link>
+                </m.article>
               ))}
             </div>
-          </div>
-
-          <div className="custom-screen w-full mb-4">
-            <div className="flex flex-wrap justify-center gap-2 md:gap-3">
-              {PROJECT_CATEGORIES.map((category) => {
-                const isActive = activeCategory === category.slug;
-                return (
-                  <button
-                    key={category.slug}
-                    type="button"
-                    onClick={() => setActiveCategory(category.slug)}
-                    className={`px-4 md:px-5 py-2 rounded-full text-sm font-display font-600 transition-all ${
-                      isActive
-                        ? "bg-brand-orange text-white shadow-md shadow-brand-orange/20"
-                        : "bg-brand-blue/8 dark:bg-white/5 text-brand-text/70 dark:text-gray-300 hover:bg-brand-blue/15 dark:hover:bg-white/10"
-                    }`}
-                  >
-                    {category.label[language]}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="custom-screen w-full mb-8">
-            <div className="flex flex-wrap justify-center gap-2">
-              {PROJECT_STATUSES.map((status) => {
-                const isActive = activeStatus === status.slug;
-                return (
-                  <button
-                    key={status.slug}
-                    type="button"
-                    onClick={() => setActiveStatus(status.slug)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-display font-600 transition-all border ${
-                      isActive
-                        ? "bg-brand-blue/10 text-brand-blue dark:bg-blue-300/10 dark:text-blue-300 border-brand-blue/30 dark:border-blue-300/30"
-                        : "bg-transparent text-brand-text/50 dark:text-gray-500 border-brand-blue/8 dark:border-white/8 hover:border-brand-blue/30 dark:hover:border-blue-300/30"
-                    }`}
-                  >
-                    {status.label[language]}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="custom-screen w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
-              <aside className="lg:sticky lg:top-28 lg:self-start space-y-6">
-                <div>
-                  <label className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-2 block">
-                    {isEnglish ? "Search" : "ស្វែងរក"}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(event) => setSearchQuery(event.target.value)}
-                      placeholder={isEnglish ? "Search projects..." : "ស្វែងរកគម្រោង..."}
-                      className="w-full px-4 py-2.5 pl-10 text-sm bg-white dark:bg-white/5 border border-brand-blue/8 dark:border-white/8 rounded-xl text-brand-text dark:text-white placeholder:text-brand-text/40 dark:placeholder:text-gray-500 focus:outline-none focus:border-brand-orange/50 transition-colors font-body"
-                    />
-                    <svg
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-text/40 dark:text-gray-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-display font-600 uppercase tracking-wider text-brand-text/40 dark:text-gray-500 mb-3 block">
-                    {isEnglish ? "Project Type" : "ប្រភេទគម្រោង"}
-                  </label>
-                  <ul className="space-y-1">
-                    {PROJECT_CATEGORIES.map((category) => {
-                      const count =
-                        category.slug === "all"
-                          ? projects.length
-                          : projects.filter((project) => project.category === category.slug).length;
-                      const isActive = activeCategory === category.slug;
-                      return (
-                        <li key={category.slug}>
-                          <button
-                            type="button"
-                            onClick={() => setActiveCategory(category.slug)}
-                            className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-body transition-colors ${
-                              isActive
-                                ? "bg-brand-orange/10 text-brand-orange font-display font-600"
-                                : "text-brand-text/70 dark:text-gray-400 hover:bg-brand-blue/8 dark:hover:bg-white/5"
-                            }`}
-                          >
-                            <span>{category.label[language]}</span>
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${isActive ? "bg-brand-orange/20" : "bg-brand-blue/8 dark:bg-white/8"}`}>
-                              {count}
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-blue to-brand-blue/90 dark:from-white/5 dark:to-white/10 border border-brand-blue/20 dark:border-white/8 p-5">
-                  <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-brand-orange/15 blur-2xl"></div>
-                  <div className="relative">
-                    <h4 className="text-base font-display font-700 text-white mb-2">
-                      {isEnglish ? "Need Training?" : "ត្រូវការបណ្តុះបណ្តាល?"}
-                    </h4>
-                    <p className="text-xs text-white/70 mb-4 font-body leading-relaxed">
-                      {isEnglish
-                        ? "Contact KGA to discuss a custom GIS training project for your team."
-                        : "ទាក់ទង KGA ដើម្បីពិភាក្សាគម្រោងបណ្តុះបណ្តាល GIS សម្រាប់ក្រុមការងាររបស់អ្នក។"}
-                    </p>
-                    <Link
-                      href="/contact"
-                      className="inline-flex items-center gap-1.5 text-xs font-display font-600 px-4 py-2 bg-brand-orange text-white rounded-full hover:bg-brand-orange/90 transition-colors"
-                    >
-                      {isEnglish ? "Contact Us" : "ទាក់ទងយើង"}
-                    </Link>
-                  </div>
-                </div>
-              </aside>
-
-              <div id="project-list" className="scroll-mt-28">
-                {filteredProjects.length === 0 ? (
-                  <div className="bg-brand-blue/5 dark:bg-white/5 border border-dashed border-brand-blue/20 dark:border-white/10 rounded-2xl p-12 text-center">
-                    <p className="text-base font-display font-600 text-brand-text/60 dark:text-gray-400 mb-2">
-                      {isEnglish ? "No projects match your search criteria" : "មិនមានគម្រោងត្រូវនឹងលក្ខខណ្ឌស្វែងរក"}
-                    </p>
-                    <p className="text-sm text-brand-text/40 dark:text-gray-500 font-body">
-                      {isEnglish ? "Try changing your search term or filters." : "សូមព្យាយាមផ្លាស់ប្តូរពាក្យស្វែងរក ឬប្រភេទគម្រោង។"}
-                    </p>
-                  </div>
-                ) : (
-                  <AnimatePresence mode="popLayout">
-                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                      {filteredProjects.map((project, idx) => (
-                        <m.article
-                          key={project.slug}
-                          layout
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.4, delay: idx * 0.05 }}
-                          data-language-switch
-                          className="tool-card bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 overflow-hidden group flex flex-col"
-                        >
-                          <Link href={`/project/${project.slug}`} className="block">
-                            <div className="relative aspect-[16/10] overflow-hidden bg-brand-blue/5 dark:bg-white/5">
-                              {project.coverImage && (
-                                <Image
-                                  src={project.coverImage}
-                                  alt={project.title}
-                                  fill
-                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                              )}
-                              <span
-                                className={`absolute top-3 left-3 text-xs font-display font-600 px-2.5 py-1 rounded-full border backdrop-blur-md ${categoryStyles[project.category]}`}
-                              >
-                                {getProjectCategoryLabel(project.category, language)}
-                              </span>
-                              <span
-                                className={`absolute top-3 right-3 text-xs font-display font-600 px-2.5 py-1 rounded-md border backdrop-blur-md ${statusStyles[project.status]}`}
-                              >
-                                {getProjectStatusLabel(project.status, language)}
-                              </span>
-                            </div>
-                          </Link>
-
-                          <div className="p-5 flex flex-col flex-1">
-                            <Link href={`/project/${project.slug}`}>
-                              <h3 className="text-lg font-display font-700 mb-2 text-brand-text dark:text-white leading-snug group-hover:text-brand-orange transition-colors line-clamp-2">
-                                {project.title}
-                              </h3>
-                            </Link>
-
-                            <p className="text-sm text-brand-text/60 dark:text-gray-400 leading-relaxed font-body mb-4 line-clamp-3 flex-1">
-                              {project.excerpt}
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-2 text-xs font-body mb-4 pb-4 border-b border-brand-blue/8 dark:border-white/8">
-                              <div>
-                                <div className="text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Period" : "រយៈពេល"}</div>
-                                <div className="text-brand-text/80 dark:text-gray-300 font-display font-600">
-                                  {project.dateRange}
-                                </div>
-                              </div>
-                              <div>
-                                <div className="text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Participants" : "អ្នកចូលរួម"}</div>
-                                <div className="text-brand-text/80 dark:text-gray-300 font-display font-600">
-                                  {project.participantCount}
-                                </div>
-                              </div>
-                              {project.status !== "current" ? (
-                                <div className="col-span-2">
-                                  <div className="text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Partner / Client" : "ដៃគូ / អតិថិជន"}</div>
-                                  <div className="text-brand-text/80 dark:text-gray-300 font-display font-600 line-clamp-1">
-                                    {project.partnerOrClient}
-                                  </div>
-                                </div>
-                              ) : null}
-                            </div>
-                            {project.status === "current" ? (
-                              <div className="mt-auto inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/15 bg-brand-blue/8 px-6 py-3 text-sm font-display font-700 text-brand-text/65 transition-colors dark:border-white/15 dark:bg-white/5 dark:text-gray-300">
-                                {availabilityMessage}
-                                <Clock className="h-4 w-4" aria-hidden="true" />
-                              </div>
-                            ) : (
-                              <Link
-                                href={`/project/${project.slug}`}
-                                className="mt-auto inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-full bg-brand-orange text-white hover:bg-brand-orange/90 shadow-sm shadow-brand-orange/20 transition-all"
-                              >
-                                {isEnglish ? "Details" : "មើលព័ត៌មានលម្អិត"}
-                              </Link>
-                            )}
-                          </div>
-                        </m.article>
-                      ))}
-                    </div>
-                  </AnimatePresence>
-                )}
-              </div>
-            </div>
-          </div>
+          </section>
         </div>
       </SectionWrapper>
     </main>

@@ -10,13 +10,13 @@ export async function generateMetadata({ params }) {
   const sourceProject = getProjectBySlug(slug);
 
   if (!sourceProject) {
-    return { title: "Project not found | Khmer GRS Academy" };
+    return { title: "Project not found" };
   }
 
   const project = getLocalizedProject(sourceProject, "en");
 
   return {
-    title: `${project.title} | KGA Project`,
+    title: project.title,
     description: project.excerpt,
     alternates: {
       canonical: `/project/${project.slug}`,
