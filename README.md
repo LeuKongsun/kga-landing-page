@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+This project requires Node.js 24. If you use a Node version manager, run `nvm use` or its equivalent before installing dependencies.
+
 First, run the development server:
 
 ```bash

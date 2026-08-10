@@ -2,6 +2,9 @@
   "name": "kga-landing",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "generate:openkga-social": "node scripts/generate-openkga-social-images.mjs",
     "predev": "npm run generate:openkga-social",
