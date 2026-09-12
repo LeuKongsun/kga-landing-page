@@ -1,9 +1,17 @@
 export const programs = [
   {
     id: "toolbox",
-    name: "KGA Toolbox",
+    name: "KGA Toolbox for ArcGIS Pro",
+    // Kept short for the tab selector, which has a fixed-height row.
+    shortName: "KGA Toolbox",
     accent: "Toolbox",
+    // Rendered muted after the accent, so the two Toolbox cards stay distinct
+    // without painting the whole platform name orange.
+    suffix: "for ArcGIS Pro",
     icon: "toolbox",
+    // `logo` wins over `icon` in the selector tab. Square PNG on a
+    // transparent background, so it sits on the tile in either theme.
+    logo: "/images/kga-toolbox-logo.png",
     badge: "ឧបករណ៍ ArcGIS Pro",
     platform: "ArcGIS Pro",
     tagline: "ឧបករណ៍ GIS កម្រិតវិស្វកម្មសម្រាប់ ArcGIS Pro",
@@ -39,14 +47,64 @@ export const programs = [
     ],
     image: "/images/kga-toolbox.png",
     href: "/kga-toolbox",
-    cta: "មើល KGA Toolbox",
-    primaryActionLabel: "មើល KGA Toolbox",
+    cta: "មើល KGA Toolbox for ArcGIS Pro",
+    primaryActionLabel: "មើល KGA Toolbox for ArcGIS Pro",
+  },
+  {
+    id: "toolbox-qgis",
+    name: "KGA Toolbox for QGIS",
+    shortName: "KGA Toolbox (QGIS)",
+    accent: "Toolbox",
+    suffix: "for QGIS",
+    icon: "qgis",
+    logo: "/images/kga-toolbox-qgis-logo.png",
+    badge: "កម្មវិធីជំនួយ QGIS",
+    platform: "QGIS",
+    isFree: true,
+    tagline: "កម្មវិធីជំនួយ QGIS ឥតគិតថ្លៃ ដែលមានឧបករណ៍ ៤១",
+    overview:
+      "KGA Toolbox for QGIS ជាកម្មវិធីជំនួយឥតគិតថ្លៃ ដែលបន្ថែមឧបករណ៍ដំណើរការ ៤១ ទៅក្នុង QGIS សម្រាប់ការគ្រប់គ្រងទិន្នន័យ ស្គីម៉ា ការកែសម្រួល topology និងការបម្លែងទម្រង់ទិន្នន័យ។",
+    description:
+      "កម្មវិធីជំនួយឥតគិតថ្លៃសម្រាប់ QGIS 3.28 ឬថ្មីជាងនេះ ដែលបន្ថែមឧបករណ៍ដំណើរការ ៤១ ជា ៧ ក្រុម ព្រមទាំងរបារឧបករណ៍ដាច់ដោយឡែក។",
+    details:
+      "កម្មវិធីជំនួយនេះបំពេញចន្លោះដែល QGIS មិនទាន់មាន៖ ការបម្លែងទៅវិញទៅមករវាង ArcGIS File Geodatabase និង GeoPackage ដោយរក្សា field domains និង aliases ការកែសម្រួល domain ក្នុង GeoPackage ការ append ជាមួយ field mapping ពិតប្រាកដ ការនាំចេញ-នាំចូលគុណលក្ខណៈជាមួយ Excel និងទម្រង់ layer package ដាច់ដោយឡែក។",
+    features: [
+      "ឧបករណ៍ ៤១ ជា ៧ ក្រុម",
+      "បម្លែង File Geodatabase ↔ GeoPackage",
+      "គ្រប់គ្រង domain និងស្គីម៉ា",
+      "ពិនិត្យ topology និងកំហុសទិន្នន័យ",
+    ],
+    highlights: [
+      {
+        title: "ឥតគិតថ្លៃទាំងស្រុង",
+        description: "ដំឡើងពីឃ្លាំងកម្មវិធីជំនួយ QGIS ដោយមិនគិតថ្លៃ។",
+      },
+      {
+        title: "ធ្វើការជាមួយ ArcGIS បានរលូន",
+        description: "បម្លែង File Geodatabase និង GeoPackage ដោយរក្សា domains និង aliases។",
+      },
+      {
+        title: "ឧបករណ៍កែសម្រួលបែប ArcGIS Pro",
+        description: "Construct Polygon, Copy Parallel, Buffer, Merge, Divide និង Clip។",
+      },
+      {
+        title: "មានឯកសារណែនាំពេញលេញ",
+        description: "ឧបករណ៍នីមួយៗមានទំព័រណែនាំ ភ្ជាប់ដោយផ្ទាល់ពីប៊ូតុង Help ក្នុង QGIS។",
+      },
+    ],
+    // 16:10, so it fits the featured panel exactly; the 16:9 grid card crops a
+    // little off the top and bottom, which the centred QGIS window survives.
+    image: "/images/kga-toolbox-cover.png",
+    href: "/docs/qgis",
+    cta: "មើលឯកសារ KGA Toolbox for QGIS",
+    primaryActionLabel: "មើលឯកសារ KGA Toolbox for QGIS",
   },
   {
     id: "geodigitizer",
     name: "KGA Geodigitizer",
     accent: "Geodigitizer",
     icon: "geodigitizer",
+    logo: "/images/kga-geodigitizer-logo.png",
     badge: "Web-GIS",
     platform: "Web-GIS",
     tagline: "គូសបង្កើតទិន្នន័យ GIS បានលឿន និងងាយស្រួល",

@@ -121,7 +121,33 @@ const TRANSLATION_ENTRIES = [
   ["ពិនិត្យគុណភាពទិន្នន័យ", "Data quality checks"],
   ["ស្វ័យប្រវត្តិកម្មលំហូរការងារ", "Workflow automation"],
   ["ភ្ជាប់ជាមួយ ArcGIS Pro", "ArcGIS Pro integration"],
+  // Kept: older copy elsewhere may still render the short CTA.
   ["មើល KGA Toolbox", "View KGA Toolbox"],
+  ["មើល KGA Toolbox for ArcGIS Pro", "View KGA Toolbox for ArcGIS Pro"],
+
+  // KGA Toolbox for QGIS card. The docs pages themselves opt out of this
+  // walker (data-language-switch) and translate from { km, en } pairs instead;
+  // these entries only cover the program card on / and /program.
+  ["កម្មវិធីជំនួយ QGIS", "QGIS Plugin"],
+  ["ឥតគិតថ្លៃ", "Free"],
+  ["មើលឯកសារ KGA Toolbox for QGIS", "View KGA Toolbox for QGIS Docs"],
+  ["កម្មវិធីជំនួយ QGIS ឥតគិតថ្លៃ ដែលមានឧបករណ៍ ៤១", "A free QGIS plugin with 41 tools"],
+  ["KGA Toolbox for QGIS ជាកម្មវិធីជំនួយឥតគិតថ្លៃ ដែលបន្ថែមឧបករណ៍ដំណើរការ ៤១ ទៅក្នុង QGIS សម្រាប់ការគ្រប់គ្រងទិន្នន័យ ស្គីម៉ា ការកែសម្រួល topology និងការបម្លែងទម្រង់ទិន្នន័យ។", "KGA Toolbox for QGIS is a free plugin that adds 41 processing tools to QGIS for data management, schema, editing, topology and format conversion."],
+  ["កម្មវិធីជំនួយឥតគិតថ្លៃសម្រាប់ QGIS 3.28 ឬថ្មីជាងនេះ ដែលបន្ថែមឧបករណ៍ដំណើរការ ៤១ ជា ៧ ក្រុម ព្រមទាំងរបារឧបករណ៍ដាច់ដោយឡែក។", "A free plugin for QGIS 3.28 or newer that adds 41 processing tools in 7 groups, plus a dedicated toolbar."],
+  ["កម្មវិធីជំនួយនេះបំពេញចន្លោះដែល QGIS មិនទាន់មាន៖ ការបម្លែងទៅវិញទៅមករវាង ArcGIS File Geodatabase និង GeoPackage ដោយរក្សា field domains និង aliases ការកែសម្រួល domain ក្នុង GeoPackage ការ append ជាមួយ field mapping ពិតប្រាកដ ការនាំចេញ-នាំចូលគុណលក្ខណៈជាមួយ Excel និងទម្រង់ layer package ដាច់ដោយឡែក។", "The plugin adds the things QGIS leaves out: a two-way converter between an ArcGIS File Geodatabase and a GeoPackage that carries field domains and aliases across, an editor for GeoPackage domains, an append tool with a real field mapping, a safe attribute round trip to Excel, and a self-contained layer package format."],
+  ["ឧបករណ៍ ៤១ ជា ៧ ក្រុម", "41 tools in 7 groups"],
+  ["បម្លែង File Geodatabase ↔ GeoPackage", "File Geodatabase ↔ GeoPackage conversion"],
+  ["គ្រប់គ្រង domain និងស្គីម៉ា", "Domain and schema management"],
+  ["ពិនិត្យ topology និងកំហុសទិន្នន័យ", "Topology and data error checking"],
+  ["ឥតគិតថ្លៃទាំងស្រុង", "Completely free"],
+  ["ដំឡើងពីឃ្លាំងកម្មវិធីជំនួយ QGIS ដោយមិនគិតថ្លៃ។", "Install from the QGIS Plugin Repository at no charge."],
+  ["ធ្វើការជាមួយ ArcGIS បានរលូន", "Works smoothly with ArcGIS"],
+  ["បម្លែង File Geodatabase និង GeoPackage ដោយរក្សា domains និង aliases។", "Converts between File Geodatabase and GeoPackage, keeping domains and aliases."],
+  ["ឧបករណ៍កែសម្រួលបែប ArcGIS Pro", "ArcGIS Pro-style editing tools"],
+  ["Construct Polygon, Copy Parallel, Buffer, Merge, Divide និង Clip។", "Construct Polygon, Copy Parallel, Buffer, Merge, Divide and Clip."],
+  ["មានឯកសារណែនាំពេញលេញ", "Fully documented"],
+  ["ឧបករណ៍នីមួយៗមានទំព័រណែនាំ ភ្ជាប់ដោយផ្ទាល់ពីប៊ូតុង Help ក្នុង QGIS។", "Every tool has its own page, linked straight from the Help button in QGIS."],
+
   ["គូសបង្កើតទិន្នន័យ GIS បានលឿន និងងាយស្រួល", "Create GIS data quickly and easily"],
   ["Web-GIS សម្រាប់គូសបង្កើតទិន្នន័យ GIS ដូចជា ចំណុច ខ្សែ និងពហុកោណ បានលឿន និងមានភាពងាយស្រួល។", "A Web-GIS application for quickly and easily creating point, line, and polygon data."],
   ["គូសទិន្នន័យបានងាយស្រួល", "Convenient digitizing"],
