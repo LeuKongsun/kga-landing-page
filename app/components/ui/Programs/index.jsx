@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
+  Boxes,
   CheckCircle2,
   Clock3,
   ExternalLink,
@@ -12,6 +13,7 @@ import {
   Map,
   PanelTop,
   Sparkles,
+  Table2,
   Wrench,
 } from "lucide-react";
 import { m } from "framer-motion";
@@ -20,7 +22,9 @@ import { programs } from "./data";
 
 const iconMap = {
   toolbox: Wrench,
+  qgis: Boxes,
   geodigitizer: Map,
+  datacreation: Table2,
   geolayout: PanelTop,
 };
 
@@ -29,12 +33,26 @@ const ProgramTitle = ({ program, className = "" }) => (
     {program.name.startsWith("KGA ") ? (
       <>
         KGA <span className="text-brand-orange">{program.accent}</span>
+        {program.suffix ? (
+          <span className="font-700 text-brand-text/55 dark:text-gray-400"> {program.suffix}</span>
+        ) : null}
       </>
     ) : (
       <>{program.name}</>
     )}
   </span>
 );
+
+// Price is a separate signal from platform, so it gets its own pill rather than
+// being folded into `badge`.
+const FreePill = ({ program, className = "" }) =>
+  program.isFree ? (
+    <span
+      className={`rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-1 text-xs font-display font-600 text-emerald-700 backdrop-blur-md dark:text-emerald-300 ${className}`}
+    >
+      ឥតគិតថ្លៃ
+    </span>
+  ) : null;
 
 const ProgramMedia = ({ program, priority = false, className = "" }) => {
   if (program.image) {
@@ -50,18 +68,24 @@ const ProgramMedia = ({ program, priority = false, className = "" }) => {
     );
   }
 
+  // A missing image is not the same thing as an unreleased program: only the
+  // coming-soon entries get the coming-soon caption and clock.
+  const PlaceholderIcon = program.isComingSoon ? Clock3 : iconMap[program.icon] ?? Layers3;
+
   return (
     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-blue/10 via-white to-brand-orange/10 p-8 dark:from-white/10 dark:via-white/[0.03] dark:to-brand-orange/10">
       <div className="text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-brand-orange/25 bg-brand-orange/10 text-brand-orange">
-          <Clock3 className="h-8 w-8" aria-hidden="true" />
+          <PlaceholderIcon className="h-8 w-8" aria-hidden="true" />
         </div>
         <p className="mt-5 text-xl font-display font-900 text-brand-text dark:text-white">
           {program.name}
         </p>
-        <p className="mt-2 text-sm font-display font-700 text-brand-orange">
-          នឹងមាននៅពេលអនាគត
-        </p>
+        {program.isComingSoon && (
+          <p className="mt-2 text-sm font-display font-700 text-brand-orange">
+            នឹងមាននៅពេលអនាគត
+          </p>
+        )}
       </div>
     </div>
   );
@@ -74,6 +98,7 @@ const ProgramCard = ({ program, index }) => {
       <span className="absolute left-3 top-3 rounded-full border border-brand-orange/30 bg-brand-orange/15 px-2.5 py-1 text-xs font-display font-600 text-brand-orange backdrop-blur-md">
         {program.badge}
       </span>
+      <FreePill program={program} className="absolute right-3 top-3" />
     </div>
   );
 
@@ -180,14 +205,31 @@ const SelectorCard = ({ program, index, active, onSelect, onKeyDown, buttonRef }
             : "border-brand-blue/10 bg-brand-blue/5 text-brand-text/70 group-hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
         }`}
       >
-        <Icon className="h-6 w-6" aria-hidden="true" />
+        {/* A product with its own logo shows it instead of the generic lucide
+            glyph; the logos are full colour, so they ignore the tile's text
+            colour but still sit on its tint. */}
+        {program.logo ? (
+          <Image
+            src={program.logo}
+            alt=""
+            width={40}
+            height={40}
+            className="h-10 w-10 object-contain"
+            aria-hidden="true"
+          />
+        ) : (
+          <Icon className="h-6 w-6" aria-hidden="true" />
+        )}
       </span>
       <span className="min-w-0">
+        {/* shortName keeps the longer product names off a third line in this
+            fixed-height tab. */}
         <span className="block text-base font-display font-800 text-brand-text dark:text-white md:text-lg">
-          {program.name}
+          {program.shortName || program.name}
         </span>
-        <span className="mt-1 block text-sm leading-relaxed text-brand-text/60 dark:text-gray-400">
+        <span className="mt-1 flex flex-wrap items-center gap-2 text-sm leading-relaxed text-brand-text/60 dark:text-gray-400">
           {program.platform}
+          <FreePill program={program} />
         </span>
       </span>
     </button>
@@ -274,11 +316,14 @@ function ProgramShowcase() {
                     កំពុងមើល
                   </p>
                   <p className="mt-1 text-xl font-display font-800 text-brand-text dark:text-white">
-                    {activeProgram.name}
+                    {activeProgram.shortName || activeProgram.name}
                   </p>
                 </div>
-                <span className="rounded-full border border-brand-orange/30 bg-brand-orange/10 px-3 py-1.5 text-sm font-display font-700 text-brand-orange">
-                  {activeProgram.badge}
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full border border-brand-orange/30 bg-brand-orange/10 px-3 py-1.5 text-sm font-display font-700 text-brand-orange">
+                    {activeProgram.badge}
+                  </span>
+                  <FreePill program={activeProgram} />
                 </span>
               </div>
             </div>
@@ -323,10 +368,11 @@ function ProgramShowcase() {
                 <span className="text-sm text-brand-text/55 dark:text-gray-400">
                   {activeProgram.badge}
                 </span>
+                <FreePill program={activeProgram} />
               </div>
 
               <h2 className="mt-5 text-3xl font-display font-900 leading-tight text-brand-text dark:text-white md:text-4xl">
-                {activeProgram.name}
+                <ProgramTitle program={activeProgram} />
               </h2>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-brand-text/70 dark:text-gray-300 md:text-lg">
                 {activeProgram.details}
@@ -356,7 +402,7 @@ function ProgramShowcase() {
                 ទៅកាន់កម្មវិធី
               </p>
               <h3 className="mt-4 text-2xl font-display font-900 text-brand-text dark:text-white">
-                {activeProgram.name}
+                <ProgramTitle program={activeProgram} />
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-brand-text/65 dark:text-gray-300">
                 {activeProgram.overview}
