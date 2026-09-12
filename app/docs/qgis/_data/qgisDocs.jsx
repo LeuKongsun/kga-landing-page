@@ -78,9 +78,11 @@ export const PLUGIN = {
   ],
   links: {
     pluginRepo: "https://plugins.qgis.org/plugins/kga_tools/",
-    github: "https://github.com/khmergrs/kga-toolbox",
-    releases: "https://github.com/khmergrs/kga-toolbox/releases",
-    issues: "https://github.com/khmergrs/kga-toolbox/issues",
+    // The repo the plugin's own metadata.txt declares as `repository` and
+    // `tracker`, so the page and the plugin point at the same place.
+    github: "https://github.com/sophon-pro/KGAToolbox-QGIS",
+    releases: "https://github.com/sophon-pro/KGAToolbox-QGIS/releases",
+    issues: "https://github.com/sophon-pro/KGAToolbox-QGIS/issues",
   },
   install: [
     { km: "បើក QGIS ហើយចូលទៅ Plugins ▸ Manage and Install Plugins…", en: "Open QGIS and go to Plugins ▸ Manage and Install Plugins…" },
