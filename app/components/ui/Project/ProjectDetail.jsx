@@ -153,19 +153,44 @@ const ProjectDetail = ({ slug }) => {
                 })}
               </div>
 
-              {project.outcomes?.length > 0 && (
+              {project.objectives?.length > 0 && (
                 <div className="mb-10 rounded-2xl border border-brand-blue/8 bg-brand-blue/5 p-6 dark:border-white/8 dark:bg-white/5">
                   <h2 className="text-xl font-display font-800 text-brand-text dark:text-white mb-4">
-                    {isEnglish ? "Training Outcomes" : "លទ្ធផលបណ្តុះបណ្តាល"}
+                    {isEnglish
+                      ? "Objectives of the Training"
+                      : "គោលបំណងនៃការបណ្តុះបណ្តាល"}
                   </h2>
                   <ul className="space-y-3">
-                    {project.outcomes.map((outcome) => (
-                      <li key={outcome} className="flex items-start gap-3 text-sm text-brand-text/70 dark:text-gray-300">
+                    {project.objectives.map((objective) => (
+                      <li key={objective} className="flex items-start gap-3 text-sm text-brand-text/70 dark:text-gray-300 leading-relaxed">
                         <span className="mt-1.5 h-2 w-2 rounded-full bg-brand-orange flex-shrink-0"></span>
-                        <span>{outcome}</span>
+                        <span>{objective}</span>
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {project.modules?.length > 0 && (
+                <div className="mb-10">
+                  <h2 className="text-xl font-display font-800 text-brand-text dark:text-white mb-4">
+                    {isEnglish ? "Training Modules" : "មុខវិជ្ជាបណ្តុះបណ្តាល"}
+                  </h2>
+                  <ol className="grid gap-3 sm:grid-cols-2">
+                    {project.modules.map((moduleName, index) => (
+                      <li
+                        key={moduleName}
+                        className="flex items-start gap-3 rounded-xl border border-brand-blue/8 bg-white p-4 dark:border-white/8 dark:bg-white/5"
+                      >
+                        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-orange/10 text-xs font-display font-700 text-brand-orange">
+                          {index + 1}
+                        </span>
+                        <span className="text-sm font-display font-600 text-brand-text/80 dark:text-gray-300 leading-relaxed">
+                          {moduleName}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
               )}
 
@@ -229,12 +254,28 @@ const ProjectDetail = ({ slug }) => {
                       </dd>
                     </div>
                   ) : null}
+                  {project.trainer ? (
+                    <div>
+                      <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Trainer" : "គ្រូបណ្តុះបណ្តាល"}</dt>
+                      <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                        {project.trainer}
+                      </dd>
+                    </div>
+                  ) : null}
                   <div>
                     <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Partner / Client" : "ដៃគូ / អតិថិជន"}</dt>
                     <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
                       {project.partnerOrClient}
                     </dd>
                   </div>
+                  {project.clientRepresentative ? (
+                    <div>
+                      <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Represented By" : "តំណាងដោយ"}</dt>
+                      <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
+                        {project.clientRepresentative}
+                      </dd>
+                    </div>
+                  ) : null}
                   <div>
                     <dt className="text-xs text-brand-text/40 dark:text-gray-500 mb-0.5">{isEnglish ? "Participants" : "អ្នកចូលរួម"}</dt>
                     <dd className="text-brand-text/80 dark:text-gray-300 font-display font-600">
