@@ -42,6 +42,7 @@ const coursesLinks = [
 
 const productLinks = [
   { label: "KGA Toolbox", href: "https://toolbox.khmergrs.com", external: true },
+  { label: "ArcGIS Pro Docs", href: "/docs/arcgis" },
   { label: "QGIS Plugin Docs", href: "/docs/qgis" },
   { label: "Blog", href: "/blog" },
   { label: "Our Students", href: "/our-student" },

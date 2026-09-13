@@ -6,23 +6,9 @@
 // Every docs root carries `data-language-switch` so the walker skips it, and the
 // content is rendered from { km, en } pairs through `t()` instead.
 
-/**
- * Resolve a content field for the active language.
- *
- * A field is either a language-neutral plain string (tool names, QGIS parameter
- * labels, CRS codes) or a { km, en } pair. The fallback chain ends at `en` on
- * purpose: body copy transcribed from the plugin starts out English-only, and
- * showing it in English beats showing an empty paragraph while the Khmer is
- * still being written.
- */
-export const t = (value, lang = "km") => {
-  if (typeof value === "string") return value;
-  if (!value) return "";
-  // Deliberately `||`, not `??`: an unwritten translation is stored as "", and
-  // an empty string has to fall through to the next language rather than
-  // rendering an empty paragraph.
-  return value[lang] || value.en || value.km || "";
-};
+// `t()` is shared with /docs/arcgis and lives in components/ui/docsLang.js.
+// Re-exported here so every existing `from "../_data/ui"` import still resolves.
+export { t } from "../../../components/ui/docsLang";
 
 export const UI = {
   docsTitle: { km: "ឯកសារណែនាំ KGA Toolbox for QGIS", en: "KGA Toolbox for QGIS Documentation" },

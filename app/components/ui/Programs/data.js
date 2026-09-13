@@ -148,6 +148,7 @@ export const programs = [
     name: "GeoLayout Studio",
     accent: "GeoLayout Studio",
     icon: "geolayout",
+    logo: "/images/kga-geolayout-studio-logo.png",
     badge: "Web-GIS",
     platform: "Web-GIS",
     tagline: "នឹងមាននៅពេលអនាគត",
