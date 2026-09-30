@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/proj4@2.11.0/dist/proj4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://unpkg.com/@mapbox/shp-write@0.4.3/shpwrite.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+<style>
+  body { margin: 0; background: #0F2347; font-family: 'Hanuman', 'Noto Sans Khmer', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #FF6434; text-decoration: none; }
+  a:hover { color: #E8551F; }
+  .leaflet-container { font-family: inherit; background: #E9EDF3; }
+</style>
+</helmet>
+<div style="display:flex;flex-direction:column;height:100vh;background:#F5F7FA;color:#1E2F4F;overflow:hidden">
+
+  <header style="display:flex;align-items:center;gap:16px;flex-shrink:0;height:60px;padding:0 20px;background:#0F2347;color:#fff;border-bottom:1px solid rgba(255,255,255,0.08)">
+    <a href="Program.dc.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:rgba(255,255,255,0.65)">← {{ t.back }}</a>
+    <div style="width:1px;height:24px;background:rgba(255,255,255,0.15)"></div>
+    <div style="display:flex;align-items:baseline;gap:8px">
+      <span style="font-size:18px;font-weight:900;letter-spacing:-0.01em"><span style="color:#FF6434">KGA</span> Data Creation</span>
+      <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.45)">{{ t.subtitle }}</span>
+    </div>
+    <div style="flex:1"></div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4)">{{ libStatus }}</span>
+    <div style="display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(255,255,255,0.08)">
+      <button type="button" onClick="{{ setKh }}" style="border:0;cursor:pointer;border-radius:999px;padding:5px 14px;font-family:inherit;font-size:12px;font-weight:700;background:{{ khBg }};color:{{ khFg }}">ខ្មែរ</button>
+      <button type="button" onClick="{{ setEn }}" style="border:0;cursor:pointer;border-radius:999px;padding:5px 14px;font-family:inherit;font-size:12px;font-weight:700;background:{{ enBg }};color:{{ enFg }}">EN</button>
+    </div>
+  </header>
+
+  <div style="display:flex;flex:1;min-height:0">
+
+    <aside style="width:372px;flex-shrink:0;overflow-y:auto;background:#fff;border-right:1px solid rgba(36,76,143,0.1);padding:20px;display:flex;flex-direction:column;gap:22px">
+
+      <section>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="display:flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#FF6434;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">1</span>
+          <h2 style="margin:0;font-size:14px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.s1 }}</h2>
+        </div>
+        <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:1.5px dashed rgba(36,76,143,0.25);border-radius:12px;padding:20px 12px;background:rgba(36,76,143,0.03);text-align:center">
+          <span style="font-size:22px;color:#FF6434">⬆</span>
+          <span style="font-size:13px;font-weight:700;color:#1E2F4F">{{ t.pickCsv }}</span>
+          <span style="font-size:11px;color:rgba(30,47,79,0.5)">{{ t.csvHint }}</span>
+          <input type="file" accept=".csv,text/csv" onChange="{{ onFile }}" style="display:none" />
+        </label>
+        <sc-if value="{{ fileName }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;display:flex;justify-content:space-between;gap:8px;border-radius:10px;background:rgba(36,76,143,0.05);padding:10px 12px;font-size:12px">
+            <span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#1E2F4F">{{ fileName }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;color:#FF6434;flex-shrink:0">{{ rowCountLabel }}</span>
+          </div>
+        </sc-if>
+      </section>
+
+      <section>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="display:flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#FF6434;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">2</span>
+          <h2 style="margin:0;font-size:14px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.s2 }}</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <label style="display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:11px;font-weight:700;color:rgba(30,47,79,0.55)">{{ t.xField }}</span>
+            <select value="{{ xField }}" onChange="{{ onX }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
+              <option value="">—</option>
+              <sc-for list="{{ headers }}" as="h" hint-placeholder-count="0"><option value="{{ h }}">{{ h }}</option></sc-for>
+            </select>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:11px;font-weight:700;color:rgba(30,47,79,0.55)">{{ t.yField }}</span>
+            <select value="{{ yField }}" onChange="{{ onY }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
+              <option value="">—</option>
+              <sc-for list="{{ headers }}" as="h" hint-placeholder-count="0"><option value="{{ h }}">{{ h }}</option></sc-for>
+            </select>
+          </label>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:5px;margin-top:10px">
+          <span style="font-size:11px;font-weight:700;color:rgba(30,47,79,0.55)">{{ t.crs }}</span>
+          <select value="{{ crs }}" onChange="{{ onCrs }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
+            <option value="EPSG:4326">WGS 84 — EPSG:4326</option>
+            <option value="EPSG:32648">UTM 48N / WGS 84 — EPSG:32648</option>
+            <option value="custom">{{ t.customCrs }}</option>
+          </select>
+        </label>
+        <sc-if value="{{ isCustomCrs }}" hint-placeholder-val="{{ false }}">
+          <input type="text" value="{{ customEpsg }}" onChange="{{ onCustomEpsg }}" placeholder="e.g. 3148" style="margin-top:8px;width:100%;box-sizing:border-box;font-family:'JetBrains Mono',monospace;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(255,100,52,0.4);background:#fff;color:#1E2F4F" />
+        </sc-if>
+        <button type="button" onClick="{{ plot }}" style="margin-top:12px;width:100%;cursor:pointer;border:0;border-radius:999px;background:#FF6434;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:#fff;box-shadow:0 4px 12px rgba(255,100,52,0.22)">{{ t.plot }}</button>
+      </section>
+
+      <section>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="display:flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#FF6434;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">3</span>
+          <h2 style="margin:0;font-size:14px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.s3 }}</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <button type="button" onClick="{{ drawLine }}" style="cursor:pointer;border:1px solid {{ lineBorder }};border-radius:10px;background:{{ lineBg }};padding:12px 8px;font-family:inherit;font-size:13px;font-weight:700;color:{{ lineFg }}">╱ {{ t.line }}</button>
+          <button type="button" onClick="{{ drawPoly }}" style="cursor:pointer;border:1px solid {{ polyBorder }};border-radius:10px;background:{{ polyBg }};padding:12px 8px;font-family:inherit;font-size:13px;font-weight:700;color:{{ polyFg }}">◇ {{ t.polygon }}</button>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button type="button" onClick="{{ toggleSnap }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:10px;background:{{ snapBg }};padding:9px;font-family:inherit;font-size:12px;font-weight:700;color:{{ snapFg }}">{{ snapLabel }}</button>
+          <button type="button" onClick="{{ toggleBasemap }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:10px;background:rgba(36,76,143,0.05);padding:9px;font-family:inherit;font-size:12px;font-weight:700;color:rgba(30,47,79,0.75)">{{ basemapLabel }}</button>
+        </div>
+        <p style="margin:10px 0 0;font-size:11px;line-height:1.6;color:rgba(30,47,79,0.45)">{{ t.drawHint }}</p>
+      </section>
+
+      <section>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0;font-size:14px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.layers }}</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(30,47,79,0.5)">{{ layerCounts }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{ featureList }}" as="f" hint-placeholder-count="0">
+            <div style="border:1px solid {{ f.border }};border-radius:10px;background:{{ f.bg }};overflow:hidden">
+              <button type="button" onClick="{{ f.select }}" style="display:flex;width:100%;align-items:center;gap:9px;cursor:pointer;border:0;background:transparent;padding:10px 11px;text-align:left;font-family:inherit">
+                <span style="flex-shrink:0;font-size:13px;color:#FF6434">{{ f.glyph }}</span>
+                <span style="flex:1;min-width:0;font-size:13px;font-weight:700;color:#1E2F4F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.label }}</span>
+                <span style="flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(30,47,79,0.55)">{{ f.measure }}</span>
+              </button>
+              <sc-if value="{{ f.active }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:8px;padding:0 11px 11px">
+                  <input type="text" value="{{ f.name }}" onChange="{{ f.setName }}" placeholder="{{ t.attrName }}" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;padding:8px 9px;border-radius:8px;border:1px solid rgba(36,76,143,0.18)" />
+                  <input type="text" value="{{ f.note }}" onChange="{{ f.setNote }}" placeholder="{{ t.attrNote }}" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;padding:8px 9px;border-radius:8px;border:1px solid rgba(36,76,143,0.18)" />
+                  <button type="button" onClick="{{ f.remove }}" style="cursor:pointer;border:1px solid rgba(200,40,40,0.25);border-radius:8px;background:rgba(200,40,40,0.06);padding:7px;font-family:inherit;font-size:12px;font-weight:700;color:#B02A2A">{{ t.remove }}</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="display:flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#FF6434;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">4</span>
+          <h2 style="margin:0;font-size:14px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.s4 }}</h2>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <sc-for list="{{ formats }}" as="fm" hint-placeholder-count="3">
+            <button type="button" onClick="{{ fm.toggle }}" style="cursor:pointer;border:1px solid {{ fm.border }};border-radius:999px;background:{{ fm.bg }};padding:7px 13px;font-family:inherit;font-size:12px;font-weight:700;color:{{ fm.fg }}">{{ fm.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button type="button" onClick="{{ setSeparate }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:9px;background:{{ sepBg }};padding:8px;font-family:inherit;font-size:12px;font-weight:700;color:{{ sepFg }}">{{ t.separate }}</button>
+          <button type="button" onClick="{{ setZip }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:9px;background:{{ zipBg }};padding:8px;font-family:inherit;font-size:12px;font-weight:700;color:{{ zipFg }}">{{ t.oneZip }}</button>
+        </div>
+        <button type="button" onClick="{{ runExport }}" style="margin-top:12px;width:100%;cursor:pointer;border:0;border-radius:999px;background:#244C8F;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:#fff">{{ t.exportBtn }}</button>
+        <button type="button" onClick="{{ exportDb }}" style="margin-top:8px;width:100%;cursor:pointer;border:1px solid rgba(36,76,143,0.2);border-radius:999px;background:#fff;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:#244C8F">{{ t.exportDb }}</button>
+      </section>
+
+      <div style="border-radius:10px;background:rgba(36,76,143,0.05);padding:11px 12px;font-size:11px;line-height:1.7;color:rgba(30,47,79,0.6);font-family:'JetBrains Mono',monospace;min-height:20px">{{ status }}</div>
+    </aside>
+
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column;background:#F5F7FA">
+
+      <div style="flex-shrink:0;height:36%;min-height:150px;display:flex;flex-direction:column;border-bottom:1px solid rgba(36,76,143,0.12);background:#fff">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding:11px 18px;border-bottom:1px solid rgba(36,76,143,0.08)">
+          <h2 style="margin:0;font-size:13px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.preview }}</h2>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(30,47,79,0.45)">{{ previewLabel }}</span>
+        </div>
+        <div style="flex:1;overflow:auto">
+          <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ false }}">
+            <table style="border-collapse:collapse;width:100%;font-size:12px">
+              <thead>
+                <tr>
+                  <sc-for list="{{ columns }}" as="c" hint-placeholder-count="0">
+                    <th style="position:sticky;top:0;z-index:1;background:#F5F7FA;border-bottom:1px solid rgba(36,76,143,0.12);padding:8px 12px;text-align:left;white-space:nowrap">
+                      <span style="display:block;font-size:12px;font-weight:800;color:{{ c.color }}">{{ c.name }}</span>
+                      <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;color:rgba(30,47,79,0.4)">{{ c.type }}</span>
+                    </th>
+                  </sc-for>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ previewRows }}" as="r" hint-placeholder-count="0">
+                  <tr>
+                    <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="0">
+                      <td style="border-bottom:1px solid rgba(36,76,143,0.06);padding:7px 12px;white-space:nowrap;color:rgba(30,47,79,0.8);font-family:'JetBrains Mono',monospace;font-size:11px">{{ cell }}</td>
+                    </sc-for>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </sc-if>
+          <sc-if value="{{ noRows }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;height:100%;align-items:center;justify-content:center;padding:30px;text-align:center">
+              <p style="margin:0;font-size:13px;line-height:1.8;color:rgba(30,47,79,0.4);max-width:340px">{{ t.emptyTable }}</p>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div ref="{{ mapRef }}" style="flex:1;min-height:0;width:100%"></div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+const T = {
+  kh: {
+    back: "កម្មវិធី", subtitle: "បង្កើតទិន្នន័យ GIS ពី CSV",
+    s1: "នាំចូល CSV", pickCsv: "ជ្រើសឯកសារ CSV", csvHint: "ឬអូសឯកសារមកទីនេះ",
+    s2: "ជួរកូអរដោនេ និង CRS", xField: "ជួរ X", yField: "ជួរ Y", crs: "ប្រព័ន្ធកូអរដោនេ",
+    customCrs: "បញ្ចូលលេខ EPSG ដោយខ្លួនឯង", plot: "បង្ហាញចំណុចលើផែនទី",
+    s3: "គូសទិន្នន័យ", line: "ខ្សែ", polygon: "ពហុកោណ",
+    snapOn: "Snap ៖ បើក", snapOff: "Snap ៖ បិទ", basemapOsm: "ផែនទី ៖ OSM", basemapSat: "ផែនទី ៖ ផ្កាយរណប",
+    drawHint: "ចុចប៊ូតុងខាងលើ រួចគូសលើផែនទី។ ចុចពីរដងលើចំណុចចុងក្រោយដើម្បីបញ្ចប់។",
+    layers: "ទិន្នន័យដែលបានគូស", attrName: "ឈ្មោះ", attrNote: "កំណត់ចំណាំ", remove: "លុប",
+    s4: "នាំចេញ", separate: "ដាច់ដោយឡែក", oneZip: "ជា ZIP តែមួយ",
+    exportBtn: "នាំចេញទិន្នន័យ", exportDb: "នាំចេញជាមូលដ្ឋានទិន្នន័យ (.sqlite)",
+    preview: "តារាងទិន្នន័យ",
+    emptyTable: "នាំចូលឯកសារ CSV ដើម្បីមើលតារាង។ បន្ទាប់មកកំណត់ជួរ X និង Y រួចជ្រើស CRS។",
+    points: "ចំណុច", lines: "ខ្សែ", polygons: "ពហុកោណ",
+    ready: "រួចរាល់", loading: "កំពុងផ្ទុកបណ្ណាល័យ…",
+    needXY: "សូមជ្រើសជួរ X និង Y ជាមុនសិន។", noData: "គ្មានទិន្នន័យសម្រាប់នាំចេញ។",
+    noFormat: "សូមជ្រើសទម្រង់នាំចេញយ៉ាងតិចមួយ។",
+    plotted: "បានបង្ហាញចំណុច", rows: "ជួរ", invalid: "ជួរមិនត្រឹមត្រូវ",
+    crsFail: "រកមិនឃើញនិយមន័យ EPSG នេះទេ។", exported: "នាំចេញរួចរាល់"
+  },
+  en: {
+    back: "Programs", subtitle: "Create GIS data from CSV",
+    s1: "Import CSV", pickCsv: "Choose a CSV file", csvHint: "or drop a file here",
+    s2: "Coordinate fields & CRS", xField: "X field", yField: "Y field", crs: "Coordinate system",
+    customCrs: "Enter an EPSG code…", plot: "Plot points on map",
+    s3: "Digitize", line: "Line", polygon: "Polygon",
+    snapOn: "Snap: on", snapOff: "Snap: off", basemapOsm: "Base: OSM", basemapSat: "Base: Satellite",
+    drawHint: "Pick a tool, then draw on the map. Double-click the last vertex to finish.",
+    layers: "Drawn features", attrName: "Name", attrNote: "Note", remove: "Delete",
+    s4: "Export", separate: "Separate files", oneZip: "One ZIP",
+    exportBtn: "Export data", exportDb: "Export as database (.sqlite)",
+    preview: "Table preview",
+    emptyTable: "Import a CSV to see the table. Then set the X and Y fields and pick a CRS.",
+    points: "points", lines: "lines", polygons: "polygons",
+    ready: "ready", loading: "loading libraries…",
+    needXY: "Select the X and Y fields first.", noData: "Nothing to export yet.",
+    noFormat: "Pick at least one export format.",
+    plotted: "Plotted", rows: "rows", invalid: "invalid rows",
+    crsFail: "Could not resolve that EPSG code.", exported: "Export finished"
+  }
+};
+
+const FORMATS = [
+  { id: "csv", label: "CSV / WKT" },
+  { id: "kml", label: "KML" },
+  { id: "shp", label: "Shapefile" }
+];
+
+const UTM = (z, s) => "+proj=utm +zone=" + z + (s ? " +south" : "") + " +datum=WGS84 +units=m +no_defs";
+
+class Component extends DCLogic {
+  state = {
+    lang: "kh", libsReady: false, fileName: "", headers: [], types: {}, rows: [],
+    xField: "", yField: "", crs: "EPSG:4326", customEpsg: "",
+    snap: true, basemap: "osm", tool: null,
+    features: [], selected: null, pointCount: 0,
+    fmt: { csv: true, kml: false, shp: false }, mode: "separate", status: ""
+  };
+
+  mapRef = React.createRef();
+  featureSeq = 0;
+  layerIndex = {};
+
+  componentDidMount() { this.waitForLibs(); }
+
+  waitForLibs(tries) {
+    tries = tries || 0;
+    const ok = window.L && window.L.PM && window.proj4 && window.Papa;
+    if (ok) { this.setState({ libsReady: true }); this.initMap(); return; }
+    if (tries > 200) { this.setState({ status: "Library load failed." }); return; }
+    setTimeout(() => this.waitForLibs(tries + 1), 100);
+  }
+
+  initMap() {
+    const el = this.mapRef.current;
+    if (!el || this.map) return;
+    const map = L.map(el, { center: [12.5657, 104.991], zoom: 7, zoomControl: true });
+    this.map = map;
+    this.baseOsm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, attribution: "© OpenStreetMap contributors"
+    }).addTo(map);
+    this.baseSat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 19, attribution: "Esri, Maxar, Earthstar Geographics"
+    });
+    this.pointsLayer = L.layerGroup().addTo(map);
+    this.drawLayer = L.featureGroup().addTo(map);
+
+    map.pm.setGlobalOptions({ snappable: true, snapDistance: 20, layerGroup: this.drawLayer });
+    map.pm.setPathOptions({ color: "#FF6434", fillColor: "#FF6434", fillOpacity: 0.18, weight: 3 });
+
+    map.on("pm:create", (e) => this.onCreate(e));
+    setTimeout(() => map.invalidateSize(), 200);
+  }
+
+  t() { return T[this.state.lang]; }
+
+  onCreate(e) {
+    const layer = e.layer;
+    const gj = layer.toGeoJSON();
+    const kind = gj.geometry.type === "Polygon" ? "polygon" : "line";
+    const id = "f" + ++this.featureSeq;
+    layer.__id = id;
+    this.layerIndex[id] = layer;
+    layer.on("click", () => this.setState({ selected: id }));
+    layer.on("pm:edit", () => this.remeasure(id));
+    layer.pm.enable({ allowSelfIntersection: true, snappable: this.state.snap });
+
+    const rec = { id: id, kind: kind, name: "", note: "", measure: this.measure(gj) };
+    this.setState((s) => ({ features: s.features.concat([rec]), selected: id, tool: null }));
+    this.map.pm.disableDraw();
+  }
+
+  measure(gj) {
+    try {
+      if (gj.geometry.type === "Polygon") {
+        const a = turf.area(gj);
+        return a > 1e6 ? (a / 1e6).toFixed(3) + " km²" : Math.round(a) + " m²";
+      }
+      const l = turf.length(gj, { units: "kilometers" });
+      return l >= 1 ? l.toFixed(3) + " km" : Math.round(l * 1000) + " m";
+    } catch (err) { return ""; }
+  }
+
+  remeasure(id) {
+    const layer = this.layerIndex[id];
+    if (!layer) return;
+    const m = this.measure(layer.toGeoJSON());
+    this.setState((s) => ({ features: s.features.map((f) => (f.id === id ? { ...f, measure: m } : f)) }));
+  }
+
+  onFile = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    Papa.parse(file, {
+      header: true, skipEmptyLines: true, dynamicTyping: false,
+      complete: (res) => {
+        const headers = (res.meta.fields || []).filter(Boolean);
+        const rows = res.data;
+        const types = {};
+        headers.forEach((h) => {
+          let num = 0, seen = 0;
+          for (let i = 0; i < Math.min(rows.length, 200); i++) {
+            const v = rows[i][h];
+            if (v === undefined || v === null || v === "") continue;
+            seen++;
+            if (!isNaN(parseFloat(v)) && isFinite(v)) num++;
+          }
+          types[h] = seen && num / seen > 0.9 ? "number" : "text";
+        });
+        const guess = (re) => headers.find((h) => re.test(h.trim())) || "";
+        this.setState({
+          fileName: file.name, headers: headers, rows: rows, types: types,
+          xField: guess(/^(x|lon|long|longitude|easting|e)$/i) || "",
+          yField: guess(/^(y|lat|latitude|northing|n)$/i) || "",
+          status: file.name + " — " + rows.length + " " + this.t().rows
+        });
+      }
+    });
+  };
+
+  async projDef() {
+    const crs = this.state.crs;
+    if (crs === "EPSG:4326") return "EPSG:4326";
+    if (crs === "EPSG:32648") { proj4.defs("EPSG:32648", UTM(48)); return "EPSG:32648"; }
+    const code = (this.state.customEpsg || "").replace(/[^0-9]/g, "");
+    if (!code) return null;
+    const key = "EPSG:" + code;
+    if (proj4.defs(key)) return key;
+    const n = parseInt(code, 10);
+    if (n >= 32601 && n <= 32660) { proj4.defs(key, UTM(n - 32600)); return key; }
+    if (n >= 32701 && n <= 32760) { proj4.defs(key, UTM(n - 32700, true)); return key; }
+    if (n === 3857) { proj4.defs(key, "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +no_defs"); return key; }
+    try {
+      const r = await fetch("https://epsg.io/" + code + ".proj4");
+      if (!r.ok) return null;
+      const def = (await r.text()).trim();
+      if (!def.startsWith("+proj")) return null;
+      proj4.defs(key, def);
+      return key;
+    } catch (err) { return null; }
+  }
+
+  plot = async () => {
+    const { xField, yField, rows } = this.state;
+    if (!xField || !yField) { this.setState({ status: this.t().needXY }); return; }
+    const from = await this.projDef();
+    if (!from) { this.setState({ status: this.t().crsFail }); return; }
+
+    this.pointsLayer.clearLayers();
+    const pts = [];
+    let bad = 0;
+    rows.forEach((r, i) => {
+      const x = parseFloat(r[xField]), y = parseFloat(r[yField]);
+      if (!isFinite(x) || !isFinite(y)) { bad++; return; }
+      let lon = x, lat = y;
+      if (from !== "EPSG:4326") { const o = proj4(from, "EPSG:4326", [x, y]); lon = o[0]; lat = o[1]; }
+      if (!isFinite(lon) || !isFinite(lat) || Math.abs(lat) > 90) { bad++; return; }
+      pts.push({ lon: lon, lat: lat, attrs: r, i: i });
+      L.circleMarker([lat, lon], {
+        radius: 5, color: "#244C8F", weight: 1.5, fillColor: "#FF6434", fillOpacity: 0.9
+      }).bindPopup(
+        "<div style='font-family:monospace;font-size:11px;max-height:180px;overflow:auto'>" +
+        Object.keys(r).map((k) => "<b>" + k + "</b>: " + (r[k] === "" ? "—" : r[k])).join("<br>") + "</div>"
+      ).addTo(this.pointsLayer);
+    });
+    this.points = pts;
+    if (pts.length) {
+      this.map.fitBounds(L.latLngBounds(pts.map((p) => [p.lat, p.lon])).pad(0.15));
+    }
+    this.setState({
+      pointCount: pts.length,
+      status: this.t().plotted + " " + pts.length + " / " + rows.length + (bad ? " · " + bad + " " + this.t().invalid : "")
+    });
+  };
+
+  drawTool(kind) {
+    if (!this.map) return;
+    if (this.state.tool === kind) { this.map.pm.disableDraw(); this.setState({ tool: null }); return; }
+    this.map.pm.setGlobalOptions({ snappable: this.state.snap, snapDistance: 20, layerGroup: this.drawLayer });
+    this.map.pm.enableDraw(kind === "line" ? "Line" : "Polygon");
+    this.setState({ tool: kind });
+  }
+
+  // ---- export helpers ----
+  featureGeoJSON(kind) {
+    const feats = this.state.features.filter((f) => f.kind === kind).map((f) => {
+      const layer = this.layerIndex[f.id];
+      const gj = layer.toGeoJSON();
+      gj.properties = { fid: f.id, name: f.name, note: f.note, measure: f.measure };
+      return gj;
+    });
+    return { type: "FeatureCollection", features: feats };
+  }
+
+  pointsGeoJSON() {
+    const pts = this.points || [];
+    return {
+      type: "FeatureCollection",
+      features: pts.map((p, i) => ({
+        type: "Feature", properties: { fid: "p" + (i + 1), ...p.attrs },
+        geometry: { type: "Point", coordinates: [p.lon, p.lat] }
+      }))
+    };
+  }
+
+  layerSet() {
+    const out = [];
+    if ((this.points || []).length) out.push({ name: "points", gj: this.pointsGeoJSON() });
+    const l = this.featureGeoJSON("line"); if (l.features.length) out.push({ name: "lines", gj: l });
+    const p = this.featureGeoJSON("polygon"); if (p.features.length) out.push({ name: "polygons", gj: p });
+    return out;
+  }
+
+  toWkt(g) {
+    const c = (a) => a[0] + " " + a[1];
+    if (g.type === "Point") return "POINT (" + c(g.coordinates) + ")";
+    if (g.type === "LineString") return "LINESTRING (" + g.coordinates.map(c).join(", ") + ")";
+    if (g.type === "Polygon") return "POLYGON (" + g.coordinates.map((r) => "(" + r.map(c).join(", ") + ")").join(", ") + ")";
+    return "";
+  }
+
+  toCsv(gj) {
+    const keys = [];
+    gj.features.forEach((f) => Object.keys(f.properties || {}).forEach((k) => { if (keys.indexOf(k) < 0) keys.push(k); }));
+    const esc = (v) => '"' + String(v === undefined || v === null ? "" : v).replace(/"/g, '""') + '"';
+    const head = keys.concat(["wkt"]).map(esc).join(",");
+    const body = gj.features.map((f) => keys.map((k) => esc(f.properties[k])).concat([esc(this.toWkt(f.geometry))]).join(","));
+    return "\ufeff" + [head].concat(body).join("\n");
+  }
+
+  toKml(gj, name) {
+    const esc = (s) => String(s === undefined || s === null ? "" : s).replace(/[<>&]/g, (m) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[m]));
+    const coords = (a) => a.map((p) => p[0] + "," + p[1] + ",0").join(" ");
+    const geom = (g) => {
+      if (g.type === "Point") return "<Point><coordinates>" + g.coordinates[0] + "," + g.coordinates[1] + ",0</coordinates></Point>";
+      if (g.type === "LineString") return "<LineString><tessellate>1</tessellate><coordinates>" + coords(g.coordinates) + "</coordinates></LineString>";
+      if (g.type === "Polygon") return "<Polygon><outerBoundaryIs><LinearRing><coordinates>" + coords(g.coordinates[0]) + "</coordinates></LinearRing></outerBoundaryIs></Polygon>";
+      return "";
+    };
+    const pm = gj.features.map((f) => {
+      const p = f.properties || {};
+      const data = Object.keys(p).map((k) => "<Data name=\"" + esc(k) + "\"><value>" + esc(p[k]) + "</value></Data>").join("");
+      return "<Placemark><name>" + esc(p.name || p.fid || "") + "</name><ExtendedData>" + data + "</ExtendedData>" + geom(f.geometry) + "</Placemark>";
+    }).join("\n");
+    return '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>' + esc(name) + "</name>\n" + pm + "\n</Document></kml>";
+  }
+
+  shpZipBase64(gj, name) {
+    if (!window.shpwrite) return null;
+    try {
+      return shpwrite.zip(gj, {
+        folder: name,
+        types: { point: name, polyline: name, polygon: name }
+      });
+    } catch (err) { return null; }
+  }
+
+  download(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1500);
+  }
+
+  runExport = async () => {
+    const layers = this.layerSet();
+    if (!layers.length) { this.setState({ status: this.t().noData }); return; }
+    const fmt = this.state.fmt;
+    const picked = Object.keys(fmt).filter((k) => fmt[k]);
+    if (!picked.length) { this.setState({ status: this.t().noFormat }); return; }
+
+    const files = [];
+    for (const lyr of layers) {
+      if (fmt.csv) files.push({ name: lyr.name + ".csv", blob: new Blob([this.toCsv(lyr.gj)], { type: "text/csv" }) });
+      if (fmt.kml) files.push({ name: lyr.name + ".kml", blob: new Blob([this.toKml(lyr.gj, lyr.name)], { type: "application/vnd.google-earth.kml+xml" }) });
+      if (fmt.shp) {
+        const b64 = this.shpZipBase64(lyr.gj, lyr.name);
+        if (b64) {
+          const bin = atob(b64);
+          const arr = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          files.push({ name: lyr.name + "_shp.zip", blob: new Blob([arr], { type: "application/zip" }) });
+        }
+      }
+    }
+    if (!files.length) { this.setState({ status: this.t().noData }); return; }
+
+    if (this.state.mode === "zip" && window.JSZip) {
+      const zip = new JSZip();
+      files.forEach((f) => zip.file(f.name, f.blob));
+      const blob = await zip.generateAsync({ type: "blob" });
+      this.download(blob, "kga_data_creation.zip");
+    } else {
+      files.forEach((f, i) => setTimeout(() => this.download(f.blob, f.name), i * 350));
+    }
+    this.setState({ status: this.t().exported + " — " + files.length + " file(s)" });
+  };
+
+  exportDb = async () => {
+    const layers = this.layerSet();
+    if (!layers.length) { this.setState({ status: this.t().noData }); return; }
+    if (!window.initSqlJs) { this.setState({ status: "sql.js not loaded." }); return; }
+    this.setState({ status: "building database…" });
+    const SQL = await initSqlJs({ locateFile: (f) => "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/" + f });
+    const db = new SQL.Database();
+    db.run("CREATE TABLE gpkg_spatial_ref_sys (srs_name TEXT, srs_id INTEGER PRIMARY KEY, organization TEXT, organization_coordsys_id INTEGER, definition TEXT);");
+    db.run("INSERT INTO gpkg_spatial_ref_sys VALUES ('WGS 84 geodetic', 4326, 'EPSG', 4326, 'GEOGCS[\"WGS 84\"]');");
+    db.run("CREATE TABLE gpkg_contents (table_name TEXT PRIMARY KEY, data_type TEXT, identifier TEXT, geometry_type_name TEXT, srs_id INTEGER, feature_count INTEGER);");
+
+    const geomType = { points: "POINT", lines: "LINESTRING", polygons: "POLYGON" };
+    layers.forEach((lyr) => {
+      const keys = [];
+      lyr.gj.features.forEach((f) => Object.keys(f.properties || {}).forEach((k) => { if (keys.indexOf(k) < 0) keys.push(k); }));
+      const cols = keys.map((k) => '"' + k.replace(/"/g, "") + '" TEXT');
+      db.run('CREATE TABLE "' + lyr.name + '" (fid_pk INTEGER PRIMARY KEY AUTOINCREMENT' + (cols.length ? ", " + cols.join(", ") : "") + ", geom_wkt TEXT, srs_id INTEGER);");
+      const stmt = db.prepare('INSERT INTO "' + lyr.name + '" (' + keys.map((k) => '"' + k.replace(/"/g, "") + '"').concat(["geom_wkt", "srs_id"]).join(", ") + ") VALUES (" + keys.concat(["a", "b"]).map(() => "?").join(", ") + ");");
+      lyr.gj.features.forEach((f) => {
+        const vals = keys.map((k) => { const v = (f.properties || {})[k]; return v === undefined || v === null ? null : String(v); });
+        vals.push(this.toWkt(f.geometry)); vals.push(4326);
+        stmt.run(vals);
+      });
+      stmt.free();
+      db.run("INSERT INTO gpkg_contents VALUES (?, 'features', ?, ?, 4326, ?);", [lyr.name, lyr.name, geomType[lyr.name], lyr.gj.features.length]);
+    });
+
+    const bytes = db.export();
+    db.close();
+    this.download(new Blob([bytes], { type: "application/vnd.sqlite3" }), "kga_data_creation.sqlite");
+    this.setState({ status: this.t().exported + " — kga_data_creation.sqlite (" + layers.length + " tables)" });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const t = this.t();
+    const on = { bg: "#FF6434", fg: "#fff" };
+    const off = { bg: "transparent", fg: "rgba(255,255,255,0.65)" };
+    const kh = s.lang === "kh" ? on : off, en = s.lang === "en" ? on : off;
+
+    const cols = s.headers.map((h) => ({
+      name: h,
+      type: s.types[h] || "text",
+      color: h === s.xField || h === s.yField ? "#FF6434" : "#1E2F4F"
+    }));
+    const previewRows = s.rows.slice(0, 200).map((r, i) => ({ key: i, cells: s.headers.map((h) => { const v = r[h]; return v === "" || v === undefined || v === null ? "—" : String(v); }) }));
+
+    const nLines = s.features.filter((f) => f.kind === "line").length;
+    const nPolys = s.features.filter((f) => f.kind === "polygon").length;
+
+    const featureList = s.features.map((f, i) => {
+      const active = s.selected === f.id;
+      return {
+        ...f,
+        active: active,
+        glyph: f.kind === "polygon" ? "◇" : "╱",
+        label: f.name || ((f.kind === "polygon" ? t.polygons : t.lines) + " " + (i + 1)),
+        border: active ? "rgba(255,100,52,0.5)" : "rgba(36,76,143,0.12)",
+        bg: active ? "rgba(255,100,52,0.06)" : "#fff",
+        select: () => {
+          this.setState({ selected: active ? null : f.id });
+          const ly = this.layerIndex[f.id];
+          if (ly && this.map) this.map.fitBounds(ly.getBounds().pad(0.4));
+        },
+        setName: (e) => { const v = e.target.value; this.setState((st) => ({ features: st.features.map((x) => (x.id === f.id ? { ...x, name: v } : x)) })); },
+        setNote: (e) => { const v = e.target.value; this.setState((st) => ({ features: st.features.map((x) => (x.id === f.id ? { ...x, note: v } : x)) })); },
+        remove: () => {
+          const ly = this.layerIndex[f.id];
+          if (ly) { this.drawLayer.removeLayer(ly); delete this.layerIndex[f.id]; }
+          this.setState((st) => ({ features: st.features.filter((x) => x.id !== f.id), selected: null }));
+        }
+      };
+    });
+
+    const fmtBtns = FORMATS.map((f) => {
+      const active = !!s.fmt[f.id];
+      return {
+        label: f.label,
+        border: active ? "rgba(255,100,52,0.45)" : "rgba(36,76,143,0.15)",
+        bg: active ? "rgba(255,100,52,0.12)" : "#fff",
+        fg: active ? "#E8551F" : "rgba(30,47,79,0.6)",
+        toggle: () => this.setState((st) => ({ fmt: { ...st.fmt, [f.id]: !st.fmt[f.id] } }))
+      };
+    });
+
+    const tool = (kind) => {
+      const active = s.tool === kind;
+      return {
+        border: active ? "rgba(255,100,52,0.6)" : "rgba(36,76,143,0.15)",
+        bg: active ? "rgba(255,100,52,0.12)" : "rgba(36,76,143,0.04)",
+        fg: active ? "#E8551F" : "#1E2F4F"
+      };
+    };
+    const lt = tool("line"), pt = tool("polygon");
+    const sep = s.mode === "separate", zipm = s.mode === "zip";
+
+    return {
+      t: t, mapRef: this.mapRef, status: s.status,
+      libStatus: s.libsReady ? t.ready : t.loading,
+      setKh: () => this.setState({ lang: "kh" }), setEn: () => this.setState({ lang: "en" }),
+      khBg: kh.bg, khFg: kh.fg, enBg: en.bg, enFg: en.fg,
+
+      fileName: s.fileName, rowCountLabel: s.rows.length + " " + t.rows,
+      headers: s.headers, columns: cols, previewRows: previewRows,
+      hasRows: s.rows.length > 0, noRows: s.rows.length === 0,
+      previewLabel: s.rows.length ? Math.min(200, s.rows.length) + " / " + s.rows.length + " " + t.rows : "—",
+
+      xField: s.xField, yField: s.yField, crs: s.crs, customEpsg: s.customEpsg,
+      isCustomCrs: s.crs === "custom",
+      onX: (e) => this.setState({ xField: e.target.value }),
+      onY: (e) => this.setState({ yField: e.target.value }),
+      onCrs: (e) => this.setState({ crs: e.target.value }),
+      onCustomEpsg: (e) => this.setState({ customEpsg: e.target.value }),
+      onFile: this.onFile, plot: this.plot,
+
+      drawLine: () => this.drawTool("line"), drawPoly: () => this.drawTool("polygon"),
+      lineBorder: lt.border, lineBg: lt.bg, lineFg: lt.fg,
+      polyBorder: pt.border, polyBg: pt.bg, polyFg: pt.fg,
+      snapLabel: s.snap ? t.snapOn : t.snapOff,
+      snapBg: s.snap ? "rgba(255,100,52,0.1)" : "rgba(36,76,143,0.04)",
+      snapFg: s.snap ? "#E8551F" : "rgba(30,47,79,0.6)",
+      toggleSnap: () => {
+        const v = !s.snap;
+        this.setState({ snap: v });
+        if (this.map) this.map.pm.setGlobalOptions({ snappable: v, snapDistance: 20, layerGroup: this.drawLayer });
+      },
+      basemapLabel: s.basemap === "osm" ? t.basemapOsm : t.basemapSat,
+      toggleBasemap: () => {
+        if (!this.map) return;
+        const next = s.basemap === "osm" ? "sat" : "osm";
+        this.map.removeLayer(next === "osm" ? this.baseSat : this.baseOsm);
+        (next === "osm" ? this.baseOsm : this.baseSat).addTo(this.map);
+        (next === "osm" ? this.baseOsm : this.baseSat).bringToBack();
+        this.setState({ basemap: next });
+      },
+
+      featureList: featureList,
+      layerCounts: s.pointCount + " " + t.points + " · " + nLines + " " + t.lines + " · " + nPolys + " " + t.polygons,
+
+      formats: fmtBtns,
+      setSeparate: () => this.setState({ mode: "separate" }), setZip: () => this.setState({ mode: "zip" }),
+      sepBg: sep ? "rgba(255,100,52,0.1)" : "#fff", sepFg: sep ? "#E8551F" : "rgba(30,47,79,0.6)",
+      zipBg: zipm ? "rgba(255,100,52,0.1)" : "#fff", zipFg: zipm ? "#E8551F" : "rgba(30,47,79,0.6)",
+      runExport: this.runExport, exportDb: this.exportDb
+    };
+  }
+}
+</script>
+</body>
+</html>

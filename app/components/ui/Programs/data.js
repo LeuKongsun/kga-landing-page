@@ -144,6 +144,50 @@ export const programs = [
     primaryActionLabel: "មើល KGA Geodigitizer",
   },
   {
+    id: "data-creation",
+    name: "KGA Data Creation",
+    accent: "Data Creation",
+    icon: "datacreation",
+    logo: "/images/kga-data-creation-logo.png",
+    badge: "Web-GIS",
+    platform: "Web-GIS",
+    tagline: "បង្កើតទិន្នន័យ GIS ពីតារាង CSV",
+    overview:
+      "KGA Data Creation ជួយបំប្លែងតារាង CSV ទៅជាទិន្នន័យ GIS ដោយកំណត់ជួរ X និង Y ជ្រើសប្រព័ន្ធកូអរដោនេ រួចគូសបន្ថែមខ្សែ និងពហុកោណលើផែនទី។",
+    description:
+      "នាំចូលតារាង CSV កំណត់ជួរ X និង Y ជ្រើសប្រព័ន្ធកូអរដោនេ រួចគូសខ្សែ និងពហុកោណលើផែនទី មុននាំចេញជាទម្រង់ GIS ផ្សេងៗ។",
+    details:
+      "កម្មវិធីនេះរួមបញ្ចូលដំណើរការទាំងមូលនៅក្នុងទំព័រតែមួយ ៖ នាំចូល CSV និងមើលតារាងទិន្នន័យ កំណត់ជួរកូអរដោនេ និងប្រព័ន្ធកូអរដោនេ (CRS) បង្ហាញចំណុចលើផែនទី គូសខ្សែ និងពហុកោណដោយផ្ទាល់ រួចនាំចេញជា CSV/WKT, GeoJSON, KML, Shapefile ឬជាមូលដ្ឋានទិន្នន័យ GeoPackage។",
+    features: [
+      "នាំចូល CSV និងមើលតារាង",
+      "កំណត់ជួរ X, Y និង CRS",
+      "គូសខ្សែ និងពហុកោណលើផែនទី",
+      "នាំចេញដាច់ដោយឡែក ឬជាមូលដ្ឋានទិន្នន័យ",
+    ],
+    highlights: [
+      {
+        title: "ពីតារាងទៅជាផែនទី",
+        description: "បំប្លែងជួរ X និង Y ក្នុង CSV ទៅជាចំណុចលើផែនទីភ្លាមៗ។",
+      },
+      {
+        title: "គាំទ្រប្រព័ន្ធកូអរដោនេច្រើន",
+        description: "ជ្រើស WGS 84, UTM ឬបញ្ចូលលេខ EPSG ដោយខ្លួនឯង។",
+      },
+      {
+        title: "គូសបន្ថែមលើផែនទី",
+        description: "បង្កើតខ្សែ និងពហុកោណដោយផ្ទាល់ ព្រមទាំងកំណត់ឈ្មោះ និងកំណត់ចំណាំ។",
+      },
+      {
+        title: "នាំចេញបានច្រើនទម្រង់",
+        description: "CSV/WKT, GeoJSON, KML, Shapefile និង GeoPackage (.gpkg)។",
+      },
+    ],
+    image: "/images/kga-data-creation.png",
+    href: "/data-creation",
+    cta: "មើល KGA Data Creation",
+    primaryActionLabel: "មើល KGA Data Creation",
+  },
+  {
     id: "geolayout-studio",
     name: "GeoLayout Studio",
     accent: "GeoLayout Studio",

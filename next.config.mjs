@@ -17,6 +17,10 @@ const nextConfig = {
         source: "/kga-toolbox",
         destination: "/kga-toolbox.html",
       },
+      {
+        source: "/data-creation",
+        destination: "/data-creation.html",
+      },
     ];
   },
 };

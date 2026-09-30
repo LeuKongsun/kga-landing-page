@@ -65,6 +65,9 @@ const ToolDetail = ({ slug }) => {
   const sections = [
     tool.body?.length && { id: "section-overview", label: UI.overview },
     tool.usage?.length && { id: "section-usage", label: UI.usage },
+    // Sections a file carries beyond the standard six (Add Basemap's basemap
+    // tables, Sewage and Drainage's tool list). Titles are plain English.
+    ...(tool.extra ?? []).map((section) => ({ id: section.id, label: section.title })),
     hasParameters && { id: "section-parameters", label: UI.parameters },
     tool.steps?.length && { id: "section-how-to-use", label: UI.howToUse },
     tool.environments?.length && { id: "section-environments", label: UI.environments },
@@ -176,6 +179,22 @@ const ToolDetail = ({ slug }) => {
                   <DocBlocks blocks={tool.usage} />
                 </section>
               )}
+
+              {/* In source order: the metadata puts these between Usage and
+                  Parameters, so they read as a continuation of Usage. */}
+              {tool.extra?.map((section) => (
+                <section
+                  key={section.id}
+                  id={section.id}
+                  aria-labelledby={`${section.id}-heading`}
+                  className="mt-12 scroll-mt-28"
+                >
+                  <SectionHeading id={`${section.id}-heading`}>
+                    <span lang="en">{section.title}</span>
+                  </SectionHeading>
+                  <DocBlocks blocks={section.blocks} />
+                </section>
+              ))}
 
               <ParameterTable sections={tool.parameters} toolName={tool.name} />
 

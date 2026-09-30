@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700;900&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+  body { margin: 0; background: #F5F7FA; font-family: 'Hanuman', 'Noto Sans Khmer', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #FF6434; text-decoration: none; }
+  a:hover { color: #E8551F; }
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F5F7FA;color:#1E2F4F;padding:64px 24px 96px">
+  <div style="max-width:1180px;margin:0 auto">
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:24px">
+      <div style="display:flex;gap:4px;padding:4px;border-radius:999px;border:1px solid rgba(36,76,143,0.12);background:#fff">
+        <button type="button" onClick="{{ setKh }}" style="border:0;cursor:pointer;border-radius:999px;padding:6px 16px;font-family:inherit;font-size:13px;font-weight:700;background:{{ khBg }};color:{{ khFg }}">ខ្មែរ</button>
+        <button type="button" onClick="{{ setEn }}" style="border:0;cursor:pointer;border-radius:999px;padding:6px 16px;font-family:inherit;font-size:13px;font-weight:700;background:{{ enBg }};color:{{ enFg }}">EN</button>
+      </div>
+    </div>
+
+    <div style="max-width:760px;margin:0 auto 48px;text-align:center">
+      <span style="display:inline-block;margin-bottom:20px;border-radius:999px;border:1px solid rgba(255,100,52,0.2);background:rgba(255,100,52,0.1);padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#FF6434">{{ kicker }}</span>
+      <h2 style="margin:0 0 16px;font-size:40px;font-weight:900;line-height:1.35;color:#1E2F4F">{{ heading }}</h2>
+      <div style="width:64px;height:6px;border-radius:999px;background:#FF6434;margin:0 auto 24px"></div>
+      <p style="margin:0;font-size:17px;line-height:1.75;color:rgba(30,47,79,0.6);text-wrap:pretty">{{ sub }}</p>
+    </div>
+
+    <div style="display:grid;gap:24px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">
+      <sc-for list="{{ programs }}" as="p" hint-placeholder-count="4">
+        <article style="display:flex;flex-direction:column;overflow:hidden;border-radius:16px;border:1px solid rgba(36,76,143,0.08);background:#fff;box-shadow:0 1px 2px rgba(36,76,143,0.04)">
+
+          <div style="position:relative;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,rgba(36,76,143,0.05),rgba(255,100,52,0.05))">
+            <sc-if value="{{ p.image }}" hint-placeholder-val="{{ true }}">
+              <img src="{{ p.image }}" alt="{{ p.name }}" style="width:100%;height:100%;object-fit:cover;display:block" />
+            </sc-if>
+            <sc-if value="{{ p.isNew }}" hint-placeholder-val="{{ false }}">
+              <image-slot id="datacreation-card" shape="rect" fit="cover" placeholder="Drop a KGA Data Creation screenshot"></image-slot>
+            </sc-if>
+            <sc-if value="{{ p.isComingSoon }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;height:100%;width:100%;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(36,76,143,0.1),#fff 55%,rgba(255,100,52,0.1));padding:32px">
+                <div style="text-align:center">
+                  <div style="margin:0 auto;display:flex;height:64px;width:64px;align-items:center;justify-content:center;border-radius:16px;border:1px solid rgba(255,100,52,0.25);background:rgba(255,100,52,0.1);color:#FF6434;font-size:26px">◷</div>
+                  <p style="margin:20px 0 0;font-size:20px;font-weight:900;color:#1E2F4F">{{ p.name }}</p>
+                  <p style="margin:8px 0 0;font-size:14px;font-weight:700;color:#FF6434">{{ p.cta }}</p>
+                </div>
+              </div>
+            </sc-if>
+            <span style="position:absolute;left:12px;top:12px;border-radius:999px;border:1px solid rgba(255,100,52,0.3);background:rgba(255,100,52,0.15);padding:4px 10px;font-size:12px;font-weight:700;color:#FF6434;backdrop-filter:blur(8px)">{{ p.badge }}</span>
+          </div>
+
+          <div style="display:flex;flex:1;flex-direction:column;padding:24px">
+            <h3 style="margin:0 0 8px;font-size:24px;font-weight:800;line-height:1.35;color:#1E2F4F">{{ p.prefix }}<span style="color:#FF6434">{{ p.accent }}</span></h3>
+            <p style="margin:0 0 12px;font-size:14px;font-weight:700;color:rgba(30,47,79,0.8);line-height:1.6">{{ p.tagline }}</p>
+            <p style="margin:0 0 20px;font-size:14px;line-height:1.75;color:rgba(30,47,79,0.6);text-wrap:pretty">{{ p.description }}</p>
+
+            <ul style="list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="4">
+                <li style="display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:1.6;color:rgba(30,47,79,0.7)">
+                  <span style="flex-shrink:0;margin-top:2px;color:#FF6434;font-size:14px">✓</span>{{ f }}
+                </li>
+              </sc-for>
+            </ul>
+
+            <sc-if value="{{ p.href }}" hint-placeholder-val="{{ true }}">
+              <a href="{{ p.href }}" style="margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;background:#FF6434;padding:13px 20px;font-size:14px;font-weight:700;color:#fff;box-shadow:0 4px 12px rgba(255,100,52,0.2)">{{ p.cta }} <span style="font-size:12px">↗</span></a>
+            </sc-if>
+            <sc-if value="{{ p.isComingSoon }}" hint-placeholder-val="{{ false }}">
+              <span style="margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;border:1px solid rgba(36,76,143,0.1);background:rgba(36,76,143,0.05);padding:13px 20px;font-size:14px;font-weight:700;color:rgba(30,47,79,0.7)">{{ p.cta }} ◷</span>
+            </sc-if>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DATA = [
+  {
+    id: "toolbox", prefix: "KGA ", accent: "Toolbox", name: "KGA Toolbox", badge: "ArcGIS Pro",
+    image: "public/images/kga-toolbox.png", href: "/kga-toolbox",
+    kh: {
+      badge: "ឧបករណ៍ ArcGIS Pro",
+      tagline: "ឧបករណ៍ GIS កម្រិតវិស្វកម្មសម្រាប់ ArcGIS Pro",
+      description: "បណ្តុំឧបករណ៍សម្រាប់កម្មវិធី ArcGIS Pro ពីការគ្រប់គ្រងទិន្នន័យធម្មតា រហូតដល់ការផលិតផែនទីកម្រិតជំនាញ។",
+      features: ["ការងារផែនទីកាដាស្ត្រ", "ពិនិត្យគុណភាពទិន្នន័យ", "ស្វ័យប្រវត្តិកម្មលំហូរការងារ", "ភ្ជាប់ជាមួយ ArcGIS Pro"],
+      cta: "មើល KGA Toolbox"
+    },
+    en: {
+      badge: "ArcGIS Pro toolset",
+      tagline: "Engineering-grade GIS tools for ArcGIS Pro",
+      description: "A toolset for ArcGIS Pro covering everything from routine data management to professional map production.",
+      features: ["Cadastral mapping work", "Data quality checks", "Workflow automation", "Integrated with ArcGIS Pro"],
+      cta: "View KGA Toolbox"
+    }
+  },
+  {
+    id: "geodigitizer", prefix: "KGA ", accent: "Geodigitizer", name: "KGA Geodigitizer", badge: "Web-GIS",
+    image: "public/images/kga-geodigitizer.png", href: "/geodigitizer",
+    kh: {
+      badge: "Web-GIS",
+      tagline: "គូសបង្កើតទិន្នន័យ GIS បានលឿន និងងាយស្រួល",
+      description: "Web-GIS សម្រាប់គូសបង្កើតទិន្នន័យ GIS ដូចជា ចំណុច ខ្សែ និងពហុកោណ បានលឿន និងមានភាពងាយស្រួល។",
+      features: ["គូសទិន្នន័យបានងាយស្រួល", "បង្កើតទិន្នន័យបានលឿន", "លទ្ធផលមានភាពត្រឹមត្រូវ", "ផ្ទាំងប្រើប្រាស់ងាយយល់"],
+      cta: "មើល KGA Geodigitizer"
+    },
+    en: {
+      badge: "Web-GIS",
+      tagline: "Digitize GIS data quickly and easily",
+      description: "A Web-GIS for drawing point, line and polygon data quickly, with no complex software setup.",
+      features: ["Easy digitizing", "Fast data creation", "Accurate output", "Straightforward interface"],
+      cta: "View KGA Geodigitizer"
+    }
+  },
+  {
+    id: "data-creation", prefix: "KGA ", accent: "Data Creation", name: "KGA Data Creation", badge: "Web-GIS",
+    image: null, isNew: true, href: "Data Creation.dc.html",
+    kh: {
+      badge: "Web-GIS",
+      tagline: "បង្កើតទិន្នន័យ GIS ពីតារាង CSV",
+      description: "នាំចូលតារាង CSV កំណត់ជួរ X និង Y ជ្រើសប្រព័ន្ធកូអរដោនេ រួចគូសបន្ថែមខ្សែ និងពហុកោណលើផែនទី មុននាំចេញជាទម្រង់ GIS ផ្សេងៗ។",
+      features: ["នាំចូល CSV និងមើលតារាង", "កំណត់ជួរ X, Y និង CRS", "គូសខ្សែ និងពហុកោណលើផែនទី", "នាំចេញដាច់ដោយឡែក ឬជាមូលដ្ឋានទិន្នន័យ"],
+      cta: "មើល KGA Data Creation"
+    },
+    en: {
+      badge: "Web-GIS",
+      tagline: "Create GIS data from a CSV table",
+      description: "Import a CSV table, map the X and Y columns, pick a coordinate reference system, then draw lines and polygons on the map before exporting to GIS formats.",
+      features: ["Import CSV and preview the table", "Set X, Y fields and CRS", "Draw lines and polygons on the map", "Export separately or as a database"],
+      cta: "View KGA Data Creation"
+    }
+  },
+  {
+    id: "geolayout", prefix: "", accent: "GeoLayout Studio", name: "GeoLayout Studio", badge: "Web-GIS",
+    image: null, href: null, isComingSoon: true,
+    kh: { badge: "Web-GIS", tagline: "នឹងមាននៅពេលអនាគត", description: "នឹងមាននៅពេលអនាគត។", features: ["នឹងមាននៅពេលអនាគត"], cta: "នឹងមាននៅពេលអនាគត" },
+    en: { badge: "Web-GIS", tagline: "Coming soon", description: "Coming soon.", features: ["Coming soon"], cta: "Coming soon" }
+  }
+];
+
+const COPY = {
+  kh: {
+    kicker: "កម្មវិធី",
+    heading: "កម្មវិធីរបស់ KGA",
+    sub: "កម្មវិធី និងឧបករណ៍ដែលបង្កើតឡើងសម្រាប់អ្នកជំនាញ GIS ដើម្បីបង្កើនល្បឿន ភាពងាយស្រួល និងគុណភាពការងារ។"
+  },
+  en: {
+    kicker: "Programs",
+    heading: "KGA programs",
+    sub: "Software and tools built for GIS professionals, to make everyday work faster, simpler and more consistent."
+  }
+};
+
+class Component extends DCLogic {
+  state = { lang: "kh" };
+
+  renderVals() {
+    const lang = this.state.lang;
+    const c = COPY[lang];
+    const on = { bg: "#FF6434", fg: "#fff" };
+    const off = { bg: "transparent", fg: "rgba(30,47,79,0.6)" };
+    const kh = lang === "kh" ? on : off;
+    const en = lang === "en" ? on : off;
+
+    return {
+      ...c,
+      programs: DATA.map((p) => ({ ...p, ...p[lang] })),
+      setKh: () => this.setState({ lang: "kh" }),
+      setEn: () => this.setState({ lang: "en" }),
+      khBg: kh.bg, khFg: kh.fg, enBg: en.bg, enFg: en.fg
+    };
+  }
+}
+</script>
+</body>
+</html>

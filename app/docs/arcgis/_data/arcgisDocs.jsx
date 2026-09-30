@@ -12,7 +12,7 @@
 // [label](../Category/Tool.md) for a sibling tool — and rendered by
 // DocsArcgis/RichText, which resolves those relative links to /docs/arcgis/<slug>.
 //
-// SLUG SCHEME (a contract: the add-in's Help buttons will point at these).
+// SLUG SCHEME (a live contract: the add-in's Help buttons open these URLs).
 //   kebab-case of the metadata file's basename, flat — no category prefix,
 //   because the category is already a data field and a nested URL would need a
 //   catch-all route. Split on lower|digit→upper, upper→upper+lower,
@@ -21,29 +21,38 @@
 //     DataManagement/IDBasedCSVExporter.md   → id-based-csv-exporter
 //   Basenames are unique across all 118 files, so no category prefix is needed;
 //   the generator asserts that, and the dev-only guard at the bottom re-checks it.
+//   Removing a tool removes its page, so a Help button that still points at a
+//   removed tool is a 404 — the add-in must drop it in the same release.
 //
 // LANGUAGE. Body prose is a plain string, which `t()` treats as
 // language-neutral and renders as-is; `summary` is a { km, en } pair because it
 // is what the index cards and the sidebar read, and it is translated first.
 // To translate any other string, replace it with a { km, en } pair in place.
 //
-// COUNTS. `PRODUCT.toolCount` (115) excludes the Product group, which holds
-// product pages rather than tools; `tools.length` (118) is the number of routes.
-// Both are derived, never hard-coded, so adding a tool cannot make them drift.
+// COUNTS. `TOOL_COUNT` (115) excludes the Product group, which holds product
+// pages rather than tools; `PAGE_COUNT` (118) is the number of routes. Both are
+// derived, never hard-coded, so adding a tool cannot make them drift.
 //
 // Per tool:
-//   summary      The first paragraph of ## Summary.
+//   summary      The first paragraph of ## Summary, as plain text.
 //   body         The rest of ## Summary.
 //   usage        ## Usage — prose, bullets and the free-standing tables that
 //                sit inside them.
+//   extra        Any further `##` section the file carries (Add Basemap's
+//                basemap tables, Sewage and Drainage's tool list), in source
+//                order, rendered after Usage. { id, title, blocks }.
 //   parameters   One section per table in ## Parameters. `nameLabel` is the
 //                metadata's own first-column heading (Label for a geoprocessing
 //                tool, Control or Input for a dialog) and `showType` says
 //                whether that table carried a Data Type column at all.
+//   actsOn       For a tool with no parameter table, the sentence saying what it
+//                acts on. Shown beside the ribbon path, not as a section.
 //   steps        ## How to use.
 //   licensing    ## Licensing information.
-//   environments ## Environments, on the three tools that declare one.
+//   environments ## Environments, on the tools that declare one.
 //   seeAlso      ## Related tools, resolved to slugs.
+//   status       "planned" when the Summary says the tool is not yet
+//                implemented / not available in this release.
 
 // PRODUCT is editorial copy, not metadata, so it lives in a hand-written file
 // this generator never touches. Re-exported here so components have one import.
@@ -64,8 +73,8 @@ export const groups = [
     name: "Data Management",
     icon: "Database",
     summary: {
-      km: "ការកែគុណលក្ខណៈ ការពិនិត្យគុណភាពលក្ខណៈ ការនាំចេញ-នាំចូល Excel និង KML និងការបង្កើតព្រំដែន។",
-      en: "Attribute editing, feature quality checks, Excel and KML round trips, boundary generation."
+      km: "ការកែគុណលក្ខណៈ កូអរដោនេ ការពិនិត្យគុណភាពលក្ខណៈ ការនាំចេញ-នាំចូល Excel និង KML រូបភាព និងការបង្កើតព្រំដែន។",
+      en: "Attribute editing, coordinates, feature quality checks, Excel and KML round trips, imagery, boundary generation."
     }
   },
   {
@@ -136,8 +145,17 @@ export const groups = [
     name: "Basemap and Go-to",
     icon: "Globe",
     summary: {
-      km: "ស្រទាប់ក្រឡាផែនទីមូលដ្ឋាន និងតំណភ្ជាប់ទៅសេវាកម្មផែនទីខាងក្រៅ។",
-      en: "Basemap tile layers and links out to external map services."
+      km: "ស្រទាប់ផែនទីមូលដ្ឋាន និងស្រទាប់គ្របលើ ព្រមទាំងតំណភ្ជាប់ទៅសេវាកម្មផែនទីខាងក្រៅ។",
+      en: "Basemap and overlay layers, and links out to external map services."
+    }
+  },
+  {
+    id: "utilities",
+    name: "Utilities",
+    icon: "Wrench",
+    summary: {
+      km: "ផ្នែកបន្ថែមតាមវិស័យ ដែលចូលប្រើពីម៉ឺនុយ **Utilities**។",
+      en: "Domain extensions reached from the **Utilities** menu."
     }
   },
   {
@@ -145,8 +163,8 @@ export const groups = [
     name: "Product",
     icon: "Info",
     summary: {
-      km: "ស្ថានភាពអាជ្ញាបណ្ណ ការធ្វើបច្ចុប្បន្នភាព និងកំណត់ត្រាចេញផ្សាយ។",
-      en: "Licence status, updates, and release notes."
+      km: "ស្ថានភាពអាជ្ញាបណ្ណ ការធ្វើបច្ចុប្បន្នភាព និងឯកសារណែនាំ។",
+      en: "Licence status, updates, and documentation."
     }
   }
 ];
@@ -185,6 +203,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -419,6 +438,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -653,6 +673,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -897,6 +918,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -1062,6 +1084,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -1323,6 +1346,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -1474,6 +1498,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -1639,6 +1664,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -1843,6 +1869,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -2058,6 +2085,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -2157,6 +2185,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -2256,6 +2285,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -2284,6 +2314,361 @@ export const tools = [
     ]
   },
   {
+    slug: "add-open-data-and-basemap",
+    group: "datamanagement",
+    name: "Add Open Data and Basemap",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "Custom dialog",
+    ribbonPath: "KGA Toolbox ▸ Data Management ▸ Add Open Data and Basemap",
+    actsOn: [],
+    summary: {
+      km: "ទាញព្រំដែនរដ្ឋបាល ទិន្នន័យវ៉ិចទ័រចំហផ្សេងទៀត ស្រទាប់ក្រឡាផែនទីមូលដ្ឋាន ម៉ូដែលកម្ពស់ឌីជីថល និងគម្របដី ចូលទៅក្នុងផែនទីដោយផ្ទាល់ ដោយបង្ហាញអ្នកផ្សព្វផ្សាយ ឆ្នាំតំណាង អាជ្ញាបណ្ណ និងទំហំនៃសំណុំទិន្នន័យនីមួយៗ មុនពេលទាញយក។ ជាឧបករណ៍ស្មើគ្នានៅលើ ArcGIS Pro របស់ឧបករណ៍ Add Open Data & Basemaps ក្នុងកម្មវិធីជំនួយ KGA QGIS។",
+      en: "Pulls administrative boundaries, other open vector data, basemap tile layers, digital elevation models and land cover straight into the active map, showing who published each dataset, what year it represents, its licence and its size before anything is downloaded. The ArcGIS Pro counterpart of the KGA QGIS plugin's Add Open Data & Basemaps tool."
+    },
+    body: [],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "The window is **modeless**: the map stays usable while it is open, so an area can be drawn on it and a map-extent area follows the map as you pan. Clicking the ribbon button again brings the open window to the front.",
+          "The form **rearranges itself** for the chosen **Data type** and **Data source**. Only the rows the current choice needs are shown.",
+          "**Nothing is downloaded before it is described.** Picking a country costs one small metadata request, and the **Details** panel then shows the publisher, the year, the licence, the feature count and the download size. **Add to Map** is enabled only once the details are known.",
+          "**Data types and sources**"
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Data type",
+          "Sources"
+        ],
+        rows: [
+          [
+            "**Administrative boundaries**",
+            "**geoBoundaries** (global, ADM0–ADM5 where published; release and geometry detail selectable), **HDX / OCHA COD-AB** (p-coded humanitarian boundaries; one download carries every level), **Natural Earth** (public domain; 1:10m, 1:50m or 1:110m; one country or the whole world), **KGA Database** (listed, not yet connected)"
+          ],
+          [
+            "**Other vector data**",
+            "**Custom URL or API** — a GeoJSON file, a zipped shapefile or file geodatabase, a GeoPackage, KML/KMZ, an ArcGIS REST layer (ending in `/FeatureServer/0` or `/MapServer/0`, paged so services that cap replies still arrive complete) or a WFS endpoint"
+          ],
+          [
+            "**Basemap tile layer**",
+            "OpenStreetMap, Google Satellite / Hybrid / Terrain / Terrain Hybrid / Map, ESRI Topography / Imagery / National Geographic / Grey (Dark) / Grey (Light), or a custom `{z}/{x}/{y}` tile address"
+          ],
+          [
+            "**Open digital elevation (DEM)**",
+            "**Copernicus DEM on AWS** (GLO-30 / GLO-90, no account), **OpenTopography Global DEM API** (Copernicus, SRTM, NASADEM, ALOS, EU-DTM, SRTM15+, GEBCO, GEDI; free API key)"
+          ],
+          [
+            "**Open land cover (LULC)**",
+            "**Esri Land Cover 10 m** (Sentinel-2, every year since 2017), **ESA WorldCover 10 m** (2020, 2021)"
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "An admin level a country does not publish is listed but greyed out, so the gap is visible.",
+          "**Vector data is imported into the project's default geodatabase** as a new feature class, named after the **Layer name**, and the dataset's attribution, licence and source address are written into its metadata.",
+          "**Basemaps** are added at the bottom of the map. Narrowing the **Zoom levels** sets the layer's visible scale range. **Also keep it permanently** saves the tile layer as a layer file in `Documents\\ArcGIS\\KGA Basemaps` and adds that folder to Catalog **Favorites**, so it is available in every project.",
+          "**DEM and land cover are requested by area.** The **Area** can be:"
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Area",
+          "Result"
+        ],
+        rows: [
+          [
+            "**Current map extent**",
+            "The bounding box of the map view; it follows the map as you pan."
+          ],
+          [
+            "**Draw a rectangle or polygon on the map**",
+            "Cut to the drawn shape, NoData outside it."
+          ],
+          [
+            "**Clip to a polygon layer's boundary**",
+            "Cut to the layer's polygons (optionally the selected ones), dissolved."
+          ],
+          [
+            "**Extent of a layer**",
+            "The bounding box of any layer."
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "A DEM or land-cover result is a GeoTIFF on its source's own grid, optionally reprojected to the map's coordinate system (bilinear for elevation, nearest-neighbour for land cover). Leave **Save to** empty to write it to a temporary folder. The file may be named anything, spaces included.",
+          "Elevation and land cover are read with the GDAL library that ships in ArcGIS Pro's Python environment (`arcgispro-py3`), the same engine the QGIS plugin uses. The Copernicus DEM and ESA WorldCover tiles are Cloud Optimised GeoTIFFs, so only the part inside the area is downloaded, several blocks at a time. Each dataset is published on more than one server (AWS, OpenTopography's SDSC mirror, Microsoft Planetary Computer); the tool times all of them with a 1 MB test read and uses the fastest for the next half hour, because which one is fast depends on where you are.",
+          "Land cover arrives already classified: the GeoTIFF carries the publisher's colour map and an attribute table with **lc_code** and **lc_class**, and the layer is labelled by class name. **Also add as polygons** converts the classes into a polygon feature class in the project geodatabase with the same two fields (up to 60 million pixels).",
+          "**Vector downloads are cached** under `%LOCALAPPDATA%\\KGAToolbox\\data_cache`, so adding the same boundary twice costs one download and the second works offline (as do OpenTopography and Esri land-cover requests for the same area). **Refresh** re-reads the source ignoring the cached copy; **Clear cache** frees the space.",
+          "The OpenTopography API key can be kept, encrypted, in Windows Credential Manager with **Remember**.",
+          "**Attribution is required** by every source. The Google tile endpoints are not licensed for use outside Google's own APIs; whether a particular use is permitted is the map maker's decision."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "Data type",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Administrative boundaries, other vector data, basemap, DEM or land cover."
+              }
+            ]
+          },
+          {
+            name: "Data source",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The publisher or service to read from."
+              }
+            ]
+          },
+          {
+            name: "Country",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The country to fetch. Type a name to jump to it."
+              }
+            ]
+          },
+          {
+            name: "Admin level",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "ADM0 (country) to ADM5. Unpublished levels are greyed out."
+              }
+            ]
+          },
+          {
+            name: "Release** / **Geometry",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "geoBoundaries release series and simplified or full-detail geometry."
+              }
+            ]
+          },
+          {
+            name: "Extent** / **Scale",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Natural Earth: one country or the whole world; 1:10m, 1:50m or 1:110m."
+              }
+            ]
+          },
+          {
+            name: "Dataset",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The elevation model to read."
+              }
+            ]
+          },
+          {
+            name: "Year",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The year a land-cover map represents."
+              }
+            ]
+          },
+          {
+            name: "Address",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "A custom data or tile address."
+              }
+            ]
+          },
+          {
+            name: "Zoom levels",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The zoom range a basemap draws at."
+              }
+            ]
+          },
+          {
+            name: "Also keep it permanently",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Saves the basemap as a layer file in Catalog Favorites."
+              }
+            ]
+          },
+          {
+            name: "API key** / **Remember",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The OpenTopography key, and whether to keep it."
+              }
+            ]
+          },
+          {
+            name: "Area",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "How the DEM or land-cover area is chosen."
+              }
+            ]
+          },
+          {
+            name: "Draw rectangle** / **Draw polygon** / **Clear",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Draws or clears the area on the map."
+              }
+            ]
+          },
+          {
+            name: "Layer** / **Selected features only",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The layer whose extent or boundary is the area."
+              }
+            ]
+          },
+          {
+            name: "Reproject to the map's coordinate system",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Projects the raster into the map's coordinate system."
+              }
+            ]
+          },
+          {
+            name: "Also add as polygons (lc_code, lc_class)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Also writes the land-cover classes as polygons."
+              }
+            ]
+          },
+          {
+            name: "Save to",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The output GeoTIFF; empty for a temporary file."
+              }
+            ]
+          },
+          {
+            name: "Layer name",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The name of the layer (and of the feature class for vector data)."
+              }
+            ]
+          },
+          {
+            name: "Add to Map** / **Refresh** / **Clear cache",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Adds the described data; re-reads the source; empties the download cache."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "On the **KGA Toolbox** tab, in the **Data Management** group, click **Add Open Data and Basemap**.",
+          "Choose a **Data type** and a **Data source**.",
+          "For boundaries, pick the **Country** and **Admin level**. For a DEM or land cover, choose the **Area** — draw it, or pick a layer — and a **Dataset** or **Year**.",
+          "Check the **Details** panel: publisher, year, licence and download size.",
+          "Adjust the **Layer name** if needed and click **Add to Map**. A progress bar shows the download; **Cancel** stops it."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before the window opens. The data itself is published under each source's own licence, which the **Details** panel shows and the layer metadata records."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "add-basemap",
+      "add-raster-to-map"
+    ]
+  },
+  {
     slug: "add-raster-to-map",
     group: "datamanagement",
     name: "Add Raster To Map",
@@ -2303,8 +2688,38 @@ export const tools = [
         type: "list",
         items: [
           "**Input Raster** is browsed to rather than picked from the map, so a raster need not already be in the project.",
-          "**Processing Mode** determines whether the raster is added as-is or cropped on the way in.",
-          "The **Extent / Boundary Settings** section offers several ways to define the crop: **Reset** returns the extent to its default and **Refresh** re-reads it."
+          "**Processing Mode** decides whether the raster is cropped on the way in, and which of the extent controls apply:"
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Mode",
+          "Crop defined by"
+        ],
+        rows: [
+          [
+            "**Add without clipping**",
+            "Nothing — the raster is added whole"
+          ],
+          [
+            "**Clip by selected layer extent**",
+            "The extent of a chosen layer"
+          ],
+          [
+            "**Clip by custom bounding box**",
+            "The **XMin** / **YMin** / **XMax** / **YMax** values"
+          ],
+          [
+            "**Clip by boundary polygon**",
+            "A polygon boundary"
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "The **Extent / Boundary Settings** section fills in whichever extent the mode needs: **Reset** returns the extent to its default and **Refresh** re-reads it."
         ]
       },
       {
@@ -2339,14 +2754,9 @@ export const tools = [
       {
         type: "list",
         items: [
-          {
-            text: "Two options refine a polygon-based crop:",
-            items: [
-              "**Dissolve boundary before crop** merges the boundary polygons into one before cropping, which avoids a ragged result where several polygons abut.",
-              "**Maintain clipping extent from boundary** keeps the output extent tied to the boundary rather than snapping out to the raster grid."
-            ]
-          },
-          "**Use input raster NoData value** carries the source raster's NoData value into the output, so transparent areas stay transparent rather than becoming black or zero.",
+          "**Use input raster NoData value** carries the source raster's NoData value into the output, so transparent areas stay transparent rather than becoming black or zero. Clear it and set **NoData value:** to state the value explicitly — useful when the source declares no NoData value, or declares the wrong one.",
+          "The **Preview** pane has its own drawing tools for defining a boundary by hand: rectangle, square, circle, and polygon, with a tick to accept the shape and a cross to clear it. A shape drawn here is what **Use drawn boundary from preview** refers to.",
+          "**Processing Log** records what the run did, including the crop actually applied and anything that had to be adjusted. Read it when the output is not the extent you expected.",
           "**Output Settings** control where and how the result is written — **Project geodatabase**, **Same as source**, or **Custom** — together with an **Output name** and a **Format**.",
           {
             text: "Three options govern what happens on a repeat run:",
@@ -2361,6 +2771,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -2386,7 +2797,7 @@ export const tools = [
             description: [
               {
                 type: "paragraph",
-                text: "Whether the raster is added as-is or cropped."
+                text: "How the raster is cropped: **Add without clipping**, **Clip by selected layer extent**, **Clip by custom bounding box**, or **Clip by boundary polygon**."
               }
             ]
           },
@@ -2457,35 +2868,24 @@ export const tools = [
             ]
           },
           {
-            name: "Dissolve boundary before crop",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Merges the boundary polygons into one before cropping."
-              }
-            ]
-          },
-          {
-            name: "Maintain clipping extent from boundary",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Keeps the output extent tied to the boundary rather than the raster grid."
-              }
-            ]
-          },
-          {
             name: "Use input raster NoData value",
             optional: false,
             type: "",
             description: [
               {
                 type: "paragraph",
-                text: "Carries the source NoData value into the output."
+                text: "Carries the source NoData value into the output. Clear it to state a value in **NoData value:** instead."
+              }
+            ]
+          },
+          {
+            name: "NoData value:",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The NoData value to write, when not taking it from the source raster."
               }
             ]
           },
@@ -2573,7 +2973,18 @@ export const tools = [
             description: [
               {
                 type: "paragraph",
-                text: "Shows the raster and boundary before processing."
+                text: "Shows the raster and boundary before processing, with rectangle, square, circle, and polygon drawing tools plus accept and clear buttons."
+              }
+            ]
+          },
+          {
+            name: "Processing Log",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "What the run did, including the crop actually applied."
               }
             ]
           }
@@ -2586,14 +2997,14 @@ export const tools = [
         items: [
           "On the **KGA Toolbox** tab, in the **Data Creation** group, open the **Quick Template** menu and click **Add Raster To Map**.",
           "Browse to the raster in **Input Raster**.",
-          "Set **Processing Mode** according to whether the raster needs cropping.",
-          "To crop to a boundary, select the boundary polygons in the map and check **Use selected polygons only**, then check **Dissolve boundary before crop**.",
-          "To crop to an extent instead, click **Use Map View**, or type the coordinates.",
-          "Check **Use input raster NoData value** and **Display NoData as transparent** so the edges stay clean.",
+          "Set **Processing Mode**. Choose **Add without clipping** to add the raster whole, or one of the three clip modes.",
+          "To crop to a boundary, choose **Clip by boundary polygon**, then either select the polygons in the map and check **Use selected polygons only**, or draw a shape in the **Preview** pane and check **Use drawn boundary from preview**.",
+          "To crop to an extent instead, choose **Clip by custom bounding box** and click **Use Map View**, or type the coordinates. For a layer's extent, choose **Clip by selected layer extent**.",
+          "Check **Use input raster NoData value** and **Display NoData as transparent** so the edges stay clean. If the source declares no NoData value, clear the checkbox and type one in **NoData value:**.",
           "Check the **Preview** pane and confirm the boundary is where you expect.",
           "Set the output location, **Output name**, and **Format**.",
           "Check **Replace existing layer in map with same name** if you are re-running.",
-          "Run the tool."
+          "Run the tool, then read **Processing Log** to confirm the crop that was applied."
         ]
       }
     ],
@@ -2605,8 +3016,8 @@ export const tools = [
     ],
     environments: [],
     seeAlso: [
-      "add-google-satellite-layer",
-      "clip-basemap-by-boundary",
+      "add-basemap",
+      "imagery-downloader",
       "elevation-profile-from-line-path",
       "spot-height"
     ]
@@ -2671,6 +3082,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -2799,6 +3211,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -2957,6 +3370,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -3131,6 +3545,396 @@ export const tools = [
     ]
   },
   {
+    slug: "coordinate-converter",
+    group: "datamanagement",
+    name: "Coordinate Converter",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "Custom dialog",
+    ribbonPath: "KGA Toolbox ▸ Data Management ▸ Attribute ▸ Coordinate Converter",
+    actsOn: [],
+    summary: {
+      km: "គណនាកូអរដោនេជាទម្រង់ decimal degrees, degrees-minutes-seconds, UTM, MGRS ឬ XY ដែល projected ដោយអានពីធរណីមាត្រនៃលក្ខណៈនីមួយៗ ឬពីវាលដែលមានស្រាប់ រួចសរសេរលទ្ធផលចូលវាលថ្មី ឬវាលដែលមានស្រាប់។",
+      en: "Calculates coordinates in decimal degrees, degrees-minutes-seconds, UTM, MGRS, or projected XY, reading them either from each feature's geometry or from existing fields, and writes the result into new or existing fields."
+    },
+    body: [
+      {
+        type: "paragraph",
+        text: "One tool covers both jobs that usually need two: stamping coordinates onto features from their geometry, and converting a column of coordinates already in the table from one notation to another."
+      }
+    ],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "Everything converts through a common path — **source → WGS 84 → target** — so any supported input format can be written to any supported output format.",
+          {
+            text: "**Source** chooses where the coordinates come from:",
+            items: [
+              "**From geometry** — read from each feature's shape. **Geometry position** then decides which point of the shape is used.",
+              "**From existing field(s)** — read from the table. **Source format** states how those values are written, and **Single text field** handles the case where a whole coordinate sits in one column."
+            ]
+          },
+          "**Geometry position** matters for anything that is not a point: The same position is used for every feature."
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Position",
+          "Point used"
+        ],
+        rows: [
+          [
+            "**Centroid**",
+            "The shape's centroid, which for a concave or multipart shape can fall outside it"
+          ],
+          [
+            "**Label point**",
+            "A point guaranteed to be inside the shape — the safer choice for irregular polygons"
+          ],
+          [
+            "**Extent center**",
+            "The centre of the bounding box"
+          ],
+          [
+            "**Start** / **End** / **Midpoint**",
+            "For lines: the first vertex, the last vertex, or the midpoint"
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          {
+            text: "**Output format** is one of `DD`, `DMS`, `UTM`, `MGRS`, or `XY`. Two options shape the result:",
+            items: [
+              "**One combined field (latitude + longitude)** writes a single string instead of a pair of columns.",
+              "**XY CRS (WKID)** sets the coordinate system for `XY` output, entered as a WKID and validated as you type; **Use map CRS** takes the map's."
+            ]
+          },
+          "**UTM zone** can be **Auto** — each feature gets the zone its longitude falls in — or **Fixed**, with an explicit **Zone** and **Hemisphere**. Use **Fixed** when a dataset straddling two zones must be reported in a single zone, which is common for a survey deliverable.",
+          "**New fields** are created before any edit, with fixed types: Double, Short, or Text (64). **Feature services are refused** — the tool works on local data only.",
+          {
+            text: "**The whole run is a single undo step.** All rows are converted first, in batches of 1,000 with progress and a cancel option, then written in one edit operation named *Coordinate Converter*.",
+            items: [
+              "Cancelling **before** the write phase changes nothing.",
+              "The write phase itself **cannot be cancelled**.",
+              "If the layer cannot be edited through an edit session, the tool falls back to a direct update cursor and reports that **undo is unavailable** — note this if it appears."
+            ]
+          },
+          {
+            text: "**Overwrite existing values** decides what happens to rows that fail to convert: Either way, bad rows are counted and logged with their ObjectID in **Details**. Read that log rather than assuming every row converted.",
+            items: [
+              "**On** — a bad row's target cell is set to null, but only where the field is nullable and currently holds a value.",
+              "**Off** — existing non-null cells are left alone entirely."
+            ]
+          }
+        ]
+      },
+      {
+        type: "subheading",
+        text: "Accuracy and range limits"
+      },
+      {
+        type: "list",
+        items: [
+          "**MGRS output is truncated**, which is the standard convention, and parsing an MGRS value returns the south-west corner of its square. A five-digit MGRS round trip is therefore accurate to about **1.4 m**, not 1 m. Do not treat MGRS as a lossless store for survey coordinates.",
+          "**UTM and MGRS are undefined outside 80°S to 84°N.** Features beyond those latitudes are reported as out of range rather than converted; the tool does not fall back to UPS.",
+          "In UTM text, a lone `N` or `S` is read as a **hemisphere** — which is what the tool writes — while the letters `C` to `X` are read as **MGRS latitude bands**. Mixed conventions in a hand-typed column are a common source of failed rows.",
+          "Values longer than 256 characters are rejected, and each text parser gives up after 250 ms, so a malformed cell becomes a counted failure rather than a hang."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [
+      {
+        title: "Input layer",
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "Layer / table",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The feature layer or standalone table to work on. Feature services are not accepted."
+              }
+            ]
+          },
+          {
+            name: "Geometry type",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The input's geometry type, shown for reference."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Source",
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "From geometry",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Reads coordinates from each feature's shape."
+              }
+            ]
+          },
+          {
+            name: "From existing field(s)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Reads coordinates from the table."
+              }
+            ]
+          },
+          {
+            name: "Source format",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "How the existing values are written — `DD`, `DMS`, `UTM`, `MGRS`, or `XY`."
+              }
+            ]
+          },
+          {
+            name: "Single text field",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The whole coordinate sits in one text column rather than separate ones."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Geometry position",
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "Use",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Which point of the shape supplies the coordinate: **Centroid**, **Label point**, **Extent center**, **Start**, **End**, or **Midpoint**. The same position is used for every feature."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Target",
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "Output format",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "`DD`, `DMS`, `UTM`, `MGRS`, or `XY`."
+              }
+            ]
+          },
+          {
+            name: "One combined field (latitude + longitude)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Writes a single combined string instead of a pair of fields."
+              }
+            ]
+          },
+          {
+            name: "XY CRS (WKID)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The coordinate system for `XY` output, as a WKID. Validated as you type, with the resolved name shown."
+              }
+            ]
+          },
+          {
+            name: "Use map CRS",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Uses the map's coordinate system for `XY` output."
+              }
+            ]
+          },
+          {
+            name: "UTM zone",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "**Auto** derives the zone per feature from its longitude; **Fixed** uses the **Zone** and **Hemisphere** given."
+              }
+            ]
+          },
+          {
+            name: "Zone",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The UTM zone number, when **Fixed**."
+              }
+            ]
+          },
+          {
+            name: "Hemisphere",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "North or south, when **Fixed**."
+              }
+            ]
+          },
+          {
+            name: "Overwrite existing values",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Replaces values already present. Off, existing non-null cells are kept."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Run",
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "Details",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Validation messages, notes, and the per-row failure log with ObjectIDs."
+              }
+            ]
+          },
+          {
+            name: "Copy details",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Copies the log to the clipboard."
+              }
+            ]
+          },
+          {
+            name: "Run",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Converts and writes. Becomes **Cancel** while running, enabled only before the write phase."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    steps: [
+      {
+        type: "subheading",
+        text: "Stamp coordinates onto features from their geometry"
+      },
+      {
+        type: "steps",
+        items: [
+          "On the **KGA Toolbox** tab, in the **Data Management** group, open the **Attribute** menu and click **Coordinate Converter**.",
+          "Set **Layer / table**.",
+          "Under **Source**, choose **From geometry**.",
+          "Under **Geometry position**, set **Use**. For irregular polygons choose **Label point** rather than **Centroid**, so the point is guaranteed to fall inside the parcel.",
+          "Under **Target**, set **Output format**. For `XY`, set **XY CRS (WKID)** or click **Use map CRS**. For `UTM`, set **UTM zone** to **Fixed** if the whole dataset must report in one zone.",
+          "Leave **Overwrite existing values** unchecked on a first run.",
+          "Click **Run**, then read **Details** for any rows that failed."
+        ]
+      },
+      {
+        type: "subheading",
+        text: "Convert a column of coordinates to another notation"
+      },
+      {
+        type: "steps",
+        items: [
+          "Open the tool and set **Layer / table**.",
+          "Under **Source**, choose **From existing field(s)** and set **Source format** to match how the values are actually written. Check **Single text field** if the whole coordinate is in one column.",
+          "Under **Target**, set **Output format** to the notation you want.",
+          "Click **Run**, then check **Details**. Failed rows are usually a mixed notation in the source column — in UTM text especially, a lone `N`/`S` means hemisphere while `C`–`X` means an MGRS band."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "boundary-xy-to-excel",
+      "coordinate-listing",
+      "indian-to-wgs-84-utm-converter",
+      "display-point-xy-and-id",
+      "add-multiple-fields"
+    ]
+  },
+  {
     slug: "copy-features",
     group: "datamanagement",
     name: "Copy Features",
@@ -3235,6 +4039,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -3513,6 +4318,136 @@ export const tools = [
     ]
   },
   {
+    slug: "create-layer-package",
+    group: "datamanagement",
+    name: "Create Layer Package",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "Custom dialog",
+    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Conversion Tool ▸ Create Layer Package",
+    actsOn: [],
+    summary: {
+      km: "ខ្ចប់ស្រទាប់ផែនទី ទិន្នន័យ និងរចនាបថរបស់វា ចូលទៅក្នុងឯកសារ .kgalp តែមួយ ដែលអាចបើកបានទាំងក្នុង ArcGIS Pro និង QGIS (តាមរយៈកម្មវិធីជំនួយ KGA Tools)។",
+      en: "Packs map layers, their data and their styles into one .kgalp file that opens in ArcGIS Pro and in QGIS (through the KGA Tools plugin)."
+    },
+    body: [
+      {
+        type: "paragraph",
+        text: "A layer file (`.lyrx`) only points at its data, so sharing a styled layer normally means sending a folder of files and an explanation. A `.kgalp` contains the data as well as the style."
+      }
+    ],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "The window lists every feature layer, raster layer and standalone table in the active map, in Contents order. Layers inside group layers are shown with their group path. Layers selected in the Contents pane start out ticked, and selecting a group layer ticks everything in it.",
+          "**Vector data** from all packaged layers and tables goes into one GeoPackage (`data.gpkg`) inside the package, one table per layer, written with **Export Features** / **Export Table**. Definition queries are honoured.",
+          "**Rasters** are copied as their original files, with sidecars (`.aux.xml`, `.ovr`, `.prj`, world files). A raster that is not a file on disk, such as a raster inside a geodatabase, is exported to GeoTIFF first.",
+          "**Every layer's style is written twice:**"
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "File",
+          "Used by"
+        ],
+        rows: [
+          [
+            "`styles/<layer>.lyrx`",
+            "ArcGIS Pro. It is an exact copy of the layer's symbology, labels, transparency and scale range."
+          ],
+          [
+            "`styles/<layer>.qml`",
+            "QGIS. It is translated from the layer's CIM symbology so the layer renders in QGIS as it does in Pro."
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "**What translates to QGIS:** single symbol, unique values (including multi-field) and graduated colors/symbols renderers; solid and hatch fills; solid and dashed strokes; simple markers (circle, square, diamond, triangle, star, cross, X); picture markers (embedded in the style); the first label class, with its field or simple concatenation expression, font, size, color and bold/italic; layer transparency; visible scale range. Anything without a QGIS equivalent (gradient fills, character markers, other renderer types, complex label expressions) is simplified to the nearest match, and the report lists each case.",
+          "**Package only the selected features** exports only the selected features from layers that have a selection. Layers without a selection are packaged whole. When the option is off, a layer's selection is set aside during the export and restored afterwards, so the whole layer is packaged.",
+          "The package's `manifest.json` is written last. If a run is interrupted, the package has no manifest, and Open Layer Package refuses it instead of opening it half-loaded. The file is built next to the target and only renamed into place once it is complete.",
+          "Group structure is recorded, so Open Layer Package rebuilds it in the receiving map. Only groups that contain a packaged layer are recorded."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Control",
+        showType: false,
+        blocks: [
+          {
+            type: "paragraph",
+            text: "This tool opens a window rather than a geoprocessing dialog."
+          }
+        ],
+        rows: [
+          {
+            name: "Layers to package",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Feature layers, raster layers and tables of the active map. Tick those to include. **Select All** and **Clear** tick or untick every layer."
+              }
+            ]
+          },
+          {
+            name: "Package only the selected features",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Export only the selected features of layers that have a selection. Default: off."
+              }
+            ]
+          },
+          {
+            name: "Output layer package (.kgalp)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The package file to write. Defaults to the map's name, in the project folder."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "In the **Contents** pane, select the layers to package (optional, since you can also tick them in the window).",
+          "On the **KGA Toolbox** tab, in the **Data Creation** group, open the **Conversion Tool** gallery and click **Create Layer Package**.",
+          "Check the ticked layers, and choose whether to package only the selected features.",
+          "Click **Browse...** and choose where to save the `.kgalp`.",
+          "Click **Create**. The report lists how many vector and raster layers were packaged, and any styling that had to be simplified for QGIS."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "open-layer-package",
+      "export-to-cad"
+    ]
+  },
+  {
     slug: "detect-overlap-across-layer",
     group: "datamanagement",
     name: "Detect Overlap Across Layer",
@@ -3544,6 +4479,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -3656,6 +4592,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -3693,7 +4630,7 @@ export const tools = [
     youtubeId: null,
     interactive: true,
     toolType: "Custom dialog",
-    ribbonPath: "KGA Toolbox ▸ Necessary Edit Tools ▸ Edit in Excel ▸ Edit Table",
+    ribbonPath: null,
     actsOn: [],
     summary: {
       km: "បើកកម្មវិធីកែតារាងគុណលក្ខណៈដាច់ដោយឡែក ដែលមានការជ្រើសវាល ការត្រងជួរដេក និងសកម្មភាពនាំចេញដាច់ដោយឡែកសម្រាប់តារាង និងលក្ខណៈ។",
@@ -3702,11 +4639,16 @@ export const tools = [
     body: [],
     usage: [
       {
+        type: "note",
+        tone: "warning",
+        text: "**This tool has no ribbon button in this release.** Its button is still defined in the add-in, and the editor window carries a working Help link, but no menu or group places it on the ribbon, so there is currently no way to open it from the interface. Use [Edit in Excel](EditInExcel.md) or the standard ArcGIS Pro attribute table instead."
+      },
+      {
         type: "list",
         items: [
           "The editor is a standalone window rather than the docked attribute table, so it can be sized and positioned independently and kept open beside the map.",
           "**Display Data** controls which fields are shown. **Field**, with **Select All** and **Clear**, chooses them — useful on a wide table where only a handful of fields are being edited.",
-          "**Query Feature?** enables **Query**, which filters the displayed rows. The label states the scope plainly: it filters *the displayed rows*, not the layer. Unlike [Filter Selection](FilterSelection.md), which applies a definition query affecting the whole project, this filter is local to the editor window.",
+          "**Query Feature?** enables **Query**, which filters the displayed rows. The label states the scope plainly: it filters *the displayed rows*, not the layer. Unlike [Show Selected Only](FilterSelection.md), which applies a definition query affecting the whole project, this filter is local to the editor window.",
           "Edits are staged. **Save Edit** commits them and **Revert** discards them, so a mistaken change can be undone as long as it has not been saved.",
           "Two export actions do different things:"
         ]
@@ -3736,6 +4678,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -3860,7 +4803,7 @@ export const tools = [
       {
         type: "steps",
         items: [
-          "On the **KGA Toolbox** tab, in the **Necessary Edit Tools** group, open the **Edit in Excel** menu's parent group and click **Edit Table**.",
+          "Open the editor. **It has no button on the ribbon in this release** — see the note above.",
           "Set **Layer**.",
           "Under **Field**, click **Clear** and then select only the fields you need, to reduce the grid to a workable width.",
           "To work on a subset, check **Query Feature?** and enter a **Query**.",
@@ -3942,6 +4885,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -4100,6 +5044,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -4172,102 +5117,8 @@ export const tools = [
     environments: [],
     seeAlso: [
       "label-control",
-      "kml-handler",
       "batch-export",
       "migrate-data-from-mdb"
-    ]
-  },
-  {
-    slug: "filter-selection",
-    group: "datamanagement",
-    name: "Filter Selection",
-    status: "full",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: "KGA Toolbox ▸ Data Management ▸ Feature ▸ Query Feature ▸ Filter Selection",
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "This tool has no parameters. It acts on the current map selection."
-      }
-    ],
-    summary: {
-      km: "បង្កើត definition query ពីលក្ខណៈដែលកំពុងជ្រើសលើផែនទី ដើម្បីឱ្យស្រទាប់បង្ហាញតែលក្ខណៈទាំងនោះ។ ចុចម្តងទៀតដើម្បីលុប query និងបង្ហាញទាំងអស់វិញ។",
-      en: "Builds a definition query from the features currently selected in the map, so the layer displays only those features. Clicking the button again clears the query and shows everything."
-    },
-    body: [],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "**This is a toggle.** The first click builds a definition query from the selection; the second click removes it.",
-          "Select the features you want to isolate **before** clicking. The tool reads the current selection and writes it into the layer's definition query.",
-          "The result is a **definition query**, not a selection. That distinction matters: Because a definition query hides the other features from everything — geoprocessing tools, attribute tables, exports, and the layout — it is the right way to work on a subset, and also an easy thing to forget you have applied."
-        ]
-      },
-      {
-        type: "table",
-        head: [
-          "",
-          "Selection",
-          "Definition query"
-        ],
-        rows: [
-          [
-            "Survives clicking elsewhere",
-            "No",
-            "Yes"
-          ],
-          [
-            "Other tools see only these features",
-            "No",
-            "Yes"
-          ],
-          [
-            "Shown in layer properties",
-            "No",
-            "Yes"
-          ],
-          [
-            "Affects printing and export",
-            "No",
-            "Yes"
-          ]
-        ]
-      },
-      {
-        type: "list",
-        items: [
-          "A layer with a definition query applied shows only part of its data. If a later tool reports a suspiciously low feature count, check whether a filter is still in place — clicking this button again clears it.",
-          "The query replaces any definition query already on the layer. Note the existing query before using the tool if the layer already had one you need to keep."
-        ]
-      }
-    ],
-    parameters: [],
-    steps: [
-      {
-        type: "steps",
-        items: [
-          "Select the features you want to isolate, using any selection tool.",
-          "On the **KGA Toolbox** tab, in the **Data Management** group, open the **Feature** menu, point to **Query Feature**, and click **Filter Selection**.",
-          "The layer now displays only the selected features.",
-          "Do the work that needs the subset.",
-          "Click **Filter Selection** again to clear the query and restore the full display."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "smart-select",
-      "parcel-overlap-check",
-      "smart-extract"
     ]
   },
   {
@@ -4363,6 +5214,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -4598,6 +5450,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -4810,6 +5663,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -5024,6 +5878,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -5249,6 +6104,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -5462,6 +6318,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -5632,6 +6489,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -5744,6 +6602,362 @@ export const tools = [
     ]
   },
   {
+    slug: "imagery-downloader",
+    group: "datamanagement",
+    name: "Imagery Downloader",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "Custom dialog",
+    ribbonPath: "KGA Toolbox ▸ Data Management ▸ Imagery Downloader",
+    actsOn: [],
+    summary: {
+      km: "ទាញយករូបភាពផែនទីមូលដ្ឋានសម្រាប់តំបន់ និងកម្រិតពង្រីកដែលបានជ្រើស រួចរក្សាទុកជាឯកសារ raster ដែលមាន georeference ជាមួយការប៉ាន់ស្មានទំហំមុនចាប់ផ្តើមទាញយក និងជម្រើសបន្តការទាញយកដែលត្រូវបានរំខាន។",
+      en: "Downloads basemap imagery for a chosen area and zoom level and saves it as a georeferenced raster file, with a size estimate before the download starts and the option to resume an interrupted run."
+    },
+    body: [
+      {
+        type: "paragraph",
+        text: "The basemap layers on the [Add Basemap](../Basemap/AddBasemap.md) menu are streamed and cannot be analysed or used offline. This tool turns that imagery into a real raster dataset on disk, which raster geoprocessing can read."
+      }
+    ],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "**The window is modeless**, so the map stays usable while it is open — which is what makes drawing a download box on the map possible.",
+          "**Download extent** offers four ways to define the area:"
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Option",
+          "Area used"
+        ],
+        rows: [
+          [
+            "**Map canvas extent**",
+            "Whatever the map view currently shows. **Refresh** re-reads it after you pan or zoom."
+          ],
+          [
+            "**Layer extent**",
+            "The full extent of a chosen layer."
+          ],
+          [
+            "**Draw box on map**",
+            "A rectangle you draw. Click **Draw**, then drag a box on the map."
+          ],
+          [
+            "**Clip to polygon**",
+            "An existing polygon, so the output follows a real boundary rather than a rectangle. **Selected features only** narrows it to the current selection."
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          {
+            text: "**Zoom level is the setting that matters most.** It controls ground resolution, and tile count grows fourfold with every level — so one level too high can turn a few hundred megabytes into a few gigabytes. Two aids are provided: The zoom range is clamped to what the source supports. Google Satellite allows up to level 21.",
+            items: [
+              "**Auto** picks a zoom appropriate to the current map scale.",
+              "**Refresh estimate** samples the source and reports the expected tile count and output size. **Use it before every large download.**"
+            ]
+          },
+          "**Imagery source** currently offers **Google Satellite** (maximum zoom 21, attributed *Imagery © Google*). Respect Google's terms of service — downloading and redistributing their imagery is not permitted under all uses.",
+          {
+            text: "**Format** always offers GeoTIFF (`.tif`), JPEG (`.jpg`), and PNG (`.png`). JPEG 2000 (`.jp2`) and ECW (`.ecw`) appear only when the GDAL build in ArcGIS Pro's Python reports a driver for them, so the list is shorter on some installations.",
+            items: [
+              "**GeoTIFF is the only format that supports Build pyramids**; the option is disabled for the others. Choose GeoTIFF for anything that will be used as a working raster."
+            ]
+          },
+          "**Transparent outside polygon** applies when clipping to a polygon — the area outside the boundary is written as transparent rather than black.",
+          "**Enable checkpoint (resume if interrupted)** records progress as tiles arrive, so a download broken by a dropped connection can continue instead of restarting. Worth enabling for any download over a few minutes.",
+          "**Connections** sets how many tiles are fetched in parallel. Raising it speeds the download up but is also what gets a client rate-limited or blocked by a tile server — increase it cautiously.",
+          "**Output CRS** defaults to the project CRS. **Selected** opens a coordinate system picker.",
+          "**Details** shows the running log, and **Show in folder** opens the output location when the download finishes."
+        ]
+      },
+      {
+        type: "note",
+        tone: "warning",
+        text: "**Requires ArcGIS Pro's Python with GDAL.** The download and the raster write are performed by a Python worker running in Pro's own `arcgispro-py3` environment, which ships GDAL. The tool cannot run if that environment is unavailable."
+      }
+    ],
+    extra: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Control",
+        showType: false,
+        blocks: [],
+        rows: [
+          {
+            name: "Imagery source",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The tile service to download from. Currently **Google Satellite**, maximum zoom 21."
+              }
+            ]
+          },
+          {
+            name: "Map canvas extent",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Uses the current map view as the download area."
+              }
+            ]
+          },
+          {
+            name: "Refresh",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Re-reads the map canvas extent after panning or zooming."
+              }
+            ]
+          },
+          {
+            name: "Layer extent",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Uses the full extent of a chosen layer."
+              }
+            ]
+          },
+          {
+            name: "Draw box on map** / **Draw",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Draws a rectangle on the map to define the area."
+              }
+            ]
+          },
+          {
+            name: "Clip to polygon",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Clips the output to an existing polygon rather than a rectangle."
+              }
+            ]
+          },
+          {
+            name: "Selected features only",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Restricts the clip polygon to the current map selection."
+              }
+            ]
+          },
+          {
+            name: "Zoom level",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The tile zoom level, which sets ground resolution. Clamped to the source's supported range. Tile count grows fourfold per level."
+              }
+            ]
+          },
+          {
+            name: "Auto",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Picks a zoom level appropriate to the current map scale."
+              }
+            ]
+          },
+          {
+            name: "Output CRS",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The coordinate system of the output raster. **Project CRS** uses the project's; **Selected** opens a picker."
+              }
+            ]
+          },
+          {
+            name: "Format",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "`GeoTIFF (.tif)`, `JPEG (.jpg)`, `PNG (.png)`, and — when GDAL reports a driver — `JPEG 2000 (.jp2)` and `ECW (.ecw)`."
+              }
+            ]
+          },
+          {
+            name: "Build pyramids",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Builds overviews so the raster draws quickly when zoomed out. GeoTIFF only."
+              }
+            ]
+          },
+          {
+            name: "Transparent outside polygon",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Writes transparent rather than black outside the clip polygon."
+              }
+            ]
+          },
+          {
+            name: "Connections",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "How many tiles are fetched in parallel. High values risk being rate-limited by the server."
+              }
+            ]
+          },
+          {
+            name: "Refresh estimate",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Samples the source and reports expected tile count and output size."
+              }
+            ]
+          },
+          {
+            name: "Output folder",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The folder that receives the raster."
+              }
+            ]
+          },
+          {
+            name: "File name",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The output file name. Defaults to `<source>_z<zoom>`."
+              }
+            ]
+          },
+          {
+            name: "Enable checkpoint (resume if interrupted)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Records progress so an interrupted download can resume."
+              }
+            ]
+          },
+          {
+            name: "Details",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The running log for the current job."
+              }
+            ]
+          },
+          {
+            name: "Show in folder",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "Opens the output folder."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "Zoom the map to the area you need, or add the boundary polygon you intend to clip to.",
+          "On the **KGA Toolbox** tab, in the **Data Management** group, click **Imagery Downloader**.",
+          "Choose the **Imagery source**.",
+          {
+            text: "Set the **Download extent**:",
+            items: [
+              "For the current view, choose **Map canvas extent** and click **Refresh**.",
+              "To draw an area, choose **Draw box on map**, click **Draw**, and drag a box on the map.",
+              "To follow a boundary, choose **Clip to polygon**, pick the polygon layer, and check **Transparent outside polygon**."
+            ]
+          },
+          "Set the **Zoom level**, or click **Auto**.",
+          "Click **Refresh estimate** and read the expected tile count and file size. If it is larger than you expected, drop the zoom by one level and estimate again.",
+          "Set **Output CRS** and choose a **Format**. Pick GeoTIFF and check **Build pyramids** for a working raster.",
+          "Set the **Output folder** and **File name**.",
+          "For a large download, check **Enable checkpoint (resume if interrupted)** and leave **Connections** at its default.",
+          "Start the download and watch **Details**. When it finishes, click **Show in folder**."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      },
+      {
+        type: "paragraph",
+        text: "Downloaded imagery remains subject to the provider's terms of service. Google imagery is attributed *Imagery © Google* and its terms restrict redistribution."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "add-basemap",
+      "add-raster-to-map",
+      "add-open-data-and-basemap",
+      "elevation-profile-from-line-path"
+    ]
+  },
+  {
     slug: "import-kml-file",
     group: "datamanagement",
     name: "Import KML file",
@@ -5760,7 +6974,7 @@ export const tools = [
     body: [
       {
         type: "paragraph",
-        text: "Where [KML Handler](KMLHandler.md) is a general two-way converter, this tool is built for one job: turning a KML boundary into cadastral geometry, with the coordinates shown before anything is created."
+        text: "This tool is built for one job: turning a KML boundary into cadastral geometry, with the coordinates shown before anything is created."
       }
     ],
     usage: [
@@ -5835,6 +7049,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -5989,222 +7204,9 @@ export const tools = [
     ],
     environments: [],
     seeAlso: [
-      "kml-handler",
       "point-to-polygon",
       "generate-boundary-point",
       "boundary-xy-to-excel"
-    ]
-  },
-  {
-    slug: "kml-handler",
-    group: "datamanagement",
-    name: "KML Handler",
-    status: "full",
-    youtubeId: null,
-    interactive: true,
-    toolType: "Custom dialog",
-    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Quick Template ▸ KML Handler",
-    actsOn: [],
-    summary: {
-      km: "បម្លែងឯកសារ KML និង KMZ ទៅជាស្រទាប់ GIS និងបម្លែងស្រទាប់ GIS ត្រឡប់ទៅជា KML ឬ KMZ វិញ ជាមួយប្រព័ន្ធកូអរដោនេគោលដៅ និងកំណត់ហេតុដំណើរការ។",
-      en: "Converts KML and KMZ files into GIS layers, and GIS layers back into KML or KMZ, with a target coordinate system and a processing log."
-    },
-    body: [
-      {
-        type: "paragraph",
-        text: "The window handles both directions, so it is the general-purpose KML tool. For importing a boundary with a coordinate preview and a choice of output geometry, use [Import KML file](ImportKMLFile.md) instead."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The window has two independent halves:"
-        ]
-      },
-      {
-        type: "table",
-        head: [
-          "Section",
-          "Direction",
-          "Action button"
-        ],
-        rows: [
-          [
-            "**KML/KMZ to GIS Layer**",
-            "KML or KMZ in, feature layer out",
-            "**Run Extraction**"
-          ],
-          [
-            "**GIS Layer to KML/KMZ**",
-            "Feature layer in, KML or KMZ out",
-            "**Run Conversion**"
-          ]
-        ]
-      },
-      {
-        type: "list",
-        items: [
-          "For import, **Select input** browses to the KML or KMZ file, **Select output** sets where the layer is written, and **Output format** and **Target CRS** are set under **Configure settings**.",
-          "**Target CRS matters on import.** KML is always in WGS 84 geographic coordinates — that is fixed by the format. Set **Target CRS** to the projected system your project works in, or the imported layer arrives in degrees and cannot be measured or used with the metre-based tools.",
-          "For export, **Save as KMZ** chooses between KML and KMZ. KMZ is a compressed single file, which is the better choice for sharing; plain KML is uncompressed and human-readable.",
-          "Exported KML is reprojected to WGS 84 automatically, as the format requires. A projected source layer therefore changes coordinate system on the way out — this is normal, not an error.",
-          "The **Processing Log** records what happened. Read it after a run: KML is a loose format and a file can contain geometry types, nested folders, or styling that do not map cleanly onto a feature class, and the log is where those problems are reported.",
-          "**Height** is available where KML elevation values need handling."
-        ]
-      }
-    ],
-    parameters: [
-      {
-        title: null,
-        nameLabel: "Control",
-        showType: false,
-        blocks: [],
-        rows: [
-          {
-            name: "Select input",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "The KML or KMZ file to import. Import section."
-              }
-            ]
-          },
-          {
-            name: "Select output",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Where the imported layer is written. Import section."
-              }
-            ]
-          },
-          {
-            name: "Output format",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "The format of the imported output. Import section."
-              }
-            ]
-          },
-          {
-            name: "Target CRS",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "The coordinate system the imported layer is written in. Set this to your project's projected system."
-              }
-            ]
-          },
-          {
-            name: "Height",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Handling for KML elevation values."
-              }
-            ]
-          },
-          {
-            name: "Run Extraction",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Runs the KML/KMZ to GIS layer conversion."
-              }
-            ]
-          },
-          {
-            name: "Save as KMZ",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Writes a compressed KMZ instead of a plain KML. Export section."
-              }
-            ]
-          },
-          {
-            name: "Run Conversion",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "Runs the GIS layer to KML/KMZ conversion."
-              }
-            ]
-          },
-          {
-            name: "Processing Log",
-            optional: false,
-            type: "",
-            description: [
-              {
-                type: "paragraph",
-                text: "The record of what happened during the run."
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    steps: [
-      {
-        type: "subheading",
-        text: "Import a KML or KMZ file"
-      },
-      {
-        type: "steps",
-        items: [
-          "On the **KGA Toolbox** tab, in the **Data Creation** group, open the **Quick Template** menu and click **KML Handler**.",
-          "In the **KML/KMZ to GIS Layer** section, click **Browse...** beside **Select input** and choose the file.",
-          "Set **Select output**.",
-          "Under **Configure settings**, set **Output format** and set **Target CRS** to your project's projected coordinate system.",
-          "Click **Run Extraction**.",
-          "Read the **Processing Log** and check that everything you expected was imported."
-        ]
-      },
-      {
-        type: "subheading",
-        text: "Export a layer to KML or KMZ"
-      },
-      {
-        type: "steps",
-        items: [
-          "Open the tool and use the **GIS Layer to KML/KMZ** section.",
-          "Choose the layer to export.",
-          "Check **Save as KMZ** for a single compressed file, or leave it clear for plain KML.",
-          "Click **Run Conversion**, then read the **Processing Log**."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "import-kml-file",
-      "to-google-earth-pro",
-      "to-kga-geodigitizer",
-      "export-to-cad"
     ]
   },
   {
@@ -6251,6 +7253,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -6370,6 +7373,129 @@ export const tools = [
     ]
   },
   {
+    slug: "open-layer-package",
+    group: "datamanagement",
+    name: "Open Layer Package",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "Custom dialog",
+    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Conversion Tool ▸ Open Layer Package",
+    actsOn: [],
+    summary: {
+      km: "បើកកញ្ចប់ស្រទាប់ .kgalp ដែលបង្កើតក្នុង ArcGIS Pro ឬ QGIS (កម្មវិធីជំនួយ KGA Tools) រួចបន្ថែមស្រទាប់ រចនាបថ និងរចនាសម្ព័ន្ធក្រុមរបស់វាទៅក្នុងផែនទីបច្ចុប្បន្ន។",
+      en: "Opens a .kgalp layer package built in ArcGIS Pro or in QGIS (KGA Tools plugin), and adds its layers, styles and group structure to the active map."
+    },
+    body: [],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "The package is extracted to a real folder, never to a temporary one. The layers read their data from the extracted files, so a temporary folder would leave broken layers after the next restart. If you leave **Extract to** empty, the package goes to a `KGA Packages\\<package name>` folder beside the project file, or in Documents if the project has not been saved.",
+          "If the extraction folder already has files in it (for example, from an earlier open of the same package, whose data may be locked by the map), a new folder with a `_2`, `_3`, … suffix is used instead of overwriting it.",
+          "The layers are added to a new group layer at the top of the Contents pane. The group is named after the package unless you enter a name. Groups recorded in the package are rebuilt inside it.",
+          "**Styling:**"
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Package built in",
+          "Style applied"
+        ],
+        rows: [
+          [
+            "ArcGIS Pro",
+            "The packaged `.lyrx`: renderer, labels, transparency and scale range, exactly as they were."
+          ],
+          [
+            "QGIS",
+            "The layer's QGIS style (`.qml`), translated to ArcGIS Pro symbology."
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "**What translates from QGIS:** single symbol, categorized and graduated renderers; simple fills (including hatch styles), simple lines (including dash styles), simple markers; SVG and raster image markers, using the SVG files packaged with the layer (QGIS SVG color parameters are filled in with the symbol's colors); the first label settings (a field or a simple `||` concatenation), with font, size, color and bold/italic; layer opacity; scale-based visibility. Sizes are converted from QGIS units (millimeters, pixels, inches) to points. Rule-based renderers use the first rule's symbol, and point-cluster/displacement renderers use the renderer they wrap. Font markers are drawn as circles. The report lists every simplification.",
+          "QGIS raster styles have no ArcGIS Pro equivalent, so rasters from QGIS packages open with Pro's default stretch. Only their opacity is kept.",
+          "Entries in the archive that would be written outside the extraction folder are refused. Packages written by a newer version of the format are refused with a message asking you to update."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Control",
+        showType: false,
+        blocks: [
+          {
+            type: "paragraph",
+            text: "This tool opens a window rather than a geoprocessing dialog."
+          }
+        ],
+        rows: [
+          {
+            name: "Layer package (.kgalp)",
+            optional: false,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The package to open. Once chosen, the window shows how many layers it holds, which application built it, and when."
+              }
+            ]
+          },
+          {
+            name: "Extract to",
+            optional: true,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The folder the package is extracted to. Default: `KGA Packages\\<package name>` beside the project."
+              }
+            ]
+          },
+          {
+            name: "Group name",
+            optional: true,
+            type: "",
+            description: [
+              {
+                type: "paragraph",
+                text: "The name of the group layer the package is added to. Default: the package's file name."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "Open the map you want to add the layers to.",
+          "On the **KGA Toolbox** tab, in the **Data Creation** group, open the **Conversion Tool** gallery and click **Open Layer Package**.",
+          "Click **Browse...** and choose the `.kgalp` file.",
+          "Optionally choose an extraction folder and a group name.",
+          "Click **Open**. The report states how many layers were added, where the data was extracted, and any notes from the package or about styling that was simplified."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "create-layer-package"
+    ]
+  },
+  {
     slug: "select-to-enter-value",
     group: "datamanagement",
     name: "Select To Enter Value",
@@ -6409,6 +7535,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -6660,6 +7787,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -6797,6 +7925,100 @@ export const tools = [
     ]
   },
   {
+    slug: "filter-selection",
+    group: "datamanagement",
+    name: "Show Selected Only",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "One-click command",
+    ribbonPath: "KGA Toolbox ▸ Data Management ▸ Feature ▸ Query Feature ▸ Show Selected Only",
+    actsOn: [
+      {
+        type: "paragraph",
+        text: "This tool has no parameters. It acts on the current map selection."
+      }
+    ],
+    summary: {
+      km: "បង្កើត definition query ពីលក្ខណៈដែលកំពុងជ្រើសលើផែនទី ដើម្បីឱ្យស្រទាប់បង្ហាញតែលក្ខណៈទាំងនោះ។ ចុចម្តងទៀតដើម្បីលុប query និងបង្ហាញទាំងអស់វិញ។",
+      en: "Builds a definition query from the features currently selected in the map, so the layer displays only those features. Clicking the button again clears the query and shows everything."
+    },
+    body: [],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "**This is a toggle.** The first click builds a definition query from the selection; the second click removes it.",
+          "Select the features you want to isolate **before** clicking. The tool reads the current selection and writes it into the layer's definition query.",
+          "The result is a **definition query**, not a selection. That distinction matters: Because a definition query hides the other features from everything — geoprocessing tools, attribute tables, exports, and the layout — it is the right way to work on a subset, and also an easy thing to forget you have applied."
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "",
+          "Selection",
+          "Definition query"
+        ],
+        rows: [
+          [
+            "Survives clicking elsewhere",
+            "No",
+            "Yes"
+          ],
+          [
+            "Other tools see only these features",
+            "No",
+            "Yes"
+          ],
+          [
+            "Shown in layer properties",
+            "No",
+            "Yes"
+          ],
+          [
+            "Affects printing and export",
+            "No",
+            "Yes"
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "A layer with a definition query applied shows only part of its data. If a later tool reports a suspiciously low feature count, check whether a filter is still in place — clicking this button again clears it.",
+          "The query replaces any definition query already on the layer. Note the existing query before using the tool if the layer already had one you need to keep."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "Select the features you want to isolate, using any selection tool.",
+          "On the **KGA Toolbox** tab, in the **Data Management** group, open the **Feature** menu, point to **Query Feature**, and click **Show Selected Only**.",
+          "The layer now displays only the selected features.",
+          "Do the work that needs the subset.",
+          "Click **Show Selected Only** again to clear the query and restore the full display."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "smart-select",
+      "parcel-overlap-check",
+      "smart-extract"
+    ]
+  },
+  {
     slug: "add-multiple-fields",
     group: "vectoriq",
     name: "Add multiple Fields",
@@ -6880,6 +8102,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -7015,6 +8238,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -7176,6 +8400,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -7372,6 +8597,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -7558,6 +8784,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -7726,7 +8953,7 @@ export const tools = [
           "In **Extend Existing Structure** mode, click **Detect Structure** first. It reads the existing geodatabase and populates the grids, so additions are made against what is really there rather than against an assumption. **Refresh Structure** re-reads it after an external change.",
           "**Feature Datasets** are managed with **Add Feature Dataset**, **Import Feature Dataset**, and **Remove**. Each carries a **Feature Dataset Name**, a **Coordinate System** / **CRS**, and a **Status**. Getting the feature dataset right matters beyond tidiness: a geodatabase topology can only contain feature classes from a single feature dataset, so grouping the layers that must be validated together is what makes [Topology Check](../TopologyCheck/TopologyCheck.md) possible later.",
           "**Feature Classes / Tables** are managed with **Add Feature Class**, **Add Table**, and **Import Feature/Table**. Each row has a **Name**, a **Geometry Type**, and a **Store In** value naming the feature dataset that holds it.",
-          "**Import KML/KMZ** is present on the dialog but **not implemented** — it is disabled and reports *\"Import KML/KMZ will be available in a future update.\"* Use [KML Handler](../DataManagement/KMLHandler.md) to bring KML data in.",
+          "**Import KML/KMZ** is present on the dialog but **not implemented** — it is disabled and reports *\"Import KML/KMZ will be available in a future update.\"* To bring KML data in, use [Import KML file](../DataManagement/ImportKMLFile.md), which handles KML boundaries but is not a general-purpose KML importer.",
           {
             text: "Two options apply to the whole run:",
             items: [
@@ -7738,6 +8965,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -7968,8 +9196,7 @@ export const tools = [
       "add-multiple-fields",
       "create-polygon-layer",
       "lmap-layer",
-      "topology-check",
-      "kml-handler"
+      "topology-check"
     ]
   },
   {
@@ -8047,6 +9274,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -8246,6 +9474,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -8391,6 +9620,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -8540,107 +9770,6 @@ export const tools = [
     ]
   },
   {
-    slug: "geo-dashboard",
-    group: "vectoriq",
-    name: "GeoDashboard",
-    status: "planned",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: null,
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "None. The tool collects no input in this release."
-      }
-    ],
-    summary: {
-      km: "គ្រោងផ្តល់ផ្ទាំង dashboard អន្តរកម្មសម្រាប់មើលឃើញ និងវិភាគទិន្នន័យ។",
-      en: "Intended to provide an interactive dashboard for data visualisation and analysis."
-    },
-    body: [
-      {
-        type: "note",
-        tone: "warning",
-        text: "**This tool is not yet implemented.** Clicking it displays the message *\"GeoDashboard will be available in a future update.\"* and nothing else happens. It is documented here because the button appears on the ribbon."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The button is present at the top of the **VectorIQ** menu but performs no work in this release.",
-          "No parameters are collected and no dashboard is shown — only the notice above."
-        ]
-      },
-      {
-        type: "subheading",
-        text: "Achieving the same result today"
-      },
-      {
-        type: "paragraph",
-        text: "Until the dashboard ships, the same questions can be answered with the tools that do work:"
-      },
-      {
-        type: "table",
-        head: [
-          "Need",
-          "Use instead"
-        ],
-        rows: [
-          [
-            "Descriptive statistics for a field",
-            "[Statistics Summary](StatisticsSummary.md)"
-          ],
-          [
-            "Statistics grouped by a category",
-            "[Pivot Table Builder](PivotTableBuilder.md)"
-          ],
-          [
-            "Geometry statistics for a layer",
-            "[Shape Metrics](ShapeMetrics.md)"
-          ],
-          [
-            "Feature counts across layers",
-            "[Feature Counter](../Cadastral/FeatureCounter.md)"
-          ],
-          [
-            "Coverage percentages",
-            "[Percent Coverage](../Geoprocessing/PercentCoverage.md)"
-          ],
-          [
-            "Charts and interactive views",
-            "ArcGIS Pro's own **Charts** and **Dashboards**"
-          ]
-        ]
-      },
-      {
-        type: "paragraph",
-        text: "Both [Statistics Summary](StatisticsSummary.md) and [Shape Metrics](ShapeMetrics.md) have a **Copy card** button, and [Pivot Table Builder](PivotTableBuilder.md) has **Export Pivot**, so a reporting summary can be assembled from them without the dashboard."
-      }
-    ],
-    parameters: [],
-    steps: [
-      {
-        type: "paragraph",
-        text: "There is no working procedure in this release. See *Achieving the same result today* above."
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Not applicable — the tool performs no licensed work in this release."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "statistics-summary",
-      "pivot-table-builder",
-      "shape-metrics",
-      "feature-counter"
-    ]
-  },
-  {
     slug: "id-generator",
     group: "vectoriq",
     name: "ID Generator",
@@ -8673,6 +9802,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -8850,6 +9980,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -9056,6 +10187,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -9209,6 +10341,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -9384,6 +10517,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -9495,6 +10629,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -9759,6 +10894,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -10023,6 +11159,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -10155,6 +11292,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -10333,6 +11471,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -10487,6 +11626,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -10552,6 +11692,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -10617,6 +11758,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -10682,6 +11824,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -10733,7 +11876,7 @@ export const tools = [
         type: "list",
         items: [
           "The dialog is organised around a list of **expression rows**. Each row contributes one segment of the finished label, and the rows are joined in order.",
-          "Rows are managed with the buttons beside the list:"
+          "Each row is a single-line card. Drag a card (by its **⋮⋮** grip or any empty part of the card) and drop it on the top or bottom half of another card to reorder; a blue line shows where it will land. Rows are otherwise managed with:"
         ]
       },
       {
@@ -10748,11 +11891,7 @@ export const tools = [
             "Adds a row"
           ],
           [
-            "**↑** / **↓**",
-            "Moves a row up or down, changing segment order"
-          ],
-          [
-            "**Duplicate**",
+            "**Duplicate** (copy icon)",
             "Copies a row, keeping its formatting"
           ],
           [
@@ -10811,7 +11950,7 @@ export const tools = [
       {
         type: "list",
         items: [
-          "**Functions** are available per row and cover the usual label needs: `DefaultValue` is worth noting — it substitutes a fallback where a field is null, which avoids the blank and `<Null>` labels that plague real data. Use `Superscript (sup)` for units such as m²."
+          "**Functions** are available per row and cover the usual label needs: **The menu is filtered by the field's type.** Each function declares what it applies to — text only, number only, date only, or any type — so a text field does not offer `Round` and a number field does not offer `Upper`. If a function you expect is missing, check the field type of the row you are editing. Several take extra arguments, pre-filled with a sensible default you then edit: `Left`/`Right` take a character count, `Mid` a start and length, `Replace` a find and replace pair, `Round` a number of decimal places, and `Text` a format string such as `\"#,##0.00\"`. `DefaultValue` is worth noting — it substitutes a fallback where a field is null, which avoids the blank and `<Null>` labels that plague real data. `IIF` and `When` cover conditional text, and `Decode` maps a coded value to a readable one. Use `Superscript (sup)` for units such as m²."
         ]
       },
       {
@@ -10823,37 +11962,43 @@ export const tools = [
         rows: [
           [
             "Text",
-            "`Concatenate`, `Left`, `Right`, `Find`, `Replace`, `Trim`, `Upper`, `Lower`, `Proper`, `Length`, `Text`"
+            "`Upper`, `Lower`, `Proper`, `Trim`, `Left`, `Right`, `Mid`, `Replace`, `Concatenate`, `Find`, `Length`"
           ],
           [
             "Numeric",
-            "`Round`, `Ceil`, `Floor`, `Count`"
+            "`Round`, `Ceil`, `Floor`, `Abs`, `Text`"
           ],
           [
             "Date",
-            "`Year`, `Month`, `Hour`, `Minute`"
+            "`Year`, `Month`, `Day`, `Hour`, `Minute`, `Now`"
           ],
           [
             "Logic",
-            "`When`, `Decode`, `DefaultValue`"
+            "`IIF`, `Decode`, `When`, `DefaultValue`"
           ],
           [
             "Formatting",
             "`Superscript (sup)`, `Subscript (sub)`"
+          ],
+          [
+            "Custom",
+            "**Custom Arcade expression…** — write your own Arcade for the row"
           ]
         ]
       },
       {
         type: "list",
         items: [
-          "**Formatting** can be set globally — **Global Font Name**, **Global Size**, **Global Style**, **Global Color** — and then overridden on individual rows, so one segment can be bold or coloured while the rest stays plain. For Khmer text, choose a Unicode Khmer font such as `Khmer OS` or `Hanuman`.",
-          "**Label Class** selects which of the layer's label classes the expression is written to, so existing label classes need not be disturbed. **Label Position** sets the placement.",
+          "**Custom Arcade expression…** (top of the **fx** menu) opens an editor seeded with the row's value, for arithmetic between fields and values such as `Round($feature.Shape_Area / 10000, 2)` for hectares. The editor inserts fields and operators, and **Test** evaluates the expression against the first feature of the layer; syntax errors are reported before the row is accepted.",
+          "**Formatting** can be set globally — **Global Font Name**, **Global Size**, **Global Font Style** (Regular, Bold, Italic, Bold Italic), **Global Color** — and then overridden on individual rows (font, size, font style, colour; blank means use the global value), so one segment can be bold or coloured while the rest stays plain. For Khmer text, choose a Unicode Khmer font such as `Khmer OS` or `Hanuman`.",
+          "**Label Class** selects which of the layer's label classes the expression is written to, so existing label classes need not be disturbed. **Label Position** is picked visually, between the expression and the preview: point layers show a 3×3 anchor grid around the point (plus **Best Position**); line and polygon layers show drawn tiles for each Maplex placement method.",
           "The **Preview** pane renders the label as it will appear, segment formatting included. Check it before applying — it catches null-value and spacing problems that are invisible in the raw expression.",
           "**Labeling** applies the expression to the chosen label class and turns labelling on.",
           "Unlike [Show Area](ShowArea.md) and the **Display** tools, this builder writes a normal label class. The result is saved with the project, prints, and can be edited afterwards in the standard **Labeling** ribbon."
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -10895,7 +12040,7 @@ export const tools = [
             description: [
               {
                 type: "paragraph",
-                text: "The label placement option."
+                text: "The label placement, chosen from the anchor grid (points) or drawn placement tiles (lines, polygons)."
               }
             ]
           },
@@ -10944,13 +12089,13 @@ export const tools = [
             ]
           },
           {
-            name: "Global Style",
+            name: "Global Font Style",
             optional: false,
             type: "",
             description: [
               {
                 type: "paragraph",
-                text: "The default text style."
+                text: "The default font style: Regular, Bold, Italic, or Bold Italic."
               }
             ]
           },
@@ -11000,7 +12145,7 @@ export const tools = [
           "Click **＋ Click to add new expression line** and pick a field in **Source**.",
           "Add further rows for each segment. Set each row's concatenation mode — use `NewLine` where the label should stack onto a second line.",
           "Apply a function to a row where the raw field value is not what you want — `Round` for an area, `DefaultValue` to avoid a blank label, `Superscript (sup)` for a unit.",
-          "Set **Global Font Name**, **Global Size**, **Global Style**, and **Global Color**, then override individual rows as needed.",
+          "Set **Global Font Name**, **Global Size**, **Global Font Style**, and **Global Color**, then override individual rows as needed.",
           "Check the **Preview** pane. Confirm null values and spacing look right.",
           "Click **Labeling** to apply the expression and switch labelling on."
         ]
@@ -11108,10 +12253,11 @@ export const tools = [
         type: "list",
         items: [
           "Labelling is applied through a dedicated label class named `KGA_ShowArea`. While it is active, the layer's other label classes are hidden so the area labels are not competing with existing labels. Toggling the tool off removes the class and restores the previous label visibility exactly as it was.",
-          "Because the label is an expression rather than a stored value, it cannot be exported to a table or joined. To store the value as an attribute, use **Calculate Geometry** (on the **Calculation** gallery) instead."
+          "Because the label is an expression rather than a stored value, it cannot be exported to a table or joined. To store the value as an attribute, use ArcGIS Pro's own **Calculate Geometry** (right-click the field in the attribute table) instead."
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -11223,10 +12369,11 @@ export const tools = [
         type: "list",
         items: [
           "Labelling is applied through a dedicated label class named `KGA_ShowLength`. While it is active, the layer's other label classes are hidden. Toggling the tool off removes the class and restores the previous label visibility exactly as it was.",
-          "Because the label is an expression rather than a stored value, it cannot be exported to a table or joined. To store the value as an attribute, use **Calculate Geometry** (on the **Calculation** gallery) instead."
+          "Because the label is an expression rather than a stored value, it cannot be exported to a table or joined. To store the value as an attribute, use ArcGIS Pro's own **Calculate Geometry** (right-click the field in the attribute table) instead."
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -11313,6 +12460,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -11403,6 +12551,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -11602,6 +12751,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -11744,6 +12894,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -11860,6 +13011,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12022,6 +13174,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12111,6 +13264,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12193,6 +13347,224 @@ export const tools = [
     ]
   },
   {
+    slug: "lmap-layer",
+    group: "cadastral",
+    name: "Create LMAP Layer",
+    status: "full",
+    youtubeId: null,
+    interactive: false,
+    toolType: "Geoprocessing tool",
+    ribbonPath: "KGA Toolbox ▸ Geoprocessing ▸ Cadastral Tools ▸ Create LMAP Layer",
+    actsOn: [],
+    summary: {
+      km: "បង្កើតស្រទាប់ពហុកោណដោយប្រើស្គីម៉ាវាល LMAP ស្តង់ដារដែល MLMUPC តម្រូវ ឬនាំចេញស្រទាប់ដែលមានស្រាប់ចូលទៅស្គីម៉ានោះ ជាមួយការដាក់លេខក្បាលដីស្វ័យប្រវត្តិ កាលបរិច្ឆេទបញ្ចូល និងការទប់ស្កាត់ UPRN ស្ទួន។",
+      en: "Creates a polygon layer using the standard LMAP field schema required by MLMUPC, or exports existing layers into that schema, with automatic parcel numbering, entry dates, and duplicate UPRN prevention."
+    },
+    body: [
+      {
+        type: "paragraph",
+        text: "LMAP is the field format Cambodia's Ministry of Land Management, Urban Planning and Construction requires for cadastral submissions. This tool produces data already in that schema rather than retrofitting it afterwards."
+      }
+    ],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "**Export Feature?** switches the tool between its two modes: All parameters are marked optional because which ones apply depends on the mode."
+        ]
+      },
+      {
+        type: "table",
+        head: [
+          "Mode",
+          "Parameters used"
+        ],
+        rows: [
+          [
+            "**Unchecked — create**",
+            "**Output New LMAP feature**, **Output Coordinate System**"
+          ],
+          [
+            "**Checked — export**",
+            "**Input Features to Export**, **Output workspace**"
+          ]
+        ]
+      },
+      {
+        type: "list",
+        items: [
+          "**Prevent Duplicate UPRNs** guards the unique parcel reference number. A duplicate UPRN invalidates a submission, so keep this enabled unless there is a specific reason not to. The tool ensures Global IDs exist on the feature class to support the check.",
+          "**Auto Calculate parcel_no?** populates the `parcel_no` field automatically, and **Auto Entry Date** stamps the entry date field. Both save manual attribute entry and remove the transcription errors that come with it.",
+          "**Digitizer's Name** records the responsible digitiser, as the specification requires.",
+          "**Output Coordinate System** applies when creating a new layer. Set it to the coordinate system the submission requires — for Cambodia, normally WGS 1984 UTM Zone 48N.",
+          "Feature class names are validated when exporting; a name that does not meet geodatabase rules is reported."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Label",
+        showType: true,
+        blocks: [],
+        rows: [
+          {
+            name: "Export Feature?",
+            optional: true,
+            type: "Boolean",
+            description: [
+              {
+                type: "paragraph",
+                text: "Selects the mode."
+              },
+              {
+                type: "list",
+                items: [
+                  "Checked — Existing layers are exported into the LMAP schema, using **Input Features to Export** and **Output workspace**.",
+                  "Unchecked (default) — A new empty LMAP layer is created, using **Output New LMAP feature** and **Output Coordinate System**."
+                ]
+              }
+            ]
+          },
+          {
+            name: "Output New LMAP feature",
+            optional: true,
+            type: "Feature Class",
+            description: [
+              {
+                type: "paragraph",
+                text: "The new LMAP polygon feature class to create. Used in create mode."
+              }
+            ]
+          },
+          {
+            name: "Output Coordinate System",
+            optional: true,
+            type: "Spatial Reference",
+            description: [
+              {
+                type: "paragraph",
+                text: "The coordinate system of the new layer. Used in create mode."
+              }
+            ]
+          },
+          {
+            name: "Digitizer's Name",
+            optional: true,
+            type: "String",
+            description: [
+              {
+                type: "paragraph",
+                text: "The digitiser's name, recorded as the specification requires."
+              }
+            ]
+          },
+          {
+            name: "Prevent Duplicate UPRNs",
+            optional: true,
+            type: "Boolean",
+            description: [
+              {
+                type: "paragraph",
+                text: "Enforces uniqueness of the parcel reference number. Keep enabled — a duplicate UPRN invalidates a submission."
+              }
+            ]
+          },
+          {
+            name: "Auto Calculate parcel_no?",
+            optional: true,
+            type: "Boolean",
+            description: [
+              {
+                type: "paragraph",
+                text: "Populates the `parcel_no` field automatically."
+              }
+            ]
+          },
+          {
+            name: "Auto Entry Date",
+            optional: true,
+            type: "Boolean",
+            description: [
+              {
+                type: "paragraph",
+                text: "Stamps the entry date field automatically."
+              }
+            ]
+          },
+          {
+            name: "Input Features to Export",
+            optional: true,
+            type: "Feature Layer (multiple)",
+            description: [
+              {
+                type: "paragraph",
+                text: "The layers to export into the LMAP schema. Used in export mode."
+              }
+            ]
+          },
+          {
+            name: "Output workspace",
+            optional: true,
+            type: "Workspace; Feature Dataset",
+            description: [
+              {
+                type: "paragraph",
+                text: "The geodatabase or feature dataset receiving the exported layers. Used in export mode."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    steps: [
+      {
+        type: "subheading",
+        text: "Create a new LMAP layer"
+      },
+      {
+        type: "steps",
+        items: [
+          "On the **KGA Toolbox** tab, in the **Geoprocessing** group, open the **Cadastral Tools** gallery and click **Create LMAP Layer**.",
+          "Leave **Export Feature?** unchecked.",
+          "Set **Output New LMAP feature** to the feature class to create.",
+          "Set **Output Coordinate System** to the coordinate system the submission requires.",
+          "Type the digitiser's name in **Digitizer's Name**.",
+          "Check **Prevent Duplicate UPRNs**, **Auto Calculate parcel_no?**, and **Auto Entry Date**.",
+          "Click **Run**, then digitise into the new layer."
+        ]
+      },
+      {
+        type: "subheading",
+        text: "Export existing layers into the LMAP schema"
+      },
+      {
+        type: "steps",
+        items: [
+          "Open the tool and check **Export Feature?**.",
+          "In **Input Features to Export**, select the layers to convert.",
+          "Set **Output workspace**.",
+          "Set **Digitizer's Name** and the automatic-field options as above.",
+          "Click **Run**, then review any name validation messages."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "field-formatter",
+      "parcel-cleaner",
+      "create-polygon-layer",
+      "database-structure-builder"
+    ]
+  },
+  {
     slug: "direction-analyzer",
     group: "cadastral",
     name: "Direction Analyzer",
@@ -12223,6 +13595,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12369,6 +13742,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12491,6 +13865,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12603,6 +13978,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -12681,223 +14057,6 @@ export const tools = [
     ]
   },
   {
-    slug: "lmap-layer",
-    group: "cadastral",
-    name: "LMAP Layer",
-    status: "full",
-    youtubeId: null,
-    interactive: false,
-    toolType: "Geoprocessing tool",
-    ribbonPath: "KGA Toolbox ▸ Geoprocessing ▸ Cadastral Tools ▸ LMAP Layer",
-    actsOn: [],
-    summary: {
-      km: "បង្កើតស្រទាប់ពហុកោណដោយប្រើស្គីម៉ាវាល LMAP ស្តង់ដារដែល MLMUPC តម្រូវ ឬនាំចេញស្រទាប់ដែលមានស្រាប់ចូលទៅស្គីម៉ានោះ ជាមួយការដាក់លេខក្បាលដីស្វ័យប្រវត្តិ កាលបរិច្ឆេទបញ្ចូល និងការទប់ស្កាត់ UPRN ស្ទួន។",
-      en: "Creates a polygon layer using the standard LMAP field schema required by MLMUPC, or exports existing layers into that schema, with automatic parcel numbering, entry dates, and duplicate UPRN prevention."
-    },
-    body: [
-      {
-        type: "paragraph",
-        text: "LMAP is the field format Cambodia's Ministry of Land Management, Urban Planning and Construction requires for cadastral submissions. This tool produces data already in that schema rather than retrofitting it afterwards."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "**Export Feature?** switches the tool between its two modes: All parameters are marked optional because which ones apply depends on the mode."
-        ]
-      },
-      {
-        type: "table",
-        head: [
-          "Mode",
-          "Parameters used"
-        ],
-        rows: [
-          [
-            "**Unchecked — create**",
-            "**Output New LMAP feature**, **Output Coordinate System**"
-          ],
-          [
-            "**Checked — export**",
-            "**Input Features to Export**, **Output workspace**"
-          ]
-        ]
-      },
-      {
-        type: "list",
-        items: [
-          "**Prevent Duplicate UPRNs** guards the unique parcel reference number. A duplicate UPRN invalidates a submission, so keep this enabled unless there is a specific reason not to. The tool ensures Global IDs exist on the feature class to support the check.",
-          "**Auto Calculate parcel_no?** populates the `parcel_no` field automatically, and **Auto Entry Date** stamps the entry date field. Both save manual attribute entry and remove the transcription errors that come with it.",
-          "**Digitizer's Name** records the responsible digitiser, as the specification requires.",
-          "**Output Coordinate System** applies when creating a new layer. Set it to the coordinate system the submission requires — for Cambodia, normally WGS 1984 UTM Zone 48N.",
-          "Feature class names are validated when exporting; a name that does not meet geodatabase rules is reported."
-        ]
-      }
-    ],
-    parameters: [
-      {
-        title: null,
-        nameLabel: "Label",
-        showType: true,
-        blocks: [],
-        rows: [
-          {
-            name: "Export Feature?",
-            optional: true,
-            type: "Boolean",
-            description: [
-              {
-                type: "paragraph",
-                text: "Selects the mode."
-              },
-              {
-                type: "list",
-                items: [
-                  "Checked — Existing layers are exported into the LMAP schema, using **Input Features to Export** and **Output workspace**.",
-                  "Unchecked (default) — A new empty LMAP layer is created, using **Output New LMAP feature** and **Output Coordinate System**."
-                ]
-              }
-            ]
-          },
-          {
-            name: "Output New LMAP feature",
-            optional: true,
-            type: "Feature Class",
-            description: [
-              {
-                type: "paragraph",
-                text: "The new LMAP polygon feature class to create. Used in create mode."
-              }
-            ]
-          },
-          {
-            name: "Output Coordinate System",
-            optional: true,
-            type: "Spatial Reference",
-            description: [
-              {
-                type: "paragraph",
-                text: "The coordinate system of the new layer. Used in create mode."
-              }
-            ]
-          },
-          {
-            name: "Digitizer's Name",
-            optional: true,
-            type: "String",
-            description: [
-              {
-                type: "paragraph",
-                text: "The digitiser's name, recorded as the specification requires."
-              }
-            ]
-          },
-          {
-            name: "Prevent Duplicate UPRNs",
-            optional: true,
-            type: "Boolean",
-            description: [
-              {
-                type: "paragraph",
-                text: "Enforces uniqueness of the parcel reference number. Keep enabled — a duplicate UPRN invalidates a submission."
-              }
-            ]
-          },
-          {
-            name: "Auto Calculate parcel_no?",
-            optional: true,
-            type: "Boolean",
-            description: [
-              {
-                type: "paragraph",
-                text: "Populates the `parcel_no` field automatically."
-              }
-            ]
-          },
-          {
-            name: "Auto Entry Date",
-            optional: true,
-            type: "Boolean",
-            description: [
-              {
-                type: "paragraph",
-                text: "Stamps the entry date field automatically."
-              }
-            ]
-          },
-          {
-            name: "Input Features to Export",
-            optional: true,
-            type: "Feature Layer (multiple)",
-            description: [
-              {
-                type: "paragraph",
-                text: "The layers to export into the LMAP schema. Used in export mode."
-              }
-            ]
-          },
-          {
-            name: "Output workspace",
-            optional: true,
-            type: "Workspace; Feature Dataset",
-            description: [
-              {
-                type: "paragraph",
-                text: "The geodatabase or feature dataset receiving the exported layers. Used in export mode."
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    steps: [
-      {
-        type: "subheading",
-        text: "Create a new LMAP layer"
-      },
-      {
-        type: "steps",
-        items: [
-          "On the **KGA Toolbox** tab, in the **Geoprocessing** group, open the **Cadastral Tools** gallery and click **LMAP Layer**.",
-          "Leave **Export Feature?** unchecked.",
-          "Set **Output New LMAP feature** to the feature class to create.",
-          "Set **Output Coordinate System** to the coordinate system the submission requires.",
-          "Type the digitiser's name in **Digitizer's Name**.",
-          "Check **Prevent Duplicate UPRNs**, **Auto Calculate parcel_no?**, and **Auto Entry Date**.",
-          "Click **Run**, then digitise into the new layer."
-        ]
-      },
-      {
-        type: "subheading",
-        text: "Export existing layers into the LMAP schema"
-      },
-      {
-        type: "steps",
-        items: [
-          "Open the tool and check **Export Feature?**.",
-          "In **Input Features to Export**, select the layers to convert.",
-          "Set **Output workspace**.",
-          "Set **Digitizer's Name** and the automatic-field options as above.",
-          "Click **Run**, then review any name validation messages."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "field-formatter",
-      "parcel-cleaner",
-      "create-polygon-layer",
-      "database-structure-builder"
-    ]
-  },
-  {
     slug: "legal-description-builder",
     group: "cadastral",
     name: "Legal Description Builder",
@@ -12962,6 +14121,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -13124,6 +14284,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -13292,6 +14453,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -13481,6 +14643,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -13611,6 +14774,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -13777,6 +14941,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -13960,6 +15125,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -14142,6 +15308,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: "Input and output",
@@ -14478,6 +15645,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -14754,6 +15922,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -14926,6 +16095,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -15033,6 +16203,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -15302,6 +16473,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: "Input",
@@ -15581,6 +16753,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -15700,6 +16873,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -15852,6 +17026,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -16087,6 +17262,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -16184,6 +17360,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -16427,6 +17604,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -16652,6 +17830,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: "Required input and output",
@@ -17048,6 +18227,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: "Required input and output",
@@ -17451,6 +18631,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -17622,6 +18803,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -17780,6 +18962,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -17894,6 +19077,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -18030,6 +19214,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -18167,6 +19352,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -18289,6 +19475,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: "Parcel geometry",
@@ -18658,6 +19845,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: null,
@@ -18932,6 +20120,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [
       {
         title: "Input",
@@ -19231,337 +20420,380 @@ export const tools = [
     environments: [],
     seeAlso: [
       "quick-landplot-1",
-      "add-google-satellite-layer",
-      "clip-basemap-by-boundary",
+      "add-basemap",
       "parcel-division-form"
     ]
   },
   {
-    slug: "add-google-hybrid-satellite-layer",
+    slug: "add-basemap",
     group: "basemap",
-    name: "Add Google Hybrid Satellite Layer",
+    name: "Add Basemap",
     status: "full",
     youtubeId: null,
     interactive: true,
     toolType: "One-click command",
-    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Quick Template ▸ Add Basemap ▸ Add Google Hybrid Satellite Layer",
+    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Quick Template ▸ Add Basemap",
     actsOn: [
       {
         type: "paragraph",
-        text: "This tool has no parameters. It adds the tile layer to the active map."
+        text: "These tools have no parameters. Each menu entry adds one layer to the active map."
       }
     ],
     summary: {
-      km: "បន្ថែមរូបភាពផ្កាយរណបរបស់ Google ដែលមានស្លាកទីតាំង និងខ្សែផ្លូវគូសពីលើ ទៅផែនទីជាស្រទាប់ក្រឡា XYZ។",
-      en: "Adds Google's satellite imagery with place labels and road lines drawn over it to the active map as an XYZ tile layer."
+      km: "បន្ថែមស្រទាប់ផ្ទៃខាងក្រោយ ឬស្រទាប់គ្របពីលើទៅផែនទីបច្ចុប្បន្ន ពីប្រភពដែលមានស្រាប់ ៣១ — OpenStreetMap សេវា Google ប្រាំពីរ សេវាក្រឡា raster របស់ ESRI ដប់ពីរ និងផែនទីមូលដ្ឋាន vector tile របស់ ESRI ដប់មួយ។",
+      en: "Adds a backdrop or overlay layer to the active map from one of 31 built-in sources — OpenStreetMap, seven Google services, twelve ESRI raster tile services, and eleven ESRI vector tile basemaps."
     },
     body: [
       {
         type: "paragraph",
-        text: "The labels make this the better choice for orientation and for checking that you are working in the right village or along the right road. For tracing features, the unlabelled [Add Google Satellite Layer](AddGoogleSatelliteLayer.md) is clearer."
+        text: "Every entry on the menu is a single click: there is no dialog. The layer is created, named, and placed in the correct position in the drawing order automatically."
       }
     ],
     usage: [
       {
         type: "list",
         items: [
-          "The tool has no dialog. Clicking it creates the tile layer and adds it to the active map immediately.",
-          "The layer is added with the name **Google Hybrid Satellite layer**. It arrives at the top of the drawing order, so move it to the bottom of the **Contents** pane to use it as a backdrop beneath your own layers.",
-          "The tiles are served from Google's tile endpoint `https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}`. An internet connection is required whenever the map draws — the tiles are streamed, not stored in the project.",
-          "Tiles are served in Web Mercator. ArcGIS Pro reprojects them on the fly when the map uses another coordinate system, which can soften the imagery slightly at large scales.",
-          "Because this is a tile layer rather than a raster dataset, it cannot be used as the input to raster geoprocessing tools. To analyse imagery, add a raster dataset with [Add Raster To Map](../DataManagement/AddRasterToMap.md) instead.",
-          "Review Google's terms of service before using these tiles in published maps or commercial deliverables.",
-          "The tool reports an error if there is no active map."
+          {
+            text: "**Basemaps go to the bottom, overlays go to the top.** The tool decides this for you: No manual reordering is needed. The **Overlay** column in the tables below says which entries behave this way.",
+            items: [
+              "A basemap is added at the **bottom** of the drawing order, beneath your own layers.",
+              "An overlay — labels, traffic, reference lines, transportation — is added at the **top**, so it draws over everything."
+            ]
+          },
+          "**All 31 sources are streamed, not stored.** An internet connection is required whenever the map draws. Nothing is copied into the project, so the project file stays small but the map is blank without a connection.",
+          "**A tile layer cannot feed raster geoprocessing.** These are tile and vector tile layers, not raster datasets, so they cannot be used as the input to Slope, Hillshade, Contour, Extract By Mask, or any other raster tool. To analyse imagery you need an actual raster dataset — add one with [Add Raster To Map](../DataManagement/AddRasterToMap.md), or download one with [Imagery Downloader](../DataManagement/ImageryDownloader.md).",
+          "**Tiles are served in Web Mercator.** ArcGIS Pro reprojects them on the fly when the map uses another coordinate system, which can soften the imagery slightly at large scales.",
+          "The tool reports *\"No active map found.\"* if there is no open map view.",
+          "Review each provider's terms of service before using its tiles in published maps or commercial deliverables. The Google entries in particular are subject to Google's terms, not Esri's."
+        ]
+      }
+    ],
+    extra: [
+      {
+        id: "section-available-basemaps",
+        title: "Available basemaps",
+        blocks: [
+          {
+            type: "subheading",
+            text: "OpenStreetMap"
+          },
+          {
+            type: "table",
+            head: [
+              "Basemap",
+              "Type",
+              "Overlay",
+              "Notes"
+            ],
+            rows: [
+              [
+                "OpenStreetMap",
+                "Raster tile",
+                "No",
+                "Community-mapped streets, tracks, and points of interest. Served from `tile.openstreetmap.org`."
+              ]
+            ]
+          },
+          {
+            type: "subheading",
+            text: "Google"
+          },
+          {
+            type: "paragraph",
+            text: "Served from Google's tile endpoint, selected by its `lyrs` code."
+          },
+          {
+            type: "table",
+            head: [
+              "Basemap",
+              "`lyrs`",
+              "Type",
+              "Overlay",
+              "Notes"
+            ],
+            rows: [
+              [
+                "Google Satellite",
+                "`s`",
+                "Raster tile",
+                "No",
+                "Imagery with no labels or roads. The right choice for digitising, since nothing obscures the features being traced."
+              ],
+              [
+                "Google Satellite Hybrid",
+                "`y`",
+                "Raster tile",
+                "No",
+                "Imagery with place labels and roads drawn over it. Better for orientation. Added to the map as **Google Hybrid Satellite**."
+              ],
+              [
+                "Google Map",
+                "`m`",
+                "Raster tile",
+                "No",
+                "The standard Google road map."
+              ],
+              [
+                "Google Terrain",
+                "`p`",
+                "Raster tile",
+                "No",
+                "Shaded relief with roads and labels."
+              ],
+              [
+                "Google Terrain Hybrid",
+                "`p`",
+                "Raster tile",
+                "No",
+                "Uses the same `lyrs=p` code as **Google Terrain**, so it produces an identical layer under a different name."
+              ],
+              [
+                "Google Label",
+                "`h`",
+                "Raster tile",
+                "**Yes**",
+                "Labels and roads only, transparent elsewhere. Drape it over imagery or over your own data."
+              ],
+              [
+                "Google Traffic",
+                "`h` + traffic",
+                "Raster tile",
+                "**Yes**",
+                "Live traffic conditions as an overlay."
+              ]
+            ]
+          },
+          {
+            type: "subheading",
+            text: "ESRI raster tile"
+          },
+          {
+            type: "paragraph",
+            text: "Served from `services.arcgisonline.com` / `server.arcgisonline.com`. No ArcGIS Online sign-in is required."
+          },
+          {
+            type: "table",
+            head: [
+              "Basemap",
+              "Type",
+              "Overlay",
+              "Service"
+            ],
+            rows: [
+              [
+                "ESRI Topography",
+                "Raster tile",
+                "No",
+                "`World_Topo_Map`"
+              ],
+              [
+                "ESRI Imagery",
+                "Raster tile",
+                "No",
+                "`World_Imagery`"
+              ],
+              [
+                "ESRI National Geographic",
+                "Raster tile",
+                "No",
+                "`NatGeo_World_Map`"
+              ],
+              [
+                "ESRI Grey (Dark)",
+                "Raster tile",
+                "No",
+                "`Canvas/World_Dark_Gray_Base`"
+              ],
+              [
+                "ESRI Grey (Light)",
+                "Raster tile",
+                "No",
+                "`Canvas/World_Light_Gray_Base`"
+              ],
+              [
+                "ESRI Ocean",
+                "Raster tile",
+                "No",
+                "`Ocean/World_Ocean_Base`"
+              ],
+              [
+                "ESRI Physical",
+                "Raster tile",
+                "No",
+                "`World_Physical_Map`"
+              ],
+              [
+                "ESRI Reference overlay",
+                "Raster tile",
+                "**Yes**",
+                "`Reference/World_Reference_Overlay`"
+              ],
+              [
+                "ESRI Hillshade",
+                "Raster tile",
+                "No",
+                "`World_Shaded_Relief`"
+              ],
+              [
+                "ESRI Terrain",
+                "Raster tile",
+                "No",
+                "`World_Terrain_Base`"
+              ],
+              [
+                "ESRI Standard",
+                "Raster tile",
+                "No",
+                "`World_Street_Map`"
+              ],
+              [
+                "ESRI Transportation",
+                "Raster tile",
+                "**Yes**",
+                "`Reference/World_Transportation`"
+              ]
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "The two grey canvas basemaps are the ones to reach for when your own data is the subject of the map — they are deliberately desaturated so thematic symbology reads clearly against them."
+          },
+          {
+            type: "subheading",
+            text: "ESRI vector tile"
+          },
+          {
+            type: "paragraph",
+            text: "On the **ESRI Vector Tile** submenu. These are vector tile styles, so they stay sharp at any zoom and re-label as you zoom, unlike the raster tile entries above. They are added **without needing an ArcGIS Online sign-in**."
+          },
+          {
+            type: "table",
+            head: [
+              "Basemap",
+              "Type",
+              "Overlay"
+            ],
+            rows: [
+              [
+                "Charted Territory Map",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Community Map",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Dark Gray Canvas",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Dark Gray Canvas (Labels)",
+                "Vector tile",
+                "**Yes**"
+              ],
+              [
+                "Modern Antique Map",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "National Geographic Style Map",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Newspaper Map",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Nova Map",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "OpenStreetMap v2",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Streets",
+                "Vector tile",
+                "No"
+              ],
+              [
+                "Streets (Night)",
+                "Vector tile",
+                "No"
+              ]
+            ]
+          },
+          {
+            type: "paragraph",
+            text: "**Dark Gray Canvas** and **Dark Gray Canvas (Labels)** are designed to be used together: add the canvas as the backdrop and the labels as an overlay above your data, so place names sit on top rather than being hidden by it."
+          }
         ]
       }
     ],
     parameters: [],
     steps: [
       {
-        type: "steps",
-        items: [
-          "Open or activate the map that needs the backdrop.",
-          "On the **KGA Toolbox** tab, in the **Data Creation** group, open **Quick Template**, point to **Add Basemap**, and click **Add Google Hybrid Satellite Layer**.",
-          "In the **Contents** pane, drag the new **Google Hybrid Satellite layer** layer to the bottom of the drawing order."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "add-google-satellite-layer",
-      "add-google-map-layer",
-      "add-google-terrain-layer",
-      "quick-landplot-2"
-    ]
-  },
-  {
-    slug: "add-google-map-layer",
-    group: "basemap",
-    name: "Add Google Map Layer",
-    status: "full",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Quick Template ▸ Add Basemap ▸ Add Google Map Layer",
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "This tool has no parameters. It adds the tile layer to the active map."
-      }
-    ],
-    summary: {
-      km: "បន្ថែមផែនទីផ្លូវស្តង់ដាររបស់ Google ទៅផែនទីជាស្រទាប់ក្រឡា XYZ។",
-      en: "Adds Google's standard road map to the active map as an XYZ tile layer."
-    },
-    body: [
-      {
-        type: "paragraph",
-        text: "A cartographic street map rather than imagery. Use it when the backdrop should show the road network and place names clearly, without the visual noise of aerial photography."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The tool has no dialog. Clicking it creates the tile layer and adds it to the active map immediately.",
-          "The layer is added with the name **Google Map layer**. It arrives at the top of the drawing order, so move it to the bottom of the **Contents** pane to use it as a backdrop beneath your own layers.",
-          "The tiles are served from Google's tile endpoint `https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}`. An internet connection is required whenever the map draws — the tiles are streamed, not stored in the project.",
-          "Tiles are served in Web Mercator. ArcGIS Pro reprojects them on the fly when the map uses another coordinate system, which can soften the imagery slightly at large scales.",
-          "Because this is a tile layer rather than a raster dataset, it cannot be used as the input to raster geoprocessing tools. To analyse imagery, add a raster dataset with [Add Raster To Map](../DataManagement/AddRasterToMap.md) instead.",
-          "Review Google's terms of service before using these tiles in published maps or commercial deliverables.",
-          "The tool reports an error if there is no active map."
-        ]
-      }
-    ],
-    parameters: [],
-    steps: [
+        type: "subheading",
+        text: "Add a basemap"
+      },
       {
         type: "steps",
         items: [
           "Open or activate the map that needs the backdrop.",
-          "On the **KGA Toolbox** tab, in the **Data Creation** group, open **Quick Template**, point to **Add Basemap**, and click **Add Google Map Layer**.",
-          "In the **Contents** pane, drag the new **Google Map layer** layer to the bottom of the drawing order."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "add-google-satellite-layer",
-      "add-google-hybrid-satellite-layer",
-      "add-google-terrain-layer",
-      "to-google-map"
-    ]
-  },
-  {
-    slug: "add-google-satellite-layer",
-    group: "basemap",
-    name: "Add Google Satellite Layer",
-    status: "full",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Quick Template ▸ Add Basemap ▸ Add Google Satellite Layer",
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "This tool has no parameters. It adds the tile layer to the active map."
-      }
-    ],
-    summary: {
-      km: "បន្ថែមរូបភាពផ្កាយរណបរបស់ Google ដោយគ្មានស្លាក ឬផ្លូវ ទៅផែនទីជាស្រទាប់ក្រឡា XYZ។",
-      en: "Adds Google's satellite imagery, without labels or roads to the active map as an XYZ tile layer."
-    },
-    body: [
-      {
-        type: "paragraph",
-        text: "Use this layer for digitising from imagery, where labels and road lines would obscure the features being traced. For imagery with place names and roads drawn over it, use [Add Google Hybrid Satellite Layer](AddGoogleHybridSatelliteLayer.md) instead."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The tool has no dialog. Clicking it creates the tile layer and adds it to the active map immediately.",
-          "The layer is added with the name **Google Satellite layer**. It arrives at the top of the drawing order, so move it to the bottom of the **Contents** pane to use it as a backdrop beneath your own layers.",
-          "The tiles are served from Google's tile endpoint `https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}`. An internet connection is required whenever the map draws — the tiles are streamed, not stored in the project.",
-          "Tiles are served in Web Mercator. ArcGIS Pro reprojects them on the fly when the map uses another coordinate system, which can soften the imagery slightly at large scales.",
-          "Because this is a tile layer rather than a raster dataset, it cannot be used as the input to raster geoprocessing tools. To analyse imagery, add a raster dataset with [Add Raster To Map](../DataManagement/AddRasterToMap.md) instead.",
-          "Review Google's terms of service before using these tiles in published maps or commercial deliverables.",
-          "The tool reports an error if there is no active map."
-        ]
-      }
-    ],
-    parameters: [],
-    steps: [
-      {
-        type: "steps",
-        items: [
-          "Open or activate the map that needs the backdrop.",
-          "On the **KGA Toolbox** tab, in the **Data Creation** group, open **Quick Template**, point to **Add Basemap**, and click **Add Google Satellite Layer**.",
-          "In the **Contents** pane, drag the new **Google Satellite layer** layer to the bottom of the drawing order."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "add-google-hybrid-satellite-layer",
-      "add-google-map-layer",
-      "add-google-terrain-layer",
-      "add-raster-to-map",
-      "quick-landplot-2"
-    ]
-  },
-  {
-    slug: "add-google-terrain-layer",
-    group: "basemap",
-    name: "Add Google Terrain Layer",
-    status: "full",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: "KGA Toolbox ▸ Data Creation ▸ Quick Template ▸ Add Basemap ▸ Add Google Terrain Layer",
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "This tool has no parameters. It adds the tile layer to the active map."
-      }
-    ],
-    summary: {
-      km: "បន្ថែមផែនទីភូមិសណ្ឋានរបស់ Google ដែលមានស្រមោលបង្ហាញកម្ពស់ ទៅផែនទីជាស្រទាប់ក្រឡា XYZ។",
-      en: "Adds Google's terrain map, with shaded relief and contour-like hill shading to the active map as an XYZ tile layer."
-    },
-    body: [
-      {
-        type: "paragraph",
-        text: "Use this layer to see the shape of the land behind your data. It is a cartographic rendering, not elevation data — for slope, contours, or profiles you need a digital elevation model, not this layer."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The tool has no dialog. Clicking it creates the tile layer and adds it to the active map immediately.",
-          "The layer is added with the name **Google Terrain layer**. It arrives at the top of the drawing order, so move it to the bottom of the **Contents** pane to use it as a backdrop beneath your own layers.",
-          "The tiles are served from Google's tile endpoint `https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}`. An internet connection is required whenever the map draws — the tiles are streamed, not stored in the project.",
-          "Tiles are served in Web Mercator. ArcGIS Pro reprojects them on the fly when the map uses another coordinate system, which can soften the imagery slightly at large scales.",
-          "Because this is a tile layer rather than a raster dataset, it cannot be used as the input to raster geoprocessing tools. To analyse imagery, add a raster dataset with [Add Raster To Map](../DataManagement/AddRasterToMap.md) instead.",
-          "Review Google's terms of service before using these tiles in published maps or commercial deliverables.",
-          "The tool reports an error if there is no active map."
-        ]
-      }
-    ],
-    parameters: [],
-    steps: [
-      {
-        type: "steps",
-        items: [
-          "Open or activate the map that needs the backdrop.",
-          "On the **KGA Toolbox** tab, in the **Data Creation** group, open **Quick Template**, point to **Add Basemap**, and click **Add Google Terrain Layer**.",
-          "In the **Contents** pane, drag the new **Google Terrain layer** layer to the bottom of the drawing order."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "add-google-satellite-layer",
-      "add-google-map-layer",
-      "elevation-profile-from-line-path",
-      "spot-height"
-    ]
-  },
-  {
-    slug: "clip-basemap-by-boundary",
-    group: "basemap",
-    name: "Clip Basemap By Boundary",
-    status: "planned",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: null,
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "None. The tool collects no input in this release."
-      }
-    ],
-    summary: {
-      km: "គ្រោងកាត់ការបង្ហាញផែនទីមូលដ្ឋានតាមស្រទាប់ព្រំដែនដែលបានកំណត់។",
-      en: "Intended to clip the basemap display to a specified boundary layer."
-    },
-    body: [
-      {
-        type: "note",
-        tone: "warning",
-        text: "**This tool is not yet implemented.** Clicking it displays the message *\"This feature will be available in a future update.\"* and nothing else happens. It is documented here because the button appears on the ribbon."
-      }
-    ],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The button is present on the **Quick Template** menu but performs no work in this release.",
-          "No parameters are collected and no dialog is shown — only the notice above."
+          "On the **KGA Toolbox** tab, in the **Data Creation** group, open **Quick Template**, then point to **Add Basemap**.",
+          "Click the basemap you want. It is added at the bottom of the drawing order, beneath your own layers."
         ]
       },
       {
         type: "subheading",
-        text: "Achieving the same result today"
+        text: "Add an overlay on top of a basemap"
       },
       {
-        type: "paragraph",
-        text: "Until the tool ships, the display can be limited to a boundary by other means:"
-      },
-      {
-        type: "list",
+        type: "steps",
         items: [
-          "**Clip the map frame.** In a layout, set the map frame's extent to the boundary layer, which limits what the frame draws.",
-          "**Mask with a layer.** Add a polygon layer covering everything outside the boundary and place it above the basemap, so only the area of interest shows through.",
-          "**Clip an actual raster.** If the backdrop is a raster dataset rather than a tile layer, clip it with **Clip Raster** or **Extract By Mask** from the **Basic Tool → Raster Tool** menu. Note that this does not work on the Google tile layers, which are streamed rather than stored."
+          "Add a basemap first — **Google Satellite** or **ESRI Imagery**, for example.",
+          "Open **Add Basemap** again and click an overlay entry — **Google Label**, **ESRI Reference overlay**, **ESRI Transportation**, or **Dark Gray Canvas (Labels)**.",
+          "The overlay is added at the top of the drawing order, so its labels draw over both the imagery and your own layers."
         ]
-      }
-    ],
-    parameters: [],
-    steps: [
+      },
       {
-        type: "paragraph",
-        text: "There is no working procedure in this release. See *Achieving the same result today* above."
+        type: "subheading",
+        text: "Use an ESRI vector tile basemap"
+      },
+      {
+        type: "steps",
+        items: [
+          "Open **Add Basemap** and point to **ESRI Vector Tile**.",
+          "Click a style. No ArcGIS Online sign-in is needed."
+        ]
       }
     ],
     licensing: [
       {
         type: "paragraph",
-        text: "Not applicable — the tool performs no licensed work in this release."
+        text: "Requires an active KGA Toolbox license. The tool validates the license before running."
+      },
+      {
+        type: "paragraph",
+        text: "Each basemap is subject to its provider's own terms of service. Check them before using the tiles in a published or commercial map."
       }
     ],
     environments: [],
     seeAlso: [
-      "add-google-satellite-layer",
       "add-raster-to-map",
-      "clip-multiple"
+      "imagery-downloader",
+      "add-open-data-and-basemap",
+      "to-google-map",
+      "to-living-atlas",
+      "quick-landplot-2"
     ]
   },
   {
@@ -19605,6 +20837,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -19626,7 +20859,6 @@ export const tools = [
     environments: [],
     seeAlso: [
       "to-google-earth-web",
-      "kml-handler",
       "import-kml-file"
     ]
   },
@@ -19666,6 +20898,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -19726,6 +20959,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -19748,7 +20982,7 @@ export const tools = [
       "to-google-earth-web",
       "to-google-earth-pro",
       "to-open-street-map",
-      "add-google-map-layer"
+      "add-basemap"
     ]
   },
   {
@@ -19819,6 +21053,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -19842,7 +21077,6 @@ export const tools = [
     environments: [],
     seeAlso: [
       "to-google-map",
-      "kml-handler",
       "import-kml-file"
     ]
   },
@@ -19881,6 +21115,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -19902,7 +21137,7 @@ export const tools = [
     environments: [],
     seeAlso: [
       "to-open-street-map",
-      "add-google-satellite-layer",
+      "add-basemap",
       "add-raster-to-map"
     ]
   },
@@ -19942,6 +21177,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -19964,6 +21200,206 @@ export const tools = [
       "to-google-map",
       "to-google-earth-web",
       "to-living-atlas"
+    ]
+  },
+  {
+    slug: "sewage-and-drainage",
+    group: "utilities",
+    name: "Sewage and Drainage",
+    status: "planned",
+    youtubeId: null,
+    interactive: true,
+    toolType: "One-click command",
+    ribbonPath: "KGA Toolbox ▸ Utilities ▸ Sewage and Drainage ▸ Sewage and Drainage",
+    actsOn: [
+      {
+        type: "paragraph",
+        text: "The **Sewage and Drainage** launcher and **Back to KGA Toolbox** have no parameters."
+      },
+      {
+        type: "paragraph",
+        text: "The sixteen tools have no parameters defined in this release, because the toolbox implementing them is not yet shipped."
+      }
+    ],
+    summary: {
+      km: "បើកផ្ទាំង ribbon Sewage and Drainage ដែលជាបណ្តុំឧបករណ៍ដប់ប្រាំមួយសម្រាប់សាងសង់ និងថែទាំបណ្តាញទ្រព្យសម្បត្តិលូ និងបង្ហូរទឹក — ការរៀបចំ geodatabase ការត្រួតពិនិត្យគុណភាពបណ្តាញ ការត្រួតពិនិត្យ និងថែទាំ និងការរាយការណ៍។ ជាផ្នែកបន្ថែមដែលមានអាជ្ញាបណ្ណដោយឡែក ហើយមិនទាន់មានក្នុងកំណែនេះទេ។",
+      en: "Opens the Sewage and Drainage ribbon tab, a set of sixteen tools for building and maintaining a sewer and drainage asset network — geodatabase setup, network quality control, inspection and maintenance, and reporting."
+    },
+    body: [
+      {
+        type: "note",
+        tone: "warning",
+        text: "**This is a separately licensed extension and it is not available in this release.** The tools are a domain extension on top of the KGA Toolbox licence. Clicking any of them shows: *\"Your current KGA Toolbox license does not include the Sewage and Drainage tools. These tools are a separate extension for the sewage and drainage domain and require an additional purchase. Please contact KGA Admin to add this extension to your license.\"* No licence currently grants the extension, and the toolbox that implements the sixteen tools is not yet shipped. The buttons appear on the ribbon so the tab can be reviewed, but none of them runs. Contact KGA Admin about availability."
+      }
+    ],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "The **Sewage and Drainage** button on the **Utilities** menu shows the tab and switches the ribbon to it. The tab is hidden until then, so it does not clutter the ribbon for users who do not have the extension.",
+          "**Back to KGA Toolbox**, at the right-hand end of the tab, closes it and returns to the **KGA Toolbox** tab.",
+          "These two buttons — show the tab and return from it — are the only ones that currently do anything. Each of the sixteen tools shows the licence message above.",
+          "Because the implementing toolbox is not yet shipped, the tools have no parameters defined. This page therefore describes what each tool is **intended** to do, taken from the ribbon itself, and does not list parameters. Parameter documentation will follow when the extension ships."
+        ]
+      }
+    ],
+    extra: [
+      {
+        id: "section-the-sixteen-tools",
+        title: "The sixteen tools",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "The tab is organised into four groups."
+          },
+          {
+            type: "subheading",
+            text: "Data Setup"
+          },
+          {
+            type: "table",
+            head: [
+              "Tool",
+              "Intended purpose"
+            ],
+            rows: [
+              [
+                "**Create Sewer GDB**",
+                "Creates a new, empty geodatabase with the sewer and drainage layers, tables, and drop-down lists already set up."
+              ],
+              [
+                "**Generate Asset IDs**",
+                "Fills in the Asset ID of every feature in a standard format, for example `MH-0007`, so inspection sheets match the map."
+              ],
+              [
+                "**Import Assets**",
+                "Adds points from a GPS file or spreadsheet into an existing layer, checking that they fall inside Cambodia and are not already present."
+              ],
+              [
+                "**Attach Field Photos**",
+                "Links field photos to the assets they show, and reports which assets still have no photo."
+              ]
+            ]
+          },
+          {
+            type: "subheading",
+            text: "Network QA/QC"
+          },
+          {
+            type: "table",
+            head: [
+              "Tool",
+              "Intended purpose"
+            ],
+            rows: [
+              [
+                "**Calculate Pipe Attributes**",
+                "Works out pipe length and slope, fills in which structure each pipe runs from and to, and calculates each manhole's depth."
+              ],
+              [
+                "**Fix Flow Direction**",
+                "Finds pipes drawn uphill and, on request, reverses them so water runs the right way."
+              ],
+              [
+                "**Network QA/QC Check**",
+                "Checks the whole network in one pass and writes every problem as a point you can zoom to, with a plain instruction on how to fix it."
+              ],
+              [
+                "**Select Uphill Pipes**",
+                "Finds gravity pipes whose downstream invert sits at or above the upstream one. Can also compare each line's drawn direction against its upstream and downstream node fields, catching pipes digitised backwards even when their inverts are correct."
+              ]
+            ]
+          },
+          {
+            type: "subheading",
+            text: "Inspection & Maintenance"
+          },
+          {
+            type: "table",
+            head: [
+              "Tool",
+              "Intended purpose"
+            ],
+            rows: [
+              [
+                "**Import Inspections**",
+                "Validates a field inspection sheet row by row, copies it into the Inspection table, and writes the condition grade onto the assets."
+              ],
+              [
+                "**Calculate Priority Score**",
+                "Works out which assets matter most, combining how likely each is to fail with how much trouble a failure would cause."
+              ],
+              [
+                "**Field Inspection Package**",
+                "Produces the printed field sheet with Asset IDs already filled in."
+              ],
+              [
+                "**Maintenance Schedule**",
+                "Turns priority classes into dated work orders, bringing blockage-prone assets forward so they are cleaned before the rains."
+              ]
+            ]
+          },
+          {
+            type: "subheading",
+            text: "Analysis & Output"
+          },
+          {
+            type: "table",
+            head: [
+              "Tool",
+              "Intended purpose"
+            ],
+            rows: [
+              [
+                "**Apply Symbology**",
+                "Colours a layer by condition, priority, material, size, or type in one click, and verifies the symbology applied."
+              ],
+              [
+                "**Trace Upstream / Downstream**",
+                "Follows the network from one manhole and shows everything draining into it, or everything it drains into."
+              ],
+              [
+                "**Monitoring Report**",
+                "Builds the monitoring report spreadsheet — asset inventory, condition, priorities, and which fields are still empty."
+              ],
+              [
+                "**Backup Geodatabase**",
+                "Makes a dated copy of the geodatabase, verifies the copy matches, and tidies away older backups."
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    parameters: [],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "On the **KGA Toolbox** tab, open the **Utilities** menu and click **Sewage and Drainage**. The **Sewage and Drainage** tab appears and the ribbon switches to it.",
+          "Review the four groups of tools.",
+          "Clicking any tool shows the extension licence message. To obtain the extension, contact KGA Admin.",
+          "Click **Back to KGA Toolbox** at the right-hand end of the tab to close it and return."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "Requires an active KGA Toolbox license **and** the Sewage and Drainage extension."
+      },
+      {
+        type: "paragraph",
+        text: "The extension is a separate purchase. No licence currently grants it, so the sixteen tools cannot be run in this release. The launcher and the return button work without the extension."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "database-structure-builder",
+      "add-multiple-fields",
+      "id-generator",
+      "network-builder",
+      "detect-overlap-gap"
     ]
   },
   {
@@ -20029,6 +21465,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -20050,7 +21487,61 @@ export const tools = [
     environments: [],
     seeAlso: [
       "update",
-      "whats-new"
+      "documentation"
+    ]
+  },
+  {
+    slug: "documentation",
+    group: "product",
+    name: "Documentation",
+    status: "full",
+    youtubeId: null,
+    interactive: true,
+    toolType: "One-click command",
+    ribbonPath: "KGA Toolbox ▸ Product ▸ Help ▸ Help",
+    actsOn: [
+      {
+        type: "paragraph",
+        text: "This tool has no parameters."
+      }
+    ],
+    summary: {
+      km: "បើកឯកសារណែនាំ KGA Toolbox សម្រាប់ ArcGIS Pro ក្នុងកម្មវិធីរុករកលំនាំដើម។",
+      en: "Opens the KGA Toolbox documentation for ArcGIS Pro in the default browser."
+    },
+    body: [],
+    usage: [
+      {
+        type: "list",
+        items: [
+          "The button is captioned **Help** on the ribbon, and its tooltip reads *Documentation*.",
+          "The tool has no dialog. Clicking it opens `https://www.khmergrs.com/docs/arcgis` in the default browser.",
+          "The documentation is published on the web rather than bundled with the add-in, so it always reflects the latest release — which may be newer than the version installed. Check the installed version in [About](About.md) before assuming a described feature is present.",
+          "An internet connection and a default browser are required."
+        ]
+      }
+    ],
+    extra: [],
+    parameters: [],
+    steps: [
+      {
+        type: "steps",
+        items: [
+          "On the **KGA Toolbox** tab, in the **Product** group, click **Help**. The button is captioned **Help**; its tooltip reads *Documentation*.",
+          "The documentation page opens in the default browser."
+        ]
+      }
+    ],
+    licensing: [
+      {
+        type: "paragraph",
+        text: "This tool runs without a license."
+      }
+    ],
+    environments: [],
+    seeAlso: [
+      "about",
+      "update"
     ]
   },
   {
@@ -20085,6 +21576,7 @@ export const tools = [
         ]
       }
     ],
+    extra: [],
     parameters: [],
     steps: [
       {
@@ -20107,60 +21599,7 @@ export const tools = [
     environments: [],
     seeAlso: [
       "about",
-      "whats-new"
-    ]
-  },
-  {
-    slug: "whats-new",
-    group: "product",
-    name: "What's New",
-    status: "full",
-    youtubeId: null,
-    interactive: true,
-    toolType: "One-click command",
-    ribbonPath: "KGA Toolbox ▸ Product ▸ What's New",
-    actsOn: [
-      {
-        type: "paragraph",
-        text: "This tool has no parameters."
-      }
-    ],
-    summary: {
-      km: "បើកទំព័រផលិតផល KGA Toolbox ក្នុងកម្មវិធីរុករកលំនាំដើម ជាកន្លែងផ្សាយកំណត់ត្រាចេញផ្សាយសម្រាប់កំណែបច្ចុប្បន្ន។",
-      en: "Opens the KGA Toolbox product page in the default browser, where the release notes for the current version are published."
-    },
-    body: [],
-    usage: [
-      {
-        type: "list",
-        items: [
-          "The tool has no dialog. Clicking it opens `https://www.khmergrs.com/kga-toolbox` in the default browser.",
-          "The notes are published on the web rather than bundled with the add-in, so the page always reflects the latest release — which may be newer than the version installed. Check the installed version in [About](About.md) before assuming a described feature is present.",
-          "An internet connection and a default browser are required."
-        ]
-      }
-    ],
-    parameters: [],
-    steps: [
-      {
-        type: "steps",
-        items: [
-          "On the **KGA Toolbox** tab, in the **Product** group, click **What's New**.",
-          "The product page opens in the default browser.",
-          "Compare the version described there against the one shown in [About](About.md). If the page is ahead, run [Update](Update.md)."
-        ]
-      }
-    ],
-    licensing: [
-      {
-        type: "paragraph",
-        text: "This tool runs without a license."
-      }
-    ],
-    environments: [],
-    seeAlso: [
-      "about",
-      "update"
+      "documentation"
     ]
   }
 ];
@@ -20186,17 +21625,19 @@ export const FILE_SLUGS = {
   QuickTemplateLine: "quick-template-line",
   QuickTemplatePoint: "quick-template-point",
   QuickTemplatePolygon: "quick-template-polygon",
+  AddOpenDataAndBasemap: "add-open-data-and-basemap",
   AddRasterToMap: "add-raster-to-map",
   ApplyExcelEdits: "apply-excel-edits",
   BatchAddField: "batch-add-field",
   BoundaryXYToExcel: "boundary-xy-to-excel",
+  CoordinateConverter: "coordinate-converter",
   CopyFeatures: "copy-features",
+  CreateLayerPackage: "create-layer-package",
   DetectOverlapAcrossLayer: "detect-overlap-across-layer",
   DetectOverlapGap: "detect-overlap-gap",
   EditTable: "edit-table",
   EditInExcel: "edit-in-excel",
   ExportToCAD: "export-to-cad",
-  FilterSelection: "filter-selection",
   FindDuplicate: "find-duplicate",
   GenerateBoundaryLine: "generate-boundary-line",
   GenerateBoundaryPoint: "generate-boundary-point",
@@ -20204,11 +21645,13 @@ export const FILE_SLUGS = {
   GenerateLineVertices: "generate-line-vertices",
   GeneratePolygonCentralPoint: "generate-polygon-central-point",
   IDBasedCSVExporter: "id-based-csv-exporter",
+  ImageryDownloader: "imagery-downloader",
   ImportKMLFile: "import-kml-file",
-  KMLHandler: "kml-handler",
   KhmerFontConverter: "khmer-font-converter",
+  OpenLayerPackage: "open-layer-package",
   SelectToEnterValue: "select-to-enter-value",
   ExcelEditorSettings: "excel-editor-settings",
+  FilterSelection: "filter-selection",
   AddMultipleFields: "add-multiple-fields",
   AddValueToFields: "add-value-to-fields",
   AttributeReclassifier: "attribute-reclassifier",
@@ -20218,7 +21661,6 @@ export const FILE_SLUGS = {
   DefaultValueFiller: "default-value-filler",
   DirectionSelector: "direction-selector",
   FeaturePercentage: "feature-percentage",
-  GeoDashboard: "geo-dashboard",
   IDGenerator: "id-generator",
   NearestFeatureDistance: "nearest-feature-distance",
   PivotTableBuilder: "pivot-table-builder",
@@ -20243,11 +21685,11 @@ export const FILE_SLUGS = {
   CoordinateListing: "coordinate-listing",
   CopyParcelToGDB: "copy-parcel-to-gdb",
   CornerPointBuilder: "corner-point-builder",
+  LMAPLayer: "lmap-layer",
   DirectionAnalyzer: "direction-analyzer",
   DuplicateFinder: "duplicate-finder",
   FeatureCounter: "feature-counter",
   FieldFormatter: "field-formatter",
-  LMAPLayer: "lmap-layer",
   LegalDescriptionBuilder: "legal-description-builder",
   MinWidthCheck: "min-width-check",
   NetworkBuilder: "network-builder",
@@ -20278,20 +21720,17 @@ export const FILE_SLUGS = {
   ParcelDivisionForm: "parcel-division-form",
   QuickLandplot1: "quick-landplot-1",
   QuickLandplot2: "quick-landplot-2",
-  AddGoogleHybridSatelliteLayer: "add-google-hybrid-satellite-layer",
-  AddGoogleMapLayer: "add-google-map-layer",
-  AddGoogleSatelliteLayer: "add-google-satellite-layer",
-  AddGoogleTerrainLayer: "add-google-terrain-layer",
-  ClipBasemapByBoundary: "clip-basemap-by-boundary",
+  AddBasemap: "add-basemap",
   ToGoogleEarthPro: "to-google-earth-pro",
   ToGoogleEarthWeb: "to-google-earth-web",
   ToGoogleMap: "to-google-map",
   ToKGAGeodigitizer: "to-kga-geodigitizer",
   ToLivingAtlas: "to-living-atlas",
   ToOpenStreetMap: "to-open-street-map",
+  SewageAndDrainage: "sewage-and-drainage",
   About: "about",
-  Update: "update",
-  WhatsNew: "whats-new"
+  Documentation: "documentation",
+  Update: "update"
 };
 
 export const SLUGS = tools.map((tool) => tool.slug);

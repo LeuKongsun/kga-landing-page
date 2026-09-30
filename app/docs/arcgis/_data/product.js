@@ -17,7 +17,7 @@
 export const PRODUCT = {
   name: "KGA Toolbox for ArcGIS Pro",
   shortName: "KGA Toolbox",
-  version: "2026.2.0",
+  version: "2026.3.0",
   arcgisMinimum: "3.6",
   licence: { km: "ត្រូវការអាជ្ញាបណ្ណ", en: "Licence required" },
 
@@ -45,8 +45,8 @@ export const PRODUCT = {
           en: "Cadastral tools: bearing and distance traverses, parcel subdivision, shape-quality checks and metes-and-bounds legal descriptions",
         },
         {
-          km: "ការនាំចេញ-នាំចូលទិន្នន័យជាមួយ Excel, KML និង CAD",
-          en: "Attribute round trips through Excel, and conversion to and from KML and CAD",
+          km: "ការនាំចេញ-នាំចូលទិន្នន័យជាមួយ Excel ការនាំចូល KML ការនាំចេញទៅ CAD ការបម្លែងកូអរដោនេ និងកញ្ចប់ស្រទាប់ .kgalp ដែលចែករំលែកជាមួយ QGIS",
+          en: "Attribute round trips through Excel, KML import, CAD export, coordinate conversion, and .kgalp layer packages shared with QGIS",
         },
         {
           km: "VectorIQ — បណ្តុំឧបករណ៍គ្រប់គ្រង ជ្រើសរើស ស្រង់ចេញ និងវិភាគគុណលក្ខណៈ",
@@ -93,8 +93,8 @@ export const PRODUCT = {
       icon: "Database",
       title: { km: "គ្រប់គ្រងទិន្នន័យ", en: "Data management" },
       description: {
-        km: "កែតារាងគុណលក្ខណៈ នាំចេញ-នាំចូល Excel, KML និង CAD និងបង្កើតព្រំដែន។",
-        en: "Attribute-table editing, Excel, KML and CAD round trips, and boundary generation.",
+        km: "កែគុណលក្ខណៈ នាំចេញ-នាំចូល Excel, KML និង CAD បម្លែងកូអរដោនេ ទាញយកទិន្នន័យចំហ និងរូបភាព និងបង្កើតព្រំដែន។",
+        en: "Attribute editing, Excel, KML and CAD round trips, coordinate conversion, open-data and imagery downloads, and boundary generation.",
       },
     },
     {

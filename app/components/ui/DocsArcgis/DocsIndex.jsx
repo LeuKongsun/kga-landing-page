@@ -22,6 +22,7 @@ import {
   Shapes,
   Sparkles,
   Tag,
+  Wrench,
   X,
 } from "lucide-react";
 import SectionWrapper from "../../SectionWrapper";
@@ -51,6 +52,7 @@ const iconMap = {
   GitBranch,
   Map: MapIcon,
   Globe,
+  Wrench,
   Info,
 };
 
