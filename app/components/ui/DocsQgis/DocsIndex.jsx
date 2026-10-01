@@ -10,6 +10,7 @@ import {
   FileSpreadsheet,
   GitBranch,
   Layers3,
+  Map,
   PenLine,
   Repeat,
   Shapes,
@@ -19,7 +20,7 @@ import {
 import SectionWrapper from "../../SectionWrapper";
 import { useLanguage } from "../../LanguageProvider";
 import { t, UI } from "../../../docs/qgis/_data/ui";
-import { PLUGIN, groups, tools, getToolsInGroup } from "../../../docs/qgis/_data/qgisDocs";
+import { PLUGIN, groups, getToolsInGroup } from "../../../docs/qgis/_data/qgisDocs";
 import DocBlocks from "./DocBlocks";
 import DocsSidebar from "./DocsSidebar";
 import DocsBreadcrumb from "./DocsBreadcrumb";
@@ -34,6 +35,7 @@ const iconMap = {
   GitBranch,
   Repeat,
   Waves,
+  Map,
   Boxes,
   FileSpreadsheet,
 };
@@ -244,14 +246,6 @@ const DocsIndex = () => {
                 );
               })}
 
-              {process.env.NODE_ENV !== "production" && (
-                <p className="mt-8 rounded-xl border border-dashed border-brand-blue/20 px-4 py-2 font-mono text-xs text-brand-text/50 dark:border-white/15 dark:text-gray-500">
-                  dev only — {tools.filter((x) => x.status === "full").length}/{tools.length} full ·{" "}
-                  {tools.filter((x) => x.status === "draft").length} draft ·{" "}
-                  {tools.filter((x) => x.status === "stub").length} stub ·{" "}
-                  {tools.filter((x) => x.youtubeId).length} with video
-                </p>
-              )}
             </div>
           </div>
         </div>
