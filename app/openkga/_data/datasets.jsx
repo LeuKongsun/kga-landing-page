@@ -549,6 +549,34 @@ export const datasets = [
     ],
     tags: ["Cambodia", "vintage map", "raster", "KGA", "open source"],
   },
+  {
+    slug: "esri-north-arrow-for-qgis",
+    category: "tool-solution",
+    format: "tool",
+    title: "ESRI North Arrow for QGIS",
+    excerpt:
+      "ឈុតសញ្ញាទិសខាងជើង (North Arrow) របស់ ESRI ជាទម្រង់ SVG ក្នុងឯកសារ ZIP សម្រាប់ប្រើក្នុងការរចនាផែនទី QGIS។",
+    coverImage: "/SharedDataThumbnail/esri_north_arrow_qgis.png",
+    fileSize: "363.6 KB",
+    fileFormat: "SVG files in ZIP (.zip)",
+    lastUpdated: "2026-10-07",
+    license: "not-specified",
+    downloadUrl: "https://drive.google.com/file/d/1XwsKbt4426PEjXBrfYDgrUgOQpNYDJxS/view?usp=sharing",
+    source: "ESRI (ប្រភពនៃកំណែខ្មែរមិនស្គាល់)",
+    crs: null,
+    featureCount: null,
+    description: [
+      {
+        type: "paragraph",
+        text: "កញ្ចប់នេះមានសញ្ញាទិសខាងជើង (North Arrow) របស់ ESRI ជាឯកសារ SVG ចំនួន ៣០៩ ក្នុងឯកសារ ZIP សម្រាប់ប្រើក្នុងការរចនាប្លង់ផែនទី QGIS។",
+      },
+      {
+        type: "paragraph",
+        text: "ប្រភពដើមគឺ ESRI ចំណែកប្រភពនៃកំណែខ្មែរមិនត្រូវបានបញ្ជាក់ ហើយអាជ្ញាបណ្ណក៏មិនត្រូវបានបញ្ជាក់ដែរ។",
+      },
+    ],
+    tags: ["ESRI", "north arrow", "QGIS", "SVG", "map layout"],
+  },
 ];
 
 export const getDatasetBySlug = (slug) => datasets.find((d) => d.slug === slug);

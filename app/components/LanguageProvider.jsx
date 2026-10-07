@@ -288,6 +288,10 @@ const TRANSLATION_ENTRIES = [
   ["ឧបករណ៍ ArcGIS Toolbox ប្រភពបើកចំហពី Khmer GRS Academy (KGA) សម្រាប់គ្រប់គ្រងលំហូរការងារ KML និង KMZ ក្នុង ArcGIS Pro។", "Open-source ArcGIS toolbox tools from Khmer GRS Academy (KGA) for handling KML and KMZ workflows in ArcGIS Pro."],
   ["ឧបករណ៍ KML Handler គឺជាកញ្ចប់ ArcGIS Toolbox (.atbx) ប្រភពបើកចំហពី Khmer GRS Academy (KGA) សម្រាប់ធ្វើការជាមួយទិន្នន័យ KML និង KMZ ក្នុង ArcGIS Pro។", "KML Handler tools is an open-source ArcGIS Toolbox (.atbx) package from Khmer GRS Academy (KGA) for working with KML and KMZ data in ArcGIS Pro."],
   ["មើលវីដេអូបង្ហាញ", "Watch demo"],
+  ["ឈុតសញ្ញាទិសខាងជើង (North Arrow) របស់ ESRI ជាទម្រង់ SVG ក្នុងឯកសារ ZIP សម្រាប់ប្រើក្នុងការរចនាផែនទី QGIS។", "A set of ESRI North Arrow symbols as SVG files in a ZIP archive, for use in QGIS map layouts."],
+  ["កញ្ចប់នេះមានសញ្ញាទិសខាងជើង (North Arrow) របស់ ESRI ជាឯកសារ SVG ចំនួន ៣០៩ ក្នុងឯកសារ ZIP សម្រាប់ប្រើក្នុងការរចនាប្លង់ផែនទី QGIS។", "This package contains 309 ESRI North Arrow symbols as SVG files in a ZIP archive, for use in QGIS map layouts."],
+  ["ប្រភពដើមគឺ ESRI ចំណែកប្រភពនៃកំណែខ្មែរមិនត្រូវបានបញ្ជាក់ ហើយអាជ្ញាបណ្ណក៏មិនត្រូវបានបញ្ជាក់ដែរ។", "The original source is ESRI. The source of the Khmer version is not specified, and the license is not specified either."],
+  ["ESRI (ប្រភពនៃកំណែខ្មែរមិនស្គាល់)", "ESRI (Khmer version source unknown)"],
   // Contact and footer
   ["លេខទំនាក់ទំនង", "Phone Number"],
   ["អាស័យដ្ឋានអ៉ីម៉ែល", "Email Address"],
