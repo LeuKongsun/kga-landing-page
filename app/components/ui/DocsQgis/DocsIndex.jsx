@@ -10,10 +10,12 @@ import {
   FileSpreadsheet,
   GitBranch,
   Layers3,
+  LayoutGrid,
   Map,
   PenLine,
   Repeat,
   Shapes,
+  SquarePen,
   Table2,
   Waves,
 } from "lucide-react";
@@ -36,6 +38,8 @@ const iconMap = {
   Repeat,
   Waves,
   Map,
+  SquarePen,
+  LayoutGrid,
   Boxes,
   FileSpreadsheet,
 };
@@ -177,8 +181,8 @@ const DocsIndex = () => {
               <p className="mb-8 text-sm text-brand-text/60 dark:text-gray-400">
                 {t(
                   {
-                    km: `ឧបករណ៍ទាំង ${PLUGIN.toolCount} រៀបតាមក្រុមដូចក្នុង QGIS។ ចុចលើឧបករណ៍ណាមួយដើម្បីមើលលម្អិត។`,
-                    en: `All ${PLUGIN.toolCount} tools, grouped as they are in QGIS. Select any tool for its full page.`,
+                    km: `ឧបករណ៍ទាំង ${PLUGIN.toolCount} រៀបតាមក្រុមដូចក្នុង QGIS។ ក្រុមពីរចុងក្រោយជាមុខងារផ្សេងៗ ដែលមិនមែនជា algorithm ក្នុង Processing។ ចុចលើណាមួយដើម្បីមើលលម្អិត។`,
+                    en: `All ${PLUGIN.toolCount} tools, grouped as they are in QGIS. The last two groups are features that are not Processing algorithms, so they do not appear in the Geoprocessing panel. Select any entry for its full page.`,
                   },
                   language,
                 )}

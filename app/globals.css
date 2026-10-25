@@ -208,40 +208,73 @@ html[lang="en"] .font-body {
 html[lang="en"] .font-display {
   font-family: "Plus Jakarta Sans", sans-serif !important;
 }
-/* Text contrast tuning: lift secondary/caption copy without changing the palette. */
-.text-brand-text\/30 { color: rgb(30 47 79 / 0.44); }
-.text-brand-text\/35 { color: rgb(30 47 79 / 0.48); }
-.text-brand-text\/40 { color: rgb(30 47 79 / 0.54); }
-.text-brand-text\/45 { color: rgb(30 47 79 / 0.58); }
-.text-brand-text\/50 { color: rgb(30 47 79 / 0.64); }
-.text-brand-text\/55 { color: rgb(30 47 79 / 0.68); }
-.text-brand-text\/60 { color: rgb(30 47 79 / 0.72); }
-.text-brand-text\/65 { color: rgb(30 47 79 / 0.76); }
-.text-brand-text\/70 { color: rgb(30 47 79 / 0.80); }
-.text-brand-text\/75 { color: rgb(30 47 79 / 0.84); }
+/* ─── WCAG 2.1 AA text contrast ───
+   Secondary/caption copy keeps its visual hierarchy but never drops below 4.5:1.
+   Light: #1E2F4F on #e8edf5 (worst-case hero). Dark: white on #244C8F (worst-case hero) and #0B1929. */
+.text-brand-text\/30 { color: rgb(30 47 79 / 0.68); }
+.text-brand-text\/35 { color: rgb(30 47 79 / 0.69); }
+.text-brand-text\/40 { color: rgb(30 47 79 / 0.70); }
+.text-brand-text\/45 { color: rgb(30 47 79 / 0.71); }
+.text-brand-text\/50 { color: rgb(30 47 79 / 0.72); }
+.text-brand-text\/55 { color: rgb(30 47 79 / 0.73); }
+.text-brand-text\/60 { color: rgb(30 47 79 / 0.76); }
+.text-brand-text\/65 { color: rgb(30 47 79 / 0.78); }
+.text-brand-text\/70 { color: rgb(30 47 79 / 0.82); }
+.text-brand-text\/75 { color: rgb(30 47 79 / 0.85); }
 .text-brand-text\/80 { color: rgb(30 47 79 / 0.88); }
-.text-white\/20 { color: rgb(255 255 255 / 0.34); }
-.text-white\/25 { color: rgb(255 255 255 / 0.38); }
-.text-white\/30 { color: rgb(255 255 255 / 0.44); }
-.text-white\/40 { color: rgb(255 255 255 / 0.56); }
-.text-white\/50 { color: rgb(255 255 255 / 0.66); }
-.text-white\/55 { color: rgb(255 255 255 / 0.70); }
+.text-white\/20 { color: rgb(255 255 255 / 0.64); }
+.text-white\/25 { color: rgb(255 255 255 / 0.65); }
+.text-white\/30 { color: rgb(255 255 255 / 0.66); }
+.text-white\/40 { color: rgb(255 255 255 / 0.68); }
+.text-white\/50 { color: rgb(255 255 255 / 0.70); }
+.text-white\/55 { color: rgb(255 255 255 / 0.72); }
 .text-white\/60 { color: rgb(255 255 255 / 0.76); }
 .text-white\/70 { color: rgb(255 255 255 / 0.82); }
-.placeholder\:text-brand-text\/30::placeholder { color: rgb(30 47 79 / 0.48); }
-.placeholder\:text-brand-text\/40::placeholder { color: rgb(30 47 79 / 0.56); }
-.dark .dark\:text-gray-600 { color: rgb(156 163 175); }
-.dark .dark\:text-gray-500 { color: rgb(186 194 207); }
+.placeholder\:text-brand-text\/30::placeholder { color: rgb(30 47 79 / 0.68); }
+.placeholder\:text-brand-text\/40::placeholder { color: rgb(30 47 79 / 0.70); }
+.dark .dark\:text-gray-600 { color: rgb(186 194 207); }
+.dark .dark\:text-gray-500 { color: rgb(200 207 219); }
 .dark .dark\:text-gray-400 { color: rgb(209 216 228); }
 .dark .dark\:text-gray-300 { color: rgb(226 232 240); }
 .dark .dark\:text-gray-200 { color: rgb(241 245 249); }
-.dark .dark\:placeholder\:text-gray-600::placeholder { color: rgb(156 163 175); }
-.dark .dark\:placeholder\:text-gray-500::placeholder { color: rgb(186 194 207); }
-.dark .dark\:text-white\/20 { color: rgb(255 255 255 / 0.34); }
-.dark .dark\:text-white\/25 { color: rgb(255 255 255 / 0.38); }
-.dark .dark\:text-white\/30 { color: rgb(255 255 255 / 0.44); }
-.dark .dark\:text-white\/40 { color: rgb(255 255 255 / 0.56); }
-.dark .dark\:text-white\/50 { color: rgb(255 255 255 / 0.66); }
-.dark .dark\:text-white\/55 { color: rgb(255 255 255 / 0.70); }
+.dark .dark\:placeholder\:text-gray-600::placeholder { color: rgb(186 194 207); }
+.dark .dark\:placeholder\:text-gray-500::placeholder { color: rgb(200 207 219); }
+.dark .dark\:text-white\/20 { color: rgb(255 255 255 / 0.64); }
+.dark .dark\:text-white\/25 { color: rgb(255 255 255 / 0.65); }
+.dark .dark\:text-white\/30 { color: rgb(255 255 255 / 0.66); }
+.dark .dark\:text-white\/40 { color: rgb(255 255 255 / 0.68); }
+.dark .dark\:text-white\/50 { color: rgb(255 255 255 / 0.70); }
+.dark .dark\:text-white\/55 { color: rgb(255 255 255 / 0.72); }
 .dark .dark\:text-white\/60 { color: rgb(255 255 255 / 0.76); }
 .dark .dark\:text-white\/70 { color: rgb(255 255 255 / 0.82); }
+
+/* Brand orange fails as text on light surfaces (2.5–2.9:1) and as a white-text button fill (2.95:1).
+   Light: #B93A0B text (4.9–5.7:1). Dark: a lighter tint that stays readable on #0B1929 and #244C8F. */
+.text-brand-orange,
+.hover\:text-brand-orange:hover,
+.group:hover .group-hover\:text-brand-orange { color: #B93A0B; }
+.dark .text-brand-orange,
+.dark .hover\:text-brand-orange:hover,
+.dark .group:hover .group-hover\:text-brand-orange { color: #FF8A63; }
+.bg-brand-orange.text-white { background-color: #C2410C; }
+.bg-brand-orange.text-white:hover { background-color: #A8360A; }
+
+/* ─── Typographic accessibility ─── */
+/* Never render text below 12px; Khmer's stacked vowels/subscripts need more room than Latin. */
+.text-\[10px\], .text-\[11px\] { font-size: 0.75rem; }
+.text-\[13px\] { font-size: 0.8125rem; }
+html[lang="km"] body { line-height: 1.75; }
+html[lang="km"] .text-xs { font-size: 0.8125rem; line-height: 1.6; }
+html[lang="km"] .text-sm { line-height: 1.7; }
+html[lang="km"] .leading-tight { line-height: 1.4; }
+html[lang="km"] .leading-snug { line-height: 1.55; }
+html[lang="km"] .leading-none { line-height: 1.35; }
+
+/* Visible keyboard focus everywhere (several controls use outline-none). */
+:focus-visible { outline: 2px solid #244C8F; outline-offset: 2px; }
+.dark :focus-visible { outline-color: #FF8A63; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
