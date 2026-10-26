@@ -8,7 +8,7 @@ import { t, UI } from "../../../docs/qgis/_data/ui";
 const crumbLink =
   "rounded px-1 transition-colors hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60";
 
-const DocsBreadcrumb = ({ group, tool }) => {
+const DocsBreadcrumb = ({ group, parent = null, tool }) => {
   const { language } = useLanguage();
 
   return (
@@ -31,6 +31,16 @@ const DocsBreadcrumb = ({ group, tool }) => {
             <li>
               <Link href={`/docs/qgis#group-${group.id}`} className={crumbLink}>
                 <span lang="en">{group.name}</span>
+              </Link>
+            </li>
+          </>
+        )}
+        {parent && (
+          <>
+            <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
+            <li>
+              <Link href={`/docs/qgis/${parent.slug}`} className={crumbLink}>
+                <span lang="en">{parent.name}</span>
               </Link>
             </li>
           </>

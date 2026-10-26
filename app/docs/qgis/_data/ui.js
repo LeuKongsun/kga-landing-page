@@ -57,6 +57,7 @@ export const UI = {
 
   // Tool page section headings and the identity card.
   howToUse: { km: "របៀបប្រើ", en: "How to use" },
+  toolsInPane: { km: "ឧបករណ៍ក្នុងផ្ទាំងនេះ", en: "Tools in this pane" },
   notesAndLimits: { km: "កំណត់សម្គាល់ និងដែនកំណត់", en: "Notes and limits" },
   outputsDeclared: { km: "លទ្ធផលដែលប្រកាស", en: "Outputs declared" },
   whatYouGet: { km: "អ្វីដែលអ្នកទទួលបាន", en: "What you get" },

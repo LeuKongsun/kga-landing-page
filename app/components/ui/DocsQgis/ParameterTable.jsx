@@ -34,9 +34,16 @@ const ParameterTable = ({ sections = [], toolName = "" }) => {
 
       <div className="space-y-6">
         {usable.map((section, index) => {
-          const isControls = /control/i.test(section.nameLabel ?? "");
+          const isControls = /control|option/i.test(section.nameLabel ?? "");
           const nameHeading = t(isControls ? UI.colControl : UI.colName, language);
           const captionId = `parameters-${index}`;
+          // The Modify Features panes document options with no data type or
+          // default, so those columns would be a run of blank cells. Drop a
+          // column when no row in the section fills it; it comes back on its
+          // own as soon as one does.
+          const rows = section.rows ?? [];
+          const showType = rows.some((row) => t(row.type, language).trim());
+          const showDefault = rows.some((row) => t(row.default, language).trim());
 
           return (
             <div key={index} className="space-y-3">
@@ -57,7 +64,7 @@ const ParameterTable = ({ sections = [], toolName = "" }) => {
                   tabIndex={0}
                   className="overflow-x-auto rounded-2xl border border-brand-blue/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/8"
                 >
-                  <table className="w-full min-w-[680px] text-left text-sm">
+                  <table className={`w-full text-left text-sm ${showType || showDefault ? "min-w-[680px]" : "min-w-[420px]"}`}>
                     <caption id={captionId} className="sr-only">
                       {`${t(UI.parameters, "en")}${toolName ? ` for ${toolName}` : ""}${
                         section.title ? ` — ${t(section.title, "en")}` : ""
@@ -67,22 +74,26 @@ const ParameterTable = ({ sections = [], toolName = "" }) => {
                       <tr>
                         <th
                           scope="col"
-                          className="w-[26%] px-4 py-3 font-display font-700 text-brand-text dark:text-white"
+                          className={`px-4 py-3 font-display font-700 text-brand-text dark:text-white ${showType || showDefault ? "w-[26%]" : "w-[32%]"}`}
                         >
                           {nameHeading}
                         </th>
-                        <th
-                          scope="col"
-                          className="w-[18%] px-4 py-3 font-display font-700 text-brand-text dark:text-white"
-                        >
-                          {t(UI.colType, language)}
-                        </th>
-                        <th
-                          scope="col"
-                          className="w-[16%] px-4 py-3 font-display font-700 text-brand-text dark:text-white"
-                        >
-                          {t(UI.colDefault, language)}
-                        </th>
+                        {showType && (
+                          <th
+                            scope="col"
+                            className="w-[18%] px-4 py-3 font-display font-700 text-brand-text dark:text-white"
+                          >
+                            {t(UI.colType, language)}
+                          </th>
+                        )}
+                        {showDefault && (
+                          <th
+                            scope="col"
+                            className="w-[16%] px-4 py-3 font-display font-700 text-brand-text dark:text-white"
+                          >
+                            {t(UI.colDefault, language)}
+                          </th>
+                        )}
                         <th
                           scope="col"
                           className="px-4 py-3 font-display font-700 text-brand-text dark:text-white"
@@ -102,12 +113,16 @@ const ParameterTable = ({ sections = [], toolName = "" }) => {
                               <RichText value={row.name} />
                             </span>
                           </th>
-                          <td className="px-4 py-3 text-xs leading-relaxed text-brand-text/70 dark:text-gray-300">
-                            <RichText value={row.type} />
-                          </td>
-                          <td className="px-4 py-3 text-xs leading-relaxed text-brand-text/70 dark:text-gray-300">
-                            {row.default ? <RichText value={row.default} /> : "—"}
-                          </td>
+                          {showType && (
+                            <td className="px-4 py-3 text-xs leading-relaxed text-brand-text/70 dark:text-gray-300">
+                              <RichText value={row.type} />
+                            </td>
+                          )}
+                          {showDefault && (
+                            <td className="px-4 py-3 text-xs leading-relaxed text-brand-text/70 dark:text-gray-300">
+                              {row.default ? <RichText value={row.default} /> : "—"}
+                            </td>
+                          )}
                           <td className="px-4 py-3 leading-relaxed text-brand-text/70 dark:text-gray-300">
                             <RichText value={row.description} />
                           </td>

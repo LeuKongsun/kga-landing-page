@@ -4165,6 +4165,1966 @@ export const tools = [
     seeAlso: ["create_features", "open_feature_attribute", "merge_features", "divide_features"],
   },
   {
+    slug: "modify_move",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Alignment",
+    name: "Move",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Alignment ▸ Move",
+    summary: {
+               km: "ផ្លាស់ទី features ដែលបានជ្រើស ដោយអូសលើផែនទី ឬដោយវាយបញ្ចូលចម្ងាយ។",
+               en: "Moves the selected features by dragging them on the map, or by a typed offset.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**dX (map units)**", type: "", default: "", description: { km: "", en: "Offset along X, in the map CRS." } },
+          { name: "**dY (map units)**", type: "", default: "", description: { km: "", en: "Offset along Y, in the map CRS." } },
+          { name: "**Anchor**", type: "", default: "", description: {
+            km: "",
+            en: "The centre of the selection unless set with **Set on the map**. Snaps to vertices, edges and midpoints.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Turn **Edit Session** On and open **Modify Features > Alignment > Move**." },
+        {
+          km: "",
+          en: "Press on a feature and drag. It is selected for you and follows the mouse; release to apply. Click empty map to clear the selection, or drag there to select several (Shift adds, Ctrl removes).",
+        },
+        { km: "", en: "Or type **dX** and **dY** on the page and press **Move by this offset**." },
+        {
+          km: "",
+          en: "To move from a set point, press **Set on the map** in the anchor group and click the map; **Reset** goes back to the centre of the selection.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "A live preview is drawn on rubber bands before anything is written." },
+        {
+          km: "",
+          en: "Works on the selected features of every editable layer shown on the map; layers in other CRSs follow along.",
+        },
+        { km: "", en: "One undoable edit per layer. Ctrl+Z or **Discard Edits** undoes it." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_rotate",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Alignment",
+    name: "Rotate",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Alignment ▸ Rotate",
+    summary: {
+               km: "បង្វិល features ដែលបានជ្រើសជុំវិញចំណុចយោង ដោយអូស ឬដោយវាយបញ្ចូលមុំ។",
+               en: "Rotates the selected features about an anchor, by dragging or by a typed angle.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Counter-clockwise**", type: "", default: "", description: { km: "", en: "The angle to rotate by, in degrees (-360 to 360)." } },
+          { name: "**Anchor**", type: "", default: "", description: {
+            km: "",
+            en: "Centre of the selection unless **Set on the map** places it elsewhere; **Reset** goes back to the centre.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the features (or click one while the tool is active and nothing is selected).",
+        },
+        {
+          km: "",
+          en: "A red anchor marks the centre of the selection. Drag around it on the map, or type an angle on the page.",
+        },
+        {
+          km: "",
+          en: "Release to write the rotation, or press **Rotate by this angle** for a typed one.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Works in the map CRS and is converted back to each layer's CRS." },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_scale",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Alignment",
+    name: "Scale",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Alignment ▸ Scale",
+    summary: {
+               km: "ពង្រីក ឬបង្រួម features ដែលបានជ្រើសជុំវិញចំណុចយោង ដោយអូស ឬដោយវាយបញ្ចូលមេគុណ។",
+               en: "Scales the selected features about an anchor, by dragging away from or towards it, or by a typed factor.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Factor (2 = twice as big)**", type: "", default: "", description: { km: "", en: "Scale factor; 0.5 halves the size." } },
+          { name: "**Anchor**", type: "", default: "", description: {
+            km: "",
+            en: "Centre of the selection unless **Set on the map** places it elsewhere; **Reset** goes back to the centre.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Select the features." },
+        {
+          km: "",
+          en: "Drag away from the red anchor to enlarge or towards it to shrink, or type a factor on the page.",
+        },
+        {
+          km: "",
+          en: "Release to write the result, or press **Scale by this factor** for a typed one.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Works in the map CRS and is converted back to each layer's CRS." },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_move_to",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Alignment",
+    name: "Move To",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Alignment ▸ Move To",
+    summary: {
+               km: "ផ្លាស់ទីការជ្រើសរើសទៅទីតាំងមួយ ដូចផ្ទាំង Move To របស់ ArcGIS Pro។",
+               en: "Moves the selection to a location, laid out like the Move To pane of ArcGIS Pro. A map click only fills in the values; the **Move To** button applies them.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Absolute**", type: "", default: "", description: {
+            km: "",
+            en: "Puts the anchor at **X, Y**. The anchor is the centre of the selection unless you set it.",
+          } },
+          { name: "**Delta**", type: "", default: "", description: { km: "", en: "Moves by **dX, dY**." } },
+          { name: "**Direction/Distance**", type: "", default: "", description: {
+            km: "",
+            en: "Moves a **Distance** along a **Direction** (degrees clockwise from north). Units show as the CRS abbreviation.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the features. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose a **Method** and type its values, or click the map to fill them in. A preview shows the result.",
+        },
+        { km: "", en: "Press **Move To** (it stays disabled until there is a non-zero move)." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "The default X, Y are refilled when the selection or anchor changes." },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_edit_vertices",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Edit Vertices",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Edit Vertices",
+    summary: {
+               km: "កែកំពូលរបស់ feature លើផែនទី ឬក្នុងតារាង ដូចផ្ទាំង Edit Vertices របស់ ArcGIS Pro។",
+               en: "Edits the vertices of a feature on the map or in a table, laid out like the Edit Vertices pane of ArcGIS Pro. It is KGA's own tool, so selecting and editing are one flow.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**# / X / Y table**", type: "", default: "", description: {
+            km: "",
+            en: "The vertices of the feature picked in the list, in the map CRS. Edit X or Y in a cell.",
+          } },
+          { name: "**Copy**", type: "", default: "", description: { km: "", en: "Copies the table to the clipboard." } },
+          { name: "**Change the selection.**", type: "", default: "", description: {
+            km: "",
+            en: "Use this button to pick features by dragging; a plain drag on empty map picks vertices.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Click a feature: it is selected and its vertices show as handles." },
+        {
+          km: "",
+          en: "Drag a handle to move that vertex (it snaps to the features around). Double-click a segment to add a vertex.",
+        },
+        {
+          km: "",
+          en: "Drag a box on empty map to choose the vertices inside it (hold Alt for a freehand lasso; Shift adds, Ctrl removes). Chosen vertices are orange.",
+        },
+        {
+          km: "",
+          en: "Press **Delete** to remove the chosen vertices, else the vertex under the mouse, else the rows selected in the table.",
+        },
+        {
+          km: "",
+          en: "Or edit the **table** at the bottom: type a new X or Y in a cell to move that vertex; select rows and press the red cross to delete them.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "A line needs at least 2 vertices and a polygon ring 3; deleting more is refused.",
+        },
+        {
+          km: "",
+          en: "Z and M values are kept when a vertex moves; a polygon's closing vertex moves with the first.",
+        },
+        {
+          km: "",
+          en: "The table follows the map: a drag, undo or redo updates it, and the vertex of the selected row is circled on the map.",
+        },
+        {
+          km: "",
+          en: "Every change is one undoable edit written in the layer's own CRS. Esc first drops the chosen vertices.",
+        },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_reshape",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Reshape",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Reshape",
+    summary: {
+               km: "គូសបន្ទាត់លើ features ដើម្បីកែរូបរាងរបស់វា ដូចផ្ទាំង Reshape របស់ ArcGIS Pro។",
+               en: "Draws a line over features to reshape them, laid out like the Reshape pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Show Preview**", type: "", default: "", description: { km: "", en: "Draws the reshaped features while you move the mouse." } },
+          { name: "**Allow reshaping without a selection**", type: "", default: "", description: { km: "", en: "With nothing selected, reshapes every editable feature the line crosses." } },
+          { name: "**Reshape with single intersection**", type: "", default: "", description: {
+            km: "",
+            en: "Lets one crossing reshape a line: the shorter side is trimmed and the line continues along the sketch. Needs a selected line.",
+          } },
+          { name: "**Choose result on finish**", type: "", default: "", description: {
+            km: "",
+            en: "When the sketch cuts a polygon in pieces, click the piece to keep. Unticked, the piece with the longest perimeter is kept.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the features. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        { km: "", en: "Click points on the map to draw the new edge over the features." },
+        {
+          km: "",
+          en: "Finish with the **Finish** button, right-click or Enter. Backspace removes the last point and Esc cancels.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "While sketching, right-click for **Parallel** and **Perpendicular** (keys **P** and **R**): the next segment is locked to an edge. See the Notes in [Replace Geometry](modify_replace_geometry.md).",
+        },
+        {
+          km: "",
+          en: "Only editable layers shown on the map are changed. One undoable edit per layer.",
+        },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_replace_geometry",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Replace Geometry",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Replace Geometry",
+    summary: {
+               km: "ជំនួសរូបរាងរបស់ features ដែលបានជ្រើស ដោយរូបរាងថ្មីដែលអ្នកគូស។",
+               en: "Replaces the shape of the selected features with a new one you draw, laid out like the Replace Geometry pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Sketch menu**", type: "", default: "", description: {
+            km: "",
+            en: "Right-click while sketching: Finish Sketch, Parallel (P), Perpendicular (R), Clear Constraint, Delete Sketch.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the features. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Click the **Replace Polygon / Line / Point** tile and draw the new shape: click its points (a dashed outline and green vertices show it, with snapping).",
+        },
+        { km: "", en: "Finish with right-click or Enter. The selected features take that shape." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "**Parallel / Perpendicular** lock the next segment to an edge of any feature or of the sketch. Right-click with the mouse over an edge to use it at once, or hover and click the edge. A thin cyan guide shows the locked direction; the lock is used up by the next click.",
+        },
+        { km: "", en: "Needs at least 3 points for a polygon and 2 for a line." },
+        { km: "", en: "Attributes are kept; only the geometry changes." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_extend_trim",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Extend or Trim",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Extend or Trim",
+    summary: {
+               km: "ពន្លូតបន្ទាត់ទៅ feature ជិតបំផុត ឬកាត់វាឲ្យខ្លីវិញ។",
+               en: "Extends a line to the nearest feature or trims it back, laid out like the Extend or Trim pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Recalculate COGO attributes**", type: "", default: "", description: {
+            km: "",
+            en: "After a change, rewrites the line's COGO fields (direction, distance...) from its geometry.",
+          } },
+          { name: "**Allow Extend or Trim without a selection**", type: "", default: "", description: { km: "", en: "With nothing selected, any editable line you click is changed." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the lines. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        { km: "", en: "Choose a tile: **Extend or Trim**, **Extend** or **Trim**." },
+        {
+          km: "",
+          en: "Hover a line. A grey preview shows the part that would be removed (thick) or the extension (dashed).",
+        },
+        {
+          km: "",
+          en: "Click to do it. Lines change to the nearest other feature shown on the map.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Only selected lines change unless no selection is allowed." },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_fillet",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Fillet",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Fillet",
+    summary: {
+               km: "ភ្ជាប់បន្ទាត់ពីរដោយធ្នូ ដូចផ្ទាំង Fillet របស់ ArcGIS Pro។",
+               en: "Joins two lines with an arc, laid out like the Fillet pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Fixed Radius**", type: "", default: "", description: {
+            km: "",
+            en: "Rounds every corner with the same radius, typed in the project's distance unit. Unticked, the mouse sets the radius.",
+          } },
+          { name: "**Trim or extend the lines to the arc**", type: "", default: "", description: { km: "", en: "Trims or extends both lines to meet the arc." } },
+          { name: "**Add the arc as a new feature**", type: "", default: "", description: {
+            km: "",
+            en: "Adds the connecting arc as a new feature. If both options are off, nothing happens.",
+          } },
+          { name: "**Start over**", type: "", default: "", description: { km: "", en: "Forgets the first line (Esc or right-click does the same)." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Click the first line, then the second. Both lines and the arc are previewed (the arc dashed).",
+        },
+        {
+          km: "",
+          en: "With **Fixed Radius** off the mouse sets the radius: the arc touches the second line where you click.",
+        },
+        { km: "", en: "Click to finish." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Only single-part lines (or polygon edges) can be joined." },
+        { km: "", en: "Click the part of each line you want to keep." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_generalize",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Generalize",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Command in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Generalize",
+    summary: {
+               km: "លុប ធ្វើឲ្យរលូន ឬបន្ថែមកំពូលក្នុងបន្ទាត់ និងពហុកោណដែលបានជ្រើស។",
+               en: "Removes, smooths or adds vertices in the selected lines and polygons, laid out like the Generalize pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Simplify**", type: "", default: "", description: {
+            km: "",
+            en: "Removes vertices that move the shape by less than the **Maximum Allowable Offset**.",
+          } },
+          { name: "**Smooth**", type: "", default: "", description: {
+            km: "",
+            en: "A smooth curve through the vertices; the offset is how far a chord of it may lie from the curve.",
+          } },
+          { name: "**Densify**", type: "", default: "", description: {
+            km: "",
+            en: "Adds vertices: one at most a **Distance** apart, or, for curved segments, within an Offset / Angle.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Select lines or polygons (the Select tool is in hand from the start)." },
+        { km: "", en: "Choose a **Method** and set its value in a unit of your choice." },
+        {
+          km: "",
+          en: "Tick **Show Preview** to see the result (blue line, vertices as dots), then press **Generalize**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Every run is one undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_line_intersection",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Line Intersection",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Line Intersection",
+    summary: {
+               km: "កាត់ ឬពន្លូតបន្ទាត់ពីរឲ្យជួបគ្នានៅជ្រុងរបស់វា។",
+               en: "Trims or extends two lines to meet at their corner, laid out like the Line Intersection pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Recalculate COGO attributes**", type: "", default: "", description: { km: "", en: "Rewrites the lines' COGO fields from their geometry afterwards." } },
+          { name: "**Create new lines when extending**", type: "", default: "", description: {
+            km: "",
+            en: "An extended line keeps its shape; the extension is added as a new line instead.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Click the first line (grey), then hover the second: the result is previewed, with a blue dot at the intersection.",
+        },
+        {
+          km: "",
+          en: "Lines that cross are cut in two there, so two crossing lines become four. Lines that do not meet are extended until they do.",
+        },
+        {
+          km: "",
+          en: "Press **Tab** to try another crossing when there are several, then click or press Enter.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Only single-part editable lines can be used." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_reverse_direction",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Reverse Direction",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Reverse Direction",
+    summary: {
+               km: "បង្វែរទិសដៅបន្ទាត់ ដូចផ្ទាំង Reverse Direction របស់ ArcGIS Pro។",
+               en: "Turns a line around, laid out like the Reverse Direction pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Reverse topmost line**", type: "", default: "", description: { km: "", en: "Reverses the line on top where lines overlap." } },
+          { name: "**Choose from overlapping lines**", type: "", default: "", description: { km: "", en: "Where lines overlap, pick which one to reverse from a list." } },
+          { name: "**Choose component part of a multipart line**", type: "", default: "", description: { km: "", en: "Reverses only the part you click, not all parts." } },
+          { name: "**Recalculate COGO Direction attribute**", type: "", default: "", description: { km: "", en: "Rewrites the line's COGO fields from its new direction." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Hover an editable line: arrows show the way it runs." },
+        { km: "", en: "Click it to reverse it. Ctrl+Z undoes it." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Only editable lines are listed." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_change_line_length",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Reshape",
+    name: "Change Line Length",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Command in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Reshape ▸ Change Line Length",
+    summary: {
+               km: "កំណត់ប្រវែងបន្ទាត់ដែលបានជ្រើស ដោយរក្សាចុងម្ខាងនៅនឹងកន្លែង។",
+               en: "Sets the length of the selected lines, keeping one end where it is, laid out like the Change Line Length pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Preserve location of**", type: "", default: "", description: {
+            km: "",
+            en: "**First Vertex** or **Last Vertex** stays where it is; the other end is cut back along the line (shorter) or continued straight on in the direction of its last segment (longer).",
+          } },
+          { name: "**Proportion geometry using existing COGO**", type: "", default: "", description: {
+            km: "",
+            en: "Scales the whole line about the preserved vertex so every segment changes by the same factor. Needs the layer's COGO Distance field.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Select the lines." },
+        {
+          km: "",
+          en: "Choose **Change Length to:** (a new total) or **Change Length by:** (an amount), and give a value and unit.",
+        },
+        { km: "", en: "Choose which end to preserve: **First Vertex** or **Last Vertex**." },
+        {
+          km: "",
+          en: "Tick **Show Preview** to see the new lines dashed over the old, then press **Change Length**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Only single-part lines change." },
+        {
+          km: "",
+          en: "Lengths are measured on the ground when the project has an ellipsoid, else flat in map units.",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_split",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Divide",
+    name: "Split",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Divide ▸ Split",
+    summary: {
+               km: "បំបែក features ដោយបន្ទាត់ដែលគូស ឬដោយ features ផ្សេងទៀត។",
+               en: "Splits features with a drawn line or with other features, laid out like the Split pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Allow splitting without a selection**", type: "", default: "", description: { km: "", en: "With nothing selected, splits every editable feature the line crosses." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "**Interactive:** select features, then click the points of a line across them. Right-click, double-click or Enter splits; Backspace removes the last point; Esc cancels.",
+        },
+        {
+          km: "",
+          en: "**By Feature:** pick **Input Features** (lines, or polygons whose outline cuts) and **Target Features** (what gets split) with their **Select** buttons, then press **Split**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "Pieces keep the attributes of the feature they came from (QGIS's own split).",
+        },
+        {
+          km: "",
+          en: "One undoable edit per layer. Ctrl+Z and Ctrl+Y undo and redo the splits in every layer they touched; the split layer becomes the active layer.",
+        },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_divide",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Divide",
+    name: "Divide",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Divide ▸ Divide",
+    summary: {
+               km: "ចែកពហុកោណជាផ្នែកៗតាមផ្ទៃ សមាមាត្រ ឬទទឹង និងចែកបន្ទាត់តាមចម្ងាយ ចំនួនស្មើគ្នា ឬភាគរយ។",
+               en: "Divides polygons into parts by area, proportion or width, or lines by distance, equal parts or percentage. The page changes with what is selected.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Proportional Area**", type: "", default: "", description: { km: "", en: "N parts that each hold 1/N of the polygon." } },
+          { name: "**Equal Area**", type: "", default: "", description: {
+            km: "",
+            en: "Parts of a given area from the start side; the rest stays as the remaining polygon, or is shared out equally between the parts.",
+          } },
+          { name: "**Equal Width**", type: "", default: "", description: {
+            km: "",
+            en: "Parts of a given width from the start side; the rest stays, or is merged into the last part.",
+          } },
+          { name: "**Lines: Distance**", type: "", default: "", description: {
+            km: "",
+            en: "Cuts the line at the distances in a table, with repetitions; the rest can be shared out.",
+          } },
+          { name: "**Lines: Equal Parts / Percentage**", type: "", default: "", description: { km: "", en: "Number of parts, or a percentage, from the start or the end of the line." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select polygons or lines. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose a **Method**, then the **Direction** (a polygon edge or a drawn line; **Switch** picks the side to start from).",
+        },
+        {
+          km: "",
+          en: "Enter the values, check the information bar (it shows the areas), tick **Show Preview**, then press **Divide**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "The dividing lines run parallel to the direction. The first part keeps the original feature; the others are new features with the same attributes.",
+        },
+        {
+          km: "",
+          en: "Areas and lengths are measured on the ground when the project has an ellipsoid, else flat.",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_clip",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Divide",
+    name: "Clip",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Divide ▸ Clip",
+    summary: {
+               km: "កាត់បន្ទាត់ និងពហុកោណដោយប្រើ features ផ្សេងទៀត។",
+               en: "Clips lines and polygons with other features, laid out like the Clip pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Buffer Distance**", type: "", default: "", description: {
+            km: "",
+            en: "Points and lines clip through the buffer around them, so they need a distance above 0; polygons may be grown by it too.",
+          } },
+          { name: "**Discard (Remainder)**", type: "", default: "", description: {
+            km: "",
+            en: "Removes the part of each target inside the clip area. **Keep coincident** keeps a line's part that runs along the clip boundary.",
+          } },
+          { name: "**Preserve**", type: "", default: "", description: { km: "", en: "Keeps only the part inside the clip area." } },
+          { name: "**Contain**", type: "", default: "", description: { km: "", en: "Deletes the targets outside the clip area; the others stay as they are." } },
+          { name: "**Split**", type: "", default: "", description: {
+            km: "",
+            en: "Keeps both: the part inside and the part outside become separate features.",
+          } },
+          { name: "**Clip all editable features**", type: "", default: "", description: {
+            km: "",
+            en: "Clips every editable line and polygon the clip area touches instead of the Target Features.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Pick the **Input Features** (the clip features: points, lines or polygons) and the **Target Features** (lines or polygons that get clipped) with their Select buttons.",
+        },
+        { km: "", en: "Set a **Buffer Distance** and choose **When clipping features**." },
+        { km: "", en: "Press **Clip**." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "New pieces copy the attributes. One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_explode",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Divide",
+    name: "Explode",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Divide ▸ Explode",
+    summary: {
+               km: "បំបែក features ពហុផ្នែកទៅជាផ្នែកតែមួយ ឬដកផ្នែកតែមួយចេញពីវា។",
+               en: "Breaks multi-part features into single parts, or pulls single parts out of them. Works on multi-part features only.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Keep original features**", type: "", default: "", description: {
+            km: "",
+            en: "Leaves the multi-part features as they are and adds every part as a new feature.",
+          } },
+          { name: "**Allow explode without selection**", type: "", default: "", description: { km: "", en: "With nothing selected, click any part of an editable multi-part feature." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "**Features tab:** select multi-part features and press **Explode**. Each part becomes a feature of its own. The button is enabled only while every selected feature is multi-part (a single-part one is flagged: unselect it).",
+        },
+        {
+          km: "",
+          en: "**Parts tab:** hover a part on the map (it is outlined) and click it to make it a feature of its own.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "New features copy the attributes; primary key and unique fields get fresh values.",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_planarize",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Divide",
+    name: "Planarize",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Divide ▸ Planarize",
+    summary: {
+               km: "កាត់បន្ទាត់ដែលបានជ្រើសនៅកន្លែងដែលវាកាត់គ្នា។",
+               en: "Cuts the selected lines where they cross each other, laid out like the Planarize pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Cluster Tolerance**", type: "", default: "", description: {
+            km: "",
+            en: "Lines cross or end on another selected line within this distance are cut there.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the lines. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        { km: "", en: "Set the **Cluster Tolerance** in the project's distance unit." },
+        { km: "", en: "Press **Planarize**." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "Every selected line is cut where it crosses another selected line, or where another selected line ends on it, so no two lines cross without a vertex.",
+        },
+        {
+          km: "",
+          en: "The first piece keeps the original feature; the other pieces are new features with the same attributes (primary key and unique fields get fresh values).",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_merge",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Construct",
+    name: "Merge",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Construct ▸ Merge",
+    summary: {
+               km: "បញ្ចូល features ទៅជាតែមួយ ដូចផ្ទាំង Merge របស់ ArcGIS Pro។",
+               en: "Merges features into one, laid out like the Merge pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Existing Feature**", type: "", default: "", description: {
+            km: "",
+            en: "The features become the preserved one: it gets the combined shape and the attribute values shown, and the others are deleted. Click a row to preserve another.",
+          } },
+          { name: "**New Feature**", type: "", default: "", description: {
+            km: "",
+            en: "A new feature with the combined shape and those values is added (to the template layer if **Use Template** is on).",
+          } },
+          { name: "**Keep original features**", type: "", default: "", description: { km: "", en: "New Feature tab: leaves the originals in place." } },
+          { name: "**Features to merge**", type: "", default: "", description: { km: "", en: "One row per feature, with buttons to flash it on the map or unselect it." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the features. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        { km: "", en: "Choose the tab: **Existing Feature** or **New Feature**." },
+        {
+          km: "",
+          en: "Check the **Merged Feature Attributes** (type a value to change it), then press **Merge**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "The shape is the union: touching parts dissolve, others stay as parts of a multi-part feature.",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_buffer",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Construct",
+    name: "Buffer",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Construct ▸ Buffer",
+    summary: {
+               km: "បង្កើត buffer ពី features ដែលបានជ្រើស ជាពហុកោណ ឬជាបន្ទាត់ព្រំ។",
+               en: "Buffers the selected features into polygons or outlines, laid out like the Buffer pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Buffer Distance**", type: "", default: "", description: {
+            km: "",
+            en: "How far out from each selected feature (points, lines and polygons), in a unit of your choice.",
+          } },
+          { name: "**Rings**", type: "", default: "", description: {
+            km: "",
+            en: "Several buffers, each one Buffer Distance further out. A polygon template gets them as separate bands (ring 2 is the area between the first and second buffer).",
+          } },
+          { name: "**Dissolve**", type: "", default: "", description: {
+            km: "",
+            en: "The buffers of all selected features become one shape. Off: one shape per feature.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the features. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose the **Template**: the layer that receives the buffers. A polygon layer gets polygons; a line layer gets the outlines.",
+        },
+        {
+          km: "",
+          en: "Set the **Buffer Distance**, **Rings** and **Dissolve**, tick **Show Preview**, then press **Buffer**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "The new features take the template layer's default attribute values and are selected afterwards.",
+        },
+        { km: "", en: "One undoable edit." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_copy_parallel",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Construct",
+    name: "Copy Parallel",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Construct ▸ Copy Parallel",
+    summary: {
+               km: "ចម្លងបន្ទាត់ដែលបានជ្រើសនៅចម្ងាយមួយ ទៅម្ខាង ឬទាំងសងខាង។",
+               en: "Copies the selected lines at a distance, on one or both sides, laid out like the Copy Parallel pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Distance / Repetitions**", type: "", default: "", description: { km: "", en: "Repetition k is copied at k x Distance." } },
+          { name: "**Side**", type: "", default: "", description: {
+            km: "",
+            en: "Both, Left or Right of the line's direction. Arrows on the selected lines in the preview show which way Left and Right refer to.",
+          } },
+          { name: "**Corners**", type: "", default: "", description: { km: "", en: "Mitered, Rounded or Beveled." } },
+          { name: "**Use Template / Keep source attribute values**", type: "", default: "", description: {
+            km: "",
+            en: "Make the copies in the template layer, and carry the source attribute values across.",
+          } },
+          { name: "**Remove self-intersecting loops**", type: "", default: "", description: { km: "", en: "Drops the loops an offset makes on the inside of a tight bend." } },
+          { name: "**Align the direction of connected lines**", type: "", default: "", description: { km: "", en: "Ticked by default." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the lines. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose the **Template** (the line layer that receives the copies, and whether they keep the source attribute values).",
+        },
+        {
+          km: "",
+          en: "Choose **Copy to separate features** or **Copy to a single feature**, set the **Distance** and **Repetitions**, then the **Side** and **Corners**.",
+        },
+        { km: "", en: "Tick **Show Preview**, then press **Copy**." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "The preview draws the copies in olive. The new lines are selected afterwards.",
+        },
+        { km: "", en: "One undoable edit." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_construct_polygons",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Construct",
+    name: "Construct Polygons",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Construct ▸ Construct Polygons",
+    summary: {
+               km: "បង្កើតពហុកោណពីបន្ទាត់ដែលបានជ្រើស ដែលព័ទ្ធជុំវិញផ្ទៃមួយ។",
+               en: "Builds polygons from the selected lines that enclose an area, laid out like the Construct Polygons pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Cluster Tolerance**", type: "", default: "", description: {
+            km: "",
+            en: "Line ends that stop short of another line by no more than this are joined to it.",
+          } },
+          { name: "**Use existing features in target**", type: "", default: "", description: {
+            km: "",
+            en: "Lets the outlines of polygons already in the template layer close areas too, and leaves out any polygon that is already there.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the lines. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose the **Template**: the editable polygon layer that receives the polygons.",
+        },
+        { km: "", en: "Set the **Cluster Tolerance**, then press **Construct**." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "The lines are joined where they cross or meet and every closed area becomes a polygon. Lines that do not close an area are ignored.",
+        },
+        {
+          km: "",
+          en: "New polygons take the template's default attribute values and are selected afterwards.",
+        },
+        { km: "", en: "One undoable edit." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_offset",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Construct",
+    name: "Offset",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Construct ▸ Offset",
+    summary: {
+               km: "បង្កើតចំណុចតាមបណ្តោយបន្ទាត់យោង ដោយកំណត់ចម្ងាយតាមបណ្តោយ និងចម្ងាយទៅចំហៀង។",
+               en: "Creates points along a reference line, each at a distance along it and a distance to its side, laid out like the Offset pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Distance**", type: "", default: "", description: {
+            km: "",
+            en: "Distance along the line (counted from Start from). A row beyond End at is left out.",
+          } },
+          { name: "**Offset**", type: "", default: "", description: {
+            km: "",
+            en: "Distance to the side of the line. A negative offset goes to the other side.",
+          } },
+          { name: "**Side**", type: "", default: "", description: { km: "", en: "None puts the point on the line; Left or Right of the line's direction." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Choose the reference line: **Interactive** (draw it with the Two-Point Line tool, or pick a line with the Trace Line tool) or **By Feature** (the first selected line feature).",
+        },
+        {
+          km: "",
+          en: "Optionally set the **Range**: *Start from* and *End at*, distances along the line. The bar shows the line's length.",
+        },
+        { km: "", en: "Fill the **Values** table: one point per row." },
+        {
+          km: "",
+          en: "Choose the **Template** (the editable point layer), tick **Show Preview**, then press **Create**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "The reference line is drawn in blue with an arrow showing its direction." },
+        {
+          km: "",
+          en: "The new points take the template's default attribute values and are selected afterwards.",
+        },
+        { km: "", en: "One undoable edit." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_copy_paste",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Construct",
+    name: "Copy Paste",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Construct ▸ Copy Paste",
+    summary: {
+               km: "ឧបករណ៍ Copy-Paste Feature ដែលដំណើរការនៅក្នុងផ្ទាំង Modify Features។",
+               en: "The Copy-Paste Feature tool inside the pane. It shares its clipboard and paste engine with the Copy-Paste Feature window, so what is copied here can be pasted there and the other way round.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Clear clipboard**", type: "", default: "", description: { km: "", en: "Empties the clipboard." } },
+          { name: "**Paste Special fields**", type: "", default: "", description: { km: "", en: "Target layer, how attributes carry across, and geometry options." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "**Copy tab:** select features (select mode stays on), choose the **Layer** if features of several layers are selected, then press **Copy**. The copied features are outlined on the map.",
+        },
+        {
+          km: "",
+          en: "**Paste tab:** set the Paste Special fields (target layer, how attributes carry across, geometry options), then press **Paste**, or **Paste again** for the same target and mapping.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "A blue bar tells what is on the clipboard; a green bar reports what was pasted.",
+        },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_sequential_numbering",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Attributes",
+    name: "Sequential Numbering",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Attributes ▸ Sequential Numbering",
+    summary: {
+               km: "ដាក់លេខ features តាមលំដាប់ដែលបន្ទាត់គូសកាត់វា។",
+               en: "Numbers features in the order a drawn line crosses them, laid out like the Sequential Numbering pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Format**", type: "", default: "", description: {
+            km: "",
+            en: "For a text field: the text around the number, with # standing for it. \"A-###\" gives A-001, A-002 ... (as many # as digits; a lone # means no padding). Greyed out for a number field.",
+          } },
+          { name: "**Start value**", type: "", default: "", description: {
+            km: "",
+            en: "The first number. It moves on to the next number after each run, so the next line carries on from there.",
+          } },
+          { name: "**Increment**", type: "", default: "", description: { km: "", en: "The step; a negative value counts down." } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Choose the **Layer** (editable) and the **Field** (number or text)." },
+        { km: "", en: "Set the **Format**, the **Start value** and the **Increment**." },
+        {
+          km: "",
+          en: "Draw a line across the features: click its points, then right-click, double-click or Enter. A single click numbers the one feature under it.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "Values longer than a text field allows are cut to its length." },
+        { km: "", en: "One undoable edit per run." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_transfer_attributes",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "Attributes",
+    name: "Transfer Attributes",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ Attributes ▸ Transfer Attributes",
+    summary: {
+               km: "ចម្លងតម្លៃគុណលក្ខណៈពី feature មួយ ទៅ feature មួយទៀត។",
+               en: "Copies attribute values from one feature to another, laid out like the Transfer Attributes pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Field list**", type: "", default: "", description: {
+            km: "",
+            en: "Every field with the same name in both layers is copied. Untick a field on the page to leave it out.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Click a **source** feature, then click a **target** feature. A tip beside the cursor names the step and the source.",
+        },
+        {
+          km: "",
+          en: "The values go across and the tool is ready for the next source. Right-click or Esc goes back to choosing a source.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "Values are converted to the target field's type. The primary key, unique and calculated fields are never touched.",
+        },
+        {
+          km: "",
+          en: "A green strip says \"Attribute transfer completed.\" One undoable edit per transfer.",
+        },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_traverse",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "COGO",
+    name: "Traverse",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ COGO ▸ Traverse",
+    summary: {
+               km: "គូសបន្ទាត់ COGO ពីទិស និងចម្ងាយដែលវាយបញ្ចូល។",
+               en: "Draws COGO lines from typed directions and distances, laid out like the Traverse pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Direction**", type: "", default: "", description: {
+            km: "",
+            en: "In the direction type and units of the COGO settings (north azimuth 45-30-00, quadrant N45-30-00E ...).",
+          } },
+          { name: "**Distance**", type: "", default: "", description: {
+            km: "",
+            en: "In the distance unit of the settings (map units when none is chosen). With a Radius it is the length of the chord.",
+          } },
+          { name: "**Radius**", type: "", default: "", description: { km: "", en: "Positive turns clockwise, negative counter-clockwise; empty = straight." } },
+          { name: "**One feature per course, with its COGO values**", type: "", default: "", description: {
+            km: "",
+            en: "Each course is a line carrying its Direction, Distance, Radius and ArcLength. Off, the traverse is one connected line.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        { km: "", en: "Choose the **Template**: the editable line layer the lines are made in." },
+        {
+          km: "",
+          en: "Click the **start point** on the map (it snaps; a green square marks it) or type it.",
+        },
+        {
+          km: "",
+          en: "Fill in the **Courses** table, one row per course: Direction, Distance and, for a curve, Radius. \"Click to add new row.\" adds one. Each course starts where the one before ends.",
+        },
+        {
+          km: "",
+          en: "Set the COGO settings, tick **Show Preview** to see the traverse in blue, then press **Create**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "The new lines are selected afterwards. One undoable edit." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_update_cogo",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "COGO",
+    name: "Update COGO",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ COGO ▸ Update COGO",
+    summary: {
+               km: "សរសេរ fields COGO របស់បន្ទាត់ដែលបានជ្រើសឡើងវិញ ពីធរណីមាត្ររបស់វា។",
+               en: "Rewrites the COGO fields of the selected lines from their geometry, laid out like the Update COGO pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Create the COGO fields if they are missing**", type: "", default: "", description: {
+            km: "",
+            en: "Adds Direction, Distance, Radius and ArcLength when the layer lacks them.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select the lines. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose the COGO settings: **Direction type**, **Direction units** and **Distance units**.",
+        },
+        { km: "", en: "Press **Update**." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "A single course gives its own direction and distance (an arc also its radius and arc length). A line with several vertices gets the chord from its first to its last point and its full length.",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_cul_de_sac",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "COGO",
+    name: "Cul-de-sac",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ COGO ▸ Cul-de-sac",
+    summary: {
+               km: "បន្ថែមកន្លែងបត់ត្រឡប់នៅចុងផ្លូវ ដូចផ្ទាំង Cul-de-sac របស់ ArcGIS Pro។",
+               en: "Adds a turnaround at the end of a street, laid out like the Cul-de-sac pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Street width**", type: "", default: "", description: {
+            km: "",
+            en: "The street's two edges (kerbs) lie half this width either side of the line.",
+          } },
+          { name: "**Radius**", type: "", default: "", description: { km: "", en: "Radius of the turnaround circle, centred on the end of the street." } },
+          { name: "**Return radius**", type: "", default: "", description: { km: "", en: "Radius of the curve joining the circle to each kerb, tangent to both." } },
+          { name: "**Use Template**", type: "", default: "", description: {
+            km: "",
+            en: "Creates the outline in the template layer. Off: in the selected line's own layer.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select a line. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose the **Template** (the editable layer the outline is made in) and the **Side**: **Start of line** or **End of line**. Black arrows on the selected lines show which way they run.",
+        },
+        {
+          km: "",
+          en: "Set **Street width**, **Radius** and **Return radius** (each in its own distance unit), tick **Show Preview**, then press **Create**.",
+        },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        { km: "", en: "The outline is one line (a closed ring in a polygon layer)." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
+    slug: "modify_split_cogo_lines",
+    group: "kgaeditor",
+    parent: "modify_features",
+    category: "COGO",
+    name: "Split Into COGO Lines",
+    icon: "SquarePen",
+    status: "full",
+    youtubeId: null,
+    algorithmId: null,
+    interactive: true,
+    toolType: { km: "", en: "Map tool in the Modify Features pane (not a Processing algorithm)" },
+    processingPath: "KGA Editor toolbar ▸ Modify Features ▸ COGO ▸ Split Into COGO Lines",
+    summary: {
+               km: "បំបែកបន្ទាត់ ឬព្រំពហុកោណនៅកំពូលរបស់វា ទៅជាបន្ទាត់ COGO។",
+               en: "Splits lines, or polygon boundaries, at their vertices into COGO lines, laid out like the Split Into COGO Lines pane of ArcGIS Pro.",
+             },
+    body: [],
+    parameters: [
+      {
+        title: null,
+        nameLabel: "Option",
+        blocks: [],
+        rows: [
+          { name: "**Use Template**", type: "", default: "", description: {
+            km: "",
+            en: "On: the new lines go into the template layer (an editable line layer). Off: lines are split in their own layer.",
+          } },
+          { name: "**Split lines with existing COGO attributes**", type: "", default: "", description: {
+            km: "",
+            en: "Lines that already have a Direction and a Distance are left alone unless this is ticked.",
+          } },
+        ],
+      },
+    ],
+    outputs: [],
+    usage: [
+      { type: "steps", items: [
+        {
+          km: "",
+          en: "Select lines or polygons. The **Change the selection.** banner switches to select mode: click or drag on the map (Shift adds, Ctrl removes, empty map clears). The list under it shows what is selected.",
+        },
+        {
+          km: "",
+          en: "Choose the **Template** if the new lines should go into a line layer (a polygon boundary needs one).",
+        },
+        { km: "", en: "Press **Split**." },
+      ] },
+    ],
+    results: [],
+    notes: [
+      { type: "list", items: [
+        {
+          km: "",
+          en: "Each straight run and each arc becomes a line of its own carrying its Direction, Distance, Radius and ArcLength. The direction convention and units are the shared COGO settings.",
+        },
+        {
+          km: "",
+          en: "A line that was split is replaced by its courses; a polygon is kept. New lines copy the attributes of the feature they came from.",
+        },
+        { km: "", en: "One undoable edit per layer." },
+        {
+          km: "",
+          en: "Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
+      ] },
+    ],
+    seeAlso: [],
+  },
+  {
     slug: "open_feature_attribute",
     group: "kgaeditor",
     name: "Open Feature Attribute",
@@ -4679,13 +6639,35 @@ export const SLUGS = tools.map((tool) => tool.slug);
 
 export const getToolBySlug = (slug) => tools.find((tool) => tool.slug === slug);
 export const getGroupById = (id) => groups.find((group) => group.id === id);
-export const getToolsInGroup = (id) => tools.filter((tool) => tool.group === id);
+
+/**
+ * A group's own entries. Sub-tools (the 30 inside the Modify Features pane)
+ * carry a `parent` and hang off that page instead of sitting beside it, so they
+ * are left out here and the group listing stays the length the plugin says.
+ */
+export const getToolsInGroup = (id) =>
+  tools.filter((tool) => tool.group === id && !tool.parent);
+
+/** The sub-tools of one page, in metadata order. */
+export const getChildren = (slug) => tools.filter((tool) => tool.parent === slug);
+
+/** The sub-tools of one page, grouped by the pane category they sit in. */
+export const getChildrenByCategory = (slug) => {
+  const out = [];
+  for (const child of getChildren(slug)) {
+    const last = out[out.length - 1];
+    if (last && last.category === child.category) last.items.push(child);
+    else out.push({ category: child.category, items: [child] });
+  }
+  return out;
+};
 
 /** Previous/next within the tool's own group, so paging never jumps groups. */
 export const getToolNeighbours = (slug) => {
   const tool = getToolBySlug(slug);
   if (!tool) return { prev: null, next: null };
-  const siblings = getToolsInGroup(tool.group);
+  // A sub-tool pages among its fellow sub-tools, never out into the group.
+  const siblings = tool.parent ? getChildren(tool.parent) : getToolsInGroup(tool.group);
   const index = siblings.findIndex((item) => item.slug === slug);
   return { prev: siblings[index - 1] ?? null, next: siblings[index + 1] ?? null };
 };

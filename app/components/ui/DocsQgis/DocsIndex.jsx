@@ -22,7 +22,7 @@ import {
 import SectionWrapper from "../../SectionWrapper";
 import { useLanguage } from "../../LanguageProvider";
 import { t, UI } from "../../../docs/qgis/_data/ui";
-import { PLUGIN, groups, getToolsInGroup } from "../../../docs/qgis/_data/qgisDocs";
+import { PLUGIN, groups, getToolsInGroup, getChildren } from "../../../docs/qgis/_data/qgisDocs";
 import DocBlocks from "./DocBlocks";
 import DocsSidebar from "./DocsSidebar";
 import DocsBreadcrumb from "./DocsBreadcrumb";
@@ -229,6 +229,11 @@ const DocsIndex = () => {
                               <h4 className="font-display font-700 leading-snug text-brand-text transition-colors group-hover:text-brand-orange dark:text-white">
                                 <span lang="en">{tool.name}</span>
                               </h4>
+                              {getChildren(tool.slug).length > 0 && (
+                                <span className="mt-0.5 flex-shrink-0 rounded-full border border-brand-orange/25 bg-brand-orange/10 px-2 py-0.5 text-[10px] font-display font-600 text-brand-orange">
+                                  {`${getChildren(tool.slug).length} ${t(UI.toolsLabel, language)}`}
+                                </span>
+                              )}
                               {tool.status !== "full" && (
                                 <span className="mt-0.5 flex-shrink-0 rounded-full bg-brand-blue/5 px-2 py-0.5 text-[10px] text-brand-text/55 dark:bg-white/5 dark:text-gray-400">
                                   {t(UI.summaryOnly, language)}

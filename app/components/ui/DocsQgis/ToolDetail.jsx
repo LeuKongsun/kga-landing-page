@@ -9,6 +9,7 @@ import {
   getToolBySlug,
   getGroupById,
   getToolNeighbours,
+  getChildrenByCategory,
 } from "../../../docs/qgis/_data/qgisDocs";
 import DocBlocks from "./DocBlocks";
 import DocsSidebar from "./DocsSidebar";
@@ -35,6 +36,10 @@ const ToolDetail = ({ slug }) => {
 
   const group = getGroupById(tool.group);
   const { prev, next } = getToolNeighbours(slug);
+  // Pages with sub-tools (Modify Features) list them; a sub-tool breadcrumbs
+  // back through its parent rather than straight to the group.
+  const childCategories = getChildrenByCategory(tool.slug);
+  const parent = tool.parent ? getToolBySlug(tool.parent) : null;
 
   const hasParameters = (tool.parameters ?? []).some(
     (section) => section.rows?.length || section.blocks?.length,
@@ -48,6 +53,7 @@ const ToolDetail = ({ slug }) => {
     tool.body?.length && { id: "section-overview", label: UI.overview },
     hasParameters && { id: "section-parameters", label: UI.parameters },
     tool.usage?.length && { id: "section-how-to-use", label: UI.howToUse },
+    childCategories.length > 0 && { id: "section-tools", label: UI.toolsInPane },
     hasResults && { id: "section-outputs", label: UI.outputs },
     tool.notes?.length && { id: "section-notes", label: UI.notesAndLimits },
   ].filter(Boolean);
@@ -59,7 +65,7 @@ const ToolDetail = ({ slug }) => {
     <main className="pt-24 md:pt-32" data-language-switch>
       <SectionWrapper>
         <div className="custom-screen">
-          <DocsBreadcrumb group={group} tool={tool} />
+          <DocsBreadcrumb group={group} parent={parent} tool={tool} />
 
           <div className="grid gap-10 lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_220px]">
             <DocsSidebar mode="links" activeSlug={tool.slug} activeGroupId={tool.group} />
@@ -88,6 +94,18 @@ const ToolDetail = ({ slug }) => {
               <h1 className="text-3xl font-display font-900 leading-tight text-brand-text dark:text-white md:text-4xl">
                 <span lang="en">{tool.name}</span>
               </h1>
+
+              {parent && (
+                <p className="mt-2 text-sm text-brand-text/55 dark:text-gray-400">
+                  <Link
+                    href={`/docs/qgis/${parent.slug}`}
+                    className="font-display font-600 text-brand-orange transition-colors hover:text-brand-orange-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60"
+                  >
+                    <span lang="en">{parent.name}</span>
+                  </Link>
+                  {tool.category ? <span lang="en">{` ▸ ${tool.category}`}</span> : null}
+                </p>
+              )}
 
               <p className="mt-4 text-base leading-relaxed text-brand-text/75 dark:text-gray-300 md:text-lg">
                 {t(tool.summary, language)}
@@ -172,6 +190,47 @@ const ToolDetail = ({ slug }) => {
                         <DocBlocks blocks={tool.results} />
                       </div>
                     )}
+                  </div>
+                </section>
+              )}
+
+              {childCategories.length > 0 && (
+                <section
+                  id="section-tools"
+                  aria-labelledby="child-tools-heading"
+                  className="mt-12 scroll-mt-28"
+                >
+                  <SectionHeading id="child-tools-heading">
+                    {t(UI.toolsInPane, language)}
+                  </SectionHeading>
+                  <div className="space-y-6">
+                    {childCategories.map(({ category, items }) => (
+                      <div key={category}>
+                        <h3 className="mb-3 flex items-center gap-2 text-sm font-display font-700 uppercase tracking-wide text-brand-text/55 dark:text-gray-400">
+                          <span lang="en">{category}</span>
+                          <span className="rounded-full bg-brand-blue/5 px-2 py-0.5 text-[11px] font-600 normal-case tracking-normal dark:bg-white/5">
+                            {items.length}
+                          </span>
+                        </h3>
+                        <ul className="grid gap-3 sm:grid-cols-2">
+                          {items.map((child) => (
+                            <li key={child.slug}>
+                              <Link
+                                href={`/docs/qgis/${child.slug}`}
+                                className="tool-card group flex h-full flex-col rounded-2xl border border-brand-blue/8 bg-white p-4 transition-colors hover:border-brand-orange/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/8 dark:bg-white/5"
+                              >
+                                <h4 className="mb-1 font-display font-700 leading-snug text-brand-text transition-colors group-hover:text-brand-orange dark:text-white">
+                                  <span lang="en">{child.name}</span>
+                                </h4>
+                                <p className="text-sm leading-relaxed text-brand-text/65 dark:text-gray-400">
+                                  {t(child.summary, language)}
+                                </p>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 </section>
               )}
