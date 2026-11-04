@@ -18,7 +18,7 @@ const linkIdle =
 
 /**
  * One tool in the group list. A tool with sub-tools — only Modify Features so
- * far — becomes its own disclosure, so the 30 tools of the pane sit under it
+ * far — becomes its own disclosure, so the 32 tools of the pane sit under it
  * rather than flooding the group.
  */
 const ToolItem = ({ tool, activeSlug }) => {
