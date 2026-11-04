@@ -680,30 +680,44 @@ export const tools = [
       en: "Searches open imagery archives for an area and a date range, then downloads the chosen scenes clipped to the area.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Shows scene thumbnails and footprints, and downloads the chosen scenes clipped to the area as GeoTIFF or Cloud-Optimized GeoTIFF with a JSON metadata file. **Only the area is transferred**: cloud-optimised rasters are read with HTTP range requests, so a 10 \u00d7 10 km Sentinel-2 subset takes seconds rather than a whole 100 km tile. Searching, thumbnails and downloads run as background QGIS tasks." } },
-      { type: "paragraph", text: { km: "", en: "It complements **[Imagery Downloader](imagery_downloader.md)**, which stitches current web-map tiles; this tool is for dated scenes with cloud and coverage figures." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Searches open imagery archives for an area and a date range, shows scene thumbnails and footprints, and downloads the chosen scenes clipped to the area as GeoTIFF or Cloud-Optimized GeoTIFF with a JSON metadata file. Only the area is transferred: cloud-optimised rasters are read with HTTP range requests, so a 10 × 10 km Sentinel-2 subset takes seconds rather than a whole 100 km tile.",
+        } },
+      { type: "paragraph", text: { km: "", en: "Searching, thumbnails and downloads run as background QGIS tasks." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "It complements **Imagery Downloader**, which stitches current web-map tiles (Google Satellite); this tool is for dated scenes with cloud and coverage figures.",
+        } },
       { type: "subheading", text: { km: "", en: "Sources" } },
       { type: "table", head: [{ km: "", en: "Source" }, { km: "", en: "Archive" }, { km: "", en: "Resolution" }, { km: "", en: "Account" }], rows: [
-        [{ km: "", en: "ESA Sentinel-2 L2A (Element 84 Earth Search, AWS)" }, { km: "", en: "2015 \u2192" }, { km: "", en: "10 m" }, { km: "", en: "No" }],
-        [{ km: "", en: "USGS Landsat 4\u20139 Collection 2 Level-2 (Microsoft Planetary Computer)" }, { km: "", en: "1982 \u2192" }, { km: "", en: "30 m" }, { km: "", en: "No" }],
-        [{ km: "", en: "Google Earth Engine" }, { km: "", en: "1984 \u2192" }, { km: "", en: "10\u201330 m" }, { km: "", en: "Yes \u2014 `earthengine-api`, a registered Cloud project, one-time sign-in" }],
-        [{ km: "", en: "OpenAerialMap" }, { km: "", en: "varies" }, { km: "", en: "cm \u2013 m" }, { km: "", en: "No (CC-BY 4.0)" }],
+        [{ km: "", en: "ESA Sentinel-2 L2A (Element 84 Earth Search, AWS)" }, { km: "", en: "2015 →" }, { km: "", en: "10 m" }, { km: "", en: "No" }],
+        [{ km: "", en: "USGS Landsat 4–9 Collection 2 Level-2 (Microsoft Planetary Computer)" }, { km: "", en: "1982 →" }, { km: "", en: "30 m" }, { km: "", en: "No" }],
+        [{ km: "", en: "Google Earth Engine" }, { km: "", en: "1984 →" }, { km: "", en: "10–30 m" }, { km: "", en: "Yes — `earthengine-api`, a registered Cloud project, one-time sign-in" }],
+        [{ km: "", en: "OpenAerialMap" }, { km: "", en: "varies" }, { km: "", en: "cm – m" }, { km: "", en: "No (CC-BY 4.0)" }],
         [{ km: "", en: "Custom STAC catalog" }, { km: "", en: "any" }, { km: "", en: "any" }, { km: "", en: "depends" }],
       ] },
+      { type: "subheading", text: { km: "", en: "Parameters (panel tabs)" } },
+      { type: "table", head: [{ km: "", en: "Tab" }, { km: "", en: "Controls" }], rows: [
+        [{ km: "", en: "**Search**" }, {
+            km: "",
+            en: "Source and collection; area as *Map view*, *Draw box or *Polygon (a polygon layer, optionally selected features only; with Map Tabs on, the list shows only the layers of the active map); *Year or *From/To*; *Max cloud*; *Min coverage of the area; number of results.",
+          }],
+        [{ km: "", en: "**Results**" }, {
+            km: "",
+            en: "Thumbnails with date, satellite, cloud %, area coverage, pixel size and tile. Filter by year, sort (newest, oldest, least cloudy, best coverage); footprints are outlined on the map; zoom to, select all, add a footprints layer. The **Preview on map* button draws the selected scene(s) (up to 4) on the map as a temporary layer in an *Imagery Preview group. The part of the scene in view is read once at screen resolution (a few seconds) into a temporary local file; zoom in or pan out of it and the preview re-reads itself. Turn the button off to remove the layers. Not available for Earth Engine.",
+          }],
+        [{ km: "", en: "**Download**" }, {
+            km: "",
+            en: "Band combination, resolution (native, 50 %, 25 %, 10/30/60 m), GeoTIFF or COG, *Clip to polygon shape*, output folder, add to map, `.json` metadata, quality report. A pre-download check shows expected size and warns about partial coverage, cloud and the size limit.",
+          }],
+        [{ km: "", en: "**Settings**" }, {
+            km: "",
+            en: "Earth Engine project, Planetary Computer key (optional), custom STAC catalog, size limit, timeout.",
+          }],
+      ] },
     ],
-    parameters: [
-      {
-        title: { km: "", en: "Panel tabs" },
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Search", type: "", default: "", description: { km: "", en: "Source and collection; area as *Map view*, *Draw box* or *Polygon* (optionally selected features only); *Year* or *From/To*; *Max cloud*; *Min coverage* of the area; number of results." } },
-          { name: "Results", type: "", default: "", description: { km: "", en: "Thumbnails with date, satellite, cloud %, area coverage, pixel size and tile. Filter by year, sort, outline footprints on the map, zoom to, select all, add a footprints layer. **Preview on map** draws up to 4 selected scenes as a temporary layer, read once at screen resolution and re-read when you zoom or pan. Not available for Earth Engine." } },
-          { name: "Download", type: "", default: "", description: { km: "", en: "Band combination, resolution (native, 50 %, 25 %, 10/30/60 m), GeoTIFF or COG, *Clip to polygon shape*, output folder, add to map, `.json` metadata, quality report. A pre-download check shows expected size and warns about partial coverage, cloud and the size limit." } },
-          { name: "Settings", type: "", default: "", description: { km: "", en: "Earth Engine project, Planetary Computer key (optional), custom STAC catalog, size limit, timeout." } },
-        ],
-      },
-    ],
+    parameters: [],
     outputs: [],
     usage: [
       { type: "steps", items: [
@@ -714,20 +728,16 @@ export const tools = [
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "`<SRC>_<YYYYMMDD>_<scene_id>_<bands>.tif` plus a `.json` sidecar recording source, acquisition, processing and quality. **Existing files are never overwritten.**" },
-        { km: "", en: "Alpha bands and masks become NoData, and reflectance scale and offset are written into the file." },
-        { km: "", en: "Each file is checked after download \u2014 corrupt tiles, missing georeferencing, empty output, saturation, and a pixel comparison with the source at native resolution. A report dialog lists the results." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "`<SRC>_<YYYYMMDD>_<scene_id>_<bands>.tif` plus a `.json` sidecar (source, acquisition, processing, quality). Existing files are never overwritten. Alpha bands and masks become NoData, reflectance scale and offset are written into the file, and each file is checked after download (corrupt tiles, missing georeferencing, empty output, saturation, and a pixel comparison with the source at native resolution). A report dialog lists the results.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Landsat and Sentinel-2 requests go to third-party servers; **their terms and rate limits apply**. Cite the data providers (Copernicus, USGS, OpenAerialMap)." },
-        { km: "", en: "Google Earth Engine is optional; downloads are limited to about 32 MB each." },
-        { km: "", en: "Downloads read the area in many parallel pieces; on a slow or distant connection the archive's server speed is still the limit. Reprojected, resampled or clipped outputs use GDAL's warper and are slower." },
-        { km: "", en: "Output larger than the size limit \u2014 400 MP per band by default \u2014 is blocked." },
-        { km: "", en: "Settings are stored under `kga_tools/historical_imagery/` in the QGIS profile." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Landsat and Sentinel-2 requests go to third-party servers; their terms and rate limits apply. Cite the data providers (Copernicus, USGS, OpenAerialMap). * Google Earth Engine is optional; downloads are limited to about 32 MB each. * Downloads read the area in many parallel pieces; on a slow or distant connection the archive's server speed is still the limit. Reprojected, resampled or clipped outputs use GDAL's warper and are slower. * Output larger than the size limit (400 MP per band by default) is blocked. * Settings are stored under `kga_tools/historical_imagery/` in the QGIS profile. * Tests: `tests/historical_imagery/` (`test_core.py` offline unit tests, `test_integration.py` wiring and drop-down). The folder is not part of the repository.",
+        } },
     ],
     seeAlso: ["imagery_downloader", "add_data", "raster_format_converter"],
   },
@@ -914,17 +924,26 @@ export const tools = [
       en: "Add project layers, or layers browsed from disk, to an existing .kgalp package.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Adds one or more layers to a `.kgalp` that already exists, with the same treatment **[Create Layer Package](create_layer_package.md)** gives them: vector data goes into the package GeoPackage (field domains included), rasters are copied with their sidecar files, each style is saved as a QML, and the SVG and image resources the symbology uses are collected." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Adds one or more layers to a `.kgalp` that already exists, with the same treatment **[Create Layer Package](create_layer_package.md)** gives them: vector data goes into the package GeoPackage (field domains included), rasters are copied with their sidecar files, each style is saved as a QML, and the SVG and image resources the symbology uses are collected.",
+        } },
     ],
     parameters: [
       {
         title: null,
-        nameLabel: "Control",
+        nameLabel: "Input",
         blocks: [],
         rows: [
-          { name: "Input layers", type: "Layer list", default: "—", description: { km: "", en: "The project's vector and raster layers, each with a tick box. **Select all** / **Clear** tick or untick the lot. **Browse…** adds layers from files on disk that are not in the project; a container with several layers contributes each one, ticked." } },
-          { name: "Use only the selected features", type: "Boolean", default: "off", description: { km: "", en: "For every ticked vector layer that has a selection, only the selected features are added. Layers without a selection are added whole. The label counts how many ticked layers have a selection." } },
-          { name: "Layer package (.kgalp)", type: "File", default: "—", description: { km: "", en: "The existing package to add to." } },
+          { name: "**Input layers**", type: "", default: "", description: {
+            km: "",
+            en: "A list of the project's vector and raster layers, each with a tick box. **Select all* / **Clear* tick or untick the lot. **Browse...* adds layers from files on disk (GeoPackage, shapefile, GeoJSON, raster...) that are not in the project; a container with several layers contributes each one, ticked.",
+          } },
+          { name: "**Use only the selected features**", type: "", default: "", description: {
+            km: "",
+            en: "For every ticked vector layer that has a selection, only the selected features are added. Layers without a selection are added whole. The label counts how many ticked layers have a selection.",
+          } },
+          { name: "**Layer package (.kgalp)**", type: "", default: "", description: { km: "", en: "The existing package to add to." } },
         ],
       },
     ],
@@ -932,7 +951,7 @@ export const tools = [
     usage: [
       { type: "steps", items: [
         { km: "", en: "Open **KGA Data Management > Add Layers to Layer Package**." },
-        { km: "", en: "Tick the layers to add, or press **Browse…** for layers on disk." },
+        { km: "", en: "Tick the layers to add, or press **Browse...** for layers on disk." },
         { km: "", en: "Tick **Use only the selected features** if only a selection should go in." },
         { km: "", en: "Choose the target `.kgalp`." },
         { km: "", en: "Press **Add**. The window stays open for the next batch." },
@@ -940,13 +959,10 @@ export const tools = [
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Layers already in the package are never changed or replaced. A layer with the same name as an existing one is stored beside it (`name_2`)." },
-        { km: "", en: "**A zip cannot be appended to in place**, so the package is rebuilt into a temporary file and swapped in only once complete. A failure — or a package open in another program — leaves the original untouched." },
-        { km: "", en: "Groups the new layers belong to in the Layers panel are merged into the package's recorded structure; a group with the same name is shared. Layers browsed from disk have no group and open at the top of the package group." },
-        { km: "", en: "Fonts cannot be packaged; a layer using a font marker gives a warning naming the font." },
-        { km: "", en: "The window can also be opened from the Browser: right-click a `.kgalp` and choose **Add Layers to Layer Package…**. If a layer read straight from the package is still in the project, Windows holds the file and the update is refused with a message — remove the layer and try again." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- Layers already in the package are never changed or replaced. A layer with the same name as an existing one is stored beside it (`name_2`). - A zip cannot be appended to in place, so the package is rebuilt into a temporary file and swapped in only once complete. A failure (or a package open in another program) leaves the original untouched. - Groups the new layers belong to in the Layers panel are merged into the package's recorded structure; a group with the same name is shared. Layers browsed from disk have no group and open at the top of the package group. - Fonts cannot be packaged; a layer using a font marker gives a warning naming the font. - The window can also be opened from the Browser: right-click a `.kgalp` and choose **Add Layers to Layer Package...** to start with that package chosen. If a layer read straight from the package is still in the project, Windows holds the file and the update is refused with a message; remove the layer and try again.",
+        } },
     ],
     seeAlso: ["create_layer_package", "open_layer_package"],
   },
@@ -1305,7 +1321,14 @@ export const tools = [
       en: "Collects every shapefile in a folder and writes them into a single GeoPackage, using each file name as the layer name.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "The usual reason to run it: a folder of shapefiles arrived from somewhere, and you want one file to work with, back up and hand on. It can also reproject everything to a common CRS on the way in, which is what you want when the folder is a mix of UTM zones and degrees." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Collects every shapefile in a folder and packs them into a single GeoPackage, one layer per file, using each file name as the layer name.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The usual reason to run it: a folder of shapefiles arrived from somewhere, and you want one file to work with, back up and hand on. It can also reproject everything to a common CRS on the way in, which is what you want when the folder is a mix of UTM zones and degrees.",
+        } },
     ],
     parameters: [
       {
@@ -1313,26 +1336,29 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Input folder", type: "Folder", default: "—", description: { km: "", en: "The folder holding the shapefiles." } },
-          { name: "Output GeoPackage", type: "File destination (`*.gpkg`)", default: "—", description: { km: "", en: "The container to write." } },
-          { name: "File extensions (comma separated)", type: "String, optional", default: "`shp`", description: { km: "", en: "Which files to pick up. Widen it to pull in other OGR formats sitting in the same folder." } },
-          { name: "Source encoding", type: "String, optional", default: "`UTF-8`", description: { km: "", en: "Applied on **read**. This is the one to get right — see the notes." } },
-          { name: "Reproject all layers to (optional)", type: "CRS, optional", default: "empty", description: { km: "", en: "Leave empty to keep each layer in its own CRS. Set it to bring a mixed folder into one system." } },
-          { name: "Search subfolders", type: "Boolean", default: "`False`", description: { km: "", en: "On, walks the whole tree below the input folder." } },
-          { name: "Append to existing GeoPackage (keep current layers)", type: "Boolean", default: "`False`", description: { km: "", en: "On, adds to a GeoPackage that is already there instead of replacing it." } },
-          { name: "Skip layers with no features", type: "Boolean", default: "`False`", description: { km: "", en: "On, an empty shapefile produces no layer." } },
+          { name: "**Input folder**", type: "Folder", default: "—", description: { km: "", en: "The folder holding the shapefiles." } },
+          { name: "**Output GeoPackage**", type: "File destination (`*.gpkg`)", default: "—", description: { km: "", en: "The container to write." } },
+          { name: "**File extensions (comma separated)**", type: "String, optional", default: "`shp`", description: {
+            km: "",
+            en: "Which files to pick up. Widen it to pull in other OGR formats sitting in the same folder.",
+          } },
+          { name: "**Source encoding**", type: "String, optional", default: "`UTF-8`", description: { km: "", en: "Applied on **read**. This is the one to get right — see the notes." } },
+          { name: "**Reproject all layers to (optional)**", type: "CRS, optional", default: "empty", description: {
+            km: "",
+            en: "Leave empty to keep each layer in its own CRS. Set it to bring a mixed folder into one system.",
+          } },
+          { name: "**Search subfolders**", type: "Boolean", default: "`False`", description: { km: "", en: "On, walks the whole tree below the input folder." } },
+          { name: "**Append to existing GeoPackage (keep current layers)**", type: "Boolean", default: "`False`", description: { km: "", en: "On, adds to a GeoPackage that is already there instead of replacing it." } },
+          { name: "**Skip layers with no features**", type: "Boolean", default: "`False`", description: { km: "", en: "On, an empty shapefile produces no layer." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Data Management > Shapefiles to GeoPackage**." },
-        { km: "", en: "Point **Input folder** at the folder and name the **Output GeoPackage**." },
-        { km: "", en: "Set **Source encoding** to whatever the shapefiles actually are. If the attributes contain Khmer and there is no `.cpg` beside the `.shp`, this is almost always the setting that decides whether the text survives." },
-        { km: "", en: "Set **Reproject all layers to** only if you want a single common CRS." },
-        { km: "", en: "Press **Run**. The log reports each file as `ok`, `skip` or a failure, and finishes with a `Packed | Skipped | Failed` tally." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Data Management > Shapefiles to GeoPackage**. 2. Point **Input folder** at the folder and name the **Output GeoPackage**. 3. Set **Source encoding** to whatever the shapefiles actually are. If the attributes contain Khmer and there is no `.cpg` beside the `.shp`, this is almost always the setting that decides whether the text survives. 4. Set **Reproject all layers to** only if you want a single common CRS. 5. Press **Run**. The log reports each file as `ok`, `skip` or a failure, and finishes with a `Packed | Skipped | Failed` tally.",
+        } },
     ],
     results: [
       { type: "list", items: [
@@ -1341,12 +1367,10 @@ export const tools = [
       ] },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Encoding is applied on read, not on write.** QGIS falls back to the system encoding when a `.cpg` sidecar is missing, and that is the usual cause of unreadable Khmer attributes. Setting it wrong here mangles the text permanently in the output." },
-        { km: "", en: "**Truncated field names cannot be recovered.** If a previous shapefile export cut `Construction_Year` down to `Constructi`, that is the name that arrives in the GeoPackage. Nothing here can restore it." },
-        { km: "", en: "Duplicate layer names are renamed rather than overwritten; the log says `renamed duplicate to …` when it happens." },
-        { km: "", en: "The reverse direction is **[GeoPackage to Shapefiles](gpkgtoshapefiles.md)**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Encoding is applied on read, not on write.** QGIS falls back to the system encoding when a `.cpg` sidecar is missing, and that is the usual cause of unreadable Khmer attributes. Setting it wrong here mangles the text permanently in the output. - **Truncated field names cannot be recovered.** If a previous shapefile export cut `Construction_Year` down to `Constructi`, that is the name that arrives in the GeoPackage. Nothing here can restore it. - Duplicate layer names are renamed rather than overwritten; the log says `renamed duplicate to …` when it happens. - The reverse direction is **[GeoPackage to Shapefiles](gpkgtoshapefiles.md)**.",
+        } },
     ],
     seeAlso: ["gpkgtoshapefiles"],
   },
@@ -1728,7 +1752,14 @@ export const tools = [
       en: "Work out which source field belongs in which target field, and write the result as a JSON mapping file.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "The file is in exactly the format **[Append with Field Mapping](append_with_mapping.md)** takes, so a mapping between two schemas can be saved once, kept in version control, reviewed in a diff and reused. That reuse is the part that actually saves time when the same two schemas come round every month." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Works out which source field belongs in which target field, and writes the result as a JSON mapping file.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The file is in exactly the format **[Append with Field Mapping](append_with_mapping.md)** takes, so a mapping between two schemas can be saved once, kept in version control, reviewed in a diff and reused. That reuse is the part that actually saves time when the same two schemas come round every month.",
+        } },
     ],
     parameters: [
       {
@@ -1736,41 +1767,37 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Source layer", type: "Vector layer", default: "—", description: { km: "", en: "The layer whose fields are being mapped from." } },
-          { name: "Target layer", type: "Vector layer", default: "—", description: { km: "", en: "The layer whose fields are being mapped to." } },
-          { name: "Match field names by", type: "Enum", default: "`Fuzzy (ignore case, spaces and underscores)`", description: { km: "", en: "`Exact name`, `Case-insensitive name`, `Fuzzy (ignore case, spaces and underscores)`. Fuzzy lowercases names and strips spaces and underscores, so `Parcel_ID` finds `parcelid`." } },
-          { name: "Field mapping", type: "File destination (`*.json`)", default: "—", description: { km: "", en: "Where the mapping is written." } },
-          { name: "Change report", type: "File destination (HTML), optional", default: "not created", description: { km: "", en: "The match report as a file." } },
+          { name: "**Source layer**", type: "Vector layer", default: "—", description: { km: "", en: "The layer whose fields are being mapped from." } },
+          { name: "**Target layer**", type: "Vector layer", default: "—", description: { km: "", en: "The layer whose fields are being mapped to." } },
+          { name: "**Match field names by**", type: "Enum", default: "`Fuzzy (ignore case, spaces and underscores)`", description: {
+            km: "",
+            en: "`Exact name`, `Case-insensitive name`, `Fuzzy (ignore case, spaces and underscores)`. Fuzzy lowercases names and strips spaces and underscores, so `Parcel_ID` finds `parcelid`.",
+          } },
+          { name: "**Field mapping**", type: "File destination (`*.json`)", default: "—", description: { km: "", en: "Where the mapping is written." } },
+          { name: "**Change report**", type: "File destination (HTML), optional", default: "not created", description: { km: "", en: "The match report as a file." } },
         ],
       },
     ],
     outputs: [
-      { name: "Number of matched fields", type: "Number", description: { km: "", en: "How many source→target pairs were found." } },
+      { name: "**Number of matched fields**", type: "Number", description: { km: "", en: "How many source→target pairs were found." } },
     ],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Load both layers in QGIS." },
-        { km: "", en: "Open **KGA Schema Tools > Generate Field Mapping**." },
-        { km: "", en: "Set **Source layer** and **Target layer**, and pick a matching strategy — start with the Fuzzy default." },
-        { km: "", en: "Choose where the **Field mapping** JSON goes. Somewhere you keep, not a temp folder: the point is to reuse it." },
-        { km: "", en: "Press **Run** and read the report. The unmatched fields on either side are the ones to fix by hand." },
-        { km: "", en: "Edit the JSON if needed, then feed it to **[Append with Field Mapping](append_with_mapping.md)** through its *…or a saved mapping file* parameter." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Load both layers in QGIS. 2. Open **KGA Schema Tools > Generate Field Mapping**. 3. Set **Source layer** and **Target layer**, and pick a matching strategy — start with the Fuzzy default. 4. Choose where the **Field mapping** JSON goes. Somewhere you keep, not a temp folder: the point is to reuse it. 5. Press **Run** and read the report. The unmatched fields on either side are the ones to fix by hand. 6. Edit the JSON if needed, then feed it to **[Append with Field Mapping](append_with_mapping.md)** through its *…or a saved mapping file* parameter.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "A JSON mapping file, ready for *Append with Field Mapping*." },
-        { km: "", en: "A report — in the Processing log, and as HTML when you ask for the file — listing the matched pairs, the unmatched source fields and the unmatched target fields." },
-        { km: "", en: "The **Number of matched fields** count in the Processing results panel." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- A JSON mapping file, ready for *Append with Field Mapping*. - A report — in the Processing log, and as HTML when you ask for the file — listing the matched pairs, the unmatched source fields and the unmatched target fields. - The **Number of matched fields** count in the Processing results panel.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Each target field is claimed at most once**, so two source fields can never collapse onto one column." },
-        { km: "", en: "**Nothing is written to either layer.** This tool only inspects schemas." },
-        { km: "", en: "Unmatched fields are not an error — they are the output you care about. A field that appears in the unmatched lists needs a human decision, which is why the JSON is meant to be edited before use." },
-        { km: "", en: "The mapping matches **names**, not types. A pair whose types do not fit shows up later, as a lossy conversion in the append tool's report." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Each target field is claimed at most once**, so two source fields can never collapse onto one column. - **Nothing is written to either layer.** This tool only inspects schemas. - Unmatched fields are not an error — they are the output you care about. A field that appears in the unmatched lists needs a human decision, which is why the JSON is meant to be edited before use. - The mapping matches **names**, not types. A pair whose types do not fit shows up later, as a lossy conversion in the append tool's report.",
+        } },
     ],
     seeAlso: ["append_with_mapping"],
   },
@@ -1790,8 +1817,18 @@ export const tools = [
       en: "Check every feature against the field domains its layer declares, and list the values that break them.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "A domain constrains new edits — but data that predates the domain, or that arrived through an import, is never re-checked. Attaching a domain does not clean up what is already there. This tool finds that data." } },
-      { type: "paragraph", text: { km: "", en: "Run it after **[Apply Domain Library](apply_domain_library.md)**, after any bulk import, and before handing a dataset on." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Checks every feature against the field domains its layer declares, and lists the values that break them.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A domain constrains new edits — but data that predates the domain, or that arrived through an import, is never re-checked. Attaching a domain does not clean up what is already there. This tool finds that data.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Run it after **[Apply Domain Library](apply_domain_library.md)**, after any bulk import, and before handing a dataset on.",
+        } },
     ],
     parameters: [
       {
@@ -1799,43 +1836,40 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Input layer(s)", type: "Multiple vector layers", default: "—", description: { km: "", en: "The layers to check. Layers that cannot carry domains are skipped with a note." } },
-          { name: "Report empty values as violations", type: "Boolean", default: "`False`", description: { km: "", en: "Off, a NULL or empty value passes. On, every empty value in a domain-constrained field is listed too." } },
-          { name: "Violations", type: "Feature sink", default: "temporary layer", description: { km: "", en: "The violations table: one row per bad value." } },
-          { name: "Violation locations", type: "Feature sink (point), optional", default: "not created", description: { km: "", en: "A point layer of the offending features, so you can zoom to them on the map." } },
-          { name: "Change report", type: "File destination (HTML), optional", default: "not created", description: { km: "", en: "The report as a file." } },
+          { name: "**Input layer(s)**", type: "Multiple vector layers", default: "—", description: {
+            km: "",
+            en: "The layers to check. Layers that cannot carry domains are skipped with a note.",
+          } },
+          { name: "**Report empty values as violations**", type: "Boolean", default: "`False`", description: {
+            km: "",
+            en: "Off, a NULL or empty value passes. On, every empty value in a domain-constrained field is listed too.",
+          } },
+          { name: "**Violations**", type: "Feature sink", default: "temporary layer", description: { km: "", en: "The violations table: one row per bad value." } },
+          { name: "**Violation locations**", type: "Feature sink (point), optional", default: "not created", description: { km: "", en: "A point layer of the offending features, so you can zoom to them on the map." } },
+          { name: "**Change report**", type: "File destination (HTML), optional", default: "not created", description: { km: "", en: "The report as a file." } },
         ],
       },
     ],
     outputs: [
-      { name: "Number of violations", type: "Number", description: { km: "", en: "Total bad values found across all layers." } },
+      { name: "**Number of violations**", type: "Number", description: { km: "", en: "Total bad values found across all layers." } },
     ],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Load the layers to check. They must be stored in a GeoPackage or File Geodatabase — nothing else can carry domains." },
-        { km: "", en: "Open **KGA Schema Tools > Validate Against Domains**." },
-        { km: "", en: "Pick the layers under **Input layer(s)**." },
-        { km: "", en: "Tick **Violation locations** if you want to zoom to the offending features; this is usually the fastest way to fix them." },
-        { km: "", en: "Press **Run**." },
-        { km: "", en: "Open the **Violations** table. Each row names the layer, feature, field, value, domain and reason." },
-        { km: "", en: "Fix the values, then run it again until the count is zero." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Load the layers to check. They must be stored in a GeoPackage or File Geodatabase — nothing else can carry domains. 2. Open **KGA Schema Tools > Validate Against Domains**. 3. Pick the layers under **Input layer(s)**. 4. Tick **Violation locations** if you want to zoom to the offending features; this is usually the fastest way to fix them. 5. Press **Run**. 6. Open the **Violations** table. Each row names the layer, feature, field, value, domain and reason. 7. Fix the values, then run it again until the count is zero.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "A **Violations** table, one row per bad value: layer, feature, field, value, domain and reason." },
-        { km: "", en: "Optionally a **Violation locations** point layer for map navigation." },
-        { km: "", en: "A report — in the log, and as HTML when asked for — summarising per layer." },
-        { km: "", en: "The **Number of violations** count in the Processing results panel." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- A **Violations** table, one row per bad value: layer, feature, field, value, domain and reason. - Optionally a **Violation locations** point layer for map navigation. - A report — in the log, and as HTML when asked for — summarising per layer. - The **Number of violations** count in the Processing results panel.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Only layers stored in a GeoPackage or File Geodatabase can carry domains.** Shapefiles, GeoJSON, memory layers and the rest are skipped with a note in the log, not an error — check the note before concluding a layer is clean." },
-        { km: "", en: "**A clean run means the values match the domains, nothing more.** Fields with no domain attached are not checked at all; use the **[Domain & Schema Manager](domain_manager.md)** to see which fields actually carry one." },
-        { km: "", en: "**Nothing is modified.** This tool only reports." },
-        { km: "", en: "Empty values pass by default. Tick *Report empty values as violations* when a blank is as wrong as a bad code — which it usually is for a status field." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Only layers stored in a GeoPackage or File Geodatabase can carry domains.** Shapefiles, GeoJSON, memory layers and the rest are skipped with a note in the log, not an error — check the note before concluding a layer is clean. - **A clean run means the values match the domains, nothing more.** Fields with no domain attached are not checked at all; use the **[Domain & Schema Manager](domain_manager.md)** to see which fields actually carry one. - **Nothing is modified.** This tool only reports. - Empty values pass by default. Tick *Report empty values as violations* when a blank is as wrong as a bad code — which it usually is for a status field.",
+        } },
     ],
     seeAlso: ["apply_domain_library", "domain_manager"],
   },
@@ -3915,42 +3949,86 @@ export const tools = [
       en: "Works out how much water a reservoir holds at each water level, from its DEM — with inundation maps, a volume-to-level lookup and depth rasters.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Builds the **elevation–area–volume** table, draws the elevation–volume and elevation–area curves, and goes on from there to inundation maps, a volume-to-level lookup, depth rasters, and a way to make a DEM from contours." } },
-      { type: "paragraph", text: { km: "", en: "All calculation is in metres, square metres and cubic metres. The saved table carries the volume in m³, 1,000 m³ and million m³, so the same file serves a design report and a map label." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Works out how much water a reservoir holds at each water level, from its DEM. It builds the **elevation–area–volume** table, draws the elevation–volume and elevation–area curves, and goes on from there to inundation maps, a volume-to-level lookup, depth rasters, and a way to make a DEM from contours.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "All calculation is in metres, square metres and cubic metres. The saved table carries the volume in m³, 1,000 m³ and million m³, so the same file serves a design report and a map label.",
+        } },
       { type: "subheading", text: { km: "", en: "How the volume is counted" } },
-      { type: "list", items: [
-        { km: "", en: "**Flooded area** is the set of cells below the water level that are connected to the **lowest cell** of the DEM. Isolated pits are not counted." },
-        { km: "", en: "**Natural ground:** volume = Σ (water level − ground) over the flooded area × cell area." },
-        { km: "", en: "**Excavated:** the bed is `min(ground, base level)`; volume = Σ max(level − bed, 0) × cell area; soil removed = Σ max(ground − base level, 0) × cell area." },
-      ] },
-      { type: "subheading", text: { km: "", en: "The tabs" } },
-      { type: "list", items: [
-        { km: "", en: "**Curves** and **Table** — the result of *Calculate Storage*: the two curves (whole-metre levels circled) and the table behind them. Save the table as CSV and the curve as PNG, PDF or SVG." },
-        { km: "", en: "**Inundation Maps** — one panel per water level on a hillshade, with depth shading, the flooded edge, background contours, scale bar, north arrow, a summary table and a footer. A4–A0, Letter, Tabloid or fit-to-content; PNG, PDF, TIFF, JPEG or SVG." },
-        { km: "", en: "**Volume Lookup** — the water level (and area) for volumes you give, read from the last calculation or a CSV this tool saved. Interpolated linearly between rows." },
-        { km: "", en: "**Export Rasters** — one GeoTIFF per level, clipped to the flooded area: water depth and/or bottom elevation. Summing depth × cell area reproduces the table's volume, which makes them useful for checking in other software." },
-        { km: "", en: "**Contours to DEM** — interpolates a DEM from elevation contour lines (linear, cubic, inverse distance or nearest), optionally clipped to a polygon in any CRS." },
-        { km: "", en: "**Log** — what each job did, and any warning." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Flooded area** is the set of cells below the water level that are connected to the **lowest cell** of the DEM. Isolated pits are not counted. - **Natural ground:** volume = Σ (water level − ground) over the flooded area × cell area. - **Excavated:** the bed is `min(ground, base level)`; volume = Σ max(level − bed, 0) × cell area; soil removed = Σ max(ground − base level, 0) × cell area.",
+        } },
+      { type: "subheading", text: { km: "", en: "Migrating from Storage Capacity Curve" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The old tool took several DEMs in one run and wrote one chart per DEM with fixed axis settings. This one works on one DEM at a time and adds the surface option, maps, lookup and rasters. The CSV columns changed: `Elevation_m` is now `Water_Level_m`, `Volume_1000m3` is unchanged in meaning, and `Area_ha` is the flooded area (connected to the lowest cell) rather than every cell under the level.",
+        } },
     ],
     parameters: [
+      {
+        title: null,
+        nameLabel: "Parameter",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "The left panel holds the inputs shared by every tab; the tabs on the right use them.",
+            } },
+        ],
+        rows: [],
+      },
       {
         title: { km: "", en: "Input and settings" },
         nameLabel: "Control",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "The left panel holds the inputs shared by every tab; the tabs on the right use them." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "**Stop** ends the running job at the next step. Closing the window while a job runs stops it first.",
+            } },
         ],
         rows: [
-          { name: "DEM", type: "Raster layer", default: "—", description: { km: "", en: "Elevation raster in a projected CRS in metres. **A geographic (degree) DEM is refused.** The panel shows its size, cell size, CRS and elevation range." } },
-          { name: "Boundary", type: "Polygon layer, optional", default: "—", description: { km: "", en: "Only cells inside it are used." } },
-          { name: "Split line / Keep", type: "Line layer, optional", default: "—", description: { km: "", en: "A line (for example a dam axis) that must cross the whole DEM. Keep the **west, east, north or south** side of it. A line that does not cut the DEM in two is ignored with a warning." } },
-          { name: "From / To / Step", type: "Numbers", default: "DEM range", description: { km: "", en: "Water levels to tabulate. **DEM range** fills From and To from the lowest and highest cell." } },
-          { name: "Or levels", type: "Text", default: "—", description: { km: "", en: "A list such as `40, 41.5, 43.8` used instead of From/To/Step." } },
-          { name: "Surface", type: "Combo box", default: "Natural ground", description: { km: "", en: "**Natural ground** fills the DEM as it is. **Excavated to base level** lowers the ground inside the flooded area to the **base level** first, and reports the soil removed separately." } },
-          { name: "Smoothing", type: "Boolean", default: "off", description: { km: "", en: "Gaussian smoothing before the calculation. It changes volumes slightly, so **leave it off for reported figures**." } },
-          { name: "Volume unit", type: "Combo box", default: "million m³", description: { km: "", en: "Unit on the curve and map labels. The CSV always has all three." } },
-          { name: "Folder", type: "Folder", default: "—", description: { km: "", en: "Where the table and image are saved after **Calculate Storage**." } },
+          { name: "**DEM**", type: "", default: "", description: {
+            km: "",
+            en: "Elevation raster in a projected CRS in metres. A geographic (degree) DEM is refused. The panel shows its size, cell size, CRS and elevation range.",
+          } },
+          { name: "**Boundary**", type: "", default: "", description: { km: "", en: "Optional polygon. Only cells inside it are used." } },
+          { name: "**Split line* / **Keep**", type: "", default: "", description: {
+            km: "",
+            en: "Optional line (for example a dam axis) that must cross the whole DEM. Keep the **west, east, north or south* side of it. A line that does not cut the DEM in two is ignored with a warning.",
+          } },
+          { name: "**From / To / Step**", type: "", default: "", description: {
+            km: "",
+            en: "Water levels to tabulate. **DEM range* fills From and To from the lowest and highest cell. Levels that miss the DEM entirely are moved onto it when a DEM is chosen.",
+          } },
+          { name: "**Or levels**", type: "", default: "", description: { km: "", en: "A list such as `40, 41.5, 43.8` used instead of From/To/Step." } },
+          { name: "**Surface**", type: "", default: "", description: {
+            km: "",
+            en: "**Natural ground* fills the DEM as it is. **Excavated to base level* lowers the ground inside the flooded area to the **base level* first, and reports the soil removed separately.",
+          } },
+          { name: "**Smoothing**", type: "", default: "", description: {
+            km: "",
+            en: "Gaussian smoothing before the calculation. Off by default; it changes volumes slightly, so leave it off for reported figures.",
+          } },
+          { name: "**Volume unit**", type: "", default: "", description: {
+            km: "",
+            en: "Unit on the curve and map labels (million m³, 1,000 m³ or m³). The CSV always has all three.",
+          } },
+          { name: "**Folder**", type: "", default: "", description: { km: "", en: "Where the table and image are saved after **Calculate Storage**." } },
         ],
+      },
+      {
+        title: { km: "", en: "Tabs" },
+        nameLabel: "Parameter",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "- **Curves** and **Table** — the result of **Calculate Storage**: the elevation–volume and elevation–area curves (whole-metre levels circled) and the table behind them. With the excavated surface the natural-ground volume and the soil removed are added. Save the table as CSV and the curve as PNG, PDF or SVG. - **Inundation Maps** — one panel per water level on a hillshade, with water depth shaded, the flooded edge, background contours, scale bar, north arrow, a summary table (area, storage, maximum depth) and a footer. Pick a paper size (A4–A0, Letter, Tabloid, or fit to content), orientation, resolution and contour settings; save as PNG, PDF, TIFF, JPEG or SVG. Leave the levels empty to spread five over the DEM. - **Volume Lookup** — the water level (and area) for volumes you give, read from the last calculation or from a CSV saved by this tool. Levels are interpolated linearly between rows. - **Export Rasters** — one GeoTIFF per level, clipped to the flooded area: **water depth** and/or **bottom elevation**. Summing depth × cell area reproduces the Table's volume, which makes them useful for checking in other software. - **Contours to DEM** — interpolates a DEM from elevation contour lines (linear, cubic, inverse distance or nearest), optionally clipped to a polygon in any CRS. The result is added to the map and selected as the input. - **Log** — what each job did, and any warning.",
+            } },
+        ],
+        rows: [],
       },
     ],
     outputs: [],
@@ -3965,21 +4043,20 @@ export const tools = [
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "Per DEM in the output folder: `{name}_storage.csv` and `{name}_storage_curve.png`. Maps default to `{name}_inundation.png`; rasters go to a `rasters` folder." },
-        { km: "", en: "CSV columns: `Water_Level_m`, `Area_m2`, `Area_ha`, `Area_km2`, `Volume_m3`, `Volume_1000m3`, `Volume_Mm3` — plus `Natural_Vol_m3` and `Excavated_Soil_m3` with the excavated surface." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "In the output folder, per DEM: `{name}_storage.csv` and `{name}_storage_curve.png`. Maps are saved where you choose (default `{name}_inundation.png`); rasters go to a `rasters` folder.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "CSV columns: `Water_Level_m`, `Area_m2`, `Area_ha`, `Area_km2`, `Volume_m3`, `Volume_1000m3`, `Volume_Mm3`, and with the excavated surface `Natural_Vol_m3` and `Excavated_Soil_m3`.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**The lowest cell decides which water body is counted.** A single stray low pixel outside the reservoir — a DEM artefact, a borrow pit — takes over, and the reservoir itself then reads as empty. Use a boundary polygon or split line so the lowest cell is inside the reservoir." },
-        { km: "", en: "A DEM with an undeclared NoData value (such as `-9999`) is flagged in the Log when the lowest cell is below −500 m. Set the NoData value first." },
-        { km: "", en: "The whole DEM is read into memory as 64-bit numbers: a very large raster needs a boundary or a coarser copy." },
-        { km: "", en: "**A DEM made from contours is a model.** Interpolating between lines flattens hill tops and pits, and the area outside the outermost contour takes the nearest contour's height — clip it to the reservoir." },
-        { km: "", en: "Levels cost one pass over the DEM each; more than 2,000 levels are refused." },
-      ] },
-      { type: "subheading", text: { km: "", en: "Migrating from Storage Capacity Curve" } },
-      { type: "paragraph", text: { km: "", en: "The old tool took several DEMs in one run and wrote one chart per DEM with fixed axis settings. This one works on one DEM at a time and adds the surface option, maps, lookup and rasters. **The CSV columns changed:** `Elevation_m` is now `Water_Level_m`, `Volume_1000m3` is unchanged in meaning, and `Area_ha` is the flooded area (connected to the lowest cell) rather than every cell under the level." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **The lowest cell decides which water body is counted.** A single stray low pixel outside the reservoir (a DEM artefact, a borrow pit) takes over, and the reservoir itself then reads as empty. Use a boundary polygon or split line so the lowest cell is inside the reservoir. - A DEM with an undeclared NoData value (such as `-9999`) is flagged in the Log when the lowest cell is below −500 m. Set the NoData value first. - The whole DEM is read into memory as 64-bit numbers: a very large raster needs a boundary or a coarser copy. - A DEM made from contours is a model. Interpolating between lines flattens hill tops and pits, and the area outside the outermost contour takes the nearest contour's height — clip it to the reservoir. - Levels cost one pass over the DEM each; more than 2,000 levels are refused.",
+        } },
     ],
     seeAlso: ["reservoir_rating_curve", "generate_contour_roi", "csvtodemcontour"],
   },
@@ -3999,63 +4076,111 @@ export const tools = [
       en: "Two steps in one window: the high and low ground of every paddy block from a DEM, then a gravity command check from field to reservoir.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "**Step 1 — High points** finds the high (and low) ground of every paddy block from a DEM. **Step 2 — Gravity command** then asks whether every block can be irrigated by gravity: Field → TC → SC → MC → Reservoir." } },
-      { type: "paragraph", text: { km: "", en: "After a run in step 1, **Next: Step 2** opens step 2 with the same block layer and the new `HighestPoints` layer filled in. Step 2 also works on its own with any block layer and any point layer — one point per block, with an elevation field." } },
-      { type: "subheading", text: { km: "", en: "Step 1 — High points" } },
-      { type: "paragraph", text: { km: "", en: "For every feature of the ticked block layers (polygons **or** lines) the tool finds the highest cell of a DEM and adds one point layer, `HighestPoints`, with `src_layer`, `block_fid`, the block attributes you tick, `elev`, `X`, `Y`, `Lon`, `Lat` and `Top_cells` — plus `dist_along` for lines. Tick **Lowest point** as well to get a blue `LowestPoints` layer." } },
-      { type: "list", items: [
-        { km: "", en: "**Polygons** count the cells whose centre is inside the polygon, like QGIS zonal statistics. **Lines** count every cell the line passes through, and the point is placed *on* the line." },
-        { km: "", en: "**Combine features with the same value of** gives one point per group — per BM name, say — instead of one per feature." },
-        { km: "", en: "`Top_cells` above 1 means a flat top: several cells share the highest value." },
-      ] },
+      { type: "subheading", text: { km: "", en: "Two steps in one window" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The window has two tabs. **Step 1 - High points** finds the high (and low) ground of every paddy block from a DEM. **Step 2 - Gravity command** then asks whether every block can be irrigated by gravity: Field → TC → SC → MC → Reservoir. After a run in step 1, **Next: Step 2** opens step 2 with the same block layer and the new `HighestPoints` layer filled in. Step 2 also works on its own with any block layer and any point layer (one point per block, with an elevation field).",
+        } },
+      { type: "subheading", text: { km: "", en: "Step 1 - High points" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "For every feature of the ticked block layers (polygons **or** lines) the tool finds the highest cell of a DEM and adds **one point layer**, `HighestPoints`, with `src_layer`, `block_fid`, the block attributes you tick, `elev`, `X`, `Y`, `Lon`, `Lat` and `Top_cells` (plus `dist_along` for lines: distance from the line start to the point). Tick **Lowest point** as well to get a blue `LowestPoints` layer.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Polygons** count the cells whose centre is inside the polygon, like QGIS zonal statistics. **Lines** count every cell the line passes through, and the point is placed *on* the line. - **Combine features with the same value of** gives one point per group (for example per BM name) instead of one per feature. - `Top_cells` above 1 means a flat top: several cells share the highest value.",
+        } },
       { type: "subheading", text: { km: "", en: "Method (polygon blocks)" } },
-      { type: "paragraph", text: { km: "", en: "For gravity irrigation design the raw highest cell is often a tree crown, hut or dike. The **High / low point method** list chooses what \"highest\" means:" } },
-      { type: "list", items: [
-        { km: "", en: "**Top of general slope** (default) — the DEM inside each block is ground-filtered (a morphological opening removes trees, dikes and huts narrower than the *Ground filter* window), then smoothed, so the point marks the high side of the field rather than a spike. `elev` is the **ground** elevation there, so the water level needed is never under-estimated; `Smooth_z` and `Raw_cell` are kept for comparison." },
-        { km: "", en: "**Highest ground** — ground filter only." },
-        { km: "", en: "**Highest DEM cell** — the raw cell, trees and dikes included. Lines always use this." },
+      { type: "paragraph", text: {
+          km: "",
+          en: "For gravity irrigation design (field → TC → SC → MC → reservoir) the raw highest cell is often a tree crown, hut or dike. The **High / low point method** list chooses what \"highest\" means:",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Top of general slope** (default) — the DEM inside each block is ground-filtered (a morphological opening removes trees, dikes and huts narrower than the *Ground filter* window), then smoothed (*Smoothing* window) so the point marks the high side of the field, not a spike. `elev` is the ground elevation at that point (trees and dikes removed, not the smoothed value, so the water level needed is never under-estimated); `Smooth_z` is the smoothed value and `Raw_cell` the highest raw cell, for comparison. - **Highest ground** — ground filter only. - **Highest DEM cell** — the raw cell, trees and dikes included (lines always use this).",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The two terrain methods also give each block a robust plane fit of its ground: `Slope_pct`, `Fall_m` (high–low drop across the block), `Aspect` / `Flow_dir` (downslope direction) and `Fit_R2`. They are added to the point layers, and `Slope_pct`, `Fall_m`, `Flow_dir`, `Aspect` to the block layers when you write results into them. A block with a fall under 5 cm is almost level and its high/low point is weakly defined (the log says so).",
+        } },
+      { type: "subheading", text: { km: "", en: "Step 2 - Gravity command" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Blocks and high points come from step 1 (you may move points by hand; tick *Re-sample elevation from the DEM* so moved points get a fresh ground elevation). Canals and a reservoir are optional.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. **Field level** each block needs: `FSL_req` = top of block + field water depth. 2. **Plot-to-plot supply**: neighbouring blocks (dikes and gaps up to the tolerance are bridged). Block A can feed block B when `top_A - top_B` is at least the spill loss. *Head* blocks have no neighbour high enough and need a canal turnout. 3. **Turnouts**: the nearest point on a canal within the search distance. The canal water level needed there is `FSL_req` + turnout loss + field-channel gradient × field-channel length. 4. **Service**: blocks are processed from high to low, each served directly from a canal or plot-to-plot from a served higher neighbour. 5. **Canal levels**. *DESIGN* needs no water levels: it gives the water level each canal needs at its upstream end (TC → SC → MC) and the reservoir level needed, and names the block that controls each canal. *CHECK* compares your canal water levels with the need at every turnout, junction and the reservoir. 6. With a DEM, the ground along each canal shows how far the design level is above (fill) or below (cut) the ground.",
+        } },
+      { type: "table", head: [{ km: "", en: "Tab" }, { km: "", en: "Contents" }], rows: [
+        [{ km: "", en: "**Blocks**" }, {
+            km: "",
+            en: "Block layer and name field, high-point layer and elevation field, optional DEM re-sampling, point-to-block tolerance.",
+          }],
+        [{ km: "", en: "**Field**" }, {
+            km: "",
+            en: "Field water depth, plot-to-plot spill loss, neighbour gap tolerance, minimum shared border, prefer plot-to-plot supply.",
+          }],
+        [{ km: "", en: "**Canals**" }, {
+            km: "",
+            en: "Canal layer, name and level field (MC / SC / TC or 1 / 2 / 3), flow direction, junction tolerance, turnout search distance, losses and gradients, DESIGN / CHECK mode.",
+          }],
+        [{ km: "", en: "**Reservoir**" }, { km: "", en: "Full supply level check and an intake point that orients the main canal." }],
+        [{ km: "", en: "**Save**" }, { km: "", en: "Save every result layer to a GeoPackage, with an HTML report beside it." }],
       ] },
-      { type: "paragraph", text: { km: "", en: "The two terrain methods also give each block a robust plane fit of its ground: `Slope_pct`, `Fall_m`, `Aspect` / `Flow_dir` and `Fit_R2`. **A block with a fall under 5 cm is almost level and its high/low point is weakly defined** — the log says so." } },
-      { type: "subheading", text: { km: "", en: "Step 2 — Gravity command" } },
-      { type: "steps", items: [
-        { km: "", en: "**Field level** each block needs: `FSL_req` = top of block + field water depth." },
-        { km: "", en: "**Plot-to-plot supply**: neighbouring blocks (dikes and gaps up to the tolerance are bridged). Block A can feed block B when `top_A − top_B` is at least the spill loss. *Head* blocks have no neighbour high enough and need a canal turnout." },
-        { km: "", en: "**Turnouts**: the nearest point on a canal within the search distance. The canal water level needed there is `FSL_req` + turnout loss + field-channel gradient × field-channel length." },
-        { km: "", en: "**Service**: blocks are processed from high to low, each served directly from a canal or plot-to-plot from a served higher neighbour." },
-        { km: "", en: "**Canal levels.** *DESIGN* needs no water levels: it gives the level each canal needs at its upstream end (TC → SC → MC) and the reservoir level needed, naming the block that controls each canal. *CHECK* compares your canal water levels with the need at every turnout, junction and the reservoir." },
-        { km: "", en: "With a DEM, the ground along each canal shows how far the design level is above (fill) or below (cut) the ground." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Results: `Command_Blocks` (Top_z, FSL_req, Head, Service, Status, Canal, Req_WL, Canal_WL, Margin_m, Supplier ...), `Command_Links` (plot-to-plot arrows), `Turnouts`, `Field_channels` and `Canal_Command` (canals drawn upstream → downstream with the levels, critical block, margins and fill / cut), plus a plain-language report you can save as HTML.",
+        } },
     ],
     parameters: [
       {
-        title: { km: "", en: "Step 1 — High points" },
+        title: null,
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "DEM raster / Band", type: "Raster layer", default: "—", description: { km: "", en: "The elevation raster. A DEM in degrees works but warns; reproject it to a metre CRS first." } },
-          { name: "Block layers", type: "Layer list", default: "—", description: { km: "", en: "Any number of polygon and line layers, ticked in a list. *Selected features only* uses the selection of layers that have one." } },
-          { name: "Zones", type: "Combo box", default: "Each feature separately", description: { km: "", en: "Or *Combine features with the same value of* a field." } },
-          { name: "Clean blocks", type: "Options", default: "repair only", description: { km: "", en: "Works on a copy; your layers are not changed. Optionally snap boundaries, remove small overlaps (the shared area stays with the larger block) and fill small gaps. **Rings you drew inside a block — trees, ponds, houses — are kept as excluded areas and never filled**, so the point is searched only in the remaining area. A `Topology_issues` layer lists what was found or fixed." } },
-          { name: "Point attributes", type: "Field list", default: "—", description: { km: "", en: "Fields copied from the block that holds the peak." } },
-          { name: "High / low point method", type: "Combo box", default: "Top of general slope", description: { km: "", en: "See *Method* above. *Ground filter* is the width of the widest tree crown or dike to remove; *Smoothing* (10–30 m) sets how \"general\" the slope is. Needs a DEM in metres." } },
-          { name: "Analysis resolution", type: "Combo box", default: "Native", description: { km: "", en: "Native, 0.5 m, 1 m, 30 m or custom. When coarsening choose *Maximum* (keeps peaks, recommended for the raw method), *Average* or *Nearest*; the terrain methods always use Average. With Maximum the point is traced back to the exact cell of the original DEM." } },
-          { name: "Small-block safety", type: "Boolean", default: "—", description: { km: "", en: "Raw method only. Splits cells (values unchanged) for blocks only a few cells wide, so they still get cells." } },
-          { name: "Inner buffer", type: "Number", default: "—", description: { km: "", en: "Shrinks polygons to ignore dikes, roads and canal banks on their edges; 2–5 m is typical. Ignored for lines." } },
-          { name: "Find", type: "Check boxes", default: "Highest point", description: { km: "", en: "Highest point (red ▲) and/or lowest point (blue ▼)." } },
-          { name: "Create", type: "Combo box", default: "Point layers only", description: { km: "", en: "Or also write `Higher_elevation`, `Elev_Min`, `Elev_Mean`, `Elev_Cells`, `MaxElev_X/Y` (and the Lowest equivalents) into the block layers, or into new copies." } },
-          { name: "Save results to file", type: "Check boxes", default: "off", description: { km: "", en: "GeoPackage, Shapefile (names shortened to 10 characters) and/or Excel. Existing files are never overwritten: `_1`, `_2` … is added." } },
-        ],
-      },
-      {
-        title: { km: "", en: "Step 2 — Gravity command tabs" },
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Blocks", type: "Tab", default: "—", description: { km: "", en: "Block layer and name field, high-point layer and elevation field, optional DEM re-sampling, point-to-block tolerance." } },
-          { name: "Field", type: "Tab", default: "—", description: { km: "", en: "Field water depth, plot-to-plot spill loss, neighbour gap tolerance, minimum shared border, prefer plot-to-plot supply." } },
-          { name: "Canals", type: "Tab", default: "—", description: { km: "", en: "Canal layer, name and level field (MC / SC / TC or 1 / 2 / 3), flow direction, junction tolerance, turnout search distance, losses and gradients, DESIGN / CHECK mode." } },
-          { name: "Reservoir", type: "Tab", default: "—", description: { km: "", en: "Full supply level check and an intake point that orients the main canal." } },
-          { name: "Save", type: "Tab", default: "—", description: { km: "", en: "Save every result layer to a GeoPackage, with an HTML report beside it." } },
+          { name: "**DEM raster / Band**", type: "", default: "", description: {
+            km: "",
+            en: "The elevation raster. A DEM in degrees works but warns; reproject it to a metre CRS first.",
+          } },
+          { name: "**Block layers**", type: "", default: "", description: {
+            km: "",
+            en: "Any number of polygon and line layers, ticked in a list (filter, All, None, Filtered). *Selected features only uses the selection of layers that have one.",
+          } },
+          { name: "**Zones**", type: "", default: "", description: {
+            km: "",
+            en: "*Each feature separately*, or *Combine features with the same value of a field.",
+          } },
+          { name: "**Clean blocks**", type: "", default: "", description: {
+            km: "",
+            en: "Works on a copy; your layers are not changed. Invalid geometry is always repaired. Optionally snap boundaries within a distance, remove small overlaps (the shared area stays with the larger block), and fill small gaps. Rings you drew inside a block (trees, ponds, houses) are kept as excluded areas and never filled, so the point is searched only in the remaining area; untick *Keep rings to treat them as gaps. Larger overlaps and gaps are only reported. A `Topology_issues` layer lists what was found or fixed.",
+          } },
+          { name: "**Point attributes**", type: "", default: "", description: { km: "", en: "Fields copied from the block that holds the peak." } },
+          { name: "**High / low point method**", type: "", default: "", description: {
+            km: "",
+            en: "See *Method above. *Ground filter is the width of the widest tree crown or dike to remove; *Smoothing (10–30 m) sets how \"general\" the slope is. Needs a DEM in metres.",
+          } },
+          { name: "**Analysis resolution**", type: "", default: "", description: {
+            km: "",
+            en: "Native, 0.5 m, 1 m, 30 m or custom. When coarsening choose *Maximum (keeps peaks, recommended for the raw method), *Average or *Nearest*; the terrain methods always use Average (1 m with Average is fast and accurate enough). Whole-number ratios are aggregated exactly, and with Maximum the point is traced back to the exact cell of the original DEM.",
+          } },
+          { name: "**Small-block safety**", type: "", default: "", description: {
+            km: "",
+            en: "(Raw method only.) Splits cells (values unchanged) for blocks only a few cells wide, so they still get cells.",
+          } },
+          { name: "**Inner buffer**", type: "", default: "", description: {
+            km: "",
+            en: "Shrinks polygons to ignore dikes, roads and canal banks on their edges (2–5 m is typical). Ignored for lines.",
+          } },
+          { name: "**Find**", type: "", default: "", description: { km: "", en: "Highest point (red ▲) and/or lowest point (blue ▼)." } },
+          { name: "**Create**", type: "", default: "", description: {
+            km: "",
+            en: "*Point layers only*, or also write `Higher_elevation`, `Elev_Min`, `Elev_Mean`, `Elev_Cells`, `MaxElev_X/Y` (and `Lowest_elevation`, `MinElev_X/Y`) into the block layers, or into new copies.",
+          } },
+          { name: "**Save results to file**", type: "", default: "", description: {
+            km: "",
+            en: "GeoPackage, Shapefile (names shortened to 10 characters) and/or Excel. Existing files are never overwritten: `_1`, `_2` … is added.",
+          } },
         ],
       },
     ],
@@ -4070,21 +4195,12 @@ export const tools = [
         { km: "", en: "On **Step 2**, add the canals and reservoir, choose DESIGN or CHECK, and read the report." },
       ] },
     ],
-    results: [
-      { type: "list", items: [
-        { km: "", en: "Step 1: `HighestPoints` and optionally `LowestPoints`, plus `Topology_issues` when block cleaning found anything." },
-        { km: "", en: "Step 2: `Command_Blocks` (Top_z, FSL_req, Head, Service, Status, Canal, Req_WL, Canal_WL, Margin_m, Supplier …), `Command_Links` (plot-to-plot arrows), `Turnouts`, `Field_channels` and `Canal_Command` (canals drawn upstream → downstream with the levels, critical block, margins and fill / cut)." },
-        { km: "", en: "A plain-language report you can save as HTML." },
-      ] },
-    ],
+    results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Block layers in edit mode cannot be written to: save and stop editing, or tick *Create new output layers*." },
-        { km: "", en: "Run time grows with the number of blocks and the DEM resolution; use a coarser analysis resolution for a first pass." },
-        { km: "", en: "Block cleaning needs a DEM in metres and is skipped for a DEM in degrees." },
-        { km: "", en: "**The result layers are temporary until you tick a save format.**" },
-        { km: "", en: "In step 2 you may move high points by hand — tick *Re-sample elevation from the DEM* so moved points get a fresh ground elevation." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- Block layers in edit mode cannot be written to: save and stop editing, or tick *Create new output layers*. - Run time grows with the number of blocks and the DEM resolution; use a coarser analysis resolution for a first pass. - Block cleaning needs a DEM in metres and is skipped for a DEM in degrees. - The result layers are temporary until you tick a save format.",
+        } },
     ],
     seeAlso: ["generate_contour_roi", "reservoir_storage_analyzer", "updatexyfields"],
   },
@@ -4104,8 +4220,14 @@ export const tools = [
       en: "Download the free Copernicus DEM for an area and contour it, styled and labelled.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Makes contour lines for any area of interest in one step. The tool downloads the free **Copernicus DEM** (30 m or 90 m, from the AWS open-data bucket — no account and no API key), cuts it to the area, traces the contours at the chosen interval and adds them to the map: dark and thick for the main contours, thin and grey for the rest, with elevation labels." } },
-      { type: "paragraph", text: { km: "", en: "The job runs on a background task, so QGIS stays usable. **One progress bar covers all of it** — reading and cutting the DEM, tracing the lines, marking main and sub contours and, if ticked, smoothing." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Makes contour lines for any area of interest in one step. The tool downloads the free **Copernicus DEM** (30 m or 90 m, from the AWS open-data bucket — no account and no API key), cuts it to the area, traces the contours at the chosen interval and adds them to the map, dark and thick for the main contours and thin and grey for the rest, with elevation labels.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The job runs on a background task, so QGIS stays usable. **One progress bar covers all of it** — reading and cutting the DEM, tracing the lines, marking main and sub contours and, if ticked, smoothing.",
+        } },
     ],
     parameters: [
       {
@@ -4113,48 +4235,72 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "DEM", type: "Combo box", default: "Copernicus GLO-30", description: { km: "", en: "GLO-30 (about 30 m) or GLO-90 (about 90 m), or **Local DEM** to use one you already have: a raster layer from the project or any GDAL raster on disk. It may be in any CRS, but must have one and be north-up." } },
-          { name: "Area", type: "Combo box", default: "Current map extent", description: { km: "", en: "**Whole DEM** (local DEM only), **Current map extent**, **Extent of a layer**, **Boundary of a polygon layer** (cut to the shape; optional *Selected features only*), or **Draw a rectangle or polygon** on the map." } },
-          { name: "Interval", type: "Number 0.1–5000 m", default: "—", description: { km: "", en: "Vertical distance between contours. Lines fall on whole multiples of it (0, 10, 20 … for 10 m)." } },
-          { name: "Main contour", type: "Number 2–20", default: "—", description: { km: "", en: "Every Nth contour is a main contour." } },
-          { name: "Smooth the lines", type: "Boolean", default: "off", description: { km: "", en: "Rounds off the pixel steps (one round of corner cutting). Better looking, about twice the vertices, and the lines move by less than a pixel." } },
-          { name: "Symbolize", type: "Boolean", default: "on", description: { km: "", en: "Main contours dark and thick (0.5 mm), sub contours grey and thin (0.15 mm). Untick for QGIS's default line style." } },
-          { name: "Labels", type: "Combo box", default: "Main contours only", description: { km: "", en: "**Main contours only**, **All contours**, or **No labels**." } },
-          { name: "Terrain surfaces", type: "Check boxes", default: "off", description: { km: "", en: "Optionally derive a **Hillshade** (lit from the north-west), **Slope** (degrees) and **Aspect** (0–360° clockwise from north) from the DEM." } },
-          { name: "Add random spot height", type: "Boolean + number", default: "off", description: { km: "", en: "Scatter spot heights over the area, spread evenly rather than clumped. Each is a small black dot with its height beside it, as on a topographic map, saved as the `spot_heights` layer." } },
-          { name: "Output CRS", type: "Combo box", default: "Current project CRS", description: { km: "", en: "Or **Same as the DEM** (no reprojection) or a **Specified CRS**. The DEM is published in WGS 84; for any other CRS it is warped (bilinear) and the contours are made in that CRS." } },
-          { name: "Output folder", type: "Folder", default: "temporary", description: { km: "", en: "Empty means a temporary folder, which QGIS deletes when it closes." } },
-          { name: "Name", type: "Text", default: "—", description: { km: "", en: "Base name: `<name>_DEM.tif` and `<name>_contours.gpkg`." } },
-          { name: "Also add the DEM to the map", type: "Boolean", default: "—", description: { km: "", en: "Adds the clipped DEM with a pale elevation tint, below the vector layers." } },
+          { name: "**DEM**", type: "", default: "", description: {
+            km: "",
+            en: "Copernicus GLO-30 (1 arc-second, about 30 m) or GLO-90 (about 90 m), or **Local DEM* to use one you already have: pick a raster layer from the project or browse for any GDAL raster (a file takes precedence over the layer). It may be in any CRS, but must have one and be north-up.",
+          } },
+          { name: "**Area**", type: "", default: "", description: {
+            km: "",
+            en: "**Whole DEM* (local DEM only: no cutting), **Current map extent**, **Extent of a layer**, **Boundary of a polygon layer* (the DEM is cut to the shape; optional *Selected features only*), or **Draw a rectangle or polygon* on the map.",
+          } },
+          { name: "**Interval**", type: "", default: "", description: {
+            km: "",
+            en: "Vertical distance between contours, 0.1–5000 m. Lines fall on whole multiples of it (0, 10, 20 … for 10 m).",
+          } },
+          { name: "**Main contour**", type: "", default: "", description: { km: "", en: "Every Nth contour (2–20) is a main contour." } },
+          { name: "**Smooth the lines**", type: "", default: "", description: {
+            km: "",
+            en: "Rounds off the pixel steps (one round of corner cutting). Better looking, about twice the vertices, and the lines move by less than a pixel.",
+          } },
+          { name: "**Symbolize**", type: "", default: "", description: {
+            km: "",
+            en: "Main contours dark and thick (0.5 mm), sub contours grey and thin (0.15 mm). Untick for QGIS's default line style.",
+          } },
+          { name: "**Labels**", type: "", default: "", description: { km: "", en: "**Main contours only**, **All contours**, or **No labels**." } },
+          { name: "**Terrain surfaces**", type: "", default: "", description: {
+            km: "",
+            en: "Optionally derive a **Hillshade* (lit from the north-west), **Slope* (degrees) and **Aspect* (0-360 degrees clockwise from north) from the DEM.",
+          } },
+          { name: "**Add random spot height**", type: "", default: "", description: {
+            km: "",
+            en: "Scatter spot heights at random over the area, spread evenly rather than clumped (set how many). Each is a small black dot with its height beside it, as on a topographic map, saved as the `spot_heights` layer in the contours GeoPackage.",
+          } },
+          { name: "**Output CRS**", type: "", default: "", description: {
+            km: "",
+            en: "**Current project CRS* (default), **Same as the DEM* (no reprojection) or a **Specified CRS**. The DEM is published in WGS 84 (EPSG:4326); for any other CRS it is warped (bilinear) and the contours are made in that CRS.",
+          } },
+          { name: "**Output folder**", type: "", default: "", description: {
+            km: "",
+            en: "Where the DEM and contours go. Empty means a temporary folder, which QGIS deletes when it closes.",
+          } },
+          { name: "**Name**", type: "", default: "", description: { km: "", en: "Base name: `<name>_DEM.tif` and `<name>_contours.gpkg`." } },
+          { name: "**Also add the DEM to the map**", type: "", default: "", description: { km: "", en: "Adds the clipped DEM with a pale elevation tint, below the vector layers." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Irrigation Tools > Generate Contour for ROI**." },
-        { km: "", en: "Choose the area. For a drawn area, click *Draw rectangle* or *Draw polygon* and draw on the map." },
-        { km: "", en: "Set the interval, the main-contour step, and the smoothing, symbology and label options." },
-        { km: "", en: "Pick an output folder, or leave it empty for a temporary one." },
-        { km: "", en: "Click **Generate contours**. Click **Stop** to cancel; nothing is added to the map." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Irrigation Tools > Generate Contour for ROI**. 2. Choose the area. For a drawn area, click *Draw rectangle* or *Draw polygon* and draw on the map. 3. Set the interval, the main-contour step, and the smoothing, symbology and label options. 4. Pick an output folder, or leave it empty for a temporary one. 5. Click **Generate contours**. Click **Stop** to cancel; nothing is added to the map.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "`<name>_contours.gpkg` — layer `contours`, in the output CRS, with `ID`, `ELEV` (metres) and `TYPE` (`main` or `sub`)." },
-        { km: "", en: "`<name>_DEM.tif` — the clipped DEM, compressed, in the output CRS. Outside a drawn shape or layer boundary the DEM is NoData." },
-        { km: "", en: "`<name>_hillshade.tif`, `<name>_slope.tif`, `<name>_aspect.tif` — only the ones ticked, NoData −9999 (hillshade is Byte). Slope and aspect use the Horn method; for a DEM in degrees the horizontal scale is worked out from the latitude so the values match a projected CRS." },
-        { km: "", en: "Layers made from Copernicus data carry its attribution in their metadata." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* `<name>_contours.gpkg` — layer `contours`, in the output CRS, with the fields `ID`, `ELEV` (metres) and `TYPE` (`main` or `sub`). * `<name>_DEM.tif` — the clipped DEM, compressed, in the output CRS. Outside a drawn shape or a layer boundary the DEM is NoData.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* `<name>_hillshade.tif`, `<name>_slope.tif`, `<name>_aspect.tif` — only the ones ticked, in the same CRS as the DEM, NoData -9999 (hillshade is Byte). They are added below the contours: the hillshade on top of the DEM at 60% opacity, slope and aspect switched off so they do not hide it. Slope and aspect use the Horn method; for a DEM in degrees the horizontal scale is worked out from the latitude, so the values match those from a projected CRS. Flat ground has no aspect and is NoData.",
+        } },
+      { type: "paragraph", text: { km: "", en: "Layers made from Copernicus data carry its attribution in their metadata." } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Large areas.** Above about 25 million DEM pixels (roughly 150 km square at 30 m) the tool asks before it starts, with a sterner warning above 150 million, and also when the output drive is short of space. A temporary output adds to the warning because it lands on the system drive. One request is limited to 700 million pixels." },
-        { km: "", en: "**Too many levels.** More than 20,000 levels — an interval of 0.1 m across a mountain range — is refused; the DEM is kept and the message says where." },
-        { km: "", en: "The Copernicus DEM is a **surface** model: it follows tree tops and buildings, not bare ground. Elevations are metres above the EGM2008 geoid." },
-        { km: "", en: "Attribution is required: Copernicus DEM © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under COPERNICUS by the European Union and ESA." },
-        { km: "", en: "Open sea has no tiles; an area entirely over open sea is reported as having nothing to contour." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Large areas.** Above about 25 million DEM pixels (roughly 150 km square at 30 m) the tool asks before it starts, with a sterner warning above 150 million, and also when the output drive is short of space. A big DEM is read and contoured in memory and can make a modest PC slow or freeze. A temporary output adds to the warning because it lands on the system drive. One request is limited to 700 million pixels. * **Too many levels.** More than 20,000 levels (an interval of 0.1 m across a mountain range) is refused; the DEM is kept and the message says where. * The Copernicus DEM is a surface model: it follows tree tops and buildings, not bare ground. Elevations are metres above the EGM2008 geoid. * Attribution is required: Copernicus DEM © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA. * Open sea has no tiles; an area entirely over open sea is reported as having nothing to contour.",
+        } },
     ],
     seeAlso: ["generate_stream_roi", "csvtodemcontour", "dem_legend_bar"],
   },
@@ -4174,18 +4320,87 @@ export const tools = [
       en: "Download the free Copernicus DEM for an area and extract its river and stream network, graded and checked.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Downloads the free **Copernicus DEM**, cuts it to the area, fills its depressions, routes the water downhill, and draws a stream wherever enough ground drains through a cell. Each segment is numbered (Strahler order), measured, and **graded for confidence**; an optional comparison with OpenStreetMap or your own layer finds streams that only one network has." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Extracts the river and stream network for any area of interest in one step. The tool downloads the free **Copernicus DEM** (30 m or 90 m, from the AWS open-data bucket — no account and no API key), cuts it to the area, fills its depressions, routes the water downhill, and draws a stream wherever enough ground drains through a cell. Each stream segment is numbered (Strahler order), measured, and **graded for confidence**; an optional comparison with OpenStreetMap or your own layer finds streams that only one network has.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The job runs on a background task, so QGIS stays usable. **One progress bar covers all of it** — downloading and cutting the DEM, loading it, routing the water, accumulating flow, tracing the streams, checking them and writing the results.",
+        } },
       { type: "subheading", text: { km: "", en: "How much stream? (Detail)" } },
-      { type: "paragraph", text: { km: "", en: "A cell becomes stream when at least a certain area of ground drains through it. That one number controls the whole network." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A cell becomes stream when at least a certain area of ground drains through it. That one number controls the whole network:",
+        } },
       { type: "table", head: [{ km: "", en: "Detail" }, { km: "", en: "Contributing area" }, { km: "", en: "Use it for" }], rows: [
-        [{ km: "", en: "**Major rivers only**" }, { km: "", en: "25 km²" }, { km: "", en: "The skeleton of the drainage. Needs a large area; below about 100 km² there may be nothing this big." }],
-        [{ km: "", en: "**Main streams** (default)" }, { km: "", en: "5 km²" }, { km: "", en: "The streams a map would normally show." }],
+        [{ km: "", en: "**Major rivers only**" }, { km: "", en: "25 km²" }, {
+            km: "",
+            en: "The skeleton of the drainage. Needs a large area; below about 100 km² there may be nothing this big.",
+          }],
+        [{ km: "", en: "**Main streams* (default)" }, { km: "", en: "5 km²" }, { km: "", en: "The streams a map would normally show." }],
         [{ km: "", en: "**Detailed network**" }, { km: "", en: "1 km²" }, { km: "", en: "Adds smaller tributaries; good for a catchment of tens of km²." }],
-        [{ km: "", en: "**Very detailed**" }, { km: "", en: "0.2 km²" }, { km: "", en: "Every gully that gathers water. Includes channels dry most of the year, and more false streams on flat ground." }],
-        [{ km: "", en: "**Custom**" }, { km: "", en: "0.01–5000 km²" }, { km: "", en: "Anything in between." }],
-        [{ km: "", en: "**Match a drainage density**" }, { km: "", en: "0.1–5 km/km²" }, { km: "", en: "Lets the tool pick the area. Natural catchments run roughly 0.5 (sparse) to 2 (dense)." }],
+        [{ km: "", en: "**Very detailed**" }, { km: "", en: "0.2 km²" }, {
+            km: "",
+            en: "Every gully that gathers water. Includes channels dry most of the year and more false streams on flat ground.",
+          }],
+        [{ km: "", en: "**Custom**" }, { km: "", en: "your value (0.01–5000 km²)" }, { km: "", en: "Anything in between." }],
+        [{ km: "", en: "**Match a drainage density**" }, { km: "", en: "target km of stream per km² (0.1–5)" }, {
+            km: "",
+            en: "Lets the tool pick the area. Natural catchments run roughly 0.5 (sparse) to 2 (dense).",
+          }],
       ] },
-      { type: "paragraph", text: { km: "", en: "At 30 m, 1 km² is about 1,100 cells. A threshold below 3 cells is raised to 3, and one that would make a quarter of the area \"stream\" is refused as a typo." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "At 30 m, 1 km² is about 1,100 cells. A threshold below 3 cells is raised to 3, and one that would make a quarter of the area \"stream\" is refused as a typo.",
+        } },
+      { type: "subheading", text: { km: "", en: "Is the result any good? (Checks)" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A network traced from a DEM is a model of where water runs, not a survey of where streams are. Two kinds of check say how far to trust it.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Internal checks** run on every job and need nothing but the DEM. A segment is flagged when it:",
+        } },
+      { type: "table", head: [{ km: "", en: "Flag" }, { km: "", en: "Meaning" }], rows: [
+        [{ km: "", en: "`FLAT`" }, {
+            km: "",
+            en: "Falls less than 0.1 % — smaller than a 30 m DEM's error can resolve. The trace is a best guess and tends to run straight or in parallel lines.",
+          }],
+        [{ km: "", en: "`FILLED`" }, {
+            km: "",
+            en: "Crosses a depression the DEM had to fill by 8 m or more (twice the DEM's stated 4 m vertical accuracy): a reservoir, embankment, bridge or real sink.",
+          }],
+        [{ km: "", en: "`NOVALLEY`" }, {
+            km: "",
+            en: "Lies on open ground — it sits less than 1 m below the average of the 7 × 7 cells around it.",
+          }],
+        [{ km: "", en: "`EDGE`" }, {
+            km: "",
+            en: "Starts at the edge of the data, so its real source is probably outside. Does not lower the grade by itself. Use *Include upstream area*.",
+          }],
+      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Two or more of the first three give **Low** confidence, one gives **Medium**, none **High**. Flat country grades low by nature — that is the DEM's limit, not a fault in the tool.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Reference comparison** (optional) sets the DEM network against an independent one. A stretch is *matched* when the other network has a line within the match distance; only unmatched stretches of twice that distance or more are reported, so ragged junctions are not counted as faults. The report gives:",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* the share of DEM streams that have a reference stream nearby, and of reference streams that have a DEM stream nearby — overall and by stream order; * the length \"in the DEM, not in the reference\" and \"in the reference, not in the DEM\", which are also drawn on the `stream_check` layer so each can be checked against imagery; * how much of the DEM-only length the internal checks had already graded Low.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "OpenStreetMap supplies natural rivers and streams only (`waterway=river|stream`). Canals, drains and ditches are left out: they are dug where water is wanted, not where the ground runs downhill, so they do not test a DEM-derived network.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Read the numbers with care.** A reference can be incomplete — OpenStreetMap often is in the countryside — and a DEM stream can be a real gully that carries water only after rain. Agreement normally rises with stream size: the biggest streams match well, the smallest hardly at all. Not matching does not prove a stream wrong.",
+        } },
     ],
     parameters: [
       {
@@ -4193,61 +4408,98 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "DEM", type: "Combo box", default: "Copernicus GLO-30", description: { km: "", en: "GLO-30 (the one to use), GLO-90 (for a very large area), or **Local DEM**: a raster layer or a DEM file. A local DEM is read from band 1 as metres, must cover the area, and needs no internet. No Copernicus attribution is added to its layers." } },
-          { name: "Area", type: "Combo box", default: "Current map extent", description: { km: "", en: "**Current map extent**, **Extent of a layer**, **Boundary of a polygon layer** (cut to the shape; optional *Selected features only*), or **Draw a rectangle or polygon** on the map." } },
-          { name: "Detail", type: "Combo box", default: "Main streams", description: { km: "", en: "See the table above." } },
-          { name: "Include upstream area", type: "Combo box", default: "Off", description: { km: "", en: "Off, 2, 5 or 10 km. Streams that rise outside the area are otherwise cut short at its edge and look smaller than they are. The saved DEM then includes the margin." } },
-          { name: "Smooth the lines", type: "Boolean", default: "off", description: { km: "", en: "Rounds off the cell-by-cell steps. `LENGTH_M` is measured along the cell path **before** smoothing." } },
-          { name: "Symbology", type: "Combo box", default: "By stream order", description: { km: "", en: "**By stream order** (blue, wider = higher order) or **By check confidence** (green High, amber Medium, red Low)." } },
-          { name: "Compare with", type: "Combo box", default: "None", description: { km: "", en: "**OpenStreetMap rivers and streams** (needs internet) or **A line layer of my own** (optional *Selected features only*)." } },
-          { name: "Match distance", type: "Number", default: "about three DEM cells", description: { km: "", en: "How close the other network must be for a stretch to count as matched — 90 m at 30 m." } },
-          { name: "Output CRS", type: "Combo box", default: "UTM zone of the area", description: { km: "", en: "Default keeps streams, slopes and catchment areas measured in metres. Or **Current project CRS**, **WGS 84 as published**, or a **Specified CRS**." } },
-          { name: "Output folder", type: "Folder", default: "temporary", description: { km: "", en: "Empty means a temporary folder, which QGIS deletes when it closes." } },
-          { name: "Name", type: "Text", default: "—", description: { km: "", en: "Base name: `<name>_DEM.tif`, `<name>_streams.gpkg`, `<name>_report.txt`, and optionally `<name>_flow_accumulation.tif`." } },
-          { name: "Also save the flow accumulation raster", type: "Boolean", default: "off", description: { km: "", en: "Contributing area in km² for every cell. Useful to judge the threshold or pick catchment outlets. Added to the map switched off." } },
+          { name: "**DEM**", type: "", default: "", description: {
+            km: "",
+            en: "Copernicus GLO-30 (about 30 m, the one to use), GLO-90 (about 90 m, for a very large area), or **Local DEM**: a raster layer from the project or a DEM file (GeoTIFF, IMG, ASC, VRT, HGT...). A local DEM is read from band 1 as elevation in metres, must cover the area, and needs no internet. If it is in a metric CRS and the output CRS is left on *UTM zone of the area*, its own grid is kept. No Copernicus attribution is added to its layers.",
+          } },
+          { name: "**Area**", type: "", default: "", description: {
+            km: "",
+            en: "**Current map extent**, **Extent of a layer**, **Boundary of a polygon layer* (the DEM is cut to the shape; optional *Selected features only*), or **Draw a rectangle or polygon* on the map.",
+          } },
+          { name: "**Detail**", type: "", default: "", description: { km: "", en: "See above." } },
+          { name: "**Include upstream area**", type: "", default: "", description: {
+            km: "",
+            en: "Off, 2, 5 or 10 km. Streams that rise outside the area are otherwise cut short at its edge and look smaller than they are. With a margin the DEM is downloaded for the area plus the margin, and the streams are cut back to the area afterwards. The saved DEM then includes the margin.",
+          } },
+          { name: "**Smooth the lines**", type: "", default: "", description: {
+            km: "",
+            en: "Rounds off the cell-by-cell steps (one round of corner cutting). `LENGTH_M` is measured along the cell path before smoothing.",
+          } },
+          { name: "**Symbology**", type: "", default: "", description: {
+            km: "",
+            en: "**By stream order* (blue, wider = higher order) or **By check confidence* (green High, amber Medium, red Low).",
+          } },
+          { name: "**Compare with**", type: "", default: "", description: {
+            km: "",
+            en: "**None**, **OpenStreetMap rivers and streams* (needs internet), or **A line layer of my own* (with optional *Selected features only*).",
+          } },
+          { name: "**Match distance**", type: "", default: "", description: {
+            km: "",
+            en: "How close the other network must be for a stretch to count as matched. Default about three DEM cells (90 m at 30 m).",
+          } },
+          { name: "**Output CRS**", type: "", default: "", description: {
+            km: "",
+            en: "**UTM zone of the area* (default; streams, slopes and catchment areas are measured in metres), **Current project CRS**, **WGS 84 as published**, or a **Specified CRS**.",
+          } },
+          { name: "**Output folder**", type: "", default: "", description: {
+            km: "",
+            en: "Where the DEM, streams and report go. Empty means a temporary folder, which QGIS deletes when it closes.",
+          } },
+          { name: "**Name**", type: "", default: "", description: {
+            km: "",
+            en: "Base name: `<name>_DEM.tif`, `<name>_streams.gpkg`, `<name>_report.txt`, and optionally `<name>_flow_accumulation.tif`.",
+          } },
+          { name: "**Also add the DEM to the map**", type: "", default: "", description: { km: "", en: "Adds the DEM with a pale elevation tint, below the vector layers." } },
+          { name: "**Also save the flow accumulation raster**", type: "", default: "", description: {
+            km: "",
+            en: "Contributing area in km² for every cell. Useful to judge the threshold or pick catchment outlets. Added to the map switched off.",
+          } },
         ],
       },
     ],
-    outputs: [
-      { name: "STREAM_ID, NEXT_ID", type: "Integer", description: { km: "", en: "The segment, and the one it flows into (0 at an outlet)." } },
-      { name: "STRAHLER", type: "Integer", description: { km: "", en: "Strahler order: 1 for a source; two equal orders meeting make the next one up." } },
-      { name: "LENGTH_M", type: "Number", description: { km: "", en: "Length along the cell path, before smoothing." } },
-      { name: "UP_KM2", type: "Number", description: { km: "", en: "Ground draining to the end of the segment, in km²." } },
-      { name: "ELEV_UP, ELEV_DN", type: "Number", description: { km: "", en: "Elevation at the start and end, from the depression-filled DEM." } },
-      { name: "SLOPE_PCT", type: "Number", description: { km: "", en: "Fall along the segment, in percent." } },
-      { name: "FILL_M", type: "Number", description: { km: "", en: "The most water the DEM had to pour into a depression to carry this stream across it." } },
-      { name: "RELIEF_M", type: "Number", description: { km: "", en: "How far the stream sits below the ground around it (7 × 7 cells)." } },
-      { name: "CONF, FLAGS", type: "Text", description: { km: "", en: "Confidence grade and the reasons behind it." } },
-    ],
+    outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Irrigation Tools > Generate River or Stream for ROI**." },
-        { km: "", en: "Choose the area. For a drawn area, click *Draw rectangle* or *Draw polygon* and draw on the map." },
-        { km: "", en: "Pick the detail level. Optionally add an upstream margin and a reference to compare with." },
-        { km: "", en: "Pick an output folder, or leave it empty for a temporary one." },
-        { km: "", en: "Click **Generate streams**. Click **Stop** to cancel; nothing is added to the map." },
-        { km: "", en: "Read the report that opens when the run finishes, also under **Last report**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Irrigation Tools > Generate River or Stream for ROI**. 2. Choose the area. For a drawn area, click *Draw rectangle* or *Draw polygon* and draw on the map. 3. Pick the detail level. Optionally add an upstream margin and a reference to compare with. 4. Pick an output folder, or leave it empty for a temporary one. 5. Click **Generate streams**. Click **Stop** to cancel; nothing is added to the map. 6. Read the report that opens when the run finishes (also under **Last report**).",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "`<name>_streams.gpkg` — layer `streams`, one line per segment between junctions, with the fields listed above." },
-        { km: "", en: "A `stream_check` layer when a reference was used and the networks differ: lines of `KIND` `extra` (in the DEM, not the reference) and `missed` (in the reference, not the DEM)." },
-        { km: "", en: "`<name>_DEM.tif` and `<name>_report.txt`." },
+      { type: "paragraph", text: {
+          km: "",
+          en: "`<name>_streams.gpkg` — layer `streams`, in the output CRS, one line per segment between junctions:",
+        } },
+      { type: "table", head: [{ km: "", en: "Field" }, { km: "", en: "Meaning" }], rows: [
+        [{ km: "", en: "`STREAM_ID`, `NEXT_ID`" }, { km: "", en: "The segment, and the one it flows into (0 at an outlet)." }],
+        [{ km: "", en: "`STRAHLER`" }, {
+            km: "",
+            en: "Strahler order: 1 for a source, two equal orders meeting make the next one up.",
+          }],
+        [{ km: "", en: "`LENGTH_M`" }, { km: "", en: "Length along the cell path, before smoothing." }],
+        [{ km: "", en: "`UP_KM2`" }, { km: "", en: "Ground draining to the end of the segment, in km²." }],
+        [{ km: "", en: "`ELEV_UP`, `ELEV_DN`" }, { km: "", en: "Elevation at the start and end, from the depression-filled DEM." }],
+        [{ km: "", en: "`SLOPE_PCT`" }, { km: "", en: "Fall along the segment, in percent." }],
+        [{ km: "", en: "`FILL_M`" }, {
+            km: "",
+            en: "The most water the DEM had to pour into a depression to carry this stream across it.",
+          }],
+        [{ km: "", en: "`RELIEF_M`" }, { km: "", en: "How far the stream sits below the ground around it (7 × 7 cells)." }],
+        [{ km: "", en: "`CONF`, `FLAGS`" }, { km: "", en: "Confidence grade and the reasons behind it — see below." }],
       ] },
-      { type: "subheading", text: { km: "", en: "Is the result any good? (Checks)" } },
-      { type: "paragraph", text: { km: "", en: "A network traced from a DEM is a model of where water runs, not a survey of where streams are. **Internal checks** run on every job: `FLAT` (falls under 0.1 %), `FILLED` (crosses a depression filled by 8 m or more), `NOVALLEY` (sits less than 1 m below its surroundings) and `EDGE` (starts at the edge of the data). Two or more of the first three give **Low** confidence, one gives **Medium**, none **High**." } },
-      { type: "note", tone: "info", text: { km: "", en: "**Read the numbers with care.** A reference can be incomplete — OpenStreetMap often is in the countryside — and a DEM stream can be a real gully that carries water only after rain. Agreement normally rises with stream size. **Not matching does not prove a stream wrong.**" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "`<name>_streams.gpkg` also holds a layer `stream_check` when a reference was used and the networks differ: lines of `KIND` `extra` (in the DEM, not in the reference) and `missed` (in the reference, not in the DEM).",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "`<name>_DEM.tif` is the DEM, compressed, in the output CRS; `<name>_report.txt` is the text of the report.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Large areas.** Routing needs about 110 bytes of memory per pixel. Above about 6 million pixels (roughly 75 km square at 30 m) the tool asks before it starts, with a sterner warning above 30 million. **Above 100 million pixels it refuses** — use a smaller area or the 90 m DEM." },
-        { km: "", en: "**Depressions are filled.** Every cell drains out of the area: a lake or a real closed basin is routed across, not stopped. Streams therefore cross reservoirs; look at the `FILLED` flag." },
-        { km: "", en: "**Edges.** Water leaves the area at its edge, and a cut-to-shape area treats the shape's outline the same way. Streams near the edge may be missing upstream length unless an upstream margin is used." },
-        { km: "", en: "The Copernicus DEM is a surface model, so a stream under dense canopy or through a built-up area can be displaced." },
-        { km: "", en: "Network use: the Copernicus DEM bucket on Amazon S3, and — only with the OpenStreetMap comparison — the Overpass servers. Only the area's bounding box is sent." },
-        { km: "", en: "Attribution is required: Copernicus DEM © DLR e.V. and © Airbus Defence and Space GmbH, under COPERNICUS by the European Union and ESA. OpenStreetMap data is © OpenStreetMap contributors (ODbL)." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Large areas.** Routing a DEM needs about 110 bytes of memory per pixel. Above about 6 million pixels (roughly 75 km square at 30 m) the tool asks before it starts, with a sterner warning above 30 million, and also when the output drive is short of space. A temporary output adds to the warning because it lands on the system drive. Above 100 million pixels it refuses; use a smaller area or the 90 m DEM. * **Depressions are filled.** Every cell drains out of the area: a lake or a real closed basin is routed across, not stopped. Streams therefore cross reservoirs; look at the `FILLED` flag. * **Edges.** Water leaves the area at its edge, and a cut-to-shape area treats the shape's outline the same way. Streams near the edge may be missing upstream length unless an upstream margin is used. * The Copernicus DEM is a surface model: it follows tree tops and buildings, not bare ground, so a stream under dense canopy or through a built-up area can be displaced. Elevations are metres above the EGM2008 geoid. * Over open sea there are no tiles; an area entirely over sea is reported as having nothing to trace. * Network use: the Copernicus DEM bucket on Amazon S3, and — only if the OpenStreetMap comparison is chosen — the Overpass servers overpass-api.de and overpass.kumi.systems (the second is tried if the first fails). Only the area's bounding box is sent. * Attribution is required: Copernicus DEM © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA. OpenStreetMap data is © OpenStreetMap contributors (ODbL).",
+        } },
     ],
     seeAlso: ["generate_contour_roi", "reservoir_storage_analyzer"],
   },
@@ -4267,16 +4519,30 @@ export const tools = [
       en: "Finds, explains and repairs multipart line features \u2014 the ones that make Merge Lines fail.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Canals and drains that were edited many times with Split, Trim/Extend or Reshape often end up as one feature made of several parts that do not touch *exactly*, so *Merge Lines* fails. The tool lists every true multipart feature **with the reason it is multipart**, then joins what can be joined and separates what cannot." } },
-      { type: "subheading", text: { km: "", en: "What the repair does, in order" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Finds, explains and repairs **multipart line features**. Canals and drains that were edited many times with Split, Trim/Extend or Reshape often end up as one feature made of several parts that do not touch *exactly*, so *Merge Lines* fails. The tool lists every true multipart feature with the reason it is multipart, then joins what can be joined and separates what cannot.",
+        } },
+      { type: "paragraph", text: { km: "", en: "Repair of each multipart feature, in order:" } },
       { type: "steps", items: [
-        { km: "", en: "Remove duplicate vertices." },
-        { km: "", en: "Drop parts shorter than **Min part length** \u2014 the slivers left by cutting." },
-        { km: "", en: "Snap part end-points closer than **Snap tolerance** to their common average." },
-        { km: "", en: "Dissolve overlaps (union) and merge the lines." },
+        { km: "", en: "remove duplicate vertices;" },
+        { km: "", en: "drop parts shorter than **Min part length** (slivers left by cutting);" },
+        { km: "", en: "snap part end-points closer than **Snap tolerance** to their common average;" },
+        { km: "", en: "dissolve overlaps (union) and merge the lines." },
       ] },
-      { type: "paragraph", text: { km: "", en: "If one part is left the feature is **fixed** \u2014 same feature, same attributes. If several remain they are really separate (branches, distant pieces) and become single features with the attributes copied." } },
-      { type: "note", tone: "info", text: { km: "", en: "The work runs on the GUI thread with a progress bar; **QGIS is busy until it finishes.**" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "If one part is left the feature is **fixed** — same feature, same attributes. If several remain they are really separate (branches, distant pieces) and become single features with the attributes copied.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The work runs on the GUI thread with a progress bar; QGIS is busy until it finishes.",
+        } },
+      { type: "subheading", text: { km: "", en: "The window" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "An **Input line layers** box sits on top and three tabs below it. The window resizes to the tab you are on: Repair settings and Output are compact, Check is tall for its two tables. The log and the progress bar are hidden until you run Check or Repair; the log then stays until you close the window.",
+        } },
     ],
     parameters: [
       {
@@ -4284,71 +4550,99 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Layer list", type: "", default: "", description: { km: "", en: "Every line layer in the project, shown as `group / layer`. Tick the ones to check or repair. Visible layers start ticked." } },
-          { name: "All / None / Visible / Refresh", type: "", default: "", description: { km: "", en: "Tick all, untick all, tick only the visible layers, or re-read the project's layers." } },
+          { name: "**Layer list**", type: "", default: "", description: {
+            km: "",
+            en: "Every line layer in the project, shown as `group / layer`. Tick the ones to check or repair. Visible layers start ticked.",
+          } },
+          { name: "**All / None / Visible / Refresh**", type: "", default: "", description: {
+            km: "",
+            en: "Tick all, untick all, tick only the visible layers, or re-read the project's layers. The list also refreshes each time the window opens.",
+          } },
         ],
       },
       {
-        title: { km: "", en: "Repair settings \u2014 used by both Check and Repair" },
+        title: { km: "", en: "Repair settings tab (used by both Check and Repair)" },
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Snap tolerance", type: "", default: "`0.5`", description: { km: "", en: "Part end-points closer than this are snapped together. **Layer CRS units.**" } },
-          { name: "Min part length", type: "", default: "`0.1`", description: { km: "", en: "Parts shorter than this are deleted; 0 keeps all. Layer CRS units." } },
-          { name: "Remove duplicate vertices", type: "", default: "on", description: { km: "", en: "Step 1 of the repair." } },
-          { name: "Dissolve overlapping parts (union)", type: "", default: "on", description: { km: "", en: "Step 4 of the repair; without it the parts are only collected and merged where they already touch." } },
+          { name: "**Snap tolerance**", type: "", default: "", description: {
+            km: "",
+            en: "Part end-points closer than this are snapped together. Layer CRS units. Default 0.5.",
+          } },
+          { name: "**Min part length**", type: "", default: "", description: {
+            km: "",
+            en: "Parts shorter than this are deleted; 0 keeps all. Layer CRS units. Default 0.1.",
+          } },
+          { name: "**Remove duplicate vertices**", type: "", default: "", description: { km: "", en: "Step 1 of the repair. On by default." } },
+          { name: "**Dissolve overlapping parts (union)**", type: "", default: "", description: {
+            km: "",
+            en: "Step 4 of the repair; without it the parts are only collected and merged where they already touch. On by default.",
+          } },
+          { name: "**Units**", type: "", default: "", description: {
+            km: "",
+            en: "Shown after a Check: the CRS units of the ticked layers, or a note that they differ.",
+          } },
         ],
       },
       {
         title: { km: "", en: "Check tab" },
         nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Check multipart", type: "", default: "", description: { km: "", en: "Scans the ticked layers and fills the two tables." } },
-          { name: "Layer table", type: "", default: "", description: { km: "", en: "Per layer: features, multi-type, true multipart, *Fixable (\u21921)*, *Separate*, null/empty, maximum parts. Double-click a row to list its features, select them and zoom to them." } },
-          { name: "Feature table", type: "", default: "", description: { km: "", en: "Per multipart feature: ID, parts, shortest part, largest gap, **Cause**, parts after repair, result. Causes are *overlap*, *tiny part*, *touching*, *small gap* (within tolerance) and *gap > tolerance*." } },
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "Causes: *overlap*, *tiny part*, *touching*, *small gap* (within the tolerance), *gap > tolerance*. **Fixable** means repair gives one part; **Separate** means the parts are really apart or branched and will be split into several features.",
+            } },
         ],
-      },
-      {
-        title: { km: "", en: "Output tab" },
-        nameLabel: "Control",
-        blocks: [],
         rows: [
-          { name: "Format", type: "", default: "New GeoPackage \u2014 one file per layer", description: { km: "", en: "Also *one file for all layers*, *New Shapefile*, *Temporary layers*, or **Fix in place**." } },
-          { name: "Output folder / GeoPackage name / Layer suffix", type: "", default: "`_fixed`", description: { km: "", en: "Where new files go, the single-file name, and the suffix added to each new layer's name." } },
-          { name: "Only layers that have multipart features", type: "", default: "", description: { km: "", en: "Skip clean layers. Always on for in place." } },
-          { name: "Copy symbology and labels", type: "", default: "", description: { km: "", en: "The new layer takes the original's renderer and labelling." } },
-          { name: "Add output to map (below original)", type: "", default: "", description: { km: "", en: "Adds the new layer directly under the original in the layer tree." } },
+          { name: "**Check multipart**", type: "", default: "", description: { km: "", en: "Scans the ticked layers and fills the two tables." } },
+          { name: "**Select multipart features after check**", type: "", default: "", description: { km: "", en: "Selects the multipart features on the map. On by default." } },
+          { name: "**Layer table**", type: "", default: "", description: {
+            km: "",
+            en: "Per layer: features, multi-type, true multipart, *Fixable (→1)*, *Separate*, null/empty, maximum parts. Double-click a row to list its features, select them and zoom to them.",
+          } },
+          { name: "**Feature table**", type: "", default: "", description: {
+            km: "",
+            en: "Per multipart feature: ID, parts, shortest part, largest gap, **Cause**, parts after repair, result. Click a column to sort; double-click a row to zoom to and flash that feature.",
+          } },
         ],
       },
     ],
-    outputs: [],
+    outputs: [
+      { name: "**Format**", type: "*New GeoPackage – one file per layer (default); *New GeoPackage – all layers in one file*; *New Shapefile – one file per layer*; *Temporary layers (memory, not saved)*; *Fix in place*.", description: { km: "", en: "" } },
+      { name: "**Output folder**", type: "Where new files go. Starts in the project's default folder. Not used for temporary layers or in place.", description: { km: "", en: "" } },
+      { name: "**GeoPackage name**", type: "File name for the one-file GeoPackage option (`singlepart_lines.gpkg`).", description: { km: "", en: "" } },
+      { name: "**Layer suffix**", type: "Added to each new layer's name (`_fixed`).", description: { km: "", en: "" } },
+      { name: "**Only layers that have multipart features**", type: "Skip clean layers. Always on for in place.", description: { km: "", en: "" } },
+      { name: "**Copy symbology and labels**", type: "The new layer takes the original's renderer and labelling.", description: { km: "", en: "" } },
+      { name: "**Add output to map (below original)**", type: "Adds the new layer directly under the original in the layer tree.", description: { km: "", en: "" } },
+    ],
     usage: [
       { type: "steps", items: [
         { km: "", en: "Run the tool; the window stays open beside the map." },
         { km: "", en: "Tick the line layers." },
-        { km: "", en: "On **Repair settings**, set the tolerance and minimum length. Use a projected CRS in metres." },
-        { km: "", en: "On **Check**, press **Check multipart**. Read the *Cause* and *Result* columns; if a gap that should close says *gap > tolerance*, raise the tolerance and Check again." },
+        {
+          km: "",
+          en: "On **Repair settings**, set the tolerance and minimum length. Use a projected CRS (metres).",
+        },
+        {
+          km: "",
+          en: "On **Check**, press **Check multipart**. Read the *Cause* and *Result* columns; if a gap that should close says *gap > tolerance*, raise the tolerance and Check again.",
+        },
         { km: "", en: "On **Output**, choose where the result goes." },
         { km: "", en: "Press **Repair / Fix multipart**. The log lists what was done per layer." },
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "**New file or temporary layer:** one `<name><suffix>` layer per input, every feature single-part, with the original attributes. Joined features keep theirs; parts that stay apart become extra features with the attributes copied." },
-        { km: "", en: "**Fix in place:** the original layers are put in edit mode as one undoable edit. Check the result, then Save Layer Edits or Roll Back. Split-off parts are added as new features with a fresh primary key." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **New file or temporary layer:** one `<name><suffix>` layer per input, every feature single-part, with the original attributes. Joined features keep their attributes; parts that stay apart become extra features with the attributes copied. The log gives the feature count before and after and how many multipart features are left (0). * **Fix in place:** the original layers are put in edit mode as one undoable edit. Check the result, then Save Layer Edits or Roll Back (Ctrl+Z undoes it). Split-off parts are added as new features with a fresh primary key.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Tolerance and minimum length are in the **layer's units**. The tool warns about geographic (degree) layers." },
-        { km: "", en: "**A tolerance larger than the real gaps can snap parts that should stay apart.** Check first and read the *Max gap* column." },
-        { km: "", en: "Only line layers are listed. Curved geometries are converted to straight segments." },
-        { km: "", en: "Snapping averages the end-points within tolerance of each other, so a chain of close end-points moves together." },
-        { km: "", en: "A GeoPackage output drops the old `fid` field so split parts get new ids; an existing file asks before it is overwritten, and a file loaded in QGIS cannot be overwritten." },
-        { km: "", en: "A layer filter hides features from the copy: an empty result usually means a filter or an unreadable source." },
-        { km: "", en: "**The result is not topology-checked**: overlaps with *other* layers are untouched." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Tolerance and minimum length are in the **layer's units**. The tool warns about geographic (degree) layers. * A tolerance larger than the real gaps can snap parts that should stay apart; Check first and read the *Max gap* column. * Only line layers are listed. Curved geometries are converted to straight segments. * Snapping averages the end-points that fall within the tolerance of each other, so a chain of close end-points moves together. * A GeoPackage output drops the old `fid` field so split parts get new ids; an existing file asks before it is overwritten. A file loaded in QGIS cannot be overwritten. * A layer filter (right-click › Filter) hides features from the copy: an empty result usually means a filter or an unreadable source. * The result is not topology-checked: overlaps with *other* layers are untouched.",
+        } },
     ],
     seeAlso: ["planarizelines", "duplicate_checker", "checkoverlapsandgaps"],
   },
@@ -4368,37 +4662,66 @@ export const tools = [
       en: "Diagnoses whether an elevation raster is a bare-earth DEM/DTM or a DSM with buildings and vegetation on it.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Returns a classification \u2014 DEM, DSM, PARTIALLY FILTERED DEM or INCONCLUSIVE \u2014 a confidence score and a report with eight indicators. **Use it before trusting a DEM for canal levels, contours or flow routing.** It runs on a background task and can be cancelled." } },
-      { type: "paragraph", text: { km: "", en: "Uses only NumPy and GDAL, which ship with QGIS; SciPy is optional and only speeds up blob labelling." } },
-      { type: "subheading", text: { km: "", en: "The eight indicators" } },
-      { type: "paragraph", text: { km: "", en: "Each scores from \u22121 (bare earth) to +1 (surface objects) with a reliability weight." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Diagnoses whether an elevation raster is a **bare-earth DEM/DTM** or a **DSM** (a surface with buildings and vegetation). It returns a classification (DEM, DSM, PARTIALLY FILTERED DEM or INCONCLUSIVE), a confidence score and a report with eight indicators. Use it before trusting a DEM for canal levels, contours or flow routing. It runs on a background task and can be cancelled.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Uses only NumPy and GDAL, which ship with QGIS (SciPy is optional and only speeds up blob labelling).",
+        } },
+      { type: "subheading", text: { km: "", en: "Using the panel" } },
+      { type: "table", head: [{ km: "", en: "Page" }, { km: "", en: "What it holds" }], rows: [
+        [{ km: "", en: "**Layer**" }, {
+            km: "",
+            en: "The raster, its band and a summary (real resolution, matching orthophoto). Selecting a layer clears the previous result and probes in the background whether the data are native, interpolated or resampled.",
+          }],
+        [{ km: "", en: "**Orthophoto**" }, {
+            km: "",
+            en: "An image of the same area and its bands (NIR optional) and a building-footprint layer.",
+          }],
+        [{ km: "", en: "**Compare**" }, { km: "", en: "A second elevation layer of the same area." }],
+        [{ km: "", en: "**Filter**" }, {
+            km: "",
+            en: "Multi-scale filter windows, presets, a live preview of the windows used, and the filtered-surface / dZ layers.",
+          }],
+        [{ km: "", en: "**Settings**" }, {
+            km: "",
+            en: "Scope (whole layer or current map extent), elevation units, tile sampling, thresholds, block grid, **Restore defaults**.",
+          }],
+        [{ km: "", en: "**Summary, Indicators, Blocks, Filter chart, Log**" }, {
+            km: "",
+            en: "The verdict card, the report, the eight indicators, the block grid (click a block on the map to open the Block Inspector), the filter chart and the run log. Greyed out until the selected layer has a result.",
+          }],
+      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The footer is always visible: result chip (e.g. \"DSM 95%\"), progress and **Run**.",
+        } },
+      { type: "subheading", text: { km: "", en: "The indicators" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Each scores from -1 (bare earth) to +1 (surface objects) with a reliability weight.",
+        } },
       { type: "table", head: [{ km: "", en: "#" }, { km: "", en: "Indicator" }, { km: "", en: "DSM signature" }], rows: [
-        [{ km: "", en: "1" }, { km: "", en: "Metadata and naming" }, { km: "", en: "Known surface product or a \"DSM\" keyword" }],
+        [{ km: "", en: "1" }, { km: "", en: "Metadata and naming (product registry, DSM/DTM keywords)" }, { km: "", en: "Known surface product or a \"DSM\" keyword" }],
         [{ km: "", en: "2" }, { km: "", en: "Local height above ground (flat terrain only)" }, { km: "", en: "Many pixels above the threshold" }],
         [{ km: "", en: "3" }, { km: "", en: "Slope variance / steep edges" }, { km: "", en: "Wall-like edges in flat areas" }],
         [{ km: "", en: "4" }, { km: "", en: "Roughness asymmetry" }, { km: "", en: "Skewed upward" }],
         [{ km: "", en: "5" }, { km: "", en: "Profile spikes" }, { km: "", en: "Frequent narrow spikes" }],
         [{ km: "", en: "6" }, { km: "", en: "Structure / vegetation footprints" }, { km: "", en: "Most raised blobs are sharp-edged" }],
         [{ km: "", en: "7" }, { km: "", en: "Pairwise nDSM *(optional)*" }, { km: "", en: "The DSM is higher wherever objects stand" }],
-        [{ km: "", en: "8" }, { km: "", en: "Orthophoto land-cover height test *(optional)*" }, { km: "", en: "Trees and roofs stand metres above adjacent open ground; 0.5\u20132 m means a partially filtered DTM" }],
+        [{ km: "", en: "8" }, { km: "", en: "Orthophoto land-cover height test *(optional)*" }, {
+            km: "",
+            en: "Trees and roofs stand metres above adjacent open ground; 0.5–2 m means a partially filtered DTM",
+          }],
       ] },
-      { type: "paragraph", text: { km: "", en: "**Confidence is capped by what the data can prove:** \u22642 m pixels 97%, \u22645 m 94%, \u226410 m 90%, \u226420 m 85%, \u226435 m 78%, coarser 65%. A DEM verdict rests on the *absence* of objects and is capped at 85%, or 95% with a clear orthophoto result. Below 62% the result is INCONCLUSIVE, and the report lists every cap applied." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Thresholds adapt to pixel size and sensor noise. Confidence is capped by what the data can prove: ≤2 m pixels 97%, ≤5 m 94%, ≤10 m 90%, ≤20 m 85%, ≤35 m 78%, coarser 65%; a DEM verdict rests on the absence of objects and is capped at 85% (95% with a clear orthophoto result). Below 62% confidence the result is INCONCLUSIVE; the report lists every cap applied.",
+        } },
     ],
-    parameters: [
-      {
-        title: { km: "", en: "Panel pages" },
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Layer", type: "", default: "", description: { km: "", en: "The raster, its band and a summary (real resolution, matching orthophoto). Selecting a layer clears the previous result and probes in the background whether the data are native, interpolated or resampled." } },
-          { name: "Orthophoto", type: "", default: "", description: { km: "", en: "An image of the same area and its bands (NIR optional), and a building-footprint layer." } },
-          { name: "Compare", type: "", default: "", description: { km: "", en: "A second elevation layer of the same area." } },
-          { name: "Filter", type: "", default: "", description: { km: "", en: "Multi-scale filter windows, presets, a live preview of the windows used, and the filtered-surface / dZ layers." } },
-          { name: "Settings", type: "", default: "", description: { km: "", en: "Scope (whole layer or current map extent), elevation units, tile sampling, thresholds, block grid, **Restore defaults**." } },
-          { name: "Summary, Indicators, Blocks, Filter chart, Log", type: "", default: "", description: { km: "", en: "The verdict card, the report, the eight indicators, the block grid (click a block on the map to open the Block Inspector), the filter chart and the run log. Greyed out until the selected layer has a result." } },
-        ],
-      },
-    ],
+    parameters: [],
     outputs: [],
     usage: [
       { type: "steps", items: [
@@ -4410,19 +4733,16 @@ export const tools = [
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "Reports: HTML, PDF, JSON, CSV, or **Pop out** for a full-size report." },
-        { km: "", en: "Optional map layers: object-height rasters, filtered surface and dZ, a colour-coded block grid, and a **Highest cells** point layer (red \u2265 4.5 m, orange 2\u20134.5 m, green < 2 m) to check against the orthophoto. Written to a temporary folder." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Reports: HTML, PDF, JSON, CSV, or **Pop out** for a full-size report. * Optional map layers: object-height rasters, filtered surface and dZ, a colour-coded block grid, and a **Highest cells** point layer (red ≥ 4.5 m, orange 2–4.5 m, green < 2 m) to check against the orthophoto. Written to a temporary folder.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**A DSM of bare land \u2014 desert, fresh fields, water \u2014 is physically identical to a DEM**; no raster-only test separates them. Add an orthophoto or a second layer." },
-        { km: "", en: "Only file-based GDAL rasters are supported, not WMS/WCS." },
-        { km: "", en: "Mountainous scenes leave little flat context, so confidence drops; use the map-extent scope on a flatter area." },
-        { km: "", en: "Resampled rasters \u2014 Copernicus 30 m warped to 0.5 m, say \u2014 are detected and read at their real resolution. Raised house plots and mounds are treated as ground." },
-        { km: "", en: "Very large roofs or continuous canopy wider than the maximum object width are detected only at their edges; raise the width for dense forest." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* A DSM of bare land (desert, fresh fields, water) is physically identical to a DEM; no raster-only test separates them. Add an orthophoto or a second layer. * Only file-based GDAL rasters are supported, not WMS/WCS. * Mountainous scenes leave little flat context, so confidence drops; use the map-extent scope on a flatter area. * Resampled rasters (e.g. Copernicus 30 m warped to 0.5 m) are detected and read at their real resolution. Raised house plots and mounds are treated as ground. * Very large roofs or continuous canopy wider than the maximum object width are detected only at their edges; raise the width for dense forest.",
+        } },
     ],
     seeAlso: ["generate_contour_roi", "demelevationcorrectionandpointsamplereport", "reservoir_storage_analyzer"],
   },
@@ -4442,70 +4762,121 @@ export const tools = [
       en: "Style a layer's labels as callouts — leader lines, elbows, curved arrows and balloons — from one window.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Style a layer's labels as **callouts** from one window: simple leader lines, Manhattan elbows, curved arrows and speech balloons, with the map updating as you change a setting." } },
-      { type: "paragraph", text: { km: "", en: "QGIS has all four callout types, but they live in the Layer Styling panel under Labels ▸ Callouts, with the text, buffer, placement and rendering settings in other tabs. This puts them behind one form, with quick styles to start from, an organized layout that stacks the labels so leader lines never cross, and a number key for small polygons." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Style a layer's labels as **callouts** from one window: simple leader lines, Manhattan elbows, curved arrows and speech balloons, with the map updating as you change a setting.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "QGIS has all four callout types, but they live in the Layer Styling panel under Labels > Callouts, with the text, buffer, placement and rendering settings in other tabs. This puts them behind one form, with quick styles to start from, an organized layout that stacks the labels so leader lines never cross, and a number key for small polygons.",
+        } },
     ],
     parameters: [
       {
-        title: { km: "", en: "1 — Layer and label text" },
-        nameLabel: "Control",
+        title: null,
+        nameLabel: "Parameter",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "The algorithm takes no Processing parameters — running it opens the window." } },
-        ],
-        rows: [
-          { name: "Layer", type: "Layer combo", default: "the active layer", description: { km: "", en: "Point, line or polygon layers." } },
-          { name: "Label with", type: "Field / expression", default: "the layer's current label field", description: { km: "", en: "A field or an expression (ε button)." } },
-          { name: "Only where", type: "Expression", default: "—", description: { km: "", en: "Only matching features are labelled, e.g. `\"pop\" > 100000`." } },
-        ],
-      },
-      {
-        title: { km: "", en: "2 — Quick styles" },
-        nameLabel: "Control",
-        blocks: [
-          { type: "paragraph", text: { km: "", en: "Click a thumbnail: **Classic Leader**, **Manhattan Elbow**, **Curved Arrow**, **Speech Balloon**, **Dark Badge**, **Imagery Overlay** (yellow line, dark halo), **Survey Dashed**, **Map Inset Box**. Your own presets appear as ★ thumbnails; right-click one to delete it." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "The algorithm takes no Processing parameters — running it opens the window.",
+            } },
         ],
         rows: [],
       },
       {
-        title: { km: "", en: "3 — Fine-tune" },
+        title: { km: "", en: "1 Layer and label text" },
+        nameLabel: "Control",
+        blocks: [],
+        rows: [
+          { name: "**Layer**", type: "Layer combo", default: "The active layer", description: { km: "", en: "Point, line or polygon layers." } },
+          { name: "**Label with**", type: "Field / expression", default: "The layer's current label field", description: { km: "", en: "A field or an expression (ε button)." } },
+          { name: "**Only where**", type: "Expression", default: "—", description: { km: "", en: "Only matching features are labelled, e.g. `\"pop\" > 100000`." } },
+        ],
+      },
+      {
+        title: { km: "", en: "2 Quick styles" },
+        nameLabel: "Parameter",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "Click a thumbnail: **Classic Leader**, **Manhattan Elbow**, **Curved Arrow**, **Speech Balloon**, **Dark Badge**, **Imagery Overlay** (yellow line, dark halo), **Survey Dashed**, **Map Inset Box**. Your own presets appear as ★ thumbnails; right-click one to delete it.",
+            } },
+        ],
+        rows: [],
+      },
+      {
+        title: { km: "", en: "3 Fine-tune" },
         nameLabel: "Control",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "The **Callout**, **Text** and **Placement** tabs hold the line, balloon, font, buffer and placement settings. A callout draws whenever a label sits away from its feature. **Organized layout** (Placement tab) stacks labels in columns or rows beside the data, sorted and swapped so leader lines never cross." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "The **Callout**, **Text** and **Placement** tabs hold the line, balloon, font, buffer and placement settings. A callout draws whenever a label sits away from its feature.",
+            } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "**Organized layout** (Placement tab) stacks labels in columns (left, right, both sides) or rows (top, bottom, both) beside the data, sorted and swapped so leader lines never cross.",
+            } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "Positions are computed for the current zoom; set the zoom you will print at, then Apply.",
+            } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "**Number key** tab: each feature gets a number or letter (1, 2, 3 / A, B, C) and the names are listed in key boxes outside the data. Numbering order is reading order, west to east, north to south or alphabetical; the number is a circle badge or bold text, inside the feature or outside on a leader line; the key goes right, left, below or above, in 1–12 columns, with optional title and frame. **Put key in Print Layout** sends the key to a layout as grouped, editable text boxes beside the map frame; re-sending replaces the old one. With no layout yet it creates an A4 landscape one.",
+            } },
         ],
         rows: [
-          { name: "Distance from data, Space between labels", type: "Number", default: "—", description: { km: "", en: "In millimetres on screen, or on paper when fitted to a layout." } },
-          { name: "Distribute evenly", type: "Boolean", default: "—", description: { km: "", en: "Even spacing along the whole side. Off keeps each label level with its feature." } },
-          { name: "Vertical text in rows", type: "Boolean", default: "—", description: { km: "", en: "Compact rows for long names." } },
-          { name: "Fit for", type: "Combo box", default: "Screen", description: { km: "", en: "Screen, or a print layout map: spacing is then calculated in real paper millimetres and follows the map frame's extent." } },
-          { name: "Number key", type: "Tab", default: "—", description: { km: "", en: "Each feature gets a number or letter and the names are listed in key boxes outside the data. Ordering is reading order, west to east, north to south or alphabetical; the badge sits inside the feature or outside on a leader line; the key goes right, left, below or above in 1–12 columns. **Put key in Print Layout** sends it to a layout as grouped, editable text boxes." } },
+          { name: "**Distance from data**, **Space between labels**", type: "", default: "", description: { km: "", en: "In millimetres on screen, or on paper when fitted to a layout." } },
+          { name: "**Distribute evenly**", type: "", default: "", description: {
+            km: "",
+            en: "Even spacing along the whole side. Off keeps each label level with its feature.",
+          } },
+          { name: "**Vertical text in rows**", type: "", default: "", description: { km: "", en: "Compact rows for long names." } },
+          { name: "**Fit for**", type: "", default: "", description: {
+            km: "",
+            en: "Screen, or a print layout map: spacing is then calculated in real paper millimetres and follows the map frame's extent.",
+          } },
+        ],
+      },
+      {
+        title: { km: "", en: "Buttons" },
+        nameLabel: "Button",
+        blocks: [],
+        rows: [
+          { name: "**Apply**", type: "", default: "", description: { km: "", en: "Keeps the result and leaves the window open." } },
+          { name: "**OK**", type: "", default: "", description: { km: "", en: "Applies and closes." } },
+          { name: "**Cancel / close**", type: "", default: "", description: { km: "", en: "Puts the layer's original labels back, unless Apply was pressed." } },
+          { name: "**More**", type: "", default: "", description: {
+            km: "",
+            en: "*Save as my preset*, *Copy equivalent PyQGIS code*, *Export label style (.qml)*.",
+          } },
         ],
       },
     ],
     outputs: [],
     usage: [
       { type: "steps", items: [
-        { km: "", en: "Select the layer in the Layers panel and run **KGA Mapping > Callout Label Studio**." },
+        {
+          km: "",
+          en: "Select the layer in the Layers panel and run **KGA Mapping > Callout Label Studio**.",
+        },
         { km: "", en: "Choose the label field or expression." },
         { km: "", en: "Click a quick style." },
         { km: "", en: "Adjust the Callout, Text and Placement tabs; watch the map." },
-        { km: "", en: "Press **Apply** to keep the result and leave the window open, or **OK** to apply and close." },
+        { km: "", en: "Press **Apply**." },
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "The layer's labeling is replaced by a rule-based or single labeling with callouts enabled. Nothing is written to disk; the style is saved with the project." },
-        { km: "", en: "**Export label style (.qml)** writes the labeling category only, to reuse on other layers via *Load Style*." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- The layer's labeling is replaced by a rule-based or single labeling with callouts enabled. Nothing is written to disk; the style is saved with the project. - **Export label style (.qml)** writes the labeling category only, to reuse on other layers via *Load Style*.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Cancel restores the original labels**, but only until Apply or OK. After that the change is yours to undo." },
-        { km: "", en: "**Organized layout positions are fixed for the zoom they were computed at.** Zoom to print scale first, or use *Fit for ▸ Layout* so the spacing is taken from the layout's map frame." },
-        { km: "", en: "**The number key is rule-based labelling on the layer itself**, so it prints in layouts and saves with the style." },
-        { km: "", en: "Moving a label by hand with the Label toolbar's *Move Label* tool is compatible with callouts; *Move Callout* drags the feature end." },
-        { km: "", en: "For polygons, *Polygon anchor ▸ Pole of inaccessibility* keeps the pointer well inside odd shapes." },
-        { km: "", en: "The last style used is remembered between sessions, as are your presets." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Cancel restores the original labels**, but only until Apply or OK. After that the change is yours to undo. - **Organized layout positions are fixed for the zoom they were computed at.** Zoom to print scale first, or use *Fit for > Layout* so the spacing is taken from the layout's map frame. - **The number key is rule-based labelling on the layer itself**, so it prints in layouts and saves with the style. - Moving a label by hand with the Label toolbar's *Move Label* tool is compatible with callouts; *Move Callout* drags the feature end. - For polygons, *Polygon anchor > Pole of inaccessibility* keeps the pointer well inside odd shapes. - The last style used is remembered between sessions (setting `kga_tools/callout_label_studio/last_config`), as are your presets.",
+        } },
     ],
     seeAlso: ["kga_layer_symbol", "add_grid"],
   },
@@ -4525,45 +4896,63 @@ export const tools = [
       en: "A searchable gallery of ready-made symbols, icons, textures and colour ramps to apply to a layer.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "A searchable gallery of ready-made **symbols, icons, textures and colour ramps** organised by field — hydraulics, irrigation, agriculture, land cover, cadastre, transport, geology, remote sensing, tactical and more. Pick a thumbnail and apply it to a layer; **everything is built from native QGIS symbol layers, so the result stays editable in Layer Properties.**" } },
-      { type: "paragraph", text: { km: "", en: "It opens two ways: as a stand-alone window from **KGA Mapping ▸ KGA Layer Symbol**, which follows the layer selected in the Layers panel; or as a tab in **Layer Properties**, listed right under Symbology for vector layers and after the Symbology page for rasters, pinned to the layer whose properties are open." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A searchable gallery of ready-made **symbols, icons, textures and colour ramps** organised by field (hydraulics, irrigation, agriculture, land cover, cadastre, transport, geology, remote sensing, tactical and more). Pick a thumbnail and apply it to a layer; everything is built from native QGIS symbol layers, so the result stays editable in Layer Properties.",
+        } },
+      { type: "paragraph", text: { km: "", en: "It opens two ways:" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **KGA Mapping > KGA Layer Symbol** — a stand-alone window that follows the layer selected in the Layers panel. * **Layer Properties > KGA Layer Symbol** — a tab listed right under Symbology (vector layers) or after the Symbology page (rasters), pinned to the layer whose properties are open.",
+        } },
     ],
     parameters: [
       {
         title: null,
         nameLabel: "Control",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "The algorithm takes no Processing parameters — running it opens the window." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "The algorithm takes no Processing parameters — running it opens the window.",
+            } },
         ],
         rows: [
-          { name: "Search / field / kind", type: "Filters", default: "—", description: { km: "", en: "Narrow the gallery by text, by field and by Point, Line, Polygon or Ramp." } },
-          { name: "Apply to Layer / Classes", type: "Button", default: "—", description: { km: "", en: "Styles the whole layer; in the window, legend classes selected in the Layers panel style just those classes. Categorized and graduated layers keep their classes." } },
-          { name: "Current style page", type: "Panel", default: "—", description: { km: "", en: "Applying a symbol or DEM ramp opens this page inside the panel: fine-tune colours, sizes, spacing and angles live. **‹ Back to styles** returns to the gallery." } },
-          { name: "Undo", type: "Button", default: "—", description: { km: "", en: "Puts back the style the layer had before the last apply." } },
-          { name: "Rasters", type: "Section", default: "—", description: { km: "", en: "Colour ramps — a DEM can get a hillshade; the matching field opens by the layer's name." } },
-          { name: "More menu", type: "Menu", default: "—", description: { km: "", en: "Style packs (QGIS `.xml`, ArcGIS Pro `.stylx`), save to Style Manager, hillshade options, credits." } },
+          { name: "Search / field / kind", type: "", default: "", description: { km: "", en: "Narrow the gallery by text, by field and by Point, Line, Polygon or Ramp." } },
+          { name: "Apply to Layer / Classes", type: "", default: "", description: {
+            km: "",
+            en: "Styles the whole layer; in the window, legend classes selected in the Layers panel style just those classes. Categorized and graduated layers keep their classes.",
+          } },
+          { name: "Current style page", type: "", default: "", description: {
+            km: "",
+            en: "Applying a symbol or DEM ramp opens this page inside the panel: fine-tune colours, sizes, spacing and angles live. **‹ Back to styles* returns to the gallery.",
+          } },
+          { name: "Undo", type: "", default: "", description: { km: "", en: "Puts back the style the layer had before the last apply." } },
+          { name: "Rasters", type: "", default: "", description: {
+            km: "",
+            en: "Colour ramps (a DEM can get a hillshade); the matching field opens by the layer's name.",
+          } },
+          { name: "More menu", type: "", default: "", description: {
+            km: "",
+            en: "Style packs (QGIS .xml, ArcGIS Pro .stylx), save to Style Manager, hillshade options, credits.",
+          } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Select a layer, then open **KGA Layer Symbol** from the KGA Mapping group, or open the layer's properties and choose the **KGA Layer Symbol** tab." },
-        { km: "", en: "Pick a symbol and press **Apply to Layer** — in the Layer Properties tab, the dialog's **Apply** or **OK**." },
-        { km: "", en: "Adjust on the Current style page, or press **Undo**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Select a layer, then open **KGA Layer Symbol** from the KGA Mapping group, or open the layer's properties and choose the **KGA Layer Symbol** tab. 2. Pick a symbol and press **Apply to Layer** (in the Layer Properties tab, the dialog's **Apply** or **OK**). 3. Adjust on the Current style page, or press **Undo**.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "None written to disk. The layer's renderer is changed in place." },
-      ] },
+      { type: "paragraph", text: { km: "", en: "None. The layer's renderer is changed in place." } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "In Layer Properties the tab opens on the layer's current symbol for single-symbol layers. Edit it there, or press **Change style** to pick another; **nothing changes on the layer until the dialog's own Apply or OK.**" },
-        { km: "", en: "**Class-level styling needs the Layers panel**, so it is available in the window only." },
-        { km: "", en: "Symbols and ramps are original works or open-licence sets; see **More ▸ Credits & Licences** for the icon libraries." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* In Layer Properties the tab opens on the layer's current symbol (single-symbol layers). Edit it there, or press **Change style** to pick another; nothing changes on the layer until the dialog's own **Apply** or **OK**. Undo in the tab reverts the last apply. * Class-level styling needs the Layers panel, so it is available in the window only. * Symbols and ramps are original works or open-licence sets; see **More > Credits & Licences** for the icon libraries.",
+        } },
     ],
     seeAlso: ["callout_label_studio", "dem_legend_bar"],
   },
@@ -4931,7 +5320,10 @@ export const tools = [
       en: "A docked pane in the style of ArcGIS Pro's Create Features: pick a template, pick a construction tool, and draw.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Every point, line and polygon layer that can take new features lists its **templates**; pick one, pick a construction tool, and draw on the map. New features get the template's attribute values and look. The pane docks on the right, in the same tab group as the Processing Toolbox and the Catalog." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A docked pane in the style of ArcGIS Pro's Create Features pane. Every point, line and polygon layer that can take new features lists its **templates**; pick one, pick a construction tool, and draw on the map. New features get the template's attribute values and look. The pane docks on the right, in the same tab group as the Processing Toolbox and the Catalog.",
+        } },
     ],
     parameters: [
       {
@@ -4939,36 +5331,46 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Templates tab", type: "Tab", default: "—", description: { km: "", en: "One group per layer that is switched on in the Layers panel. A Categorized layer has one template per category, a Rule-based layer one per simple rule, any other layer a single template." } },
-          { name: "Favorites tab", type: "Tab", default: "—", description: { km: "", en: "Templates you starred (right-click ▸ Add to Favorites). Saved with the project." } },
-          { name: "Search", type: "Text", default: "—", description: { km: "", en: "Matches the template name, layer name, description and tags." } },
-          { name: "Funnel button", type: "Filter", default: "all", description: { km: "", en: "Show all templates, or only point, line or polygon templates." } },
-          { name: "View button", type: "Menu", default: "—", description: { km: "", en: "Group by Layer, Geometry Type, Tag or nothing; collapse or expand all groups; Help." } },
-          { name: "Construction tools", type: "Buttons", default: "—", description: { km: "", en: "Point; Line, Right Angle Line, Freehand Line; Polygon, Rectangle, Right Angle Polygon, Circle, Ellipse, Freehand Polygon." } },
-          { name: "Blue arrow", type: "Button", default: "—", description: { km: "", en: "Template properties: name, description, tags, default tool, default attribute values." } },
+          { name: "**Templates tab**", type: "", default: "", description: {
+            km: "",
+            en: "One group per layer that is switched on in the Layers panel (switching a layer or its group off removes it from the list). A Categorized layer has one template per category, a Rule-based layer one per simple rule, any other layer a single template.",
+          } },
+          { name: "**Favorites tab**", type: "", default: "", description: {
+            km: "",
+            en: "Templates you starred (right-click > Add to Favorites). Saved with the project.",
+          } },
+          { name: "**Search**", type: "", default: "", description: { km: "", en: "Matches the template name, layer name, description and tags." } },
+          { name: "**Funnel button**", type: "", default: "", description: { km: "", en: "Show all templates, or only point, line or polygon templates." } },
+          { name: "**View button**", type: "", default: "", description: {
+            km: "",
+            en: "Group by Layer, Geometry Type, Tag or nothing; collapse or expand all groups; Help.",
+          } },
+          { name: "**Construction tools**", type: "", default: "", description: {
+            km: "",
+            en: "Shown under the picked template. Point; Line, Right Angle Line, Freehand Line; Polygon, Rectangle, Right Angle Polygon, Circle, Ellipse, Freehand Polygon.",
+          } },
+          { name: "**Blue arrow**", type: "", default: "", description: {
+            km: "",
+            en: "Template properties: name, description, tags, default tool, default attribute values.",
+          } },
+          { name: "**Green strip**", type: "", default: "", description: { km: "", en: "\"Create <layer> completed\" after each new feature." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Turn **Edit Session** On, then click **Create Features** on the KGA Editor toolbar." },
-        { km: "", en: "Click a template. Its construction tools appear under it and the first one is armed." },
-        { km: "", en: "Click on the map. Right-click for the construction menu (Parallel, Perpendicular, Direction, Distance, Absolute X,Y, Delta X,Y …). Double-click, Enter or F2 finishes a line or polygon; Rectangle, Circle and Ellipse finish by themselves; Freehand finishes when you release the mouse." },
-        { km: "", en: "Save with **Save Edits** on the KGA Editor toolbar, or QGIS's Save Layer Edits." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Turn **Edit Session** On, then click **Create Features** on the KGA Editor toolbar. The pane opens. 2. Click a template. Its construction tools appear under it and the first one is armed. 3. Click on the map. Right-click for the construction menu (Parallel, Perpendicular, Direction, Distance, Absolute X,Y, Delta X,Y, ...). Double-click, Enter or F2 finishes a line or polygon; Rectangle, Circle and Ellipse finish by themselves; Freehand finishes when you release the mouse. 4. Save with **Save Edits** (KGA Editor toolbar, when Edit Session is On) or QGIS's Save Layer Edits.",
+        } },
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "The pane draws on the template's layer; **it never changes the active layer.**" },
-        { km: "", en: "Creating a feature starts editing the layer when it is not in edit mode." },
-        { km: "", en: "A category with no value is listed as `<Null>` and leaves the field empty; graduated renderers give one template for the layer." },
-        { km: "", en: "Template edits are stored in the layer, so they travel with the project; favorites live in the project." },
-        { km: "", en: "**Not supported:** \"Avoid overlap\", topological editing, curved segments, Z values (saved as 0)." },
-        { km: "", en: "Closing the pane puts the tool away; switching to another tab does not." },
-        { km: "", en: "*Not affiliated with or endorsed by Esri. ArcGIS is a trademark of Esri.*" },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* The pane draws on the template's layer; it never changes the active layer. * Creating a feature starts editing the layer when it is not in edit mode. * A category with no value is listed as <Null> and leaves the field empty; graduated renderers give one template for the layer. * Template edits are stored in the layer (so they travel with the project); favorites in the project. * Not supported: \"Avoid overlap\", topological editing, curved segments, Z values (saved as 0). * Closing the pane puts the tool away; switching to another tab does not.",
+        } },
+      { type: "paragraph", text: { km: "", en: "*Not affiliated with or endorsed by Esri. ArcGIS is a trademark of Esri.*" } },
     ],
     seeAlso: ["modify_features", "open_feature_attribute", "add_quick_template"],
   },
@@ -4988,38 +5390,52 @@ export const tools = [
       en: "A replica of ArcGIS Pro's Modify Features pane: 32 tools in categories of icon tiles.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Tools are grouped in categories of icon tiles, with a search box and **All Tools** / **Favorites** tabs. Clicking a tile opens the tool inside the pane — options, buttons, a back arrow — and arms its map tool on the canvas. The buttons at the right of the tabs show the tools as a grid of tiles (default) or as a list; the choice is remembered." } },
-      { type: "subheading", text: { km: "", en: "The 32 tools" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A replica of ArcGIS Pro's Modify Features pane. Tools are grouped in categories of icon tiles, with a search box and **All Tools** / **Favorites** tabs. Clicking a tile opens the tool inside the pane (options, buttons, a back arrow), and arms its map tool on the canvas. The buttons at the right of the tabs show the tools as a grid of tiles (default) or as a list; the choice is remembered.",
+        } },
+      { type: "subheading", text: { km: "", en: "Tools (32)" } },
       { type: "table", head: [{ km: "", en: "Category" }, { km: "", en: "Tools" }], rows: [
         [{ km: "", en: "**Alignment**" }, { km: "", en: "Move, Rotate, Scale, Move To" }],
-        [{ km: "", en: "**Reshape**" }, { km: "", en: "Edit Vertices, Reshape, Replace Geometry, Extend or Trim, Fillet, Generalize, Line Intersection, Reverse Direction, Change Line Length" }],
+        [{ km: "", en: "**Reshape**" }, {
+            km: "",
+            en: "Edit Vertices, Reshape, Replace Geometry, Extend or Trim, Fillet, Generalize, Line Intersection, Reverse Direction, Change Line Length",
+          }],
         [{ km: "", en: "**Divide**" }, { km: "", en: "Split, Divide, Clip, Explode, Planarize" }],
-        [{ km: "", en: "**Construct**" }, { km: "", en: "Merge, Buffer, Copy Parallel, Construct Polygons, Offset, Points On Line, Points On Polygon Boundary, Copy Paste" }],
+        [{ km: "", en: "**Construct**" }, {
+            km: "",
+            en: "Merge, Buffer, Copy Parallel, Construct Polygons, Offset, Points On Line, Points On Polygon Boundary, Copy Paste",
+          }],
         [{ km: "", en: "**Attributes**" }, { km: "", en: "Sequential Numbering, Transfer Attributes" }],
         [{ km: "", en: "**COGO**" }, { km: "", en: "Traverse, Update COGO, Cul-de-sac, Split Into COGO Lines" }],
       ] },
-      { type: "paragraph", text: { km: "", en: "Divide, Clip, Planarize, Merge, Buffer, Copy Parallel, Construct Polygons, Sequential Numbering and Split Into COGO Lines are the KGA tools of the same names, opened inside the pane." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Divide, Clip, Planarize, Merge, Buffer, Copy Parallel, Construct Polygons, Sequential Numbering and Split Into COGO Lines are the KGA tools of the same names, opened inside the pane.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Tool reference:** one page for each tool is in [modify feature](modify_features.md).",
+        } },
     ],
     parameters: [],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Turn **Edit Session** On, then press **Modify Features** on the KGA Editor toolbar." },
-        { km: "", en: "Find a tool by category or by the search box, and click its tile." },
-        { km: "", en: "Select features if the page asks you to. A banner reads **Change the selection.**; click it to pick features again, and the list below shows what is selected." },
-        { km: "", en: "Set the options and press the tool's button — **Move To**, say — or draw on the map." },
-        { km: "", en: "Press the back arrow to return to the tile list." },
-      ] },
-      { type: "paragraph", text: { km: "", en: "**Favorites.** Right-click a tile ▸ *Add to favorites* and the tool gets a button on the KGA Editor toolbar. Drag a favorite to reorder. The list is kept in your QGIS settings, so it is the same in every project." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Turn **Edit Session** On, then press **Modify Features** on the KGA Editor toolbar. 2. Find a tool by category or by the search box, and click its tile. 3. Select features if the page asks you to. A banner reads **Change the selection.**; click it to pick features again, and the list below shows what is selected. 4. Set the options and press the tool's button (for example **Move To**), or draw on the map. 5. Press the back arrow to return to the tile list.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Favorites.** Right-click a tile > *Add to favorites* and the tool gets a button on the KGA Editor toolbar; right-click that button > *Remove from favorites*. Drag a favorite to reorder. The list is kept in your QGIS settings, so it is the same in every project.",
+        } },
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Edits go to the edit buffer; **nothing is saved until you press Save on the toolbar.**" },
-        { km: "", en: "Move, Rotate and Scale: a plain click selects a feature, a drag anywhere transforms the selection. Move To takes absolute, delta, or direction-and-distance values; a map click only fills them in." },
-        { km: "", en: "Edit Vertices lists the vertices of the selected feature in the map CRS and lets you type new X and Y." },
-        { km: "", en: "Distances and areas on a layer in degrees are worked in the matching UTM zone." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Edits go to the edit buffer; nothing is saved until you press Save on the toolbar. * Move, Rotate and Scale: a plain click selects a feature, a drag anywhere transforms the selection. Move To takes absolute, delta, or direction-and-distance values; a map click only fills them in. * Edit Vertices lists the vertices of the selected feature in the map CRS and lets you type new X and Y. * Distances and areas on a layer in degrees are worked in the matching UTM zone.",
+        } },
     ],
     seeAlso: ["create_features", "open_feature_attribute", "merge_features", "divide_features"],
   },
@@ -6554,17 +6970,34 @@ export const tools = [
                km: "បង្កើតចំណុចតាមបណ្តោយបន្ទាត់ដែលបានជ្រើស ឬគូរ៖ ចំនួនចំណុច ចម្ងាយស្មើគ្នា ឬតារាងចម្ងាយ។",
                en: "Constructs points along a selected or drawn line: a number of points, an equal distance, or a table of distances, laid out like the Create Points Along Line pane of ArcGIS Pro.",
              },
-    body: [],
+    body: [
+      { type: "paragraph", text: {
+          km: "",
+          en: "Constructs points along a line - a number of points, a point every distance, or a table of distances - and puts them in a point layer you choose, laid out like the Create Points Along Line pane of ArcGIS Pro.",
+        } },
+    ],
     parameters: [
       {
         title: null,
         nameLabel: "Option",
         blocks: [],
         rows: [
-          { name: "**Number of Points**", type: "", default: "", description: { km: "", en: "That many points, spaced equally between the two ends of the line (the ends are not counted; use the Additional Points for them)." } },
-          { name: "**Equal Distance**", type: "", default: "", description: { km: "", en: "A point every *Distance* from the Orientation end, as many as fit on the line. A point exactly at the far end counts." } },
-          { name: "**Distances**", type: "", default: "", description: { km: "", en: "The table: each row is a *Distance* and a *Number of Points* - that many points, that far apart, one row after the other from the Orientation end. **Remaining Length** is what is left of the line (red when the rows run past its end)." } },
-          { name: "**Orientation**", type: "", default: "", description: { km: "", en: "From Start or From End: which end the distances are counted from. The arrows on the line show its direction." } },
+          { name: "**Number of Points**", type: "", default: "", description: {
+            km: "",
+            en: "That many points, spaced equally between the two ends of the line (the ends are not counted; use the Additional Points for them).",
+          } },
+          { name: "**Equal Distance**", type: "", default: "", description: {
+            km: "",
+            en: "A point every *Distance from the **Orientation* end, as many as fit on the line. A point exactly at the far end counts.",
+          } },
+          { name: "**Distances**", type: "", default: "", description: {
+            km: "",
+            en: "The table: each row is a *Distance and a *Number of Points - that many points, that far apart, one row after the other from the **Orientation* end. **Remaining Length* is what is left of the line (red when the rows run past its end). Click **Click to add new row.* to add a row.",
+          } },
+          { name: "**Orientation**", type: "", default: "", description: {
+            km: "",
+            en: "**From Start* or **From End**: which end the distances are counted from (Equal Distance and Distances). The arrows on the line show its direction.",
+          } },
           { name: "**Additional Points**", type: "", default: "", description: { km: "", en: "Also a point at the start and / or at the end of the line." } },
           { name: "**Unit**", type: "", default: "", description: { km: "", en: "The unit of Line Length and of the distances you type (m, km, ft, yd, mi)." } },
         ],
@@ -6573,21 +7006,42 @@ export const tools = [
     outputs: [],
     usage: [
       { type: "steps", items: [
-        { km: "", en: "Choose the line: **Select Line** (the first selected line feature; click or drag on the map) or **Draw Line** (click the points of a path; right-click, double-click or Enter finishes it)." },
+        {
+          km: "",
+          en: "Choose the line: **Select Line** (the first selected line feature; click or drag on the map, or use **Change the selection.**) or **Draw Line** (click the points of a path on the map; right-click, double-click or Enter finishes it).",
+        },
         { km: "", en: "Choose the **Target point layer** (an editable point layer)." },
-        { km: "", en: "Choose the unit and one of the three tabs, and fill it in. **Line Length** shows the length of the line." },
-        { km: "", en: "Tick **At start of line** and / or **At end of line** for extra points at the ends." },
+        {
+          km: "",
+          en: "Choose the unit, then one of the three tabs and fill it in. **Line Length** shows the length of the line.",
+        },
+        {
+          km: "",
+          en: "Tick **At start of line** and / or **At end of line** for extra points at the ends.",
+        },
         { km: "", en: "Tick **Show Preview** to see the points on the map, then press **Create**." },
       ] },
     ],
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "Draw Line: Backspace removes the last point, Esc starts again, and a click after the path is finished starts a new one." },
-        { km: "", en: "Lengths and distances are measured on the ground when the project has an ellipsoid (what `$length` reports), else flat in the map's units. A line with true curves is measured flat." },
+        {
+          km: "",
+          en: "**Draw Line:** Backspace removes the last point, Esc starts again, and a click after the path is finished starts a new one.",
+        },
+        {
+          km: "",
+          en: "Lengths and distances are measured on the ground when the project has an ellipsoid (what `$length` reports), else flat in the map's units. A line with true curves is measured flat.",
+        },
         { km: "", en: "A multi-part line uses its first part." },
-        { km: "", en: "The new points take the target layer's default attribute values and are selected afterwards." },
-        { km: "", en: "One undoable edit. Needs **Edit Session** On; only editable layers shown on the map are changed." },
+        {
+          km: "",
+          en: "The new points take the target layer's default attribute values and are selected afterwards.",
+        },
+        {
+          km: "",
+          en: "One undoable edit. Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
       ] },
     ],
     seeAlso: ["modify_offset"],
@@ -6609,20 +7063,36 @@ export const tools = [
                km: "បង្កើតចំណុចនៅលើព្រំប្រទល់ប៉ូលីហ្គោនដែលបានជ្រើស៖ ចំនួនចំណុច ចម្ងាយស្មើគ្នា ឬតារាងចម្ងាយ ពីចំណុចចាប់ផ្តើម។",
                en: "Constructs points on the boundary of a selected polygon - not at its vertices: a number all the way round, an equal distance or a table of distances from a starting point.",
              },
-    body: [],
+    body: [
+      { type: "paragraph", text: {
+          km: "",
+          en: "Constructs points ON the boundary of a polygon - not at its vertices - a number of points all the way round, a point every distance, or a table of distances from a starting point, and puts them in a point layer you choose. The sister of [Points On Line](modify_points_along_line.md).",
+        } },
+    ],
     parameters: [
       {
         title: null,
         nameLabel: "Option",
         blocks: [],
         rows: [
-          { name: "**Number of Points**", type: "", default: "", description: { km: "", en: "That many points spaced equally all the way round the boundary. No starting point is needed: the first point is at the starting point if you picked one, else at the polygon's first vertex." } },
-          { name: "**Equal Distance**", type: "", default: "", description: { km: "", en: "A point every *Distance* from the starting point, going round the chosen way." } },
-          { name: "**Distances**", type: "", default: "", description: { km: "", en: "The table: each row is a *Distance* and a *Number of Points* - that many points, that far apart, one row after the other from the starting point. **Remaining Length** is what is left of the boundary (red when the rows run past it)." } },
-          { name: "**Starting point**", type: "", default: "", description: { km: "", en: "Click one of the polygon's vertices, or any point of its edge. Needed for Equal Distance and Distances; optional for Number of Points. **Clear Start** forgets it." } },
-          { name: "**Direction**", type: "", default: "", description: { km: "", en: "Clockwise or Counter-clockwise: which way round the boundary the distances are counted. Blue arrows on the boundary show it." } },
-          { name: "**Add a point at the starting point**", type: "", default: "", description: { km: "", en: "Also a point on the starting point itself (Equal Distance and Distances; with Number of Points the first point is always there)." } },
-          { name: "**Unit**", type: "", default: "", description: { km: "", en: "The unit of Boundary Length and of the distances you type (m, km, ft, yd, mi)." } },
+          { name: "**Number of Points**", type: "", default: "", description: {
+            km: "",
+            en: "That many points spaced equally all the way round the boundary. No starting point is needed: the first point is at the starting point if you picked one, else at the polygon's first vertex.",
+          } },
+          { name: "**Equal Distance**", type: "", default: "", description: { km: "", en: "A point every *Distance from the starting point, going round the chosen way." } },
+          { name: "**Distances**", type: "", default: "", description: {
+            km: "",
+            en: "The table: each row is a *Distance and a *Number of Points - that many points, that far apart, one row after the other from the starting point. **Remaining Length* is what is left of the boundary (red when the rows run past it). Click **Click to add new row.* to add a row.",
+          } },
+          { name: "**Add a point at the starting point**", type: "", default: "", description: {
+            km: "",
+            en: "Also a point on the starting point itself (Equal Distance and Distances; with Number of Points the first point is always there).",
+          } },
+          { name: "**Clear Start**", type: "", default: "", description: { km: "", en: "Forgets the starting point." } },
+          { name: "**Unit**", type: "", default: "", description: {
+            km: "",
+            en: "The unit of Boundary Length and of the distances you type (m, km, ft, yd, mi).",
+          } },
         ],
       },
     ],
@@ -6631,20 +7101,48 @@ export const tools = [
       { type: "steps", items: [
         { km: "", en: "Select a polygon (**Change the selection.**: click or drag on the map)." },
         { km: "", en: "Choose the **Target point layer** (an editable point layer) and the unit." },
-        { km: "", en: "Choose one of the three tabs and fill it in. **Boundary Length** shows the length of the outer boundary." },
-        { km: "", en: "For Equal Distance and Distances, click a vertex or any point of the polygon's edge to set the starting point (the green square). Choose the **Direction**." },
+        {
+          km: "",
+          en: "Choose one of the three tabs and fill it in. **Boundary Length** shows the length of the polygon's outer boundary.",
+        },
+        {
+          km: "",
+          en: "For **Equal Distance** and **Distances**, set the starting point: click one of the polygon's vertices, or any point of its edge. The green square marks it. (For **Number of Points** it is optional.)",
+        },
+        {
+          km: "",
+          en: "Choose the **Direction** - **Clockwise** or **Counter-clockwise** - which way round the boundary the distances are counted. Blue arrows on the boundary show it.",
+        },
         { km: "", en: "Tick **Show Preview** to see the points on the map, then press **Create**." },
       ] },
     ],
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "**Snapping the starting point:** while you hover the selected polygon a magenta mark shows what a click would pick - a square on a vertex, a double triangle on the middle of an edge, an X on the edge itself. This works whether or not the project's snapping is on." },
-        { km: "", en: "Only the **outer boundary** is used. Holes are ignored (the first part of a multi-part polygon)." },
-        { km: "", en: "A point that would land back on the starting point after the full circle is not made twice." },
-        { km: "", en: "Lengths and distances are measured on the ground when the project has an ellipsoid (what `$length` reports), else flat in the map's units." },
-        { km: "", en: "The new points take the target layer's default attribute values and are selected afterwards." },
-        { km: "", en: "One undoable edit. Needs **Edit Session** On; only editable layers shown on the map are changed." },
+        {
+          km: "",
+          en: "**Snapping the starting point:** while you hover the selected polygon a magenta mark shows what a click would pick - a square on a vertex, a double triangle on the middle of an edge, an X on the edge itself. This works whether or not the project's snapping is on, and only the selected polygon is snapped to.",
+        },
+        {
+          km: "",
+          en: "Only the **outer boundary** is used. Holes in the polygon are ignored (the first part of a multi-part polygon).",
+        },
+        {
+          km: "",
+          en: "A point that would land back on the starting point after the full circle is not made twice.",
+        },
+        {
+          km: "",
+          en: "Lengths and distances are measured on the ground when the project has an ellipsoid (what `$length` reports), else flat in the map's units.",
+        },
+        {
+          km: "",
+          en: "The new points take the target layer's default attribute values and are selected afterwards.",
+        },
+        {
+          km: "",
+          en: "One undoable edit. Needs **Edit Session** On; only editable layers shown on the map are changed.",
+        },
       ] },
     ],
     seeAlso: ["modify_points_along_line"],
@@ -7166,41 +7664,49 @@ export const tools = [
       en: "Labels the active layer with one click, with font, size, colour and placement in a small right-click window.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "The button is a **switch for the layer's labels, whoever set them**: it is pressed whenever the active layer shows labels \u2014 from this button, Layer Properties \u25b8 Labels, the Layer Styling panel or **[Callout Label Studio](callout_label_studio.md)** \u2014 and follows them when they are switched on or off there." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Labels the active layer with one click. The button is a switch for the layer's labels, whoever set them: it is pressed whenever the active layer shows labels (from this button, Layer Properties > Labels, the Layer Styling panel or Callout Label Studio) and follows them when they are switched on or off there.",
+        } },
     ],
-    parameters: [
-      {
-        title: null,
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Field", type: "", default: "", description: { km: "", en: "The label field, or the expression button to write an expression." } },
-          { name: "Font, Style, Size, Colour", type: "", default: "Regular", description: { km: "", en: "Font family, style, size in points and colour." } },
-          { name: "Halo", type: "", default: "off", description: { km: "", en: "Tick the box, then choose the halo size and colour. White, 1 pt by default." } },
-          { name: "Position", type: "", default: "", description: { km: "", en: "Choices follow the geometry. Points: Around point, Above, Below, Left, Right, Over point, Cartographic. Lines: Parallel, Above line, Below line, On line, Curved, Horizontal. Polygons: Around centroid, Over centroid, Horizontal, Free (angled), Along perimeter, Outside polygon. **The last choice is remembered separately for points, lines and polygons.**" } },
-          { name: "Offset", type: "", default: "", description: { km: "", en: "Pushes the label away from the feature, in points. Greyed out for positions with nothing to offset." } },
-          { name: "Offset X / Y", type: "", default: "", description: { km: "", en: "Point layers only. Shifts a label placed Above, Below, Left, Right or Over the point, added to Offset." } },
-          { name: "Round to 2 decimals, Add 'm', Add 'm\u00b2'", type: "", default: "", description: { km: "", en: "Shown when the field is numeric. The label expression is written into the Field box for you. An empty value shows no label, not a lone unit. Editing the expression yourself unticks the boxes and keeps your expression." } },
-        ],
-      },
-    ],
+    parameters: [],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Select a layer in the Layers panel and click **Quick Labeling**. The layer is labelled with a random field \u2014 a text field when there is one \u2014 in the font, size and colour you used last." },
-        { km: "", en: "**Right-click** the button, only while a quick label is on, to open the small window. Every change applies as you make it; there is no OK button." },
-        { km: "", en: "Click the pressed button again to turn the labels off." },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Select a layer in the Layers panel and click **Quick Labeling**. The layer is labelled with a random field (a text field when there is one), in the font, size and colour you used last. 2. **Right-click** the button, only while a quick label is on, to open the small window. Every change applies to the layer as you make it; there is no OK button. 3. Click the pressed button again to turn the labels off.",
+        } },
+      { type: "table", head: [{ km: "", en: "Setting" }, { km: "", en: "What it does" }], rows: [
+        [{ km: "", en: "**Field**" }, { km: "", en: "The label field, or the expression button to write an expression." }],
+        [{ km: "", en: "**Font, Style, Size, Colour**" }, { km: "", en: "Font family, style (default Regular), size in points and colour." }],
+        [{ km: "", en: "**Halo**" }, {
+            km: "",
+            en: "Tick the box, then choose the halo size and colour. White, 1 pt by default; off until ticked.",
+          }],
+        [{ km: "", en: "**Position**" }, {
+            km: "",
+            en: "Choices follow the geometry. Points: Around point, Above, Below, Left, Right, Over point, Cartographic. Lines: Parallel, Above line, Below line, On line, Curved, Horizontal. Polygons: Around centroid, Over centroid, Horizontal, Free (angled), Along perimeter, Outside polygon. The last choice is remembered separately for points, lines and polygons.",
+          }],
+        [{ km: "", en: "**Offset**" }, {
+            km: "",
+            en: "Pushes the label away from the feature, in points. Greyed out for positions with nothing to offset (Over point, On line, Horizontal, Free, Over centroid).",
+          }],
+        [{ km: "", en: "**Offset X / Y**" }, {
+            km: "",
+            en: "Point layers only (points; X right, Y up). Shifts a label placed Above, Below, Left, Right or Over the point, added to Offset. Greyed out for Around point and Cartographic.",
+          }],
+        [{ km: "", en: "**Round to 2 decimals, Add 'm' (length), Add 'm²' (area)**" }, {
+            km: "",
+            en: "Shown when the field is numeric ('m' and 'm²' exclude each other). The label expression is written into the Field box for you, for example `round(\"Shape_Area\",2)\\|\\|'m'\\|\\|char(178)`. An empty value shows no label, not a lone unit. Editing the expression yourself unticks the boxes and keeps your expression.",
+          }],
       ] },
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Turning off gives back the labels the layer had before.** Labels from Layer Properties or Callout Label Studio are only switched off; their settings stay on the layer." },
-        { km: "", en: "Each layer keeps its own state; the window follows you to the next layer that has a quick label." },
-        { km: "", en: "A quick label is an ordinary single-label setting, so Layer Properties \u25b8 Labels shows and refines it. A layer saved in a project reopens with the button pressed." },
-        { km: "", en: "Layers without attributes (tables, rasters) cannot be labelled; the button is greyed out for them." },
-        { km: "", en: "The superscript 2 is `char(178)`. **Use a Unicode font** \u2014 a legacy-encoded Khmer font such as Khmer MEF1 draws a stray letter for that character." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Turning off.** A quick label gives back the labels the layer had before. Labels from Layer Properties or Callout Label Studio are only switched off; their settings stay on the layer. An open Callout Label Studio panel is told it was done on purpose and does not put them back. * Each layer keeps its own state; the window follows you to the next layer that has a quick label. * A quick label is an ordinary single-label setting, so Layer Properties > Labels shows and refines it. A layer saved in a project reopens with the button pressed. * Layers without attributes (tables, rasters) cannot be labelled; the button is greyed out for them. * The superscript 2 is `char(178)`. Use a Unicode font: a legacy-encoded Khmer font such as Khmer MEF1 draws a stray letter for that character.",
+        } },
     ],
     seeAlso: ["quick_symbology", "callout_label_studio", "open_feature_attribute"],
   },
@@ -7220,41 +7726,46 @@ export const tools = [
       en: "Restyles the selected layer in a small window: one symbol, one colour per value of a field, or just one class.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Changes apply as you make them; there is no OK button. Click the button again to close the window, which follows the active layer." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Restyles the layer selected in the Layers panel in a small window: one symbol, one colour per value of a field, or just one class of a unique-value layer. Changes apply as you make them; there is no OK button. Click the button again to close the window, which follows the active layer.",
+        } },
     ],
-    parameters: [
-      {
-        title: null,
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Fill Color, Outline Color, Outline width", type: "", default: "", description: { km: "", en: "For a plain layer, with a **Preview**. Line layers show just Color and Width." } },
-          { name: "Unique Value symbol", type: "", default: "off", description: { km: "", en: "Turn on for one class per value of a field." } },
-          { name: "Field", type: "", default: "", description: { km: "", en: "The field to classify, or the expression button." } },
-          { name: "Color Scheme", type: "", default: "", description: { km: "", en: "The colour ramp the classes take their colours from." } },
-          { name: "Classes", type: "", default: "", description: { km: "", en: "Class, Value and Label. Double-click a label to rename it, or a swatch to edit that class's symbol." } },
-          { name: "+ (green)", type: "", default: "", description: { km: "", en: "Opens *Select values to add*: the values that are not classes yet, each with the colour it would get. **Options** selects all, clears the selection or adds every value." } },
-          { name: "Down / up arrows", type: "", default: "", description: { km: "", en: "Move the selected classes. **All other values** is always last and cannot be moved or removed." } },
-          { name: "Drop shadow", type: "", default: "", description: { km: "", en: "A soft shadow under the whole layer's shapes. Kept when you switch between single symbol and unique values; an existing drop shadow keeps its settings." } },
-        ],
-      },
-    ],
+    parameters: [],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Select a layer and click **Quick Symbology** (palette icon)." },
-        { km: "", en: "Set the fill, outline and width for a plain layer, watching the preview." },
-        { km: "", en: "Turn on **Unique Value symbol** for one class per value of a field, then pick the field and the colour scheme." },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Select a layer and click **Quick Symbology** (palette icon). 2. For a plain layer the window shows **Fill Color**, **Outline Color**, **Outline width** (points) and a **Preview**. Line layers show just Color and Width. 3. Turn on **Unique Value symbol** for one class per value of a field.",
+        } },
+      { type: "table", head: [{ km: "", en: "Part" }, { km: "", en: "What it does" }], rows: [
+        [{ km: "", en: "**Field**" }, { km: "", en: "The field to classify, or the expression button." }],
+        [{ km: "", en: "**Color Scheme**" }, { km: "", en: "The colour ramp the classes take their colours from." }],
+        [{ km: "", en: "**Classes**" }, {
+            km: "",
+            en: "Class, Value and Label. Double-click a label to rename it, or a swatch to edit that class's symbol.",
+          }],
+        [{ km: "", en: "**+ (green)**" }, {
+            km: "",
+            en: "Opens *Select values to add*: the values that are not classes yet, each with the colour it would get. Pick some (Ctrl or Shift for several) and press **Add**. **Options* selects all, clears the selection or adds every value.",
+          }],
+        [{ km: "", en: "**Down / up arrows**" }, {
+            km: "",
+            en: "Move the selected classes. **All other values* is always last and cannot be moved or removed.",
+          }],
+        [{ km: "", en: "**Delete**" }, { km: "", en: "Removes the selected classes (also in the right-click menu)." }],
+        [{ km: "", en: "**Drop shadow**" }, {
+            km: "",
+            en: "A soft shadow under the whole layer's shapes, as in Layer Properties > Symbology > Draw effects. Kept when you switch between single symbol and unique values. An existing drop shadow keeps its settings.",
+          }],
       ] },
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Select one class of a unique-value layer in the Layers panel and the button opens **straight on that class's symbol**; the back arrow returns to the class list." },
-        { km: "", en: "Switching *Unique Value symbol* off gives back the single symbol the layer had." },
-        { km: "", en: "**Up to 100 classes are made automatically**; if the field has more values, add the rest with **+**." },
-        { km: "", en: "A layer with another renderer (graduated, rule-based \u2026) is left alone until you turn Unique Value symbol on or press **Use a single symbol**. Symbols built from layers other than simple fill, marker or line only take a fill colour here." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Select one class of a unique-value layer in the Layers panel and the button opens straight on that class's symbol; the back arrow returns to the class list. * Switching **Unique Value symbol** off gives back the single symbol the layer had. * Up to 100 classes are made automatically; if the field has more values, add the rest with **+**. * A layer with another renderer (graduated, rule-based...) is left alone until you turn Unique Value symbol on or press **Use a single symbol**. Symbols built from layers other than simple fill, marker or line only take a fill colour here; use Layer Properties for the rest.",
+        } },
     ],
     seeAlso: ["quick_labeling", "kga_layer_symbol"],
   },
@@ -7274,8 +7785,14 @@ export const tools = [
       en: "Orders the Layers panel by data type — points, lines, polygons, rasters, web basemaps last — in the background.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "ArcGIS Pro keeps its table of contents tidy by data type, so nothing is hidden under a basemap. Layer Auto-Sort does the same for the QGIS Layers panel. **Each new layer is placed at the top of its own type band as it is added**, so a basemap or other web raster added later lands at the bottom instead of on top. What is already there can be sorted on demand." } },
-      { type: "paragraph", text: { km: "", en: "Default order, top to bottom: annotation layers, tables (no geometry), points, lines, polygons, vector layers of unknown geometry, vector tiles, point clouds, 3D tiles, mesh layers, local rasters (DEM, orthophoto, imagery), and last web rasters and basemaps (WMS, WMTS, XYZ, WCS, ArcGIS)." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "ArcGIS Pro keeps its table of contents tidy by data type: points on top, then lines, polygons, and rasters at the bottom, so nothing is hidden under a basemap. Layer Auto-Sort does the same for the QGIS Layers panel, in the background. Each new layer is placed at the top of its own type band as it is added, so a basemap or other web raster added later lands at the bottom instead of on top. What is already there can be sorted on demand.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Default order, top to bottom: annotation layers, tables (no geometry), points, lines, polygons, vector layers of unknown geometry, vector tiles, point clouds, 3D tiles, mesh layers, local rasters (DEM, orthophoto, imagery), and last web rasters and basemaps (WMS, WMTS, XYZ, WCS, ArcGIS).",
+        } },
     ],
     parameters: [
       {
@@ -7283,34 +7800,41 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Sort Layers by Type", type: "Menu command", default: "—", description: { km: "", en: "KGA Toolbox ▸ Layer Auto-Sort, and the Layers panel right-click menu. Sorts every group and the top level." } },
-          { name: "Sort Group by Type", type: "Menu command", default: "—", description: { km: "", en: "Layers panel right-click menu on a group. Sorts only that group and the groups inside it." } },
-          { name: "Auto-sort New Layers", type: "Switch", default: "On", description: { km: "", en: "While On, a layer you add goes to the top of its type band inside the group it was added to." } },
-          { name: "Order list", type: "Drag list", default: "see above", description: { km: "", en: "Drag the types up or down; the top of the list is the top of the Layers panel. **Restore Defaults** resets it." } },
-          { name: "Also sort the Layer Order panel", type: "Boolean", default: "On", description: { km: "", en: "Applies the same order to the Layer Order panel when *Control rendering order* is on." } },
+          { name: "**Sort Layers by Type**", type: "", default: "", description: {
+            km: "",
+            en: "KGA Toolbox > Layer Auto-Sort and the Layers panel right-click menu (no toolbar button). Sorts every group and the top level.",
+          } },
+          { name: "**Sort Group by Type**", type: "", default: "", description: {
+            km: "",
+            en: "Layers panel right-click menu on a group. Sorts only that group and the groups inside it.",
+          } },
+          { name: "**Auto-sort New Layers**", type: "", default: "", description: {
+            km: "",
+            en: "Switch (KGA Toolbox > Layer Auto-Sort). While On (the default), a layer you add goes to the top of its type band inside the group it was added to.",
+          } },
+          { name: "**Layer Sort Settings**", type: "", default: "", description: { km: "", en: "Opens the settings window." } },
+          { name: "**Order list**", type: "", default: "", description: {
+            km: "",
+            en: "Drag the types up or down; the top of the list is the top of the Layers panel (drawn on top). Restore Defaults resets it.",
+          } },
+          { name: "**Automatically place new layers when they are added**", type: "", default: "", description: { km: "", en: "The same switch as Auto-sort New Layers." } },
+          { name: "**Also sort the Layer Order panel when 'Control rendering order' is on**", type: "", default: "", description: { km: "", en: "Applies the same order to the Layer Order panel. On by default." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Nothing to do for new layers: they are placed as they are added." },
-        { km: "", en: "To tidy what is already there, choose **Sort Layers by Type** from the Layers panel right-click menu or the Layer Auto-Sort submenu." },
-        { km: "", en: "To stop the automatic placement, untick **Auto-sort New Layers**." },
-        { km: "", en: "To use a different order, open **Layer Sort Settings**, drag the types, and press OK." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Nothing to do for new layers: they are placed as they are added. To tidy what is already there, choose **Sort Layers by Type** from the Layers panel right-click menu or the Layer Auto-Sort submenu. The Layers panel is reordered and a message says whether anything moved. 2. To stop the automatic placement, untick **Auto-sort New Layers** in the Layer Auto-Sort submenu. 3. To use a different order, open **Layer Sort Settings**, drag the types, and press OK.",
+        } },
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Sorting is **stable**: layers of the same type keep the order they already had. Groups keep their position; only the layers around them are arranged." },
-        { km: "", en: "**A saved project is never reordered when it opens.** Only layers added afterwards are placed." },
-        { km: "", en: "Every way of adding a layer is covered — Browser and Catalog, Add Data, Processing results, other plugins. Moving a layer yourself is never undone, and opening a layer package keeps the order recorded in the package." },
-        { km: "", en: "Moving a layer never removes it from the project. Visibility, expansion and properties are kept, and the selected layer stays selected." },
-        { km: "", en: "When several layers are added at once (a multi-file drop), the layers of one type may end up in reverse of the order they were added in." },
-        { km: "", en: "The order and the switches are stored in the QGIS user profile, **not in the project**." },
-        { km: "", en: "If the stand-alone plugin \"Layer Auto-Sort\" (`layer_autosort`) is installed, KGA Toolbox leaves its own copy out and says so, so layers are not sorted twice." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Sorting is stable: layers of the same type keep the order they already had. Groups keep their position; only the layers around them are arranged. * A saved project is never reordered when it opens. Only layers added afterwards are placed. * Every way of adding a layer is covered: the Browser and Catalog, Add Data, Processing results and other plugins. Moving a layer yourself (drag and drop in the Layers panel) is never undone, and opening a layer package keeps the order recorded in the package. * Moving a layer never removes it from the project. Its visibility, expansion and properties are kept, and the selected layer stays selected. * When several layers are added at once (a multi-file drop), the layers of one type may end up in reverse of the order they were added in. * Sorting changes only the Layers panel and, if the option is on, the Layer Order panel. The data and the styles are not touched. * The order and the switches are stored in the QGIS user profile, not in the project. * If the stand-alone plugin \"Layer Auto-Sort\" (`layer_autosort`) is installed, KGA Toolbox leaves its own copy out and says so, so that layers are not sorted twice.",
+        } },
     ],
     seeAlso: ["kga_settings", "catalog_and_workspaces"],
   },
@@ -7330,33 +7854,57 @@ export const tools = [
       en: "ArcGIS Pro's Catalog for QGIS, keeping a project's data together in one workspace folder.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "It replaces the Browser panel — switched off the first time, and you can switch it back on whenever you like — and keeps a project's data together in one **workspace** folder." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "ArcGIS Pro's Catalog for QGIS. It replaces the Browser panel (switched off the first time; switch it back on whenever you like) and keeps a project's data together in one **workspace** folder.",
+        } },
       { type: "subheading", text: { km: "", en: "Catalog tabs" } },
-      { type: "list", items: [
-        { km: "", en: "**Project** — Maps, Toolboxes, Databases, Layouts and Folders of the open project." },
-        { km: "", en: "**Connections** — GeoPackage, PostgreSQL, WMS, XYZ Tiles, ArcGIS REST and the other QGIS connections." },
-        { km: "", en: "**Computer** — Home, This PC, Network." },
-        { km: "", en: "**Favorites** — items you pinned." },
+      { type: "table", head: [{ km: "", en: "Tab" }, { km: "", en: "Holds" }], rows: [
+        [{ km: "", en: "**Project**" }, { km: "", en: "Maps, Toolboxes, Databases, Layouts and Folders of the open project" }],
+        [{ km: "", en: "**Connections**" }, {
+            km: "",
+            en: "GeoPackage, PostgreSQL, WMS, XYZ Tiles, ArcGIS REST and the other QGIS connections",
+          }],
+        [{ km: "", en: "**Computer**" }, { km: "", en: "Home, This PC, Network" }],
+        [{ km: "", en: "**Favorites**" }, { km: "", en: "Items you pinned" }],
       ] },
-      { type: "paragraph", text: { km: "", en: "Every item is a real QGIS Browser item: drag layers onto the map, double-click to add, and use QGIS's own right-click menus plus KGA's Add to Map, Copy and Paste." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Every item is a real QGIS Browser item: drag layers onto the map, double-click to add, and use QGIS's own right-click menus plus KGA's Add to Map, Copy and Paste.",
+        } },
       { type: "subheading", text: { km: "", en: "Workspace" } },
-      { type: "paragraph", text: { km: "", en: "A workspace is a folder holding `<Name>.qgz`, `Default.gpkg`, a `Toolbox` folder and a `Layouts` folder." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A workspace is a folder holding `<Name>.qgz`, `Default.gpkg`, a `Toolbox` folder and a `Layouts` folder.",
+        } },
+      { type: "table", head: [{ km: "", en: "Command" }, { km: "", en: "What it does" }], rows: [
+        [{ km: "", en: "**Project > Set Workspace**" }, {
+            km: "",
+            en: "Pick a folder and a name; creates the workspace for the open project. Untitled work is moved in",
+          }],
+        [{ km: "", en: "**Project > Open Workspace**" }, { km: "", en: "Open an existing workspace" }],
+        [{ km: "", en: "**Make Default* (right-click a database or folder)" }, { km: "", en: "Sets where tool output goes" }],
+        [{ km: "", en: "**Folders > Attach Folder* / **Databases > Attach Database**" }, {
+            km: "",
+            en: "Attach any folder or database to the project; **Remove from Project* detaches it",
+          }],
+      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Toolbox:** scripts placed there are read as QGIS script tools and listed under Toolboxes. * **Layouts and Maps:** the project's print layouts and maps are listed as shortcuts (`.kgalayout`, `.kgamap`); double-click to open one. * **Untitled:** a project that has no workspace yet works in a scratch folder (`Documents\\KGA Toolbox Project\\_scratch`). **Set Workspace** moves its data into the new workspace. At start-up, unsaved scratch data from an earlier session is offered back with Recover or Discard, and scratch folders older than 7 days are removed. Only the data comes back, not the unsaved map layout.",
+        } },
       { type: "subheading", text: { km: "", en: "Output goes to the project" } },
-      { type: "paragraph", text: { km: "", en: "Like Pro's default geodatabase, every tool's output starts in the project: layers in a new table of the default database, files and folders in the default folder. Names are `<Tool>_<Input>`, never reuse an existing table or file, and follow the input layer. **This covers QGIS's Processing tools as well as KGA's.** Change any field and your choice is kept. Turn it off in Settings ▸ Projects." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Like Pro's default geodatabase, every tool's output starts in the project: layers in a new table of the default database, files and folders in the default folder. Names are `<Tool>_<Input>`, never reuse an existing table or file, and follow the input layer. This covers QGIS's Processing tools as well as KGA's. Change any field and your choice is kept. Turn it off in **Settings > Projects**.",
+        } },
+      { type: "subheading", text: { km: "", en: "Saving" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Save** and **Save As** ask whether to save as a workspace or as a traditional `.qgz` when the project is new or not in a workspace yet. Settings > Catalog can make the answer fixed. A project that already has a file is simply saved.",
+        } },
     ],
-    parameters: [
-      {
-        title: { km: "", en: "Workspace commands" },
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Project ▸ Set Workspace", type: "Menu command", default: "—", description: { km: "", en: "Pick a folder and a name; creates the workspace for the open project. Untitled work is moved in." } },
-          { name: "Project ▸ Open Workspace", type: "Menu command", default: "—", description: { km: "", en: "Open an existing workspace." } },
-          { name: "Make Default", type: "Right-click", default: "—", description: { km: "", en: "On a database or folder: sets where tool output goes." } },
-          { name: "Attach Folder / Attach Database", type: "Right-click", default: "—", description: { km: "", en: "Attach any folder or database to the project; **Remove from Project** detaches it." } },
-        ],
-      },
-    ],
+    parameters: [],
     outputs: [],
     usage: [
       { type: "list", items: [
@@ -7369,8 +7917,14 @@ export const tools = [
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "Closing or opening another project through QGIS's own prompts still saves a plain `.qgz`." },
-        { km: "", en: "Converting an existing `.qgz` and sharing a workspace are in **[Project Packages](project_packages.md)**." },
+        {
+          km: "",
+          en: "Closing or opening another project through QGIS's own prompts still saves a plain `.qgz`.",
+        },
+        {
+          km: "",
+          en: "Converting an existing `.qgz` and sharing a workspace are in [Project Packages](project_packages.md).",
+        },
       ] },
     ],
     seeAlso: ["project_packages", "browser_copy_paste", "kga_settings"],
@@ -7440,20 +7994,36 @@ export const tools = [
       en: "Copy data in the Browser and paste it somewhere else, the way ArcGIS Pro's Catalog does.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "File Geodatabase domains, aliases and OBJECTID travel with the data." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Copy data in the Browser and paste it somewhere else, the way ArcGIS Pro's Catalog does. File Geodatabase domains, aliases and OBJECTID travel with the data.",
+        } },
+      { type: "subheading", text: { km: "", en: "Menu items" } },
       { type: "table", head: [{ km: "", en: "Item" }, { km: "", en: "Where" }, { km: "", en: "What it does" }], rows: [
-        [{ km: "", en: "**Add to Map**" }, { km: "", en: "Layers, GeoPackages, File Geodatabases" }, { km: "", en: "Adds the selection to the project. Layers that cannot be copied (web services, meshes, point clouds) can still be added" }],
-        [{ km: "", en: "**Copy**" }, { km: "", en: "Layers, GeoPackages, File Geodatabases" }, { km: "", en: "Holds the selection. A whole GeoPackage or geodatabase copies every layer in it" }],
+        [{ km: "", en: "**Add to Map**" }, { km: "", en: "Layers, GeoPackages, File Geodatabases" }, {
+            km: "",
+            en: "Adds the selection to the project. Layers that cannot be copied (web services, meshes, point clouds) can still be added",
+          }],
+        [{ km: "", en: "**Copy**" }, { km: "", en: "Layers, GeoPackages, File Geodatabases" }, {
+            km: "",
+            en: "Holds the selection. A whole GeoPackage or geodatabase copies every layer in it",
+          }],
         [{ km: "", en: "**Paste**" }, { km: "", en: "Folders, GeoPackages, File Geodatabases" }, { km: "", en: "Writes the held data. Greyed out until something is copied" }],
         [{ km: "", en: "**Paste as Shapefile**" }, { km: "", en: "Folders" }, { km: "", en: "Pastes straight to shapefiles" }],
       ] },
       { type: "subheading", text: { km: "", en: "Paste targets" } },
       { type: "list", items: [
-        { km: "", en: "**Folder:** as shapefile, GeoJSON, GeoPackage or File Geodatabase, as you choose." },
+        {
+          km: "",
+          en: "**Folder:** as shapefile, GeoJSON, GeoPackage or File Geodatabase (you choose).",
+        },
         { km: "", en: "**GeoPackage or File Geodatabase:** added as new tables." },
-        { km: "", en: "Rasters paste only into folders, as GeoTIFF." },
+        { km: "", en: "Rasters paste only into folders (GeoTIFF)." },
       ] },
-      { type: "paragraph", text: { km: "", en: "When a name already exists you choose **Keep both** (adds `_2`), **Replace the existing one** or **Skip it**. The choices are remembered." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "When a name already exists you choose **Keep both** (adds `_2`), **Replace the existing one** or **Skip it**. The choices are remembered.",
+        } },
     ],
     parameters: [],
     outputs: [],
@@ -7461,9 +8031,15 @@ export const tools = [
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "A layer with a subset filter, or from PostGIS or delimited text, is written through a scratch GeoPackage first." },
-        { km: "", en: "Shapefile field names are cut to 10 characters, so a long name is shortened — GDAL says so in the log." },
-        { km: "", en: "**Pasting into a File Geodatabase that ArcGIS has locked is refused.**" },
+        {
+          km: "",
+          en: "A layer with a subset filter, or from PostGIS or delimited text, is written through a scratch GeoPackage first.",
+        },
+        {
+          km: "",
+          en: "Shapefile field names are cut to 10 characters, so a long name is shortened (GDAL says so in the log).",
+        },
+        { km: "", en: "Pasting into a File Geodatabase that ArcGIS has locked is refused." },
       ] },
     ],
     seeAlso: ["catalog_and_workspaces", "data_explorer", "spatialdatamanager"],
@@ -7484,18 +8060,15 @@ export const tools = [
       en: "A media-browser style dock to browse, search, preview and ingest geodata.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Modelled on Premiere Pro's Media Browser. Browse a folder tree, preview a dataset, read its metadata, then bring it into the project." } },
-      { type: "list", items: [
-        { km: "", en: "**Browse and preview:** folder tree, file list and a preview with a live thumbnail, a Metadata tab and the first 50 rows of the Attributes tab. GeoPackages, KML, geodatabases and Excel files expand to pick layers." },
-        { km: "", en: "**Search:** results appear as you type, ranked, with a *Why it matched* column. A background index of layers, fields, CRS and extent finds a layer inside a geodatabase or a column inside a GeoPackage. Supports `OR`, `-word`, `\"phrases\"`, wildcards and filters such as `type:raster`, `crs:32648`, `size>100mb`, `modified:7d`. Ctrl+F searches, F1 shows the syntax." },
-        { km: "", en: "**Ingest:** copy a dataset with its sidecar files, or convert it — vectors to GeoPackage, FlatGeobuf, Shapefile, GeoJSON or Parquet; rasters to Cloud Optimized GeoTIFF or tiled GeoTIFF — with optional reprojection to the project CRS. Presets can be saved and shared as JSON." },
-        { km: "", en: "**Proxies:** build overviews and a low-resolution proxy for big rasters without touching the original, and toggle between proxy and full resolution." },
-        { km: "", en: "**Rename:** the **Rename** button opens a tab that renames the selected datasets in place, or saves renamed copies to another folder. Shapefile parts and sidecar files move together, tables inside a GeoPackage or File Geodatabase can be renamed, name clashes are caught before anything is touched, and project layers are re-pointed at the new file." },
-        { km: "", en: "**Export from the preview:** the **Export** drop-down in the preview window cuts the current view, a drawn rectangle or polygon, the layer extent, or the polygons of a project layer (selected, else all) to a new file; rasters are masked to the polygon. The original is never modified." },
-        { km: "", en: "**Interpret:** override CRS, encoding, NoData, feature filter and layer name, or set the CSV delimiter and X/Y or WKT columns, with a preview." },
-        { km: "", en: "**Bins:** group layers by type, by folder or your own; *Import Folder as Bin* mirrors sub-folders." },
-        { km: "", en: "**Background work:** ingest runs as a cancellable QGIS task. Provenance is written to the layer's metadata history." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A media browser for geodata, modelled on Premiere Pro's Media Browser. Browse a folder tree, preview a dataset, read its metadata, then bring it into the project.",
+        } },
+      { type: "subheading", text: { km: "", en: "Key points" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Browse and preview:** folder tree, file list and a preview with a live thumbnail, Metadata tab and the first 50 rows of the Attributes tab. GeoPackages, KML, geodatabases and Excel files expand to pick layers. * **Search:** results appear as you type, ranked, with a *Why it matched* column. A background index of layers, fields, CRS and extent finds a layer inside a geodatabase or a column inside a GeoPackage. Supports `OR`, `-word`, `\"phrases\"`, wildcards and filters such as `type:raster`, `crs:32648`, `size>100mb`, `modified:7d`. Ctrl+F searches, F1 shows the syntax. * **Ingest:** copy a dataset with its sidecar files, or convert it (vectors to GeoPackage, FlatGeobuf, Shapefile, GeoJSON or Parquet; rasters to Cloud Optimized GeoTIFF or tiled GeoTIFF), with optional reprojection to the project CRS. Presets can be saved and shared as JSON. * **Proxies:** build overviews and a low-resolution proxy for big rasters without touching the original, and toggle between proxy and full resolution. * **Rename:** the **Rename** button opens a tab that renames the selected datasets in place, or saves renamed copies to another folder. Shapefile parts and sidecar files move together, tables inside a GeoPackage or File Geodatabase can be renamed (double-click the row), name clashes are caught before anything is touched, and project layers are re-pointed at the new file. * **Export from the preview:** the **Export** drop-down in the preview window cuts the current view, a drawn rectangle or polygon, the layer extent, or the polygons of a project layer (selected, else all) to a new file; rasters are masked to the polygon. The original is never modified. * **Interpret:** override CRS, encoding, NoData, feature filter and layer name, or set the CSV delimiter and X/Y or WKT columns, with a preview. * **Bins:** group layers by type, by folder or your own; **Import Folder as Bin** mirrors sub-folders. * **Background work:** ingest runs as a cancellable QGIS task. Provenance is written to the layer's metadata history.",
+        } },
     ],
     parameters: [],
     outputs: [],
@@ -7503,8 +8076,11 @@ export const tools = [
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "**The original data is never modified.**" },
-        { km: "", en: "The search index lives in the QGIS profile and re-reads only files that changed." },
+        { km: "", en: "The original data is never modified." },
+        {
+          km: "",
+          en: "The search index lives in the QGIS profile and re-reads only files that changed.",
+        },
       ] },
     ],
     seeAlso: ["catalog_and_workspaces", "browser_copy_paste", "add_data"],
@@ -7525,14 +8101,15 @@ export const tools = [
       en: "A visual replacement for the right-click Panels / Toolbars text menu: every one is a card you toggle with one click.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Every panel and toolbar in the QGIS window, **including those added by other plugins**, is a card." } },
-      { type: "list", items: [
-        { km: "", en: "**Cards:** toolbars show a strip of their real tool icons; panels show a snapshot taken the first time they are open and kept on disk, so a closed panel still has a preview. Hover a snapshot to enlarge it." },
-        { km: "", en: "**Search by tool name:** typing `buffer` finds the toolbar that contains a Buffer tool and says so." },
-        { km: "", en: "**Filters:** Panels / Toolbars, All / Open / Hidden, Compact rows. *Show all* and *Hide all* act only on the items currently listed." },
-        { km: "", en: "**Layouts:** save the current workspace \u2014 positions and visibility \u2014 under a name, apply it in one click, and export or import layouts as JSON to give a whole class the same workspace." },
-        { km: "", en: "**Always current:** the list rebuilds itself when a plugin adds or removes a panel or toolbar, and follows the light or dark QGIS theme." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A visual replacement for the right-click Panels / Toolbars text menu. Every panel and toolbar in the QGIS window, including those added by other plugins, is a card you toggle with one click.",
+        } },
+      { type: "subheading", text: { km: "", en: "Key points" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Cards:** toolbars show a strip of their real tool icons; panels show a snapshot taken the first time they are open and kept on disk, so a closed panel still has a preview. Hover a snapshot to enlarge it. * **Search by tool name:** typing `buffer` finds the toolbar that contains a Buffer tool and says so. * **Filters:** Panels / Toolbars, All / Open / Hidden, Compact rows. Show all / Hide all act only on the items currently listed. * **Layouts:** save the current workspace (positions and visibility) under a name, apply it in one click, and export or import layouts as JSON to give a whole class the same workspace. * **Always current:** the list rebuilds itself when a plugin adds or removes a panel or toolbar, and follows the light or dark QGIS theme.",
+        } },
     ],
     parameters: [],
     outputs: [],
@@ -7540,7 +8117,7 @@ export const tools = [
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "Applying a layout **never hides the Panels and Toolbars Manager itself**." },
+        { km: "", en: "Applying a layout never hides the Panels and Toolbars Manager itself." },
         { km: "", en: "Snapshots of a widget are only possible while it is on screen." },
       ] },
     ],
@@ -7563,24 +8140,33 @@ export const tools = [
     },
     body: [
       { type: "subheading", text: { km: "", en: "Map tabs" } },
-      { type: "paragraph", text: { km: "", en: "ArcGIS Pro's maps and layouts in one tab bar above the canvas. Turn it on in **Settings ▸ Appearance ▸ Map tabs**." } },
-      { type: "list", items: [
-        { km: "", en: "One project can hold several **maps**, each with its own layers, extent, rotation and CRS. A map is a top-level group in the Layers panel; new layers land in the active map. **Organize this project into Map tabs** turns an existing project into maps." },
-        { km: "", en: "Print layouts open as **tabs** in the main window instead of a separate Layout Designer." },
-        { km: "", en: "Each map is also saved as a map theme, so a layout map frame can show any map. Adding a map frame asks which map it should show, with a preview card per map." },
-        { km: "", en: "A layout tab shows a **Contents** panel in place of the Layers panel: every item on the page, and under a map frame the layers of its map, which can be switched on and off without leaving the layout." },
-        { km: "", en: "Maps and layouts can be brought in from another project. The Catalog lists them as `.kgamap` and `.kgalayout` shortcuts." },
-        { km: "", en: "**Duplicate a map** and the copy gets its own copy of every layer, as in Pro, so changing symbology or labels in the copy does not change the original." },
-        { km: "", en: "Layout map frames follow layer style changes automatically; **Refresh Layout** on the KGA Layout toolbar redraws the frames and side panels on demand." },
-        { km: "", en: "The strip keeps the top dock area to itself: other panels cannot be docked above it." },
-        { km: "", en: "Everything is stored in the `.qgz`, so **a project opened without the plugin shows one group per map.**" },
-      ] },
-      { type: "subheading", text: { km: "", en: "KGA Layout toolbar" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "ArcGIS Pro's maps and layouts in one tab bar above the canvas. Turn on in **Settings > Appearance > Map tabs**.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* One project can hold several **maps**, each with its own layers, extent, rotation and CRS. A map is a top-level group in the Layers panel; new layers land in the active map. **Organize this project into Map tabs** (on the tab bar) turns an existing project into maps. * Print layouts open as **tabs** in the main window instead of a separate Layout Designer (*Open print layouts as tabs in the main window*). * Each map is also saved as a map theme (*Keep a map theme for each map*), so a layout map frame can show any map. Adding a map frame asks which map it should show, with a preview card per map. * A layout tab shows a **Contents** panel in place of the Layers panel: every item on the page, and under a map frame the layers of its map, which can be switched on and off without leaving the layout. * Maps and layouts can be brought in from another project. The Catalog lists them as `.kgamap` and `.kgalayout` shortcuts. * **Duplicate a map** and the copy gets its own copy of every layer, as in Pro, so changing symbology or labels in the copy does not change the original. The data source stays shared. * Layout map frames follow layer style changes automatically; **Refresh Layout** on the KGA Layout toolbar redraws the frames and side panels on demand. * The strip keeps the top dock area to itself: other panels cannot be docked above it. * Everything is stored in the `.qgz`, so a project opened without the plugin shows one group per map.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**New layout dialog.** Name, page size (or custom), orientation, background colour and an optional neatline.",
+        } },
+      { type: "subheading", text: { km: "", en: "KGA Layout toolbar (Layout Designer)" } },
       { type: "table", head: [{ km: "", en: "Button" }, { km: "", en: "What it does" }], rows: [
-        [{ km: "", en: "**Layout Guides**" }, { km: "", en: "A panel that lays guides on the page. Step 1: margins from the page edge. Step 2: divide the area inside the margins into columns and rows, with an optional space between and centre lines. Or give exact distances such as `50, 120` from a margin. Guides update while you type; *Show guides* and *Snap to guides* switch them. Values are in millimetres" }],
-        [{ km: "", en: "**Add Grid**" }, { km: "", en: "Opens [Add Grid to Layout](add_grid.md). To change a grid a map already has, right-click it in the Contents panel and choose Edit…" }],
+        [{ km: "", en: "**Layout Guides**" }, {
+            km: "",
+            en: "A panel that lays guides on the page. Step 1: margins from the page edge (one value for all four sides, or each). Step 2: divide the area inside the margins into columns and rows, with an optional space between and centre lines. Or give exact distances such as `50, 120` from a margin. Guides update while you type; *Show guides and *Snap to guides switch them. Values are in millimetres",
+          }],
         [{ km: "", en: "**Refresh Layout**" }, { km: "", en: "Redraws the map frames and the layer panels with the latest layer symbology" }],
-        [{ km: "", en: "**Khmer North Arrows**" }, { km: "", en: "Pick a group, topic and colour, then double-click an arrow: it is inserted in the layout and linked to the layout's map, so it follows the map rotation. Styles: Khmer North Arrow, Esri North, Esri North Khmer" }],
+        [{ km: "", en: "**Add Grid**" }, {
+            km: "",
+            en: "Opens [Add Grid to Layout](add_grid.md). To change a grid a map already has, right-click it in the Contents panel and choose **Edit...**",
+          }],
+        [{ km: "", en: "**Khmer North Arrows**" }, {
+            km: "",
+            en: "Pick a group, topic and colour, then double-click an arrow: it is inserted in the layout and linked to the layout's map, so it follows the map rotation. Styles: Khmer North Arrow, Esri North, Esri North Khmer. Placed in a corner of your choice",
+          }],
       ] },
     ],
     parameters: [],
@@ -7588,10 +8174,10 @@ export const tools = [
     usage: [],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "Map tabs move the Layout Designer into the main window. Keyboard shortcuts that exist in both (Ctrl+S, Ctrl+Z, Delete) are switched off for whichever one is not on screen." },
-        { km: "", en: "Switching map tabs turns the other maps' groups off and hides them in the Layers panel." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Map tabs move the Layout Designer into the main window. Keyboard shortcuts that exist in both (Ctrl+S, Ctrl+Z, Delete) are switched off for whichever one is not on screen. * Switching map tabs turns the other maps' groups off and hides them in the Layers panel.",
+        } },
     ],
     seeAlso: ["add_grid", "kga_settings", "callout_label_studio"],
   },
@@ -7655,42 +8241,61 @@ export const tools = [
       en: "Move the map to a place by picking continent, country, province, district, commune and village \u2014 or by typing a coordinate.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Each list is filled from the one above it, and **you can stop at any rung**: pick only a country to see the whole country, or go down to one commune. The button sits next to **[Clip Basemap by Boundary](clip_basemap.md)** on the KGA Toolbox toolbar." } },
-      { type: "subheading", text: { km: "", en: "Where the data comes from" } },
-      { type: "list", items: [
-        { km: "", en: "**Provinces, districts, communes:** geoBoundaries (gbOpen, simplified), levels ADM1 to ADM3. It does not say which district is in which province, so the window works that out from the shapes. **Boundaries are the published ones, which can differ from the official ones** \u2014 check the layer's metadata for the licence." },
-        { km: "", en: "**Villages:** OpenStreetMap contributors (ODbL), through the Overpass API. Coverage varies a lot by country and area; an empty list means OpenStreetMap has no named village there, not that there are none." },
-        { km: "", en: "**Continents and countries:** the country list and extents that ship with the plugin and QGIS." },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Move the map to a place without hunting for it. Pick a continent, then a country, province, district, commune and village, each list filled from the one above it, or type a latitude and longitude. You can stop at any rung: pick only a country to see the whole country, or go down to one commune.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The button sits next to **Clip Basemap by Boundary** on the KGA Toolbox toolbar.",
+        } },
+      { type: "subheading", text: { km: "", en: "Controls" } },
+      { type: "table", head: [{ km: "", en: "Control" }, { km: "", en: "Meaning" }], rows: [
+        [{ km: "", en: "**Continent**, **Country**" }, { km: "", en: "Built in, so they open instantly and work offline. Starts on Asia" }],
+        [{ km: "", en: "**Province**, **District**, **Commune**" }, {
+            km: "",
+            en: "The first, second and third admin level of the country. Each is a check list: tick several and the list below holds the places of all of them (a name is followed by its parent when more than one parent is ticked). Ticks in the lists below are kept when they still apply. A list is greyed out when the country publishes no boundaries at that level",
+          }],
+        [{ km: "", en: "**Village**" }, {
+            km: "",
+            en: "A check list of the villages OpenStreetMap places inside the ticked communes (or districts, when the country has no communes). Only the villages OpenStreetMap has named are listed",
+          }],
+        [{ km: "", en: "**Basemap**" }, {
+            km: "",
+            en: "A preset such as Google Satellite, a basemap already in the project, or **No basemap**. It is added to the map when it is not there yet",
+          }],
+        [{ km: "", en: "**Clip basemap for the area? (by extent)**" }, {
+            km: "",
+            en: "Show the basemap only inside the box around the place (see Clip Basemap by Boundary; **Remove Clip* there undoes it)",
+          }],
+        [{ km: "", en: "**Add the location data to map?**" }, {
+            km: "",
+            en: "Add the place as a layer: its outline, or a point for a village or a coordinate. A continent has no outline to add",
+          }],
+        [{ km: "", en: "**Or type coordinate**" }, {
+            km: "",
+            en: "Latitude, longitude in decimal degrees, for example `11.5972, 104.8887`. `11.5972N 104.8887E` also works. When this box is filled in it is used instead of the lists",
+          }],
+        [{ km: "", en: "**Zoom To**" }, {
+            km: "",
+            en: "Moves the map to fit every place ticked in the deepest list that has a tick, and flashes the outlines. With the add checkbox on, each place becomes one feature of the new layer",
+          }],
       ] },
+      { type: "subheading", text: { km: "", en: "Where the data comes from" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* **Provinces, districts, communes:** [geoBoundaries](https://www.geoboundaries.org) (gbOpen, simplified), levels ADM1 to ADM3. It does not say which district is in which province, so the window works that out from the shapes. Boundaries are the published ones, which can differ from the official ones; check the layer's metadata for the licence. * **Villages:** OpenStreetMap contributors (ODbL), through the Overpass API. Coverage varies a lot by country and by area; an empty list means OpenStreetMap has no named village there, not that there are none. * **Continents and countries:** the country list and extents that ship with the plugin and QGIS.",
+        } },
     ],
-    parameters: [
-      {
-        title: null,
-        nameLabel: "Control",
-        blocks: [],
-        rows: [
-          { name: "Continent, Country", type: "", default: "Asia", description: { km: "", en: "Built in, so they open instantly and work offline." } },
-          { name: "Province, District, Commune", type: "", default: "", description: { km: "", en: "The first, second and third admin level of the country. Each is a check list: tick several and the list below holds the places of all of them. A list is greyed out when the country publishes no boundaries at that level." } },
-          { name: "Village", type: "", default: "", description: { km: "", en: "A check list of the villages OpenStreetMap places inside the ticked communes, or districts when the country has no communes. Only named villages are listed." } },
-          { name: "Basemap", type: "", default: "", description: { km: "", en: "A preset such as Google Satellite, a basemap already in the project, or **No basemap**. It is added to the map when it is not there yet." } },
-          { name: "Clip basemap for the area? (by extent)", type: "", default: "off", description: { km: "", en: "Show the basemap only inside the box around the place. **Remove Clip** in Clip Basemap by Boundary undoes it." } },
-          { name: "Add the location data to map?", type: "", default: "off", description: { km: "", en: "Add the place as a layer: its outline, or a point for a village or a coordinate. A continent has no outline to add." } },
-          { name: "Or type coordinate", type: "", default: "", description: { km: "", en: "Latitude, longitude in decimal degrees, for example `11.5972, 104.8887`. `11.5972N 104.8887E` also works. **When this box is filled in it is used instead of the lists.**" } },
-          { name: "Zoom To", type: "", default: "", description: { km: "", en: "Moves the map to fit every place ticked in the deepest list that has a tick, and flashes the outlines." } },
-        ],
-      },
-    ],
+    parameters: [],
     outputs: [],
     usage: [],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Needs an internet connection** for provinces, districts, communes and villages. Boundary files are cached in the QGIS profile, so a country you have used opens quickly and works offline. Villages are cached for a week." },
-        { km: "", en: "Villages are looked up in the background, so the window never freezes. The Village list stays greyed out when OpenStreetMap has no named village for the area." },
-        { km: "", en: "The first time a country's districts or communes are opened, **the file for the whole country is downloaded**." },
-        { km: "", en: "A village or typed coordinate is framed with a box about 2 km across." },
-        { km: "", en: "If the map's coordinate system cannot show the place \u2014 a UTM zone far from it \u2014 the window says so; change the project CRS, for example to EPSG:4326 or EPSG:3857." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Needs an internet connection for provinces, districts, communes and villages. Boundary files are cached in the QGIS profile, so a country you have used opens quickly and works offline. Villages are cached for a week. * Villages are looked up in the background, with a turning indicator beside the status line, so the window never freezes. The **Village** list stays greyed out when OpenStreetMap has no named village for the area. * The first time a country's districts or communes are opened, the file for the whole country is downloaded. * A village or typed coordinate is framed with a box about 2 km across. * If the map's coordinate system cannot show the place (a UTM zone far from it), the window says so; change the project CRS, for example to EPSG:4326 or EPSG:3857.",
+        } },
     ],
     seeAlso: ["clip_basemap", "add_data", "catalog_and_workspaces"],
   },
@@ -7710,27 +8315,71 @@ export const tools = [
       en: "New-project defaults, Pro-style selection and Layers panel, start page, theme, and Shape_Length / Shape_Area.",
     },
     body: [
-      { type: "subheading", text: { km: "", en: "Projects" } },
+      { type: "subheading", text: { km: "", en: "Settings" } },
+      { type: "paragraph", text: { km: "", en: "**Projects**" } },
       { type: "table", head: [{ km: "", en: "Setting" }, { km: "", en: "Default" }], rows: [
-        [{ km: "", en: "Default location for new workspaces" }, { km: "", en: "`Documents\\\\KGA Toolbox Project`" }],
+        [{ km: "", en: "Default location for new workspaces" }, { km: "", en: "Documents\\KGA Toolbox Project" }],
         [{ km: "", en: "Default CRS of new projects" }, { km: "", en: "EPSG:32648, WGS 84 / UTM zone 48N" }],
         [{ km: "", en: "Save tool output in the project default database and folder" }, { km: "", en: "On" }],
         [{ km: "", en: "Keep Shape_Length and Shape_Area up to date on project database layers" }, { km: "", en: "On" }],
-        [{ km: "", en: "Add a basemap to every new project" }, { km: "", en: "On, Google Terrain Hybrid" }],
-        [{ km: "", en: "Zoom new projects to a country" }, { km: "", en: "On, Cambodia" }],
+        [{ km: "", en: "Add a basemap to every new project (and which)" }, { km: "", en: "On, Google Terrain Hybrid" }],
+        [{ km: "", en: "Zoom new projects to a country (type to search)" }, { km: "", en: "On, Cambodia" }],
       ] },
-      { type: "subheading", text: { km: "", en: "Appearance" } },
-      { type: "list", items: [
-        { km: "", en: "Match QGIS to the computer's light or dark mode — **Off**." },
-        { km: "", en: "Show selected features in ArcGIS Pro style: symbol kept, bright cyan outline — **On**." },
-        { km: "", en: "Show the Layers panel in ArcGIS Pro style: filled-triangle expanders, roomier rows, light-blue selection — **On**." },
-        { km: "", en: "Map tabs, with three sub-options — **Off**. See **[Map Tabs and Layout Tools](maps_and_layouts.md)**." },
-        { km: "", en: "**Smooth navigation (ArcGIS Pro style)** — **On**. Animated wheel zoom under the cursor, kinetic pan glide after a Pan-tool or middle-button drag, continuous arrow-key pan and smooth Page Up / Page Down zoom, and an underlay that fills the edges while zooming out. Sub-options: zoom smoothness (110 ms), glide length (325 ms), keyboard, underlay." },
-        { km: "", en: "Show the KGA start page instead of the QGIS welcome page — **On**." },
-        { km: "", en: "Remember the toolbars and panels that are enabled — **Off**." },
+      { type: "paragraph", text: { km: "", en: "**Catalog**" } },
+      { type: "table", head: [{ km: "", en: "Setting" }, { km: "", en: "Default" }], rows: [
+        [{ km: "", en: "Ask to convert a traditional project when it is opened" }, { km: "", en: "On" }],
+        [{ km: "", en: "Save / Save As: ask each time, always as a workspace, or always as a `.qgz`" }, { km: "", en: "Ask" }],
       ] },
+      { type: "paragraph", text: { km: "", en: "**Appearance**" } },
+      { type: "table", head: [{ km: "", en: "Setting" }, { km: "", en: "Default" }], rows: [
+        [{ km: "", en: "Match QGIS to the computer's light or dark mode" }, { km: "", en: "Off" }],
+        [{ km: "", en: "Show selected features in ArcGIS Pro style: symbol kept, bright cyan outline" }, { km: "", en: "On" }],
+        [{
+            km: "",
+            en: "Show the Layers panel in ArcGIS Pro style: filled-triangle expanders, roomier rows, light-blue selection",
+          }, { km: "", en: "On" }],
+        [{ km: "", en: "Map tabs, with three sub-options (see [Map Tabs](maps_and_layouts.md))" }, { km: "", en: "Off" }],
+        [{
+            km: "",
+            en: "Smooth navigation (ArcGIS Pro style): animated wheel zoom under the cursor, kinetic pan glide after a Pan-tool or middle-button drag, continuous arrow-key pan and smooth Page Up / Page Down zoom, and an underlay that fills the edges while zooming out. Sub-options: zoom smoothness (110 ms), glide length (325 ms), keyboard, underlay",
+          }, { km: "", en: "On" }],
+        [{
+            km: "",
+            en: "Show the KGA start page instead of the QGIS welcome page; optionally hide the menu bar while it shows",
+          }, { km: "", en: "On" }],
+        [{
+            km: "",
+            en: "Remember the toolbars and panels that are enabled, with **Remember current layout* and **Reset toolbars and panels**",
+          }, { km: "", en: "Off" }],
+      ] },
+      { type: "subheading", text: { km: "", en: "Start page" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Shown when no project is open. **New:** Map, Workspace, Import Package, and templates from the profile's `project_templates` folder. **Open:** recent projects as cards, with find, sort, grid or list, and a \"...\" menu (Open, Pin, Show in folder, Copy path, Remove). Turn it off for the standard QGIS welcome page.",
+        } },
+      { type: "subheading", text: { km: "", en: "Smooth navigation" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "With the Pan tool, hold the right button and drag up to zoom in or down to zoom out, about the point you pressed (about 2x per 115 px). A right-click without dragging does nothing, as before.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The animation runs at the refresh rate of the screen the map is on (up to 240 frames per second, never below 60), and timing is measured in fractions of a millisecond, so motion stays even at any rate.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Works through event filters on each map canvas; turning it off removes them and QGIS navigates as before. Ctrl, Shift or Alt with the wheel, Space-bar pan, a locked map scale and the keys of editing tools keep their QGIS behaviour. Source: `kga_tools/gui/smooth_navigation/`.",
+        } },
       { type: "subheading", text: { km: "", en: "Shape_Length and Shape_Area" } },
-      { type: "paragraph", text: { km: "", en: "On line and polygon layers in the project databases, these fields are added and recalculated whenever a feature is created or edited, as a File Geodatabase does. **Values are planar, in the units of the layer's CRS.** *Layer ▸ Add Shape_Length / Shape_Area Fields* does it for the selected layer on demand." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "On line and polygon layers in the project databases, these fields are added and recalculated whenever a feature is created or edited, as a File Geodatabase does. Values are planar, in the units of the layer's CRS. **Layer > Add Shape_Length / Shape_Area Fields** does it for the selected layer on demand.",
+        } },
+      { type: "subheading", text: { km: "", en: "Check for Update" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Opens a window that asks api.github.com for the latest release of the plugin's repository and says whether yours is current. Only when you open it; no project data is sent.",
+        } },
     ],
     parameters: [],
     outputs: [],
@@ -7741,11 +8390,15 @@ export const tools = [
     results: [],
     notes: [
       { type: "list", items: [
-        { km: "", en: "New-project settings apply to **new projects only**; an opened project is never changed." },
+        {
+          km: "",
+          en: "New-project settings apply to new projects only; an opened project is never changed.",
+        },
         { km: "", en: "The basemap needs an internet connection." },
-        { km: "", en: "The cyan selection and Pro Layers panel styles can be turned off to get the standard QGIS look back." },
-        { km: "", en: "**Smooth navigation** adds a right-button drag on the Pan tool: up zooms in, down zooms out, about the point you pressed (about 2× per 115 px). A right-click without dragging does nothing, as before." },
-        { km: "", en: "The animation runs at the refresh rate of the screen the map is on, and works through event filters on each map canvas — turning it off removes them and QGIS navigates as before." },
+        {
+          km: "",
+          en: "The cyan selection and Pro Layers panel styles can be turned off to get the standard QGIS look back.",
+        },
       ] },
     ],
     seeAlso: ["catalog_and_workspaces", "maps_and_layouts", "layer_auto_sort"],
@@ -7766,20 +8419,46 @@ export const tools = [
       en: "Create an empty point, line or polygon layer with standard fields, in a few clicks.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "The window stays open, so several layers can be made one after another." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Makes an empty point, line or polygon layer in a few clicks. The window stays open, so several layers can be made one after another.",
+        } },
     ],
     parameters: [
       {
         title: null,
         nameLabel: "Control",
-        blocks: [],
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "The two field options switch each other off; with both off the layer has no attribute fields.",
+            } },
+        ],
         rows: [
-          { name: "Layer name", type: "Text", default: "Point / Line / Polygon Template", description: { km: "", en: "Defaults to match the geometry, until you type your own." } },
-          { name: "Geometry", type: "Combo box", default: "Point", description: { km: "", en: "Point, Line or Polygon. **The layer is always multipart** (MultiPoint, MultiLineString, MultiPolygon), as in ArcGIS Pro, so a feature can have several parts whenever it needs them." } },
-          { name: "CRS", type: "CRS selector", default: "EPSG:32648", description: { km: "", en: "WGS 84 / UTM zone 48N by default; use the button beside it to choose another." } },
-          { name: "Use the default fields", type: "Boolean", default: "—", description: { km: "", en: "Adds `name`, `id`, `note` and one measurement: `xy` (point), `length_m` (line) or `area_m2` (polygon). The measurement fills itself in when a feature is drawn, using `$x`/`$y`, `$length` or `$area`." } },
-          { name: "Copy the field format from a layer", type: "Layer input", default: "—", description: { km: "", en: "Pick a project layer, drag one in from the Layers panel, the Browser or a file manager, or use *Browse…* or *Browse GDB…*. Its fields are listed with checkboxes; only the ticked ones are created. Fields the format maintains itself (`fid`, `OBJECTID`, `Shape_Area` …) are listed but off." } },
-          { name: "Save as", type: "Combo box", default: "Temporary layer", description: { km: "", en: "Or Shapefile, GeoPackage or File Geodatabase, with a file path. File Geodatabase needs GDAL 3.6 or newer." } },
+          { name: "**Layer name**", type: "", default: "", description: {
+            km: "",
+            en: "Defaults to *Point Template*, *Line Template or *Polygon Template to match the geometry, until you type your own.",
+          } },
+          { name: "**Geometry**", type: "", default: "", description: {
+            km: "",
+            en: "Point, Line or Polygon. The layer is always multipart (MultiPoint, MultiLineString, MultiPolygon), as in ArcGIS Pro, so a feature can have several parts whenever it needs them. A single-part feature drawn into it is stored as a one-part multipart.",
+          } },
+          { name: "**CRS**", type: "", default: "", description: {
+            km: "",
+            en: "WGS 84 / UTM zone 48N (EPSG:32648) by default; use the button beside it to choose another.",
+          } },
+          { name: "**Use the default fields**", type: "", default: "", description: {
+            km: "",
+            en: "Adds `name`, `id`, `note` and one measurement: `xy` (point), `length_m` (line) or `area_m2` (polygon). The measurement fills itself in when a feature is drawn, using `$x`/`$y`, `$length` or `$area`.",
+          } },
+          { name: "**Copy the field format from a layer**", type: "", default: "", description: {
+            km: "",
+            en: "Shows a layer input. Pick a project layer, drag one in from the Layers panel, the Browser panel or a file manager, or use *Browse… (a file) or *Browse GDB… (a File Geodatabase folder). Its fields are listed with checkboxes; only the ticked ones are created. Fields the format maintains itself (`fid`, `OBJECTID`, `Shape_Area` …) are listed but off.",
+          } },
+          { name: "**Save as**", type: "", default: "", description: {
+            km: "",
+            en: "*Temporary layer (default), Shapefile, GeoPackage or File Geodatabase, with a file path. File Geodatabase needs GDAL 3.6 or newer.",
+          } },
         ],
       },
     ],
@@ -7789,12 +8468,10 @@ export const tools = [
     ],
     results: [],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "`$length` and `$area` follow the project's distance and area units, so the `_m` / `_m2` fields are in metres **only when the project is set to metres**." },
-        { km: "", en: "In a GeoPackage, Shapefile or File Geodatabase the draw-time expressions are stored in the QGIS project, not in the file." },
-        { km: "", en: "A Shapefile cuts field names to 10 characters; the window warns first." },
-        { km: "", en: "Saving into an existing GeoPackage or geodatabase adds the layer, replacing one of the same name." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* `$length` and `$area` follow the project's distance and area units, so the `_m` / `_m2` fields are in metres only when the project is set to metres. * In a GeoPackage, Shapefile or File Geodatabase the draw-time expressions are stored in the QGIS project, not in the file. * A Shapefile cuts field names to 10 characters; the window warns first. * Saving into an existing GeoPackage or geodatabase adds the layer, replacing one of the same name.",
+        } },
     ],
     seeAlso: ["create_features", "create_points_from_table", "duplicate_to_new_layer"],
   },
