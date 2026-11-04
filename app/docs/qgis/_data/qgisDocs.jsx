@@ -223,61 +223,288 @@ export const tools = [
       en: "Pull administrative boundaries, basemaps, elevation and land cover straight into the project, without the browser trip.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Pick a country and an admin level; the tool asks the data source what it publishes, shows you who produced it, which year it represents, under what licence and how many features it holds, then downloads it and adds it to the map." } },
-      { type: "subheading", text: { km: "", en: "Boundary sources" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Pull **administrative boundaries**, **basemaps**, **elevation** and **land cover** straight into the project, without the browser trip. Pick a country and an admin level; the tool asks the data source what it publishes, shows you who produced it, which year it represents, under what licence and how many features it holds, then downloads it and adds it to the map.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Three boundary sources ship with the tool, plus an escape hatch for anything else with a public address:",
+        } },
       { type: "table", head: [{ km: "", en: "Source" }, { km: "", en: "Coverage" }, { km: "", en: "Licence" }], rows: [
-        [{ km: "", en: "**geoBoundaries**" }, { km: "", en: "Global, ADM0 to ADM5 where it exists. Each country's own source and licence carried through." }, { km: "", en: "Varies by country — shown before you download" }],
-        [{ km: "", en: "**HDX / OCHA COD-AB**" }, { km: "", en: "The p-coded boundaries the humanitarian community agrees on, ADM0 to ADM3 or 4." }, { km: "", en: "Usually CC BY-IGO" }],
-        [{ km: "", en: "**Natural Earth**" }, { km: "", en: "Country and state outlines worldwide, at three generalisations, filtered to the country you pick." }, { km: "", en: "Public domain" }],
+        [{ km: "", en: "**geoBoundaries**" }, {
+            km: "",
+            en: "Global, ADM0 to ADM5 where it exists. Each country's own source and licence carried through.",
+          }, { km: "", en: "Varies by country — shown before you download" }],
+        [{ km: "", en: "**HDX / OCHA COD-AB**" }, {
+            km: "",
+            en: "The p-coded boundaries the humanitarian community agrees on, ADM0 to ADM3 or 4.",
+          }, { km: "", en: "Usually CC BY-IGO" }],
+        [{ km: "", en: "**Natural Earth**" }, {
+            km: "",
+            en: "Country and state outlines worldwide, at three generalisations, filtered to the country you pick.",
+          }, { km: "", en: "Public domain" }],
         [{ km: "", en: "**Custom URL**" }, { km: "", en: "Any GeoJSON file, ArcGIS REST layer or WFS endpoint." }, { km: "", en: "Set by whoever publishes it" }],
-        [{ km: "", en: "**KGA Database (PostgreSQL)**" }, { km: "", en: "Listed but not connected yet." }, { km: "", en: "—" }],
+        [{ km: "", en: "**KGA Database (Cambodia)**" }, {
+            km: "",
+            en: "Province, district, commune and village for Cambodia, as boundary or centre point, for any selection of units. See below.",
+          }, { km: "", en: "KGA data" }],
       ] },
-      { type: "subheading", text: { km: "", en: "Elevation and land cover" } },
-      { type: "list", items: [
-        { km: "", en: "**Copernicus DEM (AWS open data)** — GLO-30 (~30 m) and GLO-90 (~90 m), no account needed." },
-        { km: "", en: "**OpenTopography Global DEM API** — Copernicus, SRTM GL1/GL3, NASADEM, ALOS AW3D30, EU DTM, SRTM15+, GEBCO and GEDI L3, with a free API key." },
-        { km: "", en: "**Esri Land Cover** and **ESA WorldCover** — both 10 m, CC BY 4.0, no account." },
+      { type: "subheading", text: { km: "", en: "KGA Database (Cambodia)" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "KGA's own administrative data for Cambodia, read from a private GitHub release. It is available **only when the country is Cambodia** — for any other country the entry stays in the Data source list, greyed out, and its tooltip says why. Choosing another country while it is selected moves you back to a source that can serve that country.",
+        } },
+      { type: "paragraph", text: { km: "", en: "Pick what you want in four steps:" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. **Admin level** — Province, District, Commune or Village. 2. **Feature type** — **Boundary (polygon)** or **Centre (point)**. Villages exist only as centre points, so choosing Village fixes this to Centre and greys the boundary choice. A few communes exist only as centres so far; they are greyed in the list when you ask for boundaries, with a tooltip saying so. 3. **Narrow it** with the Province, District and Commune drop-downs (each starts at *All*, and the next one fills in when you choose the one before). 4. **Tick the units** in the list, with the filter box above it to find one by name or code. **Tick nothing to take everything inside the drop-downs above** — a whole province's communes is one drop-down and *Add to Map*; one named district is a province, a tick and *Add to Map*.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Names are shown in English with the Khmer name beside them. The village list needs a province chosen first (14,000 villages are too many to list at once); leaving everything unticked still adds every village inside the drop-downs.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**What is downloaded.** The release carries one small pack per province (about 0.5 MB). The lists and counts come from a manifest, so choosing and narrowing download no geometry at all; **Add to Map** then fetches only the province packs your selection touches, checks each against its checksum, and keeps them for next time — a second add of the same area, or any other area in the same province, costs nothing and works offline. The details panel shows what is still to download before you click.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**The access key.** The release is private, so the tool needs the KGA access key. Paste it in the **Access key** box once and click **Save key**; it is kept encrypted in the QGIS password store (QGIS may ask for its master password) and is sent to GitHub only. On a QGIS where the authentication system is disabled (Settings > Options > Authentication says so) there is no password store, so the key is kept in your QGIS profile settings instead, as plain text on your disk, and the box tells you so. Use a read-only, single-repository, expiring key and it is a small risk; enable QGIS authentication if you want it encrypted. If it expires or is revoked the box comes back with the reason, so paste the new one. **Change key** replaces a saved one.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**New data.** When KGA publishes a new release the tool picks it up on its own within a day, or straight away with **Refresh**; the old packs are removed. Plugin updates are not needed for new data.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The layers carry these fields, the same on every level and for both boundaries and centres, so layers from different levels join and compare without renaming:",
+        } },
+      { type: "table", head: [{ km: "", en: "Field" }, { km: "", en: "Meaning" }], rows: [
+        [{ km: "", en: "`pro_code`, `dist_code`, `com_code`, `vil_code`" }, {
+            km: "",
+            en: "2-, 4-, 6- and 8-digit codes as text, with the leading zero kept. A unit carries the codes of every level above it.",
+          }],
+        [{ km: "", en: "`name_en`, `name_kh`" }, { km: "", en: "The unit's name in English and Khmer." }],
+        [{ km: "", en: "`type_kh`, `type_en`" }, {
+            km: "",
+            en: "What kind of unit: Province or Capital; District, Municipality or Khan; Commune or Sangkat; Village.",
+          }],
+        [{ km: "", en: "`pcode`" }, { km: "", en: "`KH` + the unit's deepest code, for joining to humanitarian (OCHA) data." }],
+        [{ km: "", en: "`pro_name_en`, `dist_name_en`, `com_name_en`" }, { km: "", en: "The English names of the levels above." }],
+        [{ km: "", en: "`area_km2`" }, { km: "", en: "Polygons only: area, measured in UTM 48N." }],
+        [{ km: "", en: "`qa_note`" }, {
+            km: "",
+            en: "Empty when the unit is clean; otherwise a sentence about a known issue, such as a code that was renumbered.",
+          }],
       ] },
-      { type: "note", tone: "warning", text: { km: "", en: "**Vector data arrives as a temporary scratch layer.** It lives in memory and is lost when the project closes. Export it to a GeoPackage or shapefile to keep it — the tool says so, and offers a **Save layer…** button, every time. Basemaps are the exception: an XYZ layer is a reference to a URL, so it saves into the project file normally." } },
+      { type: "paragraph", text: { km: "", en: "Data is in EPSG:4326." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Digital elevation models** come from two more sources, chosen under the **Open digital elevation (DEM)** data type:",
+        } },
+      { type: "table", head: [{ km: "", en: "Source" }, { km: "", en: "Datasets" }, { km: "", en: "Account" }], rows: [
+        [{ km: "", en: "**Copernicus DEM (AWS open data)**" }, { km: "", en: "GLO-30 (~30 m), GLO-90 (~90 m)" }, { km: "", en: "None" }],
+        [{ km: "", en: "**OpenTopography Global DEM API**" }, {
+            km: "",
+            en: "Copernicus GLO-30/90, SRTM GL1/GL3 (and ellipsoidal), NASADEM, ALOS AW3D30 (and ellipsoidal), EU DTM, SRTM15+, GEBCO, GEDI L3",
+          }, { km: "", en: "Free API key" }],
+      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Land cover** comes from two more, chosen under the **Open land cover (LULC)** data type. Both are 10 m, CC BY 4.0 and need no account:",
+        } },
+      { type: "table", head: [{ km: "", en: "Source" }, { km: "", en: "Years" }, { km: "", en: "Classes" }], rows: [
+        [{
+            km: "",
+            en: "**Esri Land Cover* (Impact Observatory / Microsoft / Esri, Sentinel-2) - the data behind [livingatlas.arcgis.com/landcover](https://livingatlas.arcgis.com/landcover/)",
+          }, {
+            km: "",
+            en: "Every year from 2017; the list is read from Esri's service, so a newly published year appears on its own",
+          }, {
+            km: "",
+            en: "1 Water, 2 Trees, 4 Flooded vegetation, 5 Crops, 7 Built area, 8 Bare ground, 9 Snow/ice, 10 Clouds, 11 Rangeland",
+          }],
+        [{ km: "", en: "**ESA WorldCover**" }, { km: "", en: "2020 (v100), 2021 (v200)" }, {
+            km: "",
+            en: "10 Tree cover, 20 Shrubland, 30 Grassland, 40 Cropland, 50 Built-up, 60 Bare / sparse vegetation, 70 Snow and ice, 80 Permanent water bodies, 90 Herbaceous wetland, 95 Mangroves, 100 Moss and lichen",
+          }],
+      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The tool is promoted onto the KGA toolbar as its own button, next to the Domain & Schema Manager.",
+        } },
+      { type: "note", tone: "info", text: {
+          km: "",
+          en: "**Vector data arrives as a temporary scratch layer.** It lives in memory and > is lost when the project closes. Export it to a GeoPackage or shapefile to > keep it — the tool says so, and offers a **Save layer…** button, every time. > Basemaps are the exception: an XYZ layer is a reference to a URL, so it saves > into the project file normally.",
+        } },
     ],
     parameters: [
       {
         title: null,
         nameLabel: "Control",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "The algorithm takes no Processing parameters — running it opens the window. The controls below are the window's, and the form rearranges itself so only the ones the current choice needs are on screen." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "The algorithm takes no Processing parameters — running it opens the window. The controls below are the window's, and the form rearranges itself so only the ones the current choice needs are on screen.",
+            } },
         ],
         rows: [
-          { name: "Data type", type: "Combo box", default: "Administrative boundaries", description: { km: "", en: "`Administrative boundaries`, `Other vector data`, `Basemap tile layer`, `Open digital elevation (DEM)`, `Open land cover (LULC)`. Decides which sources are offered and which rows appear." } },
-          { name: "Data source", type: "Combo box", default: "geoBoundaries", description: { km: "", en: "The portal to read. A source that is listed but greyed out is one the tool knows about and cannot reach yet; its tooltip says why." } },
-          { name: "Country", type: "Editable combo box", default: "Cambodia (KHM)", description: { km: "", en: "Type to filter. Hidden for the custom sources, and for Natural Earth when its **Extent** is set to the whole world." } },
-          { name: "Admin level", type: "Combo box", default: "ADM1", description: { km: "", en: "`ADM0` country, `ADM1` province/state, `ADM2` district, `ADM3` commune, `ADM4` village, `ADM5`. Levels the country does not publish are **shown but disabled**, so a missing ADM4 is visibly missing rather than silently absent." } },
-          { name: "Release", type: "Combo box", default: "gbOpen", description: { km: "", en: "*geoBoundaries only.* `gbOpen` has the widest coverage; `gbHumanitarian` is UN OCHA sourced; `gbAuthoritative` is UN SALB official data." } },
-          { name: "Geometry", type: "Combo box", default: "Simplified", description: { km: "", en: "*geoBoundaries only.* Simplified is right for mapping and context. Take **Full detail** only when the exact boundary line matters — it can be many times larger." } },
-          { name: "Extent", type: "Combo box", default: "Selected country only", description: { km: "", en: "*Natural Earth only.* Its files are worldwide; this cuts the chosen country out as the layer loads." } },
-          { name: "Scale", type: "Combo box", default: "1:10m", description: { km: "", en: "*Natural Earth only.* `1:10m`, `1:50m`, `1:110m` — admin 1 is only worldwide at 1:10m. That file is about 40 MB, downloaded once and cached." } },
-          { name: "Address", type: "Text", default: "empty", description: { km: "", en: "*Custom sources only.* A `https://` address — a GeoJSON file, an ArcGIS `FeatureServer` layer, or a WFS endpoint. Local file paths are refused on purpose; use **[Layer Export / Import](layerexportimport.md)** for those." } },
-          { name: "Zoom levels", type: "Two spin boxes", default: "the service's own range", description: { km: "", en: "*Basemaps only.* Narrow the range QGIS will request tiles for." } },
-          { name: "Also add it to the Browser panel, permanently", type: "Checkbox", default: "off", description: { km: "", en: "*Basemaps only.* Writes the tile service into **XYZ Tiles** in the Browser, so it is there in every project without coming back here." } },
-          { name: "Dataset", type: "Combo box", default: "GLO-30 / COP30", description: { km: "", en: "*DEM only.* The elevation model to read." } },
-          { name: "Year", type: "Combo box", default: "the latest published", description: { km: "", en: "*Land cover only.* The year the map represents. Each map summarises that whole year." } },
-          { name: "API key", type: "Password + **Remember**", default: "empty", description: { km: "", en: "*OpenTopography only.* Free from OpenTopography. **Remember** keeps it encrypted in the QGIS password store, never in plain settings." } },
-          { name: "Area", type: "Combo box", default: "Current map extent", description: { km: "", en: "*DEM and land cover.* Current map extent, a rectangle or polygon drawn on the map, a polygon layer's boundary, or the extent of any layer. A drawn or boundary area **cuts the raster to the shape**, with NoData outside." } },
-          { name: "Selected features only", type: "Checkbox", default: "off", description: { km: "", en: "*DEM and land cover, boundary only.* Clip to the selected polygons rather than all of them." } },
-          { name: "Reproject to the project CRS", type: "Checkbox", default: "off", description: { km: "", en: "*DEM and land cover.* A DEM is warped with bilinear resampling; land cover with nearest-neighbour, so no class is ever invented. Off keeps the published grid exactly." } },
-          { name: "Also add as polygons (lc_code, lc_class)", type: "Checkbox", default: "off", description: { km: "", en: "*Land cover only.* Also turn the classes into polygons, written to a GeoPackage beside the GeoTIFF. Limited to 60 million pixels — about 6,000 km² at 10 m." } },
-          { name: "Save to", type: "File", default: "empty", description: { km: "", en: "*DEM and land cover.* Where to write the GeoTIFF. Empty means a temporary file, deleted when QGIS closes." } },
-          { name: "Layer name", type: "Text", default: "the source's own name", description: { km: "", en: "Auto-fills from the selection and keeps following it — until you type in it, after which your text is kept." } },
+          { name: "**Data type**", type: "Combo box", default: "Administrative boundaries", description: {
+            km: "",
+            en: "`Administrative boundaries`, `Other vector data`, `Basemap tile layer`, `Open digital elevation (DEM)`, `Open land cover (LULC)`. Decides which sources are offered and which rows appear.",
+          } },
+          { name: "**Data source**", type: "Combo box", default: "geoBoundaries", description: {
+            km: "",
+            en: "The portal to read. A source that is listed but greyed out is one the tool knows about and cannot reach yet; its tooltip says why.",
+          } },
+          { name: "**Country**", type: "Editable combo box", default: "Cambodia (KHM)", description: {
+            km: "",
+            en: "Type to filter. Hidden for the custom sources, and for Natural Earth when its **Extent* is set to the whole world.",
+          } },
+          { name: "**Admin level**", type: "Combo box", default: "ADM1", description: {
+            km: "",
+            en: "`ADM0` country, `ADM1` province/state, `ADM2` district, `ADM3` commune/sub-district, `ADM4` village, `ADM5`. Levels the country does not publish are **shown but disabled**, so a missing ADM4 is visibly missing rather than silently absent. For the KGA database the choices are named Province, District, Commune and Village.",
+          } },
+          { name: "**Feature type**", type: "Combo box", default: "Boundary (polygon)", description: {
+            km: "",
+            en: "*KGA database only. `Boundary (polygon)` or `Centre (point)`. Villages are centre points only.",
+          } },
+          { name: "**Province / District / Commune**", type: "Three combo boxes", default: "All", description: {
+            km: "",
+            en: "*KGA database only. Narrow the units listed below; each fills in after the one before it.",
+          } },
+          { name: "**Units list, filter box, Tick shown, Clear ticks**", type: "List", default: "nothing ticked", description: {
+            km: "",
+            en: "*KGA database only. Tick the units to add. Nothing ticked means everything inside the drop-downs above.",
+          } },
+          { name: "**Access key**", type: "Password + **Save key* / **Change key**", default: "empty", description: {
+            km: "",
+            en: "*KGA database only. The key to the private KGA data release, kept encrypted in the QGIS password store, or in the profile settings when that store is disabled.",
+          } },
+          { name: "**Release**", type: "Combo box", default: "gbOpen", description: {
+            km: "",
+            en: "*geoBoundaries only. `gbOpen` has the widest coverage; `gbHumanitarian` is UN OCHA sourced; `gbAuthoritative` is UN SALB official data.",
+          } },
+          { name: "**Geometry**", type: "Combo box", default: "Simplified", description: {
+            km: "",
+            en: "*geoBoundaries only. Simplified is right for mapping and context. Take **Full detail* only when the exact boundary line matters — it can be many times larger.",
+          } },
+          { name: "**Extent**", type: "Combo box", default: "Selected country only", description: {
+            km: "",
+            en: "*Natural Earth only. Its files are worldwide; this cuts the chosen country out as the layer loads. Set it to **Whole world* for every country at once.",
+          } },
+          { name: "**Scale**", type: "Combo box", default: "1:10m", description: {
+            km: "",
+            en: "*Natural Earth only. `1:10m`, `1:50m`, `1:110m`. See the Natural Earth note below - admin 1 is only worldwide at 1:10m. The 1:10m admin 1 file is about 40 MB, downloaded once and cached.",
+          } },
+          { name: "**Address**", type: "Text", default: "empty", description: { km: "", en: "*Custom sources only. A `https://` address. See **Custom addresses* below." } },
+          { name: "**Zoom levels**", type: "Two spin boxes", default: "the service's own range", description: { km: "", en: "*Basemaps only. Narrow the range QGIS will request tiles for." } },
+          { name: "**Also add it to the Browser panel, permanently**", type: "Checkbox", default: "off", description: {
+            km: "",
+            en: "*Basemaps only. Writes the tile service into **XYZ Tiles* in the Browser, so it is there in every project without coming back here.",
+          } },
+          { name: "**Dataset**", type: "Combo box", default: "GLO-30 / COP30", description: { km: "", en: "*DEM only. The elevation model to read." } },
+          { name: "**Year**", type: "Combo box", default: "the latest published", description: {
+            km: "",
+            en: "*Land cover only. The year the map represents. Each map summarises that whole year.",
+          } },
+          { name: "**API key**", type: "Password + **Remember**", default: "empty", description: {
+            km: "",
+            en: "*OpenTopography only. Get one free from OpenTopography. **Remember* keeps it encrypted in the QGIS password store (QGIS may ask for its master password), never in plain settings.",
+          } },
+          { name: "**Area**", type: "Combo box", default: "Current map extent", description: { km: "", en: "*DEM and land cover. See **Area (DEM and land cover)* below." } },
+          { name: "**Draw rectangle / Draw polygon / Clear**", type: "Buttons", default: "—", description: { km: "", en: "*DEM and land cover, drawn area only. Arms a drawing tool on the map." } },
+          { name: "**Layer**", type: "Layer picker", default: "the active layer", description: {
+            km: "",
+            en: "*DEM and land cover, layer areas only. Polygon layers for a boundary, any layer for an extent.",
+          } },
+          { name: "**Selected features only**", type: "Checkbox", default: "off", description: {
+            km: "",
+            en: "*DEM and land cover, boundary only. Clip to the selected polygons rather than all of them.",
+          } },
+          { name: "**Reproject to the project CRS**", type: "Checkbox", default: "off", description: {
+            km: "",
+            en: "*DEM and land cover. A DEM is warped with bilinear resampling; land cover with nearest-neighbour, so no class is ever invented. Off keeps the published grid exactly — EPSG:4326 for a DEM and WorldCover, the area's UTM zone for Esri Land Cover.",
+          } },
+          { name: "**Also add as polygons (lc_code, lc_class)**", type: "Checkbox", default: "off", description: {
+            km: "",
+            en: "*Land cover only. Also turn the classes into polygons, written to a GeoPackage beside the GeoTIFF (numbered, never overwriting an earlier one). Limited to 60 million pixels — about 6,000 km² at 10 m.",
+          } },
+          { name: "**Save to**", type: "File", default: "empty", description: {
+            km: "",
+            en: "*DEM and land cover. Where to write the GeoTIFF. Empty means a temporary file, deleted when QGIS closes.",
+          } },
+          { name: "**Layer name**", type: "Text", default: "the source's own name", description: {
+            km: "",
+            en: "Auto-fills from the selection and keeps following it — until you type in it, after which your text is kept.",
+          } },
         ],
       },
       {
         title: { km: "", en: "Buttons" },
-        nameLabel: "Control",
+        nameLabel: "Button",
         blocks: [],
         rows: [
-          { name: "Add to Map", type: "Button", default: "—", description: { km: "", en: "Download if needed, then add the layer." } },
-          { name: "Refresh", type: "Button", default: "—", description: { km: "", en: "Forget what is cached for the current selection and re-read the source. Use this if a download was interrupted or the source has republished." } },
-          { name: "Clear cache", type: "Button", default: "—", description: { km: "", en: "Delete everything the tool has downloaded. Layers already on the map are unaffected — they hold their own copy in memory." } },
+          { name: "**Add to Map**", type: "", default: "", description: { km: "", en: "Download if needed, then add the layer." } },
+          { name: "**Refresh**", type: "", default: "", description: {
+            km: "",
+            en: "Forget what is cached for the current selection and re-read the source. Use this if a download was interrupted or the source has republished.",
+          } },
+          { name: "**Clear cache**", type: "", default: "", description: {
+            km: "",
+            en: "Delete everything the tool has downloaded. Layers already on the map are unaffected — they hold their own copy in memory.",
+          } },
+          { name: "**Help**", type: "", default: "", description: { km: "", en: "This page." } },
+        ],
+      },
+      {
+        title: { km: "", en: "Area (DEM and land cover)" },
+        nameLabel: "Area",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "The details panel shows the area in km², its bounds, the resolution and an estimate of the output size before anything is downloaded. Requests over 700 million pixels are refused. At GLO-30 that is about 54 square degrees, or roughly 665,000 km² near the equator. OpenTopography's own limits are checked too — 450,000 km² for the 30 m datasets and 4,050,000 km² for SRTM GL3 and COP90, measured on the area's bounding box.",
+            } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "For land cover the limit is 500 million pixels — about 50,000 km² at 10 m, a large province. Esri's service hands out at most 4000 × 4000 pixels per request, so the details panel also says how many requests the area takes.",
+            } },
+        ],
+        rows: [
+          { name: "**Current map extent**", type: "", default: "", description: { km: "", en: "The bounding box of what the map shows. It follows the map as you pan." } },
+          { name: "**Draw a rectangle or polygon on the map**", type: "", default: "", description: {
+            km: "",
+            en: "Click **Draw rectangle* and drag, or **Draw polygon* and click each corner, then double-click, right-click or press Enter. Backspace removes the last corner, Escape starts again. The raster is **cut to the shape**, with NoData outside it. The shape stays on the map, dashed red, until you clear it or close the window.",
+          } },
+          { name: "**Clip to a polygon layer's boundary**", type: "", default: "", description: {
+            km: "",
+            en: "The layer's polygons (or only the selected ones) are merged and the raster is **cut to them**, with NoData outside.",
+          } },
+          { name: "**Extent of a layer**", type: "", default: "", description: { km: "", en: "The bounding box of any vector or raster layer." } },
+        ],
+      },
+      {
+        title: { km: "", en: "Custom addresses" },
+        nameLabel: "You paste",
+        blocks: [
+          { type: "paragraph", text: { km: "", en: "Three shapes, told apart by the address itself:" } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "Local file paths are refused on purpose — use **Layer Export / Import** for those.",
+            } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "The address is used as typed for the request, but the layer's source address and attribution are written **without a user name, password or query string**, so a token pasted as `?token=…` never travels in the project file or in an export of the layer.",
+            } },
+        ],
+        rows: [
+          { name: "`https://…/data.geojson` (or `.zip`, `.gpkg`, `.kml`)", type: "", default: "", description: { km: "", en: "Downloaded and opened with GDAL/OGR." } },
+          { name: "`https://…/FeatureServer/0`", type: "", default: "", description: {
+            km: "",
+            en: "Queried as GeoJSON and **paged through**. A service that caps each reply at 1000 or 2000 records still arrives complete. A service that ignores paging, or has more than 50 pages of records, is refused with a message rather than returned truncated or repeated.",
+          } },
+          { name: "`https://…/geoserver/wfs?service=WFS`", type: "", default: "", description: { km: "", en: "Opened live by the QGIS WFS provider. This one is *not a scratch layer." } },
         ],
       },
     ],
@@ -293,28 +520,67 @@ export const tools = [
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "**Boundaries and other vector data** — a memory (scratch) layer in the source's own CRS, carrying the publisher, licence and source address in the layer metadata. A name already taken becomes `name (2)`." },
-        { km: "", en: "**A WFS address** — a live WFS layer, read from the service on demand. This one is not a scratch layer." },
-        { km: "", en: "**DEM** — a GeoTIFF (Float32 or Int16, DEFLATE, NoData −32767) in EPSG:4326 or the project CRS." },
-        { km: "", en: "**Land cover** — a classified GeoTIFF whose pixel values are the publisher's class codes, with class names, the publisher's colour table and a raster attribute table in the `.tif.aux.xml` beside it, which ArcGIS reads as well as QGIS. It opens with a paletted legend such as `2 - Trees`, saved as a `.qml` so it opens styled next time." },
-        { km: "", en: "**Land cover polygons** — optional GeoPackage layer `landcover` with `lc_code` and `lc_class`, one polygon per connected patch." },
-        { km: "", en: "**Basemap** — an XYZ raster layer in EPSG:3857, placed at the bottom of the layer tree." },
+      { type: "table", head: [{ km: "", en: "Data type" }, { km: "", en: "What lands in the project" }], rows: [
+        [{ km: "", en: "Administrative boundaries, other vector data" }, {
+            km: "",
+            en: "A **memory (scratch) layer* in the source's own CRS, carrying the publisher, licence and source address in the layer's metadata. A layer whose name is already taken becomes `name (2)`.",
+          }],
+        [{ km: "", en: "WFS address" }, { km: "", en: "A live **WFS layer**, read from the service on demand." }],
+        [{ km: "", en: "DEM" }, {
+            km: "",
+            en: "A **GeoTIFF raster layer* (Float32 or Int16, DEFLATE-compressed, NoData −32767) in EPSG:4326 or the project CRS, carrying its licence in the layer metadata. Written to **Save to**, or to a temporary file that QGIS deletes on exit — the message bar offers **Save layer…* for those.",
+          }],
+        [{ km: "", en: "Land cover" }, {
+            km: "",
+            en: "A **classified GeoTIFF* (Byte, DEFLATE-compressed, NoData 0) whose pixel values are the publisher's class codes, with the **class names**, the publisher's **colour table* and a **raster attribute table* — `Value`, `Count`, `lc_code`, `lc_class`, `Red`, `Green`, `Blue` — in the `.tif.aux.xml` beside it, which ArcGIS reads as well as QGIS. It opens with a paletted legend such as `2 - Trees`, saved as a `.qml` beside the file so it opens styled next time too. Written to **Save to**, or to a temporary file.",
+          }],
+        [{ km: "", en: "Land cover polygons" }, {
+            km: "",
+            en: "*Optional. A **GeoPackage* layer `landcover` with `lc_code` (integer) and `lc_class` (text), one polygon per connected patch of a class, styled with the same legend.",
+          }],
+        [{ km: "", en: "Basemap" }, {
+            km: "",
+            en: "An **XYZ raster layer* in EPSG:3857, placed at the bottom of the layer tree. Optionally also a permanent Browser entry.",
+          }],
       ] },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Downloads are cached.** Adding the same boundary twice costs one download, and the second works with the network unplugged. The cache lives under the QGIS profile directory (`kga_tools/data_cache`) and is trimmed, least recently used first, once it passes 500 MB." },
-        { km: "", en: "**Natural Earth's ADM1 coverage is not the same at every scale** — 251 countries at 1:10m, nine at 1:50m, the USA only at 1:110m. ADM1 is greyed out where the file has nothing. Its 24 Cambodian units are its own generalisation, not the official 25 — use geoBoundaries or HDX when the province count has to be right." },
-        { km: "", en: "**One HDX download carries every level.** COD-AB publishes a single zipped shapefile holding ADM0 to ADM3 together, so switching level after the first add costs nothing." },
-        { km: "", en: "**Attribution is required by every source here**, including the basemaps. The licence is shown before the download, written into the layer's metadata, and travels with the layer when it is exported." },
-        { km: "", en: "**Copernicus tiles are streamed, not downloaded.** They are Cloud Optimised GeoTIFFs in a public AWS bucket, so only the part inside your area crosses the network." },
-        { km: "", en: "**Requests have ceilings.** Over 700 million pixels is refused for a DEM, 500 million for land cover; OpenTopography's own limits are checked too." },
-        { km: "", en: "**The Google basemaps come with a licensing caveat.** Google's tile endpoints are not licensed for use outside Google's own APIs and SDKs, so whether a particular deliverable may use them is a question for whoever makes it." },
-        { km: "", en: "**A token pasted into a custom address never travels.** The layer's recorded source address and attribution are written without user name, password or query string." },
-        { km: "", en: "**Coverage is the publisher's, not the tool's.** A greyed-out level is the source saying it has nothing. Trying another release or another source is often the answer." },
-        { km: "", en: "**The window needs the QGIS canvas** and cannot run headless or inside a Processing model." },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Downloads are cached.** Adding the same boundary twice costs one download, and the second one works with the network unplugged. The cache lives under the QGIS profile directory (`kga_tools/data_cache`) and is trimmed, least recently used first, once it passes 500 MB. - **Natural Earth is worldwide files, cut down on the way in.** One download serves every country, so picking a second country afterwards costs nothing. Its admin 1 coverage is not the same at every scale, and this is the publisher's doing rather than the tool's:",
+        } },
+      { type: "table", head: [{ km: "", en: "ADM1 scale" }, { km: "", en: "Units" }, { km: "", en: "Countries covered" }], rows: [
+        [{ km: "", en: "1:10m" }, { km: "", en: "4,596" }, { km: "", en: "251 — effectively everywhere. Cambodia has 24." }],
+        [{ km: "", en: "1:50m" }, { km: "", en: "294" }, {
+            km: "",
+            en: "9 only: Australia, Brazil, Canada, China, Indonesia, India, Russia, USA, South Africa",
+          }],
+        [{ km: "", en: "1:110m" }, { km: "", en: "51" }, { km: "", en: "the USA only" }],
       ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "So ADM1 is greyed out at 1:50m and 1:110m for a country those files do not hold, the same way a missing geoBoundaries level is. Admin 0 is complete at all three scales. Note that Natural Earth's 24 Cambodian units are its own generalisation, not the official 25 — use geoBoundaries or HDX when the province count has to be right.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **One HDX download carries every level.** COD-AB publishes a single zipped shapefile holding ADM0 to ADM3 together, so switching level after the first add costs nothing. The level is picked out of the container by name, and publishers do not all agree on that name — both `khm_admin2.shp` and `xxx_admbnda_adm2_gov_20181004` are understood. - **Attribution is required by every source here**, including the basemaps. The licence is shown before the download, written into the layer's metadata, and travels with the layer when it is exported. - **Copernicus tiles are streamed, not downloaded.** They are Cloud Optimised GeoTIFFs in a public AWS bucket, so only the part inside your area crosses the network — a district out of a 48 MB tile is a few MB. Tiles over open sea do not exist; the tool knows which do from the bucket's own tile list, cached for a week. This goes through GDAL rather than QGIS's network stack; the proxy set in QGIS Options is passed across to it. - **OpenTopography downloads are cached** like the vector sources, keyed by dataset and bounding box, so asking for the same area again costs nothing. The API key is kept in the QGIS authentication database (never in plain settings), is trimmed and percent-encoded into the request, and is sent only to OpenTopography. - **A file you name is never replaced silently.** Typing the path of an existing DEM or land-cover file asks first; a file that is open in the project as a layer is refused outright. - **A polygon failure keeps the raster.** If turning land cover into polygons fails, the finished raster is still added and the message says what went wrong with the polygons. - **Land cover is kept on its own grid.** Esri Land Cover is asked for in the UTM zone of the area's centre at exactly 10 m, which is how it is published, so nothing is resampled. An area crossing a zone boundary is still one raster, in the centre's zone. WorldCover stays on its 1/12000° grid, streamed from the AWS bucket like the Copernicus DEM. Esri requests are cached per chunk, so asking again for an overlapping area costs little. - **A land-cover year that is not published yet** comes back from Esri's service as all NoData; the tool says so rather than adding an empty raster. - **The two land-cover products do not share a legend.** Esri's codes run 1 to 11 with gaps, WorldCover's 10 to 100 in tens, and their classes are defined differently. WorldCover 2020 and 2021 were also made with different algorithm versions, so a difference between them is not necessarily real change. - **Copernicus, SRTM, NASADEM and ALOS are surface models.** They follow the tops of trees and buildings. EU DTM and GEDI L3 are bare-earth. The `_E` datasets give heights above the WGS84 ellipsoid, not above sea level. - **Basemap list.** Eleven services ship with the tool:",
+        } },
+      { type: "table", head: [{ km: "", en: "Basemap" }, { km: "", en: "Deepest zoom" }], rows: [
+        [{ km: "", en: "OpenStreetMap" }, { km: "", en: "19" }],
+        [{ km: "", en: "Google Satellite, Google Satellite Hybrid" }, { km: "", en: "21" }],
+        [{ km: "", en: "Google Map" }, { km: "", en: "20" }],
+        [{ km: "", en: "Google Terrain, Google Terrain Hybrid" }, { km: "", en: "18" }],
+        [{ km: "", en: "ESRI Topography, ESRI Imagery" }, { km: "", en: "19" }],
+        [{ km: "", en: "ESRI National Geographic, ESRI Grey (Dark), ESRI Grey (Light)" }, { km: "", en: "16" }],
+      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Zooming past a service's deepest level is not an error — QGIS scales the last real level up, which looks soft but keeps working. Anything not listed can be added through **Custom XYZ URL…**.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **The Google basemaps come with a licensing caveat.** Google's tile endpoints are not licensed for use outside Google's own APIs and SDKs, so whether a particular map or deliverable may use them is a question for whoever makes it. They are included because they are what people here use; this note is here so the decision is an informed one rather than an assumption. - **Coverage is the publisher's, not the tool's.** If geoBoundaries has no ADM4 for a country, the level is greyed out; that is the source saying it has nothing, not a failure here. Trying another release or another source is often the answer. - **The window needs the QGIS canvas** and cannot run headless or inside a Processing model. - **Network errors are reported as sentences**, not tracebacks. Everything the tool fetches through QGIS honours the proxy, SSL and authentication settings configured in QGIS Options. The tiles streamed straight from AWS (Copernicus, WorldCover) go through GDAL, which is handed the proxy only. If the tool cannot reach a source but a browser can, QGIS Options is the first place to look.",
+        } },
     ],
     seeAlso: ["imagery_downloader", "layerexportimport", "raster_format_converter"],
   },
@@ -334,8 +600,14 @@ export const tools = [
       en: "Downloads web-map raster tiles for an area, stitches them into one georeferenced image and adds it to the map.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Downloads web-map raster tiles for an area, stitches them into one georeferenced image, saves it in the chosen format and CRS, and adds it to the map below the vector layers. The source list is data-driven; the only source shipped is **Google Satellite**." } },
-      { type: "paragraph", text: { km: "", en: "Tiles are fetched through QGIS's network stack — proxy and authentication honoured — by a background task with a thread pool, retries with back-off and automatic slowing down when the server throttles. Tiles are written into a sparse tiled GeoTIFF work file as they arrive, and a checkpoint records which are done, so **an interrupted job resumes from the same folder without re-downloading anything.**" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Downloads web-map raster tiles for an area, stitches them into one georeferenced image, saves it in the chosen format and CRS, and adds it to the map below the vector layers. The source list is data-driven (`core/imagery/sources.py`); the only source shipped is **Google Satellite**.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Tiles are fetched through QGIS's network stack (proxy and authentication honoured) by a background task with a thread pool, retries with back-off and automatic slowing down when the server throttles. Tiles are written into a sparse tiled GeoTIFF work file as they arrive, and a checkpoint records which are done, so an interrupted job resumes from the same folder without re-downloading anything.",
+        } },
     ],
     parameters: [
       {
@@ -343,16 +615,28 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Imagery source", type: "Combo box", default: "Google Satellite", description: { km: "", en: "Entry from the source registry." } },
-          { name: "Download extent", type: "Combo box", default: "Map canvas", description: { km: "", en: "Map canvas, layer extent, a box drawn on the map, or a polygon layer — the bounding box is downloaded and pixels outside are masked. *Selected features only* is optional." } },
-          { name: "Zoom level", type: "Combo box", default: "Auto", description: { km: "", en: "Within the source's min–max zoom; the ground resolution at the area's latitude is shown. *Auto* matches the canvas scale." } },
-          { name: "Output CRS", type: "CRS selector", default: "Project CRS", description: { km: "", en: "EPSG:3857 is pixel-exact; others are reprojected with bilinear resampling." } },
-          { name: "Format", type: "Combo box", default: "GeoTIFF", description: { km: "", en: "GeoTIFF, JPEG, PNG, JPEG 2000, ECW — only those the local GDAL can write." } },
-          { name: "Build pyramids", type: "Boolean", default: "—", description: { km: "", en: "Internal overviews for GeoTIFF." } },
-          { name: "Transparent outside polygon", type: "Boolean", default: "—", description: { km: "", en: "Clip mode: transparent where the format has alpha, otherwise white." } },
-          { name: "Connections", type: "Number 1–16", default: "—", description: { km: "", en: "How many tiles are fetched in parallel." } },
-          { name: "Output folder / File name", type: "Folder + text", default: "—", description: { km: "", en: "Where the result and, if enabled, the checkpoint go." } },
-          { name: "Enable checkpoint", type: "Boolean", default: "on", description: { km: "", en: "Keep `<name>.kga_checkpoint.json` and `<name>_work.tif` so a stopped job can resume." } },
+          { name: "**Imagery source**", type: "", default: "", description: { km: "", en: "Entry from the source registry." } },
+          { name: "**Download extent**", type: "", default: "", description: {
+            km: "",
+            en: "Map canvas, layer extent, box drawn on the map, or polygon layer (bounding box downloaded, pixels outside masked; optional *Selected features only*).",
+          } },
+          { name: "**Zoom level**", type: "", default: "", description: {
+            km: "",
+            en: "Source min–max zoom; the ground resolution at the area's latitude is shown. *Auto matches the canvas scale.",
+          } },
+          { name: "**Output CRS**", type: "", default: "", description: {
+            km: "",
+            en: "Project CRS (default) or a selected CRS. EPSG:3857 is pixel-exact; others are reprojected (bilinear).",
+          } },
+          { name: "**Format**", type: "", default: "", description: { km: "", en: "GeoTIFF, JPEG, PNG, JPEG 2000, ECW — only those the local GDAL can write." } },
+          { name: "**Build pyramids**", type: "", default: "", description: { km: "", en: "Internal overviews for GeoTIFF." } },
+          { name: "**Transparent outside polygon**", type: "", default: "", description: { km: "", en: "Clip mode: transparent where the format has alpha, otherwise white." } },
+          { name: "**Connections**", type: "", default: "", description: { km: "", en: "Parallel downloads, 1–16." } },
+          { name: "**Output folder / File name**", type: "", default: "", description: { km: "", en: "Where the result and, if enabled, the checkpoint go." } },
+          { name: "**Enable checkpoint**", type: "", default: "", description: {
+            km: "",
+            en: "Keep `<name>.kga_checkpoint.json` and `<name>_work.tif` so a stopped job can resume.",
+          } },
         ],
       },
     ],
@@ -367,20 +651,16 @@ export const tools = [
       ] },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "The finished image, georeferenced — embedded for GeoTIFF, JPEG 2000 and ECW; a world file (`.jgw` / `.pgw`), `.prj` and `.aux.xml` for JPEG and PNG." },
-        { km: "", en: "The layer added to the project with the source attribution in its metadata." },
-        { km: "", en: "The work file and checkpoint removed after a successful export." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The finished image, georeferenced: embedded for GeoTIFF / JPEG 2000 / ECW; a world file (`.jgw` / `.pgw`), `.prj` and `.aux.xml` for JPEG / PNG. The layer is added to the project with the source attribution in its metadata. The work file and checkpoint are removed after a successful export.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Google's terms restrict bulk downloading and offline use of map tiles.** The tool's Help text says so and the result layer carries Google's attribution, but the window does not stop to ask for an acknowledgement before it downloads. **The user is responsible for having the right to use the imagery.**" },
-        { km: "", en: "Extents crossing the antimeridian are rejected. Latitudes are clamped to ±85.0511°. Above 5,000,000 tiles, Download is disabled." },
-        { km: "", en: "JPEG is limited to 65,500 px per side and has no alpha, so empty areas come out white." },
-        { km: "", en: "ECW is offered only when GDAL has an ECW writer with an encode licence key — see **[Raster Format Converter](raster_format_converter.md)** for the same caveat." },
-        { km: "", en: "The work file needs about 3 bytes per pixel of the tile mosaic in free disk space, on top of the final image." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "* Google's terms restrict bulk downloading and offline use of map tiles. The tool's Help text says so and the result layer carries Google's attribution, but **the window does not stop to ask for an acknowledgement** before it downloads. The user is responsible for having the right to use the imagery. * Extents crossing the antimeridian are rejected. Latitudes are clamped to ±85.0511°. Above 5,000,000 tiles Download is disabled. * JPEG is limited to 65,500 px per side and has no alpha (empty areas white). * ECW is offered only when GDAL has an ECW writer with an encode licence key. * The work file needs about 3 bytes per pixel of the tile mosaic in free disk space in addition to the final image. * Tests: `tests/imagery_downloader/` (tile maths, estimator, checkpoint, engine and dialog against a local fake tile server). The folder is kept locally and is not part of the repository.",
+        } },
     ],
     seeAlso: ["add_data", "raster_format_converter"],
   },
@@ -467,60 +747,75 @@ export const tools = [
       en: "Package layers, their styles and everything those styles need into one .kgalp file that opens anywhere.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Packages layers, their styles and everything those styles need into a single `.kgalp` file that opens on a machine that has never seen the data." } },
-      { type: "paragraph", text: { km: "", en: "A QLR file only *points at* data that has to travel beside it. A layer package *contains* it. Vector layers are copied into one GeoPackage inside the archive — field domains included — rasters are copied as their own files with their sidecars, each style is saved as a QML, and every SVG symbol and raster marker image the symbology references is collected and de-duplicated. The group structure of the Layers panel is recorded so the receiving end rebuilds it." } },
-      { type: "paragraph", text: { km: "", en: "Reach for it when you need to hand a styled map to a colleague, a client or a field team as one file." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Packages layers, their styles and everything those styles need into a single `.kgalp` file that opens on a machine that has never seen the data.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A QLR file only *points at* data that has to travel beside it. A layer package *contains* it. Vector layers are copied into one GeoPackage inside the archive — field domains included — rasters are copied as their own files with their sidecars, each style is saved as a QML, and every SVG symbol and raster marker image the symbology references is collected and de-duplicated. The group structure of the Layers panel is recorded so the receiving end rebuilds it.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Reach for it when you need to hand a styled map to a colleague, a client or a field team as one file.",
+        } },
     ],
     parameters: [
       {
         title: null,
-        nameLabel: "Parameter",
+        nameLabel: "Input",
         blocks: [],
         rows: [
-          { name: "Layers to package", type: "Multiple map layers", default: "—", description: { km: "", en: "The vector and raster layers to include. Anything that is neither is skipped with a warning." } },
-          { name: "Package only the selected features", type: "Boolean", default: "`False`", description: { km: "", en: "Package just the current selection of each vector layer instead of all its features." } },
-          { name: "Collect SVG symbols and marker images", type: "Boolean", default: "`True`", description: { km: "", en: "Copies the SVG and image files the symbology points at into the package and records where they came from, so the symbols still render on the far side." } },
-          { name: "Include layer metadata", type: "Boolean", default: "`True`", description: { km: "", en: "Stores each layer's title, abstract and identifier in the manifest." } },
-          { name: "Layer package", type: "File destination", default: "—", description: { km: "", en: "The `.kgalp` to write. The extension is appended if you leave it off." } },
-          { name: "Package report", type: "File destination (HTML)", default: "not created", description: { km: "", en: "Optional run report: counts, a per-layer table and every warning. Tick it in the Processing dialog to produce one." } },
+          { name: "**Layers to package**", type: "", default: "", description: {
+            km: "",
+            en: "A tick-box list of the project's vector and raster layers (in Layers-panel order). **Select all* / **Clear* tick or untick the lot; **Browse...* adds layers from files on disk that are not in the project.",
+          } },
+          { name: "**Package only the selected features**", type: "", default: "", description: {
+            km: "",
+            en: "For each ticked vector layer that has a selection, package just those features. Layers without a selection go in whole.",
+          } },
+          { name: "**Collect SVG symbols and marker images**", type: "", default: "", description: {
+            km: "",
+            en: "Copies the SVG and image files the symbology points at into the package and records where they came from, so the symbols still render on the far side. On by default.",
+          } },
+          { name: "**Include layer metadata**", type: "", default: "", description: {
+            km: "",
+            en: "Stores each layer's title, abstract and identifier in the manifest. On by default.",
+          } },
+          { name: "**Write an HTML report beside the package**", type: "", default: "", description: {
+            km: "",
+            en: "Optional `<package>_report.html`: counts, a per-layer table and every warning.",
+          } },
+          { name: "**Layer package (.kgalp)**", type: "", default: "", description: {
+            km: "",
+            en: "Where to save. The extension is added if you leave it off; an existing file is replaced only after you confirm.",
+          } },
         ],
       },
     ],
-    outputs: [
-      { name: "Layers packaged", type: "Number", description: { km: "", en: "Vector plus raster layers actually written (skipped layers are not counted)." } },
-    ],
+    outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Load and style the layers in QGIS exactly as you want them to arrive." },
-        { km: "", en: "Open **KGA Data Management > Create Layer Package**." },
-        { km: "", en: "Click the **…** button beside *Layers to package* and tick the layers. Group structure comes from the Layers panel, not from this list." },
-        { km: "", en: "If you only want part of the data, select those features on the map first and tick **Package only the selected features**." },
-        { km: "", en: "Choose where the `.kgalp` goes and press **Run**." },
-        { km: "", en: "Read the log. Warnings here are the ones that matter — especially fonts." },
-        { km: "", en: "Send the single `.kgalp` file. The recipient opens it with **[Open Layer Package](open_layer_package.md)**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Load and style the layers in QGIS exactly as you want them to arrive. 2. Open **KGA Data Management > Create Layer Package**. 3. Tick the layers in the list. Group structure comes from the Layers panel, not from this list. 4. If you only want part of the data, select those features on the map first and tick **Package only the selected features**. 5. Choose where the `.kgalp` goes and press **Create**. 6. Read the message under the list. Warnings here are the ones that matter — especially fonts. 7. Send the single `.kgalp` file. The recipient opens it with **[Open Layer Package](open_layer_package.md)**.",
+        } },
     ],
     results: [
       { type: "list", items: [
-        { text: { km: "", en: "One `.kgalp` archive at the chosen path, holding:" }, items: [
-          { km: "", en: "a GeoPackage with every vector layer (field domains preserved)," },
-          { km: "", en: "each raster copied as its own file with its sidecars," },
-          { km: "", en: "a QML style per layer," },
-          { km: "", en: "the collected SVG and marker image files, de-duplicated," },
-          { km: "", en: "a manifest recording the layers, CRSs, styles, resources and group tree." },
-        ] },
-        { km: "", en: "An optional HTML **Package report**." },
-        { km: "", en: "The **Layers packaged** count in the Processing results panel." },
+        { km: "", en: "One `.kgalp` archive at the chosen path, holding:" },
+        { km: "", en: "a GeoPackage with every vector layer (field domains preserved)," },
+        { km: "", en: "each raster copied as its own file with its sidecars," },
+        { km: "", en: "a QML style per layer," },
+        { km: "", en: "the collected SVG and marker image files, de-duplicated," },
+        { km: "", en: "a manifest recording the layers, CRSs, styles, resources and group tree." },
+        { km: "", en: "An optional HTML report (`<package>_report.html`)." },
       ] },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Fonts cannot be packaged.** If a layer uses a font marker you get a warning naming the font, so you can tell the recipient what to install. Nothing else in the styling has this problem." },
-        { km: "", en: "**The manifest is written last, on purpose.** A package interrupted halfway through has no manifest, and Open Layer Package refuses it rather than opening a half-loaded project. An interrupted run leaves a file you should delete." },
-        { km: "", en: "Invalid layers, and layers that are neither vector nor raster, are skipped — each with a warning naming the layer. Check the count in the log against the number you ticked." },
-        { km: "", en: "Package size is reported in the change report. Rasters dominate it; a large DEM makes a large package." },
-        { km: "", en: "Pairs with **[Open Layer Package](open_layer_package.md)**, which is why the two sit at the top of the Data Management menu together." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Fonts cannot be packaged.** If a layer uses a font marker you get a warning naming the font, so you can tell the recipient what to install. Nothing else in the styling has this problem. - **The manifest is written last, on purpose.** A package interrupted halfway through has no manifest, and Open Layer Package refuses it rather than opening a half-loaded project. An interrupted run leaves a file you should delete. - Invalid layers, and layers that are neither vector nor raster, are skipped — each with a warning naming the layer. Check the count in the log against the number you ticked. - Package size is reported in the change report. Rasters dominate it; a large DEM makes a large package. - Pairs with **[Open Layer Package](open_layer_package.md)**, which is why the two sit at the top of the Data Management menu together.",
+        } },
     ],
     seeAlso: ["open_layer_package"],
   },
@@ -540,49 +835,66 @@ export const tools = [
       en: "Unpack a .kgalp and add its layers, styles and group structure to the current project.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "The package is extracted to a real folder on disk, never to a temporary one, because the layers point at the extracted files — a temp folder would leave a project full of broken layers after the next restart. SVG and image paths inside each style are rewritten to the extracted copies, so the symbology renders the same as it did on the machine that built the package." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Unpacks a `.kgalp` written by **[Create Layer Package](create_layer_package.md)** and adds its layers, styles and group structure to the current project.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The package is extracted to a real folder on disk, never to a temporary one, because the layers point at the extracted files — a temp folder would leave a project full of broken layers after the next restart. SVG and image paths inside each style are rewritten to the extracted copies, so the symbology renders the same as it did on the machine that built the package.",
+        } },
+      { type: "subheading", text: { km: "", en: "Browsing a package without opening it" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A `.kgalp` also appears in the QGIS **Browser** panel (and the Data Source Manager) like a database: expand it to list its layers, then drag a layer onto the map or double-click it. Nothing is unpacked for this — layers are read in place from inside the package (GDAL `/vsizip/`), so they are read-only and arrive with QGIS's default style.",
+        } },
+      { type: "paragraph", text: { km: "", en: "Right-click menu:" } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- On the package: **Open Layer Package...** (this tool, already pointed at the file) and **[Add Layers to Layer Package...](add_to_layer_package.md)**. - On a layer: **Add to Project (with style)** unpacks the package once into `kga_package_cache` in the QGIS profile folder and loads the layer with its packaged style and SVG symbols.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A layer loaded straight from the Browser keeps the package file open, so Windows will not let **Add Layers to Layer Package** replace it until that layer is removed from the project.",
+        } },
     ],
     parameters: [
       {
         title: null,
-        nameLabel: "Parameter",
+        nameLabel: "Input",
         blocks: [],
         rows: [
-          { name: "Layer package", type: "File (`.kgalp`)", default: "—", description: { km: "", en: "The package to open." } },
-          { name: "Extract to", type: "Folder destination", default: "not created", description: { km: "", en: "Where the contents are unpacked. Leave it empty and a `KGA Packages/<package name>` folder is created beside the project file (or in your home folder if the project has never been saved); the log says where everything went." } },
-          { name: "Add the layers to the project", type: "Boolean", default: "`True`", description: { km: "", en: "Untick to extract only, without touching the Layers panel." } },
-          { name: "Group name (the package name if empty)", type: "String", default: "empty", description: { km: "", en: "The Layers-panel group the layers are placed in. Defaults to the package file name." } },
+          { name: "**Layer package (.kgalp)**", type: "", default: "", description: { km: "", en: "The package to open." } },
+          { name: "**Extract to**", type: "", default: "", description: {
+            km: "",
+            en: "Where the contents are unpacked. Leave it empty and a `KGA Packages/<package name>` folder is created beside the project file (or in your home folder if the project has never been saved); the box shows where.",
+          } },
+          { name: "**Add the layers to the project**", type: "", default: "", description: { km: "", en: "Untick to extract only, without touching the Layers panel." } },
+          { name: "**Group name**", type: "", default: "", description: {
+            km: "",
+            en: "The Layers-panel group the layers are placed in. Defaults to the package file name.",
+          } },
         ],
       },
     ],
-    outputs: [
-      { name: "Extraction folder", type: "String", description: { km: "", en: "The folder the package was unpacked into." } },
-      { name: "Layers added", type: "Number", description: { km: "", en: "How many layers reached the project. `0` when *Add the layers to the project* is off." } },
-    ],
+    outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Data Management > Open Layer Package**." },
-        { km: "", en: "Point **Layer package** at the `.kgalp` you received." },
-        { km: "", en: "Choose an **Extract to** folder somewhere permanent — beside the project is the usual choice. Skipping this is fine; the default is also permanent." },
-        { km: "", en: "Press **Run**." },
-        { km: "", en: "The layers appear in a group named after the package, styled, with the group structure of the original project rebuilt." },
-        { km: "", en: "Read the log for warnings carried over from the packaging machine — a missing font is the common one." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Data Management > Open Layer Package**. 2. Choose the `.kgalp` you received under **Layer package**. 3. Choose an **Extract to** folder somewhere permanent — beside the project is the usual choice. Skipping this is fine; the default is also permanent. 4. Press **Open**. 5. The layers appear in a group named after the package, styled, with the group structure of the original project rebuilt. 6. Read the message under the options for warnings carried over from the packaging machine — a missing font is the common one.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "The extracted package on disk: a GeoPackage of vector layers, raster files, QML styles, and the collected SVG/marker resources." },
-        { km: "", en: "The layers in the project, inside one group, with their styles applied and their symbol paths repointed at the extracted resources." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- The extracted package on disk: a GeoPackage of vector layers, raster files, QML styles, and the collected SVG/marker resources. - The layers in the project, inside one group, with their styles applied and their symbol paths repointed at the extracted resources.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Do not extract to a temporary folder.** The layers reference the extracted files; if the folder disappears the project breaks. This is why the tool never uses a temp folder even when you leave the parameter empty." },
-        { km: "", en: "**Fonts still have to be installed by hand.** The package carries a warning naming any font marker it could not include; it is repeated in the log here." },
-        { km: "", en: "A package whose writing was interrupted has no manifest and is refused with a clear error, rather than opening half-loaded." },
-        { km: "", en: "Archive entries that would be written outside the extraction folder are refused — a package cannot write elsewhere on your disk." },
-        { km: "", en: "Layers listed in the manifest but missing from the archive are warned about and skipped; anything not mentioned by the recorded group tree is still hung off the group directly, so no layer is silently dropped." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Do not extract to a temporary folder.** The layers reference the extracted files; if the folder disappears the project breaks. This is why the tool never uses a temp folder even when you leave the parameter empty. - **Fonts still have to be installed by hand.** The package carries a warning naming any font marker it could not include; it is repeated in the log here. - A package whose writing was interrupted has no manifest and is refused with a clear error, rather than opening half-loaded. - Archive entries that would be written outside the extraction folder are refused — a package cannot write elsewhere on your disk. - Layers listed in the manifest but missing from the archive are warned about and skipped; anything not mentioned by the recorded group tree is still hung off the group directly, so no layer is silently dropped.",
+        } },
     ],
     seeAlso: ["create_layer_package", "add_to_layer_package"],
   },
@@ -849,16 +1161,25 @@ export const tools = [
       en: "Bulk export the vector layers of the current project, and import layers from any vector file back into it.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Bulk-exports the vector layers of the current project to GeoPackage, Shapefile, GeoJSON, KML or CSV, and pulls layers out of any vector file back into the project — in one window, with a tick box per layer." } },
-      { type: "paragraph", text: { km: "", en: "QGIS can export one layer at a time through *Export > Save Features As*. This is the same job for twenty layers, with renaming on the way out and a single output folder. Because the window is **modeless** you can drag a file straight from the Browser panel onto it." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Bulk-exports the vector layers of the current project to GeoPackage, Shapefile, GeoJSON, KML or CSV, and pulls layers out of any vector file back into the project — in one window, with a tick box per layer.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "QGIS can export one layer at a time through *Export > Save Features As*. This is the same job for twenty layers, with renaming on the way out and a single output folder. Because the window is **modeless** you can drag a file straight from the Browser panel onto it.",
+        } },
       { type: "paragraph", text: { km: "", en: "The tool is promoted onto the KGA toolbar as its own button." } },
     ],
     parameters: [
       {
         title: null,
-        nameLabel: null,
+        nameLabel: "Parameter",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "The algorithm takes no Processing parameters — running it opens the window. The controls below are the window's." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "The algorithm takes no Processing parameters — running it opens the window. The controls below are the window's.",
+            } },
         ],
         rows: [],
       },
@@ -867,15 +1188,21 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Project layer table", type: "Checkable table", default: "nothing ticked", description: { km: "", en: "The vector layers in the QGIS Layers panel. Columns: *Layer*, *Geometry*, *Features*, *Export As*. *Export As* is editable, so you can rename on the way out. Double-click a row to toggle it." } },
-          { name: "**Select All** / **Clear All**", type: "Buttons", default: "—", description: { km: "", en: "Tick or untick every row." } },
-          { name: "Refresh from Layers Panel", type: "Button", default: "—", description: { km: "", en: "Re-read the Layers panel after adding or removing layers in QGIS." } },
-          { name: "Output Format", type: "Combo box", default: "GeoPackage", description: { km: "", en: "`GeoPackage (.gpkg)` — all layers in one file; `ESRI Shapefile (.shp)`, `GeoJSON (.geojson)`, `KML (.kml)`, `CSV (.csv)` — one file per layer. CSV writes attributes with geometry as WKT." } },
-          { name: "GeoPackage File", type: "Text box", default: "`export_layers.gpkg`", description: { km: "", en: "Name of the single output container. Only shown for the GeoPackage format." } },
-          { name: "Output Folder", type: "Read-only path box", default: "empty", description: { km: "", en: "Where everything is written. Set it with **Browse Folder**." } },
-          { name: "Export selected features only", type: "Checkbox", default: "unticked", description: { km: "", en: "Exports the current map selection of each layer instead of all its features." } },
-          { name: "Overwrite layers that already exist in the target (otherwise a numbered name is used)", type: "Checkbox", default: "unticked", description: { km: "", en: "Off, a name clash gets a numbered suffix rather than replacing anything." } },
-          { name: "Export Checked Layers", type: "Button", default: "—", description: { km: "", en: "Runs the export and reports a summary." } },
+          { name: "Project layer table", type: "Checkable table", default: "nothing ticked", description: {
+            km: "",
+            en: "The vector layers in the QGIS Layers panel. Columns: *Layer*, *Geometry*, *Features*, *Export As*. *Export As is editable, so you can rename on the way out. Double-click a row to toggle it.",
+          } },
+          { name: "**Select All* / **Clear All**", type: "Buttons", default: "—", description: { km: "", en: "Tick or untick every row." } },
+          { name: "**Refresh from Layers Panel**", type: "Button", default: "—", description: { km: "", en: "Re-read the Layers panel after adding or removing layers in QGIS." } },
+          { name: "**Output Format**", type: "Combo box", default: "GeoPackage", description: {
+            km: "",
+            en: "`GeoPackage (.gpkg)` — all layers in one file; `ESRI Shapefile (.shp)`, `GeoJSON (.geojson)`, `KML (.kml)`, `CSV (.csv)` — one file per layer. CSV writes attributes with geometry as WKT.",
+          } },
+          { name: "**GeoPackage File**", type: "Text box", default: "`export_layers.gpkg`", description: { km: "", en: "Name of the single output container. Only shown for the GeoPackage format." } },
+          { name: "**Output Folder**", type: "Read-only path box", default: "empty", description: { km: "", en: "Where everything is written. Set it with **Browse Folder**." } },
+          { name: "**Export selected features only**", type: "Checkbox", default: "unticked", description: { km: "", en: "Exports the current map selection of each layer instead of all its features." } },
+          { name: "**Overwrite layers that already exist in the target (otherwise a numbered name is used)**", type: "Checkbox", default: "unticked", description: { km: "", en: "Off, a name clash gets a numbered suffix rather than replacing anything." } },
+          { name: "**Export Checked Layers**", type: "Button", default: "—", description: { km: "", en: "Runs the export and reports a summary." } },
         ],
       },
       {
@@ -883,50 +1210,82 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Source File", type: "Read-only path box, drop target", default: "empty", description: { km: "", en: "The file to read. Drag a `.gpkg`, `.shp`, `.geojson`, `.kml` and so on here from the Browser panel, or use **Browse File**." } },
-          { name: "Layer table", type: "Checkable table", default: "nothing ticked", description: { km: "", en: "The layers found inside the source. Columns: *Layer*, *Geometry*, *Features*, *Add As*. *Add As* is editable, so you can rename on the way in." } },
-          { name: "**Select All** / **Clear All**", type: "Buttons", default: "—", description: { km: "", en: "Tick or untick every row." } },
-          { name: "Rescan File", type: "Button", default: "—", description: { km: "", en: "Re-read the source after it changed on disk." } },
-          { name: "Add the imported layers to the project", type: "Checkbox", default: "**ticked**", description: { km: "", en: "Untick to scan without loading anything." } },
-          { name: "Reproject to the project CRS on import (creates a memory layer)", type: "Checkbox", default: "unticked", description: { km: "", en: "On, each layer arrives reprojected — as a memory layer, so save it if you want to keep it." } },
-          { name: "Import Checked Layers", type: "Button", default: "—", description: { km: "", en: "Runs the import and reports a summary." } },
+          { name: "**Source File**", type: "Read-only path box, drop target", default: "empty", description: {
+            km: "",
+            en: "The file to read. Drag a `.gpkg`, `.shp`, `.geojson`, `.kml` and so on here from the Browser panel, or use **Browse File**.",
+          } },
+          { name: "Layer table", type: "Checkable table", default: "nothing ticked", description: {
+            km: "",
+            en: "The layers found inside the source. Columns: *Layer*, *Geometry*, *Features*, *Add As*. *Add As is editable, so you can rename on the way in.",
+          } },
+          { name: "**Select All* / **Clear All**", type: "Buttons", default: "—", description: { km: "", en: "Tick or untick every row." } },
+          { name: "**Rescan File**", type: "Button", default: "—", description: { km: "", en: "Re-read the source after it changed on disk." } },
+          { name: "**Add the imported layers to the project**", type: "Checkbox", default: "**ticked**", description: { km: "", en: "Untick to scan without loading anything." } },
+          { name: "**Reproject to the project CRS on import (creates a memory layer)**", type: "Checkbox", default: "unticked", description: {
+            km: "",
+            en: "On, each layer arrives reprojected — as a memory layer, so save it if you want to keep it.",
+          } },
+          { name: "**Import Checked Layers**", type: "Button", default: "—", description: { km: "", en: "Runs the import and reports a summary." } },
+        ],
+      },
+      {
+        title: { km: "", en: "Tab 3 — Save Temporary Layers" },
+        nameLabel: "Control",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "Finds the temporary (memory) layers in the Layers panel — Processing results left as *Temporary output*, scratch layers, reprojected imports — and saves them for good.",
+            } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "Existing tables and files are never overwritten; a clash gets a numbered name.",
+            } },
+        ],
+        rows: [
+          { name: "Temporary layer table", type: "Checkable table", default: "every temporary layer ticked", description: {
+            km: "",
+            en: "Columns: *Layer*, *Geometry*, *Features*, *Save As*. The list **refreshes by itself* when a temporary layer is added, removed, renamed or edited. *Save As is editable.",
+          } },
+          { name: "**Select All* / **Clear All**", type: "Buttons", default: "—", description: { km: "", en: "Tick or untick every row." } },
+          { name: "**Save To**", type: "Combo box", default: "**Project database**", description: {
+            km: "",
+            en: "`Project database (GeoPackage)` writes one table per layer into the GeoPackage; `Folder` writes one file per layer.",
+          } },
+          { name: "**GeoPackage**", type: "Path box", default: "the project's default database", description: { km: "", en: "Created if it does not exist." } },
+          { name: "**Format* / **Folder**", type: "Combo box, path box", default: "GeoPackage, the project's default folder", description: { km: "", en: "Folder mode only. Formats: GeoPackage, Shapefile, GeoJSON." } },
+          { name: "**Replace the temporary layer in the project…**", type: "Checkbox", default: "**ticked**", description: {
+            km: "",
+            en: "The saved layer takes the temporary one's place in the Layers panel, with its style and visibility. Untick to leave the temporary layer and add nothing.",
+          } },
+          { name: "**Save Checked Layers**", type: "Button", default: "—", description: { km: "", en: "Saves and reports a summary." } },
         ],
       },
     ],
     outputs: [],
     usage: [
       { type: "paragraph", text: { km: "", en: "**To export:**" } },
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Data Management > Layer Export / Import**, or press its button on the KGA toolbar. Close the Processing window once the pane appears." },
-        { km: "", en: "On **1. Export Layers**, tick the layers. Edit the *Export As* cell to rename one on the way out." },
-        { km: "", en: "Choose the **Output Format**. GeoPackage puts everything in one file; the others write one file per layer." },
-        { km: "", en: "Set the **Output Folder** with **Browse Folder**, then press **Export Checked Layers**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Data Management > Layer Export / Import**, or press its button on the KGA toolbar. Close the Processing window once the pane appears. 2. On **Export Layers**, tick the layers. Edit the *Export As* cell to rename one on the way out. 3. Choose the **Output Format**. GeoPackage puts everything in one file; the others write one file per layer. 4. Set the **Output Folder** with **Browse Folder**, then press **Export Checked Layers**.",
+        } },
       { type: "paragraph", text: { km: "", en: "**To import:**" } },
-      { type: "steps", items: [
-        { km: "", en: "Switch to **2. Import Layers**." },
-        { km: "", en: "Drag the source file onto **Source File** from the Browser panel, or use **Browse File**. The layers it holds are listed." },
-        { km: "", en: "Tick the ones you want, edit the *Add As* names if needed." },
-        { km: "", en: "Tick **Reproject to the project CRS** only if you need it — the result is a memory layer you will have to save." },
-        { km: "", en: "Press **Import Checked Layers**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Switch to **Import Layers**. 2. Drag the source file onto **Source File** from the Browser panel, or use **Browse File**. The layers it holds are listed. 3. Tick the ones you want, edit the *Add As* names if needed. 4. Tick **Reproject to the project CRS** only if you need it â€” the result is a memory layer you will have to save. 5. Press **Import Checked Layers**.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "**Export:** the ticked layers written to the chosen folder — one GeoPackage holding all of them, or one file per layer for the other formats. A summary message box lists what was written, skipped and failed." },
-        { km: "", en: "**Import:** the ticked layers added to the project, renamed as you asked, optionally reprojected." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Export:** the ticked layers written to the chosen folder — one GeoPackage holding all of them, or one file per layer for the other formats. A summary message box lists what was written, skipped and failed. - **Import:** the ticked layers added to the project, renamed as you asked, optionally reprojected.",
+        } },
       { type: "paragraph", text: { km: "", en: "Nothing is returned to Processing." } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**The window stays open.** Close the Processing dialog behind it and keep working. Running the tool again while the window is open brings it forward; running it after you closed it starts clean, with the ticks, output folder and scanned file cleared." },
-        { km: "", en: "**Reprojected imports are memory layers.** They disappear when the project closes unless you save them to a file." },
-        { km: "", en: "**Styles do not travel here.** This tool moves data. To carry symbology, labels, aliases and forms along, use **[Spatial Data Manager](spatialdatamanager.md)** (its Export tab writes styles into the target) or **[Create Layer Package](create_layer_package.md)**." },
-        { km: "", en: "Shapefile output truncates field names to 10 characters; CSV output keeps attributes only, with the geometry as a WKT column." },
-        { km: "", en: "`layer_styles` and `qgis_projects` are QGIS housekeeping tables and never appear in the import list." },
-        { km: "", en: "The tool cannot run headless or inside a model — it needs the QGIS main window." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **The window stays open.** Close the Processing dialog behind it and keep working. Running the tool again while the window is open brings it forward; running it after you closed it starts clean, with the ticks, output folder and scanned file cleared. - **Reprojected imports are memory layers.** They disappear when the project closes unless you save them to a file. - **Styles do not travel here.** This tool moves data. To carry symbology, labels, aliases and forms along, use **[Spatial Data Manager](spatialdatamanager.md)** (its Export tab writes styles into the target) or **[Create Layer Package](create_layer_package.md)**. - Shapefile output truncates field names to 10 characters; CSV output keeps attributes only, with the geometry as a WKT column. - `layer_styles` and `qgis_projects` are QGIS housekeeping tables and never appear in the import list. - The tool cannot run headless or inside a model — it needs the QGIS main window.",
+        } },
     ],
     seeAlso: ["spatialdatamanager", "create_layer_package"],
   },
@@ -2170,7 +2529,14 @@ export const tools = [
       en: "Splits lines where they intersect, creating planarized single-part lines with no cross-overs. Attributes from the original lines are retained.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "This is the step a network needs before it is a network: a canal layer digitized as long runs that cross each other has no node where they meet, so routing, topology checks and length-per-reach all give the wrong answer. Planarizing puts a break at every crossing." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Splits lines where they intersect, producing planarized single-part lines with no cross-overs. Attributes from the original lines are retained on every segment.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "This is the step a network needs before it is a network: a canal layer digitized as long runs that cross each other has no node where they meet, so routing, topology checks and length-per-reach all give the wrong answer. Planarizing puts a break at every crossing.",
+        } },
     ],
     parameters: [
       {
@@ -2178,35 +2544,33 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Input Line Layer", type: "Feature source (line)", default: "—", description: { km: "", en: "The lines to planarize." } },
-          { name: "Planarize the input layer in place (no output layer)", type: "Boolean", default: "`False`", description: { km: "", en: "Off, a new layer is written and the input is untouched. On, the input layer's features are replaced by the planarized ones and no output layer is produced." } },
-          { name: "Planarized Output", type: "Feature sink (line), optional", default: "temporary layer", description: { km: "", en: "Where the result goes. Ignored when the in-place box is ticked." } },
+          { name: "**Input Line Layer**", type: "Feature source (line)", default: "—", description: { km: "", en: "The lines to planarize." } },
+          { name: "**Planarize the input layer in place (no output layer)**", type: "Boolean", default: "`False`", description: {
+            km: "",
+            en: "Off, a new layer is written and the input is untouched. On, the input layer's features are replaced by the planarized ones and no output layer is produced.",
+          } },
+          { name: "**Planarized Output**", type: "Feature sink (line), optional", default: "temporary layer", description: { km: "", en: "Where the result goes. Ignored when the in-place box is ticked." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Editing Tools > Planarize Lines**." },
-        { km: "", en: "Pick the **Input Line Layer**." },
-        { km: "", en: "Leave the in-place box off for the first run — check the result, then decide." },
-        { km: "", en: "Press **Run**." },
-        { km: "", en: "To rewrite the source instead, load it in the project, tick **Planarize the input layer in place**, and run again." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Editing Tools > Planarize Lines**. 2. Pick the **Input Line Layer**. 3. Leave the in-place box off for the first run — check the result, then decide. 4. Press **Run**. 5. To rewrite the source instead, load it in the project, tick **Planarize the input layer in place**, and run again.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "A line layer of single-part, non-crossing segments, each carrying the attributes of the line it came from." },
-        { km: "", en: "In place: the input layer's features replaced by those segments, and **no** output layer." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- A line layer of single-part, non-crossing segments, each carrying the attributes of the line it came from. - In place: the input layer's features replaced by those segments, and **no** output layer.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Feature ids are not preserved**, in either mode. One input line becomes several output segments, so there is no id to keep. Joins and relates keyed on the old ids will not survive." },
-        { km: "", en: "**In place needs a real project layer** whose provider can add and delete features — not a file path typed into the parameter, and not a read-only source." },
-        { km: "", en: "**In place respects an edit session.** If the layer is already in edit mode the change is left in the edit buffer so you can undo it; otherwise it is committed." },
-        { km: "", en: "The original attributes are duplicated onto every segment. A length field carried across this way is now wrong for each piece — recompute it with **[Update Geometry Fields](updategeometryfields.md)**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Feature ids are not preserved**, in either mode. One input line becomes several output segments, so there is no id to keep. Joins and relates keyed on the old ids will not survive. - **In place needs a real project layer** whose provider can add and delete features — not a file path typed into the parameter, and not a read-only source. - **In place respects an edit session.** If the layer is already in edit mode the change is left in the edit buffer so you can undo it; otherwise it is committed. - The original attributes are duplicated onto every segment. A length field carried across this way is now wrong for each piece — recompute it with **[Update Geometry Fields](updategeometryfields.md)**.",
+        } },
     ],
     seeAlso: ["updategeometryfields"],
   },
@@ -3069,20 +3433,39 @@ export const tools = [
       en: "Converts a raster between ECW, GeoTIFF, JPEG 2000, IMG, PNG and JPEG — resumably.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Converts a raster from **any format GDAL can read** into **any format it can write** — ECW to GeoTIFF, GeoTIFF to JPEG 2000, IMG to GeoTIFF, and back." } },
-      { type: "paragraph", text: { km: "", en: "It exists for the orthophoto that is too big to convert in one go: the aerial survey that arrives as a 200 GB ECW and has to become a GeoTIFF before anything else can touch it." } },
-      { type: "subheading", text: { km: "", en: "How it survives a long run" } },
-      { type: "paragraph", text: { km: "", en: "The source is read in square blocks. Each block is written straight to disk as a temporary GeoTIFF — GeoTIFF whatever the final format is, because it is the one format that takes reliable windowed writes — and a small `<output>.checkpoint.json` beside the output records how many blocks are down. Cancel the run, lose QGIS, lose the machine: **run it again with the same output path and it carries on from the next unfinished block.** When the last block lands they are mosaicked and written once into the chosen format, which is the fast part, because it reads local uncompressed blocks instead of decoding the original again." } },
-      { type: "paragraph", text: { km: "", en: "Small rasters skip all of that. Anything that fits inside one block is converted in a single pass." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Converts a raster from **any format GDAL can read** into **any format it can write** — ECW to GeoTIFF, GeoTIFF to JPEG 2000, IMG to GeoTIFF, and back.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "It exists for the orthophoto that is too big to convert in one go: the aerial survey that arrives as a 200 GB ECW and has to become a GeoTIFF before anything else can touch it.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**How it survives a long run.** The source is read in square blocks. Each block is written straight to disk as a temporary GeoTIFF — GeoTIFF whatever the final format is, because it is the one format that takes reliable windowed writes — and a small `<output>.checkpoint.json` beside the output records how many blocks are down. Cancel the run, lose QGIS, lose the machine: **run it again with the same output path and it carries on from the next unfinished block.** When the last block lands they are mosaicked and written once into the chosen format, which is the fast part, because it reads local uncompressed blocks instead of decoding the original again.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Small rasters skip all of that. Anything that fits inside one block is converted in a single pass.",
+        } },
       { type: "subheading", text: { km: "", en: "How the pyramid is written" } },
-      { type: "paragraph", text: { km: "", en: "Overviews are **built on the throwaway mosaic and copied into the output as it is created** (`COPY_SRC_OVERVIEWS`), not built into the finished file afterwards. Re-opening a freshly written multi-gigabyte raster for update puts hours of work under a write that can still run out of room; the mosaic is disposable, so a failure there costs a rebuild and nothing else." } },
-      { type: "paragraph", text: { km: "", en: "Disk space is checked three times — before the merge, before the pyramid, and again after it. **The pyramid and the output have to fit on the drive at the same time**, because nothing is cleaned up until the output is written. If they do not:" } },
-      { type: "steps", items: [
-        { km: "", en: "The pyramid is skipped and the raster is written without it." },
-        { km: "", en: "Once the blocks are deleted and their space is back, it is tried again as a **sidecar `.ovr`**, with the raster opened **read-only** — so that attempt cannot touch the data even if it fails." },
-        { km: "", en: "If there is still no room, the log says so and tells you the raster is complete and the pyramids can be built later." },
-      ] },
-      { type: "paragraph", text: { km: "", en: "Erdas IMAGINE always takes the sidecar route: `COPY_SRC_OVERVIEWS` is a GeoTIFF creation option and does not apply to it." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Overviews are **built on the throwaway mosaic and copied into the output as it is created** (`COPY_SRC_OVERVIEWS`), not built into the finished file afterwards. Re-opening a freshly written multi-gigabyte raster for update puts hours of work under a write that can still run out of room; the mosaic is disposable, so a failure there costs a rebuild and nothing else.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Disk space is checked three times — before the merge, before the pyramid, and again after it, when there is still the option of dropping the pyramid instead of crowding out the final write. **The pyramid and the output have to fit on the drive at the same time**, because nothing is cleaned up until the output is written. If they do not:",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. The pyramid is skipped and the raster is written without it. 2. Once the blocks are deleted and their space is back, it is tried again as a **sidecar `.ovr`**, with the raster opened **read-only** — so that attempt cannot touch the data even if it fails. 3. If there is still no room, the log says so and tells you the raster is complete and the pyramids can be built later.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Erdas IMAGINE always takes the sidecar route: `COPY_SRC_OVERVIEWS` is a GeoTIFF creation option and does not apply to it.",
+        } },
     ],
     parameters: [
       {
@@ -3090,13 +3473,28 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Source \\| Raster to convert", type: "Raster layer", default: "—", description: { km: "", en: "A layer in the project or a file on disk: ECW, GeoTIFF, JPEG 2000, IMG, SID, PNG, JPEG — anything GDAL reads. It must be a file: a WMS or XYZ layer has nothing to convert." } },
-          { name: "Output \\| Format", type: "Enum", default: "`GeoTIFF (.tif)`", description: { km: "", en: "GeoTIFF, ECW, JPEG 2000, Erdas IMAGINE, PNG or JPEG." } },
-          { name: "Output \\| Converted raster", type: "File destination", default: "—", description: { km: "", en: "Where to write. The extension is corrected to match the format, so the two can never disagree. **Re-run with this same path to resume.**" } },
-          { name: "Options \\| Compression (GeoTIFF, Erdas IMAGINE)", type: "Enum", default: "`LZW`", description: { km: "", en: "`LZW`, `DEFLATE` and `ZSTD` are lossless, `JPEG` is lossy but small for photography, `NONE` is uncompressed. Ignored by the other formats." } },
-          { name: "Options \\| Quality (ECW, JPEG 2000, JPEG)", type: "Number 1–100", default: "`75`", description: { km: "", en: "JPEG and JPEG 2000: higher is better quality and a bigger file. **ECW reads it as a target compression ratio, where higher means a smaller file** — the opposite direction." } },
-          { name: "Options \\| Build overviews (pyramids)", type: "Boolean", default: "`True`", description: { km: "", en: "Pyramids down to roughly a 256 px thumbnail. Only GeoTIFF and Erdas IMAGINE can carry them; ignored for the rest." } },
-          { name: "Options \\| Add the result to the project", type: "Boolean", default: "`False`", description: { km: "", en: "Load the converted raster when the run finishes." } },
+          { name: "**Source \\| Raster to convert**", type: "Raster layer", default: "—", description: {
+            km: "",
+            en: "A layer in the project or a file on disk: ECW, GeoTIFF, JPEG 2000, IMG, SID, PNG, JPEG — anything GDAL reads. It must be a file: a WMS or XYZ layer has nothing to convert.",
+          } },
+          { name: "**Output \\| Format**", type: "Enum", default: "`GeoTIFF (.tif)`", description: { km: "", en: "GeoTIFF, ECW, JPEG 2000, Erdas IMAGINE, PNG or JPEG." } },
+          { name: "**Output \\| Converted raster**", type: "File destination", default: "—", description: {
+            km: "",
+            en: "Where to write. The extension is corrected to match the format, so the two can never disagree. **Re-run with this same path to resume.**",
+          } },
+          { name: "**Options \\| Compression (GeoTIFF, Erdas IMAGINE)**", type: "Enum", default: "`LZW`", description: {
+            km: "",
+            en: "`LZW`, `DEFLATE` and `ZSTD` are lossless, `JPEG` is lossy but small for photography, `NONE` is uncompressed. Erdas IMAGINE reads anything but `NONE` as \"compressed\". Ignored by the other formats.",
+          } },
+          { name: "**Options \\| Quality (ECW, JPEG 2000, JPEG)**", type: "Number 1–100", default: "`75`", description: {
+            km: "",
+            en: "JPEG and JPEG 2000: higher is better quality and a bigger file. **ECW reads it as a target compression ratio, where higher means a smaller file* — the opposite direction. Ignored by the other formats.",
+          } },
+          { name: "**Options \\| Build overviews (pyramids)**", type: "Boolean", default: "`True`", description: {
+            km: "",
+            en: "Pyramids down to roughly a 256 px thumbnail, so the raster draws quickly when zoomed out. Only GeoTIFF and Erdas IMAGINE can carry them; ignored for the rest. See *How the pyramid is written below — it is never edited into the finished file.",
+          } },
+          { name: "**Options \\| Add the result to the project**", type: "Boolean", default: "`False`", description: { km: "", en: "Load the converted raster when the run finishes." } },
         ],
       },
       {
@@ -3104,47 +3502,46 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Processing block size (px)", type: "Number 512–32768", default: "`4096`", description: { km: "", en: "How much of the source is converted between checkpoints. Smaller blocks lose less work when a run is interrupted but cost more overhead; larger blocks are faster and want more memory. Changing it invalidates an existing checkpoint." } },
-          { name: "GDAL threads", type: "Enum", default: "`ALL_CPUS`", description: { km: "", en: "Threads GDAL may use for decoding and compression. Drop it below `ALL_CPUS` to leave the machine usable while a long conversion runs." } },
-          { name: "Resume from an existing checkpoint", type: "Boolean", default: "`True`", description: { km: "", en: "Off, the blocks already on disk are thrown away and the conversion starts over." } },
+          { name: "**Processing block size (px)**", type: "Number 512–32768", default: "`4096`", description: {
+            km: "",
+            en: "How much of the source is converted between checkpoints. Smaller blocks lose less work when a run is interrupted but cost more overhead; larger blocks are faster and want more memory. Changing it invalidates an existing checkpoint.",
+          } },
+          { name: "**GDAL threads**", type: "Enum", default: "`ALL_CPUS`", description: {
+            km: "",
+            en: "Threads GDAL may use for decoding and compression. Drop it below `ALL_CPUS` to leave the machine usable while a long conversion runs.",
+          } },
+          { name: "**Resume from an existing checkpoint**", type: "Boolean", default: "`True`", description: {
+            km: "",
+            en: "Off, the blocks already on disk are thrown away and the conversion starts over.",
+          } },
         ],
       },
     ],
     outputs: [
-      { name: "Converted raster", type: "File", description: { km: "", en: "The written file." } },
-      { name: "Converted raster path", type: "String", description: { km: "", en: "Its path, after the extension was corrected." } },
-      { name: "Blocks converted", type: "Number", description: { km: "", en: "Blocks written this run. `1` for a one-pass conversion, `0` when the run was cancelled with a checkpoint left behind." } },
+      { name: "**Converted raster**", type: "File", description: { km: "", en: "The written file." } },
+      { name: "**Converted raster path**", type: "String", description: { km: "", en: "Its path, after the extension was corrected." } },
+      { name: "**Blocks converted**", type: "Number", description: {
+        km: "",
+        en: "Blocks written this run. `1` for a one-pass conversion, `0` when the run was cancelled with a checkpoint left behind.",
+      } },
     ],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Data Conversion > Raster Format Converter**." },
-        { km: "", en: "Pick the source raster and the output format, and name the output file." },
-        { km: "", en: "Leave the defaults unless you have a reason: LZW is lossless, overviews are worth having, and 4096 px blocks suit most orthophotos." },
-        { km: "", en: "Press **Run** and read the header the log prints first — size, band count, data type, creation options and **how much temporary disk space the blocks will need**. Stop there if that number does not fit on the drive." },
-        { km: "", en: "Leave it running. The progress bar moves per block, then again through the merge and the overviews." },
-        { km: "", en: "**If you have to stop it, press Cancel.** The log says which block it reached. Run it again later with the same source and output path, and it says *\"Resuming: N of M blocks were already converted\"*." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Data Conversion > Raster Format Converter**. 2. Pick the source raster and the output format, and name the output file. 3. Leave the defaults unless you have a reason: LZW is lossless, overviews are worth having, and 4096 px blocks suit most orthophotos. 4. Press **Run** and read the header the log prints first — size, band count, data type, creation options and **how much temporary disk space the blocks will need**. Stop there if that number does not fit on the drive. 5. Leave it running. The progress bar moves per block, then again through the merge and the overviews. 6. **If you have to stop it, press Cancel.** The log says which block it reached. Run it again later with the same source and output path, and it says *\"Resuming: N of M blocks were already converted\"*.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "The converted raster, with its georeferencing, CRS, band structure and nodata carried across by GDAL." },
-        { km: "", en: "Internal overviews when the format can hold them and the box is ticked." },
-        { km: "", en: "The raster added to the project when that box is ticked." },
-        { km: "", en: "On a clean finish, the block folder, the VRT and the checkpoint are deleted. **After a cancel they are deliberately kept** — they are what resuming reads." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- The converted raster, with its georeferencing, CRS, band structure and nodata carried across by GDAL. - Internal overviews when the format can hold them and the box is ticked. - The raster added to the project when that box is ticked. - On a clean finish, the block folder, the VRT and the checkpoint are deleted. **After a cancel they are deliberately kept** — they are what resuming reads.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Writing ECW needs a Hexagon licence.** QGIS reads ECW out of the box and the driver advertises write support, but the encoder refuses unless `ECW_ENCODE_KEY` and `ECW_ENCODE_COMPANY` are set with the key bought from Hexagon. The tool checks the licence, not just the driver, when you press **Run** — GDAL would otherwise refuse at the final write, hours in. **JPEG 2000 goes through the open-source JP2OpenJPEG driver and needs no licence.**" },
-        { km: "", en: "**Budget the temporary disk space.** The blocks are LZW GeoTIFF, so roughly the uncompressed size of the source sits beside the output until the merge is done. This is the cost of being able to resume." },
-        { km: "", en: "**A pyramid is never worth risking the raster for.** Whatever happens to the overviews, the converted raster is complete and correct, and the log says which happened. Missing pyramids can be built any time from *Raster > Build Overviews*." },
-        { km: "", en: "**Changing the block size or the output path starts over.** The blocks no longer line up, and the tool says so rather than mixing them. It also notices when the source file itself has changed since the checkpoint was written." },
-        { km: "", en: "**JPEG and PNG have format limits**: JPEG takes 8-bit data, 1, 3 or 4 bands and no side over 65535 pixels; PNG takes 8- or 16-bit data and up to 4 bands. Both are checked before the run." },
-        { km: "", en: "**JPEG, JPEG 2000 and a JPEG-compressed GeoTIFF are lossy.** Converting an archive ortho into one of them throws away detail that no later conversion brings back. GeoTIFF with LZW or DEFLATE is the lossless choice." },
-        { km: "", en: "**A source with no georeferencing** — a plain PNG or JPEG with no world file — cannot be mosaicked back from blocks, so it is converted in one pass and that run cannot be resumed." },
-        { km: "", en: "**Cancelling during the merge** keeps every block, so the next run only redoes the merge. The half-written output is removed, so there is never a truncated file that looks finished." },
-        { km: "", en: "Resuming is the same idea **[DEM Elevation Correction](demelevationcorrectionandpointsamplereport.md)** uses — these two are the toolbox's resumable jobs, and they behave the same way." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Writing ECW needs a Hexagon licence.** QGIS reads ECW out of the box, and the driver advertises write support, but the encoder refuses unless `ECW_ENCODE_KEY` and `ECW_ENCODE_COMPANY` are set with the key bought from Hexagon (*Settings > Options > System > Environment*, then restart QGIS). The tool checks the licence, not just the driver, when you press **Run** — GDAL would otherwise refuse at the final write, hours in. **JPEG 2000 goes through the open-source JP2OpenJPEG driver and needs no licence.** - **Budget the temporary disk space.** The blocks are LZW GeoTIFF, so roughly the uncompressed size of the source sits beside the output until the merge is done. The log prints the estimate before it starts, and checks the free space again before the final write and before the pyramid. This is the cost of being able to resume. Running out during the final write is the one failure that wastes the whole run, which is why it is checked rather than assumed. - **A pyramid is never worth risking the raster for.** Whatever happens to the overviews — skipped for space, dropped after being built, failed outright — the converted raster is complete and correct, and the log says which happened. Missing pyramids can be built any time from *Raster > Build Overviews*. - **Changing the block size or the output path starts over.** The blocks no longer line up, and the tool says so rather than mixing them. It also notices when the source file itself has changed since the checkpoint was written. - **JPEG and PNG have format limits**: JPEG takes 8-bit data, 1, 3 or 4 bands and no side over 65535 pixels; PNG takes 8- or 16-bit data and up to 4 bands. Both are checked before the run, against what the driver in *this* QGIS says it will accept. - **JPEG, JPEG 2000 and a JPEG-compressed GeoTIFF are lossy.** Converting an archive ortho into one of them throws away detail that no later conversion brings back. GeoTIFF with LZW or DEFLATE is the lossless choice. - **A source with no georeferencing** — a plain PNG or JPEG with no world file — cannot be mosaicked back from blocks, so it is converted in one pass and that run cannot be resumed. The log says so. - **Cancelling during the merge** keeps every block, so the next run only redoes the merge, which is the cheap half. The half-written output is removed, so there is never a truncated file that looks finished. A merge that fails for another reason (a full disk, say) also keeps the blocks and says so. - **A one-pass conversion cannot be resumed.** Cancelling one removes the unfinished file. - Resuming is the same idea the **[DEM Elevation Correction](demelevationcorrectionandpointsamplereport.md)** tool uses, so a long job in this toolbox behaves the same way wherever you meet one.",
+        } },
     ],
     seeAlso: ["demelevationcorrectionandpointsamplereport", "imagery_downloader"],
   },
@@ -3164,9 +3561,18 @@ export const tools = [
       en: "Converts a surveyed-point CSV into a DEM GeoTIFF and contour lines (Shapefile or GeoPackage). Interpolation methods: IDW, Linear, Cubic and Nearest; dual side-by-side CSV layouts are detected automatically.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Converts a surveyed point CSV straight into a DEM GeoTIFF and contour lines, in one pass." } },
-      { type: "paragraph", text: { km: "", en: "This is the survey-file route: one CSV of levelled points, one interpolation pass, contours out the other end. To contour an area you have no survey for, **[Generate Contour for ROI](generate_contour_roi.md)** downloads the free Copernicus DEM and contours that instead, and will also use a local DEM you already have." } },
-      { type: "paragraph", text: { km: "", en: "**CSV columns:** `No`, `Easting`, `Northing`, `Elevation`, `Code`. A dual side-by-side layout — two blocks of columns on one sheet, as some total stations export — is detected automatically." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Converts a surveyed point CSV straight into a DEM GeoTIFF and contour lines, in one pass.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "This is the small-job version of the workflow: one survey file, one interpolation pass, contours out the other end.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**CSV columns:** `No`, `Easting`, `Northing`, `Elevation`, `Code`. A dual side-by-side layout — two blocks of columns on one sheet, as some total stations export — is detected automatically.",
+        } },
     ],
     parameters: [
       {
@@ -3174,46 +3580,82 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Input Point CSV", type: "File (`*.csv`)", default: "—", description: { km: "", en: "The survey file." } },
-          { name: "Output Folder", type: "Folder destination", default: "—", description: { km: "", en: "" } },
-          { name: "DEM Resolution (m) [0 = auto-detect]", type: "Number, optional", default: "`0.0`", description: { km: "", en: "Auto-detect derives a cell size from the point spacing. Set it when you need a specific grid." } },
-          { name: "Interpolation Method", type: "Enum", default: "`IDW`", description: { km: "", en: "`IDW`, `Linear`, `Cubic`, `Nearest Neighbour`." } },
-          { name: "CRS – EPSG Code", type: "Integer", default: "`32648`", description: { km: "", en: "The CRS the Easting/Northing values are already in. `32648` is WGS 84 / UTM zone 48N, which covers most of Cambodia." } },
-          { name: "Generate Contour Lines", type: "Boolean", default: "`True`", description: { km: "", en: "Off, only the DEM is produced." } },
-          { name: "Contour Interval (m)", type: "Number (min 0.01)", default: "`1.0`", description: { km: "", en: "" } },
-          { name: "Contour Smoothing – Gaussian σ (0 = off)", type: "Number (min 0.0)", default: "`1.0`", description: { km: "", en: "Smooths the surface before contouring, so the lines are not ragged. `0` contours the raw grid." } },
-          { name: "Contour Output Format", type: "Enum", default: "`Shapefile (.shp)`", description: { km: "", en: "Or `GeoPackage (.gpkg)`." } },
-          { name: "Add output layers to QGIS map canvas", type: "Boolean", default: "`True`", description: { km: "", en: "" } },
+          { name: "**Input · Point CSV**", type: "File (`*.csv`)", default: "—", description: { km: "", en: "Surveyed points, one per row." } },
+          { name: "**Input · X (Easting) field**", type: "String", default: "auto", description: {
+            km: "",
+            en: "Pick the easting column from the CSV's header, or type a name or column number. Blank = auto-detect.",
+          } },
+          { name: "**Input · Y (Northing) field**", type: "String", default: "auto", description: { km: "", en: "As above, for northing." } },
+          { name: "**Input · Z (Elevation) field**", type: "String", default: "auto", description: { km: "", en: "As above, for elevation. Fill all three of X, Y and Z, or none." } },
+          { name: "**DEM · Interpolation method**", type: "Enum", default: "`IDW – Inverse Distance Weighting`", description: {
+            km: "",
+            en: "Also `Linear – Delaunay triangulation`, `Cubic – smooth surface`, `Nearest Neighbour`, `RBF – Radial basis functions (smooth)`. Each has its own settings, below.",
+          } },
+          { name: "**DEM · Cell size (m) [0 = auto]**", type: "Number", default: "`0.0`", description: {
+            km: "",
+            en: "Auto derives a cell size from the point density (minimum 0.5 m). Set it when you need a specific grid. Halving it quadruples the cell count.",
+          } },
+          { name: "**DEM · CRS (EPSG code)**", type: "Integer", default: "`32648`", description: {
+            km: "",
+            en: "The CRS the Easting/Northing values are already in; it only labels the outputs and nothing is reprojected. `32648` is WGS 84 / UTM zone 48N, which covers most of Cambodia.",
+          } },
+          { name: "**Contours · Generate contour lines**", type: "Boolean", default: "`True`", description: { km: "", en: "Off, only the DEM is produced." } },
+          { name: "**Contours · Interval (m)**", type: "Number (min 0.01)", default: "`1.0`", description: { km: "", en: "" } },
+          { name: "**Contours · Smoothing, Gaussian σ (0 = off)**", type: "Number (min 0.0), advanced", default: "`1.0`", description: {
+            km: "",
+            en: "Smooths the surface before contouring, so the lines are not ragged. `0` contours the raw grid. The DEM itself is unchanged.",
+          } },
+          { name: "**Contours · Output format**", type: "Enum, advanced", default: "`Shapefile (.shp)`", description: { km: "", en: "Or `GeoPackage (.gpkg)`." } },
+          { name: "**Output · Folder**", type: "Folder destination", default: "—", description: { km: "", en: "The DEM and contours are written here, named after the CSV." } },
+          { name: "**Output · Add results to the map**", type: "Boolean, advanced", default: "`True`", description: { km: "", en: "Loads the DEM and contours into the current project." } },
+        ],
+      },
+      {
+        title: { km: "", en: "Settings that change with the method" },
+        nameLabel: "Method",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "The window shows only the settings of the chosen method; in the Processing form they are under *Advanced Parameters*.",
+            } },
+        ],
+        rows: [
+          { name: "**IDW**", type: "IDW · Power", default: "`2`", description: { km: "", en: "How fast influence falls with distance." } },
+          { name: "", type: "IDW · Neighbours", default: "`16`", description: { km: "", en: "Nearest points averaged per cell." } },
+          { name: "", type: "IDW · Search radius (m) [0 = no limit]", default: "`0`", description: {
+            km: "",
+            en: "Points further away are ignored; a cell with none in range takes the nearest point's height.",
+          } },
+          { name: "**Linear**", type: "Linear/Cubic · Fill outside the point outline", default: "on", description: { km: "", en: "Off leaves the area outside the points as NoData." } },
+          { name: "**Cubic**", type: "Linear/Cubic · Fill outside the point outline", default: "on", description: { km: "", en: "As Linear." } },
+          { name: "", type: "Cubic · Clamp to the surveyed height range", default: "off", description: { km: "", en: "Stops overshoot above the highest or below the lowest point." } },
+          { name: "**Nearest**", type: "—", default: "", description: { km: "", en: "No settings." } },
+          { name: "**RBF**", type: "RBF · Kernel", default: "`thin_plate_spline`", description: { km: "", en: "Also `cubic`, `quintic`, `linear`." } },
+          { name: "", type: "RBF · Neighbours", default: "`50`", description: { km: "", en: "Nearest points per local fit." } },
+          { name: "", type: "RBF · Smoothing", default: "`0`", description: { km: "", en: "`0` passes through every point; raise it for noisy or duplicated points." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Open **KGA Irrigation Tools > CSV to DEM and Contour**." },
-        { km: "", en: "Pick the **Input Point CSV** and an **Output Folder**." },
-        { km: "", en: "Set the **CRS – EPSG Code** to the system the survey was recorded in. Getting this wrong is what puts the DEM in the wrong hemisphere." },
-        { km: "", en: "Leave **DEM Resolution** at `0` for the first run and look at what the auto-detected cell size gives you." },
-        { km: "", en: "Choose the **Interpolation Method** — `IDW` is the safe default for scattered survey points; `Linear` and `Cubic` assume a denser, more even sample." },
-        { km: "", en: "Set the **Contour Interval** and press **Run**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open **KGA Irrigation Tools > CSV to DEM and Contour**. A window opens. 2. Pick the point CSV. The X, Y and Z boxes fill from its header and the window reports how many points it read and their elevation range; check that range against what you expect. Choose an output folder. 3. Set the **Coordinate system** to the system the survey was recorded in. Getting this wrong is what puts the DEM in the wrong hemisphere. 4. Leave **Cell size** on `0` (auto) for the first run and look at what the auto-detected cell size gives you. 5. Choose the **Interpolation method** — `IDW` is the safe default for scattered survey points; `Linear` and `Cubic` assume a denser, more even sample. 6. Set the contour **Interval** and press **Run**.",
+        } },
     ],
     results: [
       { type: "paragraph", text: { km: "", en: "In the output folder, named after the input CSV:" } },
-      { type: "list", items: [
-        { km: "", en: "`{name}_DEM.tif` — the interpolated DEM as a GeoTIFF." },
-        { km: "", en: "`{name}_Contour_{interval}m.shp` (or `.gpkg`) — the contour lines, when *Generate Contour Lines* is on." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- `{name}_DEM.tif` — the interpolated DEM as a GeoTIFF. - `{name}_Contour_{interval}m.shp` (or `.gpkg`) — the contour lines, when *Generate contour lines* is on.",
+        } },
       { type: "paragraph", text: { km: "", en: "Both are added to the map canvas when that box is ticked." } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Requires numpy, pandas and scipy**, all bundled with QGIS." },
-        { km: "", en: "**The EPSG code is the CRS the numbers are already in**, not one to reproject to." },
-        { km: "", en: "**Smoothing changes the surface, not just the lines.** A Gaussian σ of 1 is a light touch; raise it only if the survey is noisy, and remember the contours then no longer pass exactly through the surveyed elevations." },
-        { km: "", en: "**`Cubic` can overshoot** beyond the range of the input points at the edges of the survey, producing elevations no one measured. Check the DEM's min and max against the CSV." },
-        { km: "", en: "For a DEM you already have, or an area you want contoured straight from the free Copernicus DEM, use **[Generate Contour for ROI](generate_contour_roi.md)**." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Requires numpy, pandas and scipy**, all bundled with QGIS. - **The EPSG code is the CRS the numbers are already in**, not one to reproject to. - **Smoothing changes the surface, not just the lines.** A Gaussian σ of 1 is a light touch; raise it only if the survey is noisy, and remember the contours then no longer pass exactly through the surveyed elevations. - **`Cubic` can overshoot** beyond the range of the input points at the edges of the survey, producing elevations no one measured. Check the DEM's min and max against the CSV.",
+        } },
     ],
     seeAlso: ["generate_contour_roi", "reservoir_storage_analyzer"],
   },
@@ -3233,9 +3675,18 @@ export const tools = [
       en: "Corrects one or more DEMs against a reference DEM you choose, and reports how every sampled point changed.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Corrects one or more DEMs against a **Reference DEM** you choose — your LiDAR, or whatever survey you trust — optionally merges them all into one seamless raster, and builds a Statistics tab and a Visualization tab summarising correction quality and post-correction agreement." } },
-      { type: "paragraph", text: { km: "", en: "This is the tool for a project whose elevation data arrived from several sources at different dates and different accuracies: a LiDAR block, a drone survey, an older contour-derived grid. Each has its own vertical bias, and stitching them untreated gives steps at every seam." } },
-      { type: "paragraph", text: { km: "", en: "**The Reference DEM is never modified** — it is the elevation truth every other DEM is corrected toward. The other DEMs are auto-sorted from finest to coarsest resolution and **chained**: the finest is corrected directly against the Reference, the next-finest against that already-corrected result, and so on." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Corrects one or more DEMs against a **Reference DEM** you choose — your LiDAR, or whatever survey you trust — optionally merges them all into one seamless raster, and builds a Statistics tab and a Visualization tab summarising correction quality and post-correction agreement.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "This is the tool for a project whose elevation data arrived from several sources at different dates and different accuracies: a LiDAR block, a drone survey, an older contour-derived grid. Each has its own vertical bias, and stitching them untreated gives steps at every seam.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**The Reference DEM is never modified** — it is the elevation truth every other DEM is corrected toward. The other DEMs are auto-sorted from finest to coarsest resolution and **chained**: the finest is corrected directly against the Reference, the next-finest against that already-corrected result, and so on.",
+        } },
       { type: "paragraph", text: { km: "", en: "The run is **resumable** via a `checkpoint.json` in the output folder." } },
     ],
     parameters: [
@@ -3244,62 +3695,68 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Reference DEM (the elevation truth -- never modified)", type: "Raster layer", default: "—", description: { km: "", en: "" } },
-          { name: "Reference DEM NoData override (blank = use its own NoData)", type: "String, optional", default: "empty", description: { km: "", en: "" } },
-          { name: "DEMs to correct against the reference (1 or more)", type: "Multiple raster layers", default: "—", description: { km: "", en: "Auto-sorted finest to coarsest and corrected in a chain." } },
-          { name: "NoData overrides (comma-separated, matching DEM order)", type: "String, optional", default: "empty", description: { km: "", en: "One value per DEM, in the order you selected them. Blank uses each raster's own NoData metadata." } },
-          { name: "Correction method (all stages)", type: "Enum", default: "`Auto - Compare All (Best CV)`", description: { km: "", en: "`Auto - Compare All (Best CV)`, `Global Offset`, `Polynomial Trend (degree 1)`, `Polynomial Trend (degree 2)`, `IDW (distance-decay)`. Auto tries them all and keeps whichever cross-validates best." } },
-          { name: "IDW power", type: "Number", default: "`2.0`", description: { km: "", en: "IDW method only." } },
-          { name: "IDW neighbors (k)", type: "Integer", default: "`12`", description: { km: "", en: "IDW method only." } },
-          { name: "IDW full-strength distance (m)", type: "Number", default: "`3000.0`", description: { km: "", en: "Beyond this the correction fades out." } },
-          { name: "Cross-validation folds", type: "Integer", default: "`5`", description: { km: "", en: "How the method comparison is scored." } },
-          { name: "Calibration subsample stride", type: "Integer", default: "`4`", description: { km: "", en: "Every Nth pixel is used to fit the correction. Raise it for a faster, coarser fit." } },
-          { name: "Merge finest DEM + all corrected DEMs", type: "Boolean", default: "`True`", description: { km: "", en: "" } },
-          { name: "Merge extent", type: "Enum", default: "`Reference DEM extent`", description: { km: "", en: "Or `Coarsest DEM extent (full)`." } },
-          { name: "Merge resolution (m)", type: "Number", default: "`2.5`", description: { km: "", en: "" } },
-          { name: "Report sample stride (for Statistics/Visualization tabs)", type: "Integer (min 1)", default: "`20`", description: { km: "", en: "" } },
-          { name: "Report max sample points", type: "Integer (min 100)", default: "`200000`", description: { km: "", en: "" } },
-          { name: "Force re-run everything (ignore checkpoint.json)", type: "Boolean", default: "`False`", description: { km: "", en: "" } },
-          { name: "Output folder", type: "Folder destination", default: "—", description: { km: "", en: "" } },
+          { name: "**Input · Reference DEM**", type: "Raster layer", default: "—", description: { km: "", en: "The trusted DEM. Never modified; every other DEM is corrected toward it." } },
+          { name: "**Input · DEMs to correct (1 or more)**", type: "Multiple raster layers", default: "—", description: { km: "", en: "Auto-sorted finest to coarsest and corrected in a chain." } },
+          { name: "**Input · Reference NoData override**", type: "String, advanced", default: "empty", description: {
+            km: "",
+            en: "A number to treat as NoData in the Reference. Blank = use its own NoData value.",
+          } },
+          { name: "**Input · NoData overrides for the DEMs**", type: "String, advanced", default: "empty", description: {
+            km: "",
+            en: "Comma-separated, one value per DEM in the order you selected them, e.g. `-9999,-32768`. The count must match. Blank uses each raster's own NoData metadata.",
+          } },
+          { name: "**Correction · Method (all stages)**", type: "Enum", default: "`Auto - Compare All (Best CV)`", description: {
+            km: "",
+            en: "`Auto - Compare All (Best CV)`, `Global Offset`, `Polynomial Trend (degree 1)`, `Polynomial Trend (degree 2)`, `IDW (distance-decay)`. Auto tries them all and keeps whichever cross-validates best.",
+          } },
+          { name: "**Correction · Calibration stride (pixels)**", type: "Integer", default: "`4`", description: {
+            km: "",
+            en: "Every Nth pixel of the difference raster is used as a calibration point. Higher is faster, with fewer points.",
+          } },
+          { name: "**Correction · Cross-validation folds**", type: "Integer, advanced", default: "`5`", description: { km: "", en: "How the method comparison is scored." } },
+          { name: "**IDW · Power**", type: "Number, advanced", default: "`2.0`", description: { km: "", en: "IDW method only (including inside Auto)." } },
+          { name: "**IDW · Neighbours (k)**", type: "Integer, advanced", default: "`12`", description: { km: "", en: "Nearest calibration points averaged for each pixel." } },
+          { name: "**IDW · Full-strength distance (m)**", type: "Number, advanced", default: "`3000.0`", description: {
+            km: "",
+            en: "Map units. Full strength within this distance of a calibration point, fading to zero at twice the distance.",
+          } },
+          { name: "**Merge · Merge Reference + corrected DEMs**", type: "Boolean", default: "`True`", description: { km: "", en: "Writes `MERGED_FINAL_DEM.tif`. The Reference wins, then finest to coarsest." } },
+          { name: "**Merge · Extent**", type: "Enum", default: "`Reference DEM extent`", description: { km: "", en: "Or `Coarsest DEM extent (full)`." } },
+          { name: "**Merge · Cell size (m)**", type: "Number", default: "`2.5`", description: { km: "", en: "" } },
+          { name: "**Report · Sample stride (pixels)**", type: "Integer (min 1), advanced", default: "`20`", description: { km: "", en: "The report compares all DEMs at every Nth pixel of the Reference grid." } },
+          { name: "**Report · Max sample points**", type: "Integer (min 100), advanced", default: "`200000`", description: { km: "", en: "Upper limit on sample points; the stride is raised to stay below it." } },
+          { name: "**Output · Force re-run (ignore checkpoint)**", type: "Boolean, advanced", default: "`False`", description: { km: "", en: "Redo every stage even if `checkpoint.json` says it is complete." } },
+          { name: "**Output · Folder**", type: "Folder destination", default: "—", description: {
+            km: "",
+            en: "Corrected DEMs, merged DEM, reports and `checkpoint.json` are written here. Reuse the same folder to resume.",
+          } },
         ],
       },
     ],
     outputs: [
-      { name: "Merged DEM (if merge was enabled)", type: "File", description: { km: "", en: "" } },
-      { name: "Run summary", type: "String", description: { km: "", en: "" } },
-      { name: "Statistics", type: "HTML", description: { km: "", en: "Appears as a tab in the Processing Results panel." } },
-      { name: "Visualization", type: "HTML", description: { km: "", en: "Likewise." } },
+      { name: "**Merged DEM (if merge was enabled)**", type: "File", description: { km: "", en: "" } },
+      { name: "**Run summary**", type: "String", description: { km: "", en: "" } },
+      { name: "**Statistics**", type: "HTML", description: { km: "", en: "Appears as a tab in the Processing Results panel." } },
+      { name: "**Visualization**", type: "HTML", description: { km: "", en: "Likewise." } },
     ],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Load the reference DEM and every DEM to correct." },
-        { km: "", en: "Open **KGA Irrigation Tools > DEM Elevation Correction and Point Sample Report**." },
-        { km: "", en: "Set the **Reference DEM** — the one you trust. It is never written to." },
-        { km: "", en: "Select the DEMs to correct. Their order does not matter; they are sorted by resolution." },
-        { km: "", en: "Leave the method on **Auto** for the first run and let the cross-validation pick. Look at what it chose in the Statistics tab before pinning a method." },
-        { km: "", en: "Press **Run**." },
-        { km: "", en: "**Open the Statistics and Visualization tabs in the Processing Results panel** — that is where the answer is, not in the log." },
-        { km: "", en: "If the run is interrupted, run it again with the same settings to resume." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Load the reference DEM and every DEM to correct. 2. Open **KGA Irrigation Tools > DEM Elevation Correction and Point Sample Report**. 3. Set the **Reference DEM** — the one you trust. It is never written to. 4. Select the DEMs to correct. Their order does not matter; they are sorted by resolution. 5. Leave the method on **Auto** for the first run and let the cross-validation pick. Look at what it chose in the Statistics tab before pinning a method. 6. Press **Run**. 7. **Open the Statistics and Visualization tabs in the Processing Results panel** — that is where the answer is, not in the log. 8. If the run is interrupted, run it again with the same settings to resume.",
+        } },
     ],
     results: [
       { type: "paragraph", text: { km: "", en: "In the output folder:" } },
-      { type: "list", items: [
-        { km: "", en: "`corrected_{name}.tif` — one corrected DEM per input." },
-        { km: "", en: "`MERGED_FINAL_DEM.tif` — the seamless merge, when merging is enabled." },
-        { km: "", en: "`statistics_report.html` and `visualization_report.html` — the two report tabs, also on disk." },
-        { km: "", en: "`correction_report.json` — the machine-readable run record." },
-        { km: "", en: "`checkpoint.json` — resume state. Safe to delete when finished." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- `corrected_{name}.tif` — one corrected DEM per input. - `MERGED_FINAL_DEM.tif` — the seamless merge, when merging is enabled. - `statistics_report.html` and `visualization_report.html` — the two report tabs, also on disk. - `correction_report.json` — the machine-readable run record. - `checkpoint.json` — resume state. Safe to delete when finished.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**The chain matters.** Each DEM is corrected against the already-corrected one above it, so an error early in the chain propagates down. Check the Statistics tab stage by stage, not just at the end." },
-        { km: "", en: "**Correction does not create accuracy.** It removes systematic bias relative to the reference; it cannot fix a DEM that is simply wrong in detail." },
-        { km: "", en: "**The reports are sampled, not exhaustive.** *Report sample stride* and *Report max sample points* bound the cost; the statistics describe that sample." },
-        { km: "", en: "**Resumable via `checkpoint.json`.** Tick *Force re-run* to ignore it." },
-        { km: "", en: "**NoData overrides must match the order you selected the DEMs in.** Getting the order wrong silently corrects against the wrong nodata mask." },
-              ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **The chain matters.** Each DEM is corrected against the already-corrected one above it, so an error early in the chain propagates down. Check the Statistics tab stage by stage, not just at the end. - **Correction does not create accuracy.** It removes systematic bias relative to the reference; it cannot fix a DEM that is simply wrong in detail. - **The reports are sampled, not exhaustive.** *Report · Sample stride* and *Report · Max sample points* bound the cost; the statistics describe that sample. - **Resumable via `checkpoint.json`.** Tick *Output · Force re-run* to ignore it. - **NoData overrides must match the order you selected the DEMs in.** Getting the order wrong silently corrects against the wrong nodata mask.",
+        } },
     ],
     seeAlso: ["csvtodemcontour", "raster_format_converter"],
   },
@@ -3319,23 +3776,31 @@ export const tools = [
       en: "Tabulates the total outflow from a reservoir at every water level between the lowest and highest DEM cell, and draws the stage-discharge curve. One CSV and one PNG per DEM.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "The DEM only sets the elevation range, and the boundary clips it. Discharge itself comes entirely from the outlet definitions — no storage routing is involved, so the curve is static. Pair it with **[Reservoir Storage Analyzer](reservoir_storage_analyzer.md)** for the volume side." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Tabulates the **total outflow** from a reservoir at every water level between the lowest and highest DEM cell, and draws the stage–discharge curve. One CSV and one PNG per DEM.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The DEM only sets the elevation range, and the boundary clips it. Discharge itself comes entirely from the outlet definitions — no storage routing is involved, so the curve is static. Pair it with **[Reservoir Storage Analyzer](reservoir_storage_analyzer.md)** for the volume side.",
+        } },
       { type: "subheading", text: { km: "", en: "Formulas" } },
       { type: "list", items: [
         { km: "", en: "**Weir:** `Q = C × L × H^1.5`" },
         { km: "", en: "**Orifice and pipe:** `Q = Cd × A × √(2gH)`, with g = 9.81 m/s²" },
       ] },
-      { type: "paragraph", text: { km: "", en: "`H` = water level − activation elevation. An outlet contributes nothing while `H ≤ 0`, which is what puts the kinks in the total curve." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "`H` = water level − activation elevation. An outlet contributes nothing while `H ≤ 0`, which is what puts the kinks in the total curve.",
+        } },
       { type: "subheading", text: { km: "", en: "Typical coefficients" } },
-      { type: "table",
-        head: ["Outlet", "Coefficient"],
-        rows: [
-          ["Sharp-crested weir", "C = 1.84"],
-          ["Broad-crested weir", "C = 1.70"],
-          ["Ogee spillway", "C = 2.0–2.2"],
-          ["Sharp-edged orifice or pipe", "Cd = 0.61"],
-          ["Rounded entry", "Cd = 0.80–0.90"],
-        ] },
+      { type: "table", head: [{ km: "", en: "Outlet" }, { km: "", en: "Coefficient" }], rows: [
+        [{ km: "", en: "Sharp-crested weir" }, { km: "", en: "C = 1.84" }],
+        [{ km: "", en: "Broad-crested weir" }, { km: "", en: "C = 1.70" }],
+        [{ km: "", en: "Ogee spillway" }, { km: "", en: "C = 2.0–2.2" }],
+        [{ km: "", en: "Sharp-edged orifice or pipe" }, { km: "", en: "Cd = 0.61" }],
+        [{ km: "", en: "Rounded entry" }, { km: "", en: "Cd = 0.80–0.90" }],
+      ] },
     ],
     parameters: [
       {
@@ -3343,26 +3808,35 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "DEM Raster Layer(s)", type: "Multiple raster layers", default: "—", description: { km: "", en: "One curve per DEM." } },
-          { name: "Reservoir Boundary (optional — leave blank for full DEM)", type: "Vector layer, optional", default: "empty", description: { km: "", en: "" } },
-          { name: "Elevation Step (m)", type: "Number (min 0.001)", default: "`0.1`", description: { km: "", en: "" } },
-          { name: "Outlet Definition Mode", type: "Enum", default: "`Fixed slots — up to 3 outlets, defined below`", description: { km: "", en: "Or `CSV file — any number of outlets, from a table`. In CSV mode the three slots below are ignored." } },
-          { name: "CSV Mode · Outlet Table (.csv)", type: "File (`*.csv`), optional", default: "empty", description: { km: "", en: "Columns: `outlet_id`, `type`, `act_elev`, `LA`, `C_Cd`." } },
-          { name: "Output Folder", type: "Folder destination", default: "—", description: { km: "", en: "" } },
+          { name: "**DEM Raster Layer(s)**", type: "Multiple raster layers", default: "—", description: { km: "", en: "One curve per DEM." } },
+          { name: "**Reservoir Boundary (optional — leave blank for full DEM)**", type: "Vector layer, optional", default: "empty", description: { km: "", en: "" } },
+          { name: "**Elevation Step (m)**", type: "Number (min 0.001)", default: "`0.1`", description: { km: "", en: "" } },
+          { name: "**Outlet Definition Mode**", type: "Enum", default: "`Fixed slots — up to 3 outlets, defined below`", description: {
+            km: "",
+            en: "Or `CSV file — any number of outlets, from a table`. In CSV mode the three slots below are ignored.",
+          } },
+          { name: "**CSV Mode · Outlet Table (.csv)**", type: "File (`*.csv`), optional", default: "empty", description: { km: "", en: "Columns: `outlet_id`, `type`, `act_elev`, `LA`, `C_Cd`." } },
+          { name: "**Output Folder**", type: "Folder destination", default: "—", description: { km: "", en: "" } },
         ],
       },
       {
         title: { km: "", en: "Outlet slots 1, 2 and 3" },
         nameLabel: "Parameter",
         blocks: [
-          { type: "paragraph", text: { km: "", en: "Each slot repeats the same five controls. Slot 1 is enabled by default as a weir; slots 2 and 3 are off, pre-filled as an orifice and a pipe." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "Each slot repeats the same five controls. Slot 1 is enabled by default as a weir; slots 2 and 3 are off, pre-filled as an orifice and a pipe.",
+            } },
         ],
         rows: [
-          { name: "Outlet N · Enable", type: "Boolean", default: "`True` / `False` / `False`", description: { km: "", en: "" } },
-          { name: "Outlet N · Type", type: "Enum", default: "`Weir` / `Orifice` / `Pipe`", description: { km: "", en: "" } },
-          { name: "Outlet N · Activation Elevation (m)", type: "Number", default: "`0.0`", description: { km: "", en: "The crest or centreline level." } },
-          { name: "Outlet N · Size — L (m) or A (m²)", type: "Number (min 0.001)", default: "`1.0` / `0.5` / `0.3`", description: { km: "", en: "Crest width **L** in metres for a weir, or opening area **A** in m² for an orifice or pipe. **Areas are not derived for you** — enter the computed value." } },
-          { name: "Outlet N · Coefficient — C or Cd", type: "Number (min 0.001)", default: "`1.84` / `0.61` / `0.61`", description: { km: "", en: "" } },
+          { name: "**Outlet N · Enable**", type: "Boolean", default: "`True` / `False` / `False`", description: { km: "", en: "" } },
+          { name: "**Outlet N · Type**", type: "Enum", default: "`Weir` / `Orifice` / `Pipe`", description: { km: "", en: "" } },
+          { name: "**Outlet N · Activation Elevation (m)**", type: "Number", default: "`0.0`", description: { km: "", en: "The crest or centreline level." } },
+          { name: "**Outlet N · Size — L (m) or A (m²)**", type: "Number (min 0.001)", default: "`1.0` / `0.5` / `0.3`", description: {
+            km: "",
+            en: "Crest width **L* in metres for a weir, or opening area **A* in m² for an orifice or pipe. **Areas are not derived for you* — enter the computed value.",
+          } },
+          { name: "**Outlet N · Coefficient — C or Cd**", type: "Number (min 0.001)", default: "`1.84` / `0.61` / `0.61`", description: { km: "", en: "" } },
         ],
       },
       {
@@ -3370,54 +3844,58 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "Plot · Elevation Axis Minimum / Maximum (m)", type: "Number", default: "`0.0` (auto)", description: { km: "", en: "" } },
-          { name: "Plot · Discharge Axis Maximum (m³/s)", type: "Number", default: "`0.0` (auto)", description: { km: "", en: "" } },
-          { name: "Plot · Elevation Tick Interval (m)", type: "Number", default: "`0.0` (auto)", description: { km: "", en: "" } },
-          { name: "Plot · Discharge Tick Interval (m³/s)", type: "Number", default: "`0.0` (auto)", description: { km: "", en: "" } },
-          { name: "Plot · Resolution (DPI)", type: "Integer (72–600)", default: "`150`", description: { km: "", en: "" } },
+          { name: "**Plot · Elevation Axis Minimum (m) [0 = auto]**", type: "Number", default: "`0.0` (auto)", description: {
+            km: "",
+            en: "Pins the bottom of the elevation axis so several reservoirs can be compared side by side.",
+          } },
+          { name: "**Plot · Elevation Axis Maximum (m) [0 = auto]**", type: "Number", default: "`0.0` (auto)", description: { km: "", en: "Pins the top of the elevation axis." } },
+          { name: "**Plot · Discharge Axis Maximum (m³/s) [0 = auto]**", type: "Number", default: "`0.0` (auto)", description: {
+            km: "",
+            en: "Pins the right-hand end of the discharge axis; auto fits it to the computed peak.",
+          } },
+          { name: "**Plot · Elevation Tick Interval (m) [0 = auto]**", type: "Number", default: "`0.0` (auto)", description: {
+            km: "",
+            en: "Spacing of the horizontal grid lines. Q_total is marked with a cross at each, so this also sets where the read-off points sit.",
+          } },
+          { name: "**Plot · Discharge Tick Interval (m³/s) [0 = auto]**", type: "Number", default: "`0.0` (auto)", description: { km: "", en: "Spacing of the vertical grid lines." } },
+          { name: "**Plot · Resolution (DPI)**", type: "Integer (72–600)", default: "`150`", description: { km: "", en: "" } },
         ],
       },
       {
         title: { km: "", en: "CSV table format" },
-        nameLabel: null,
+        nameLabel: "outlet_id",
         blocks: [
-          { type: "table",
-            head: ["outlet_id", "type", "act_elev", "LA", "C_Cd"],
-            rows: [
-              ["1", "Weir", "40.0", "5.00", "1.84"],
-              ["2", "Orifice", "35.0", "0.20", "0.61"],
-              ["3", "Pipe", "33.5", "0.07", "0.61"],
-            ] },
-          { type: "paragraph", text: { km: "", en: "`outlet_id` must be unique — it names the output column. `type` must be exactly `Weir`, `Orifice` or `Pipe`." } },
+          { type: "paragraph", text: {
+              km: "",
+              en: "`outlet_id` must be unique — it names the output column. `type` must be exactly `Weir`, `Orifice` or `Pipe`.",
+            } },
         ],
-        rows: [],
+        rows: [
+          { name: "1", type: "Weir", default: "40.0", description: { km: "", en: "5.00" } },
+          { name: "2", type: "Orifice", default: "35.0", description: { km: "", en: "0.20" } },
+          { name: "3", type: "Pipe", default: "33.5", description: { km: "", en: "0.07" } },
+        ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Load the DEM and the reservoir boundary." },
-        { km: "", en: "Open **KGA Irrigation Tools > Reservoir Rating Curve**." },
-        { km: "", en: "Define the outlets. For up to three, fill in the slots on the form; for more, switch **Outlet Definition Mode** to CSV and supply a table." },
-        { km: "", en: "Check that the **activation elevations are in the same vertical datum as the DEM.** This is the mistake that produces a flat zero curve." },
-        { km: "", en: "Press **Run**." },
-        { km: "", en: "To compare several reservoirs on identical axes, pin the axis ranges and tick intervals under *Advanced* and run again." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Load the DEM and the reservoir boundary. 2. Open **KGA Irrigation Tools > Reservoir Rating Curve**. 3. Define the outlets. For up to three, fill in the slots on the form; for more, switch **Outlet Definition Mode** to CSV and supply a table. 4. Check that the **activation elevations are in the same vertical datum as the DEM.** This is the mistake that produces a flat zero curve. 5. Press **Run**. 6. To compare several reservoirs on identical axes, pin the axis ranges and tick intervals under *Advanced* and run again.",
+        } },
     ],
     results: [
       { type: "paragraph", text: { km: "", en: "Per DEM, in the output folder:" } },
-      { type: "list", items: [
-        { km: "", en: "`rating_{DEM}_{boundary}.csv` — elevation, one column per outlet, and `Q_total`." },
-        { km: "", en: "`rating_{DEM}_{boundary}.png` — the curve, with each outlet's contribution shaded, its activation level marked, and `Q_total` crossed at every grid line for reading off." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- `rating_{DEM}_{boundary}.csv` — elevation, one column per outlet, and `Q_total`. - `rating_{DEM}_{boundary}.png` — the curve, with each outlet's contribution shaded, its activation level marked, and `Q_total` crossed at every grid line for reading off.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**Activation elevations must be in the same vertical datum as the DEM.** If they all sit above the DEM's highest cell the curve comes out flat at zero, and the log warns about it." },
-        { km: "", en: "**Areas are not derived for you.** For an orifice or pipe, `LA` is the opening area in m² — compute it from the diameter yourself." },
-        { km: "", en: "**No storage routing.** This is a static stage–discharge relationship, not a flood-routing result. It does not tell you how long the reservoir takes to draw down." },
-        { km: "", en: "The curve's kinks are real: they are where each outlet activates." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Activation elevations must be in the same vertical datum as the DEM.** If they all sit above the DEM's highest cell the curve comes out flat at zero, and the log warns about it. - **Areas are not derived for you.** For an orifice or pipe, `LA` is the opening area in m² — compute it from the diameter yourself. - **No storage routing.** This is a static stage–discharge relationship, not a flood-routing result. It does not tell you how long the reservoir takes to draw down. - The curve's kinks are real: they are where each outlet activates.",
+        } },
     ],
     seeAlso: ["reservoir_storage_analyzer"],
   },
@@ -4105,28 +4583,78 @@ export const tools = [
       en: "Put a coordinate grid \u2014 including a full MGRS grid \u2014 on a layout map, from one window.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "QGIS can already do all of this. What it cannot do is do it quickly: the grid lives in the layout designer's item properties panel, behind *Grids*, a **+** button, a *Modify grid\u2026* button and five collapsible sections, and the interval, the frame, the label format and each side's label orientation are in four different places. This is the same settings in one form, with a **Suggest** button that works the interval out from what the map is actually showing." } },
-      { type: "paragraph", text: { km: "", en: "It also edits the grids a map already has, not only new ones, so it is the faster way back in when an interval turns out wrong at print size." } },
-      { type: "paragraph", text: { km: "", en: "And it draws an **MGRS** grid, which QGIS cannot do at all: there is no MGRS anywhere in the QGIS API." } },
+      { type: "paragraph", text: { km: "", en: "Put a **coordinate grid** on a print layout map from one window." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "QGIS can already do all of this. What it cannot do is do it quickly: the grid lives in the layout designer's item properties panel, behind *Grids*, a **+** button, a *Modify grid…* button and five collapsible sections, and the interval, the frame, the label format and each side's label orientation are in four different places. This is the same settings in one form, with a **Suggest** button that works the interval out from what the map is actually showing.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "It also edits the grids a map already has, not only new ones, so it is the faster way back in when an interval turns out wrong at print size.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "And it draws an **MGRS** grid, which QGIS cannot do at all: there is no MGRS anywhere in the QGIS API. See *The MGRS preset* below.",
+        } },
     ],
     parameters: [
       {
+        title: null,
+        nameLabel: "Parameter",
+        blocks: [
+          { type: "paragraph", text: {
+              km: "",
+              en: "The algorithm takes no Processing parameters — running it opens the window. The controls below are the window's, and rows it does not need are hidden: the interval boxes disappear when the units are set to fit the page, the cross and marker sizes appear only for those grid types, and the frame rows go when the frame style is *No frame*.",
+            } },
+        ],
+        rows: [],
+      },
+      {
         title: { km: "", en: "Which map" },
         nameLabel: "Control",
-        blocks: [
-          { type: "paragraph", text: { km: "", en: "The algorithm takes no Processing parameters \u2014 running it opens the window. The controls below are the window's, and rows it does not need are hidden." } },
-        ],
+        blocks: [],
         rows: [
-          { name: "Layout", type: "Combo box", default: "the layout whose map is selected", description: { km: "", en: "Every print layout in the project. The **Open** button beside it opens that layout in the designer, or brings its designer to the front." } },
-          { name: "Map item", type: "Combo box", default: "the selected map", description: { km: "", en: "The map items of that layout, by name." } },
-          { name: "Create New Grid / Edit Grid", type: "Two tabs", default: "Edit when the map has a grid, otherwise Create", description: { km: "", en: "Create makes a new grid; Edit changes one the map already has. **Edit is greyed out on a map with no grids.** Changing the layout or map re-chooses the tab." } },
-          { name: "Grid to edit", type: "Combo box", default: "the first grid", description: { km: "", en: "*Edit Grid tab.* The grids the map already has. Picking one loads its settings into the form." } },
-          { name: "Grid name", type: "Text", default: "`Grid`", description: { km: "", en: "What the grid is called in the designer's grid list. A name already on that map gets ` 2` appended rather than overwriting." } },
-          { name: "Preset", type: "Combo box", default: "`Start from...`", description: { km: "", en: "Fills the whole form in one pick: *Thin black graticule*, *Exterior ticks, labels outside*, *Zebra frame, labels outside*, *Lat/long graticule in degrees*, *Crosses, labels inside*. Below the separator sits **MGRS grid**, which is not a preset but a *set*." } },
-          { name: "Grid interval", type: "Combo box", default: "Automatic", description: { km: "", en: "*MGRS set only.* `Automatic` works the spacing out from the map extent; `10 km`, `1 km`, `100 m`, `10 m` and `1 m` name it instead, which is what a sheet drawn to a stated scale needs." } },
-          { name: "Also add", type: "Two check boxes", default: "both off", description: { km: "", en: "*MGRS set only.* **1 km mesh** adds the fine mesh of a 1:50,000 sheet; **Labels inside too** repeats the numbers against the inside of the frame." } },
-          { name: "Positioning", type: "Three toggle buttons", default: "Two strips per axis, at 1/4 and 3/4", description: { km: "", en: "Where the interior number strips go. Enabled once **Labels inside too** is ticked." } },
-          { name: "100 km letters", type: "Combo box", default: "In the margin", description: { km: "", en: "*MGRS set only.* `In the margin, outside the numbers` or `Inside the map, against the frame`." } },
+          { name: "**Layout**", type: "Combo box", default: "The layout whose map is selected", description: {
+            km: "",
+            en: "Every print layout in the project. The **Open* button beside it opens that layout in the designer, or brings its designer to the front.",
+          } },
+          { name: "**Map item**", type: "Combo box", default: "The selected map", description: { km: "", en: "The map items of that layout, by name." } },
+          { name: "**Reload**", type: "Button", default: "—", description: {
+            km: "",
+            en: "Beside Map item. Read the layouts, maps and grids again, after adding or removing one in the designer.",
+          } },
+          { name: "**Create New Grid / Edit Grid**", type: "Two tabs", default: "Edit when the map has a grid, otherwise Create", description: {
+            km: "",
+            en: "Create makes a new grid; Edit changes one the map already has. Edit is greyed out on a map with no grids. Changing the layout or map re-chooses the tab.",
+          } },
+          { name: "**Grid to edit**", type: "Combo box", default: "The first grid", description: {
+            km: "",
+            en: "*Edit Grid tab. The grids the map already has. Picking one loads its settings into the form.",
+          } },
+          { name: "**Grid name**", type: "Text (top of both tabs, kept in step)", default: "`Grid`", description: {
+            km: "",
+            en: "What the grid is called in the layout designer's grid list. A name already on that map gets ` 2` appended rather than overwriting.",
+          } },
+          { name: "**Grid interval**", type: "Combo box", default: "Automatic", description: {
+            km: "",
+            en: "Only shown while the MGRS set is armed. `Automatic` works the spacing out from the map extent; `10 km`, `1 km`, `100 m`, `10 m` and `1 m` name it instead, which is what a sheet drawn to a stated scale needs — a 1:50,000 map carries a 1 km grid whatever its extent happens to suggest.",
+          } },
+          { name: "**Also add**", type: "Two check boxes", default: "Both off", description: {
+            km: "",
+            en: "Only shown while the MGRS set is armed. **1 km mesh* adds the fine mesh of a 1:50,000 sheet; **Labels inside too* repeats the numbers against the inside of the frame.",
+          } },
+          { name: "**Positioning**", type: "Three toggle buttons", default: "Two strips per axis, at 1/4 and 3/4", description: {
+            km: "",
+            en: "Where the interior number strips go: `One strip per axis, centred`, `Two strips per axis, at 1/3 and 2/3`, or `Two strips per axis, at 1/4 and 3/4`. Shown while the MGRS set is armed or the map already has strips, and enabled once **Labels inside too* is ticked. Changing it re-places the strips already on the map.",
+          } },
+          { name: "**100 km letters**", type: "Combo box", default: "In the margin", description: {
+            km: "",
+            en: "Only shown while the MGRS set is armed. `In the margin, outside the numbers` or `Inside the map, against the frame`.",
+          } },
+          { name: "**Preset**", type: "Combo box (Create tab)", default: "`Start from...`", description: {
+            km: "",
+            en: "Fills the whole form in one pick: *Thin black graticule*, *Exterior ticks, labels outside*, *Zebra frame, labels outside*, *Lat/long graticule in degrees*, *Crosses, labels inside*. It also re-suggests the interval, because a preset can change the CRS. Below the separator sits **MGRS grid**, which is not a preset but a *set — see *The MGRS preset*.",
+          } },
         ],
       },
       {
@@ -4134,14 +4662,31 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Grid type", type: "Combo box", default: "Solid lines", description: { km: "", en: "`Solid lines`, `Crosses`, `Markers`, `Frame and labels only`." } },
-          { name: "Coordinate system", type: "CRS selector", default: "Not set", description: { km: "", en: "Not set grids the map in its own CRS. Set it to EPSG:4326 for a latitude/longitude graticule over a projected map. Changing it re-suggests the interval." } },
-          { name: "Interval units", type: "Combo box", default: "Map units", description: { km: "", en: "`Map units`, `Millimetres on the page`, `Centimetres on the page`, `Fit the page automatically`." } },
-          { name: "Interval", type: "Two numbers + **Suggest**", default: "1000", description: { km: "", en: "X and Y spacing. **Suggest** fills both with a round number \u2014 1, 2, 2.5 or 5 times a power of ten \u2014 that cuts the map into about five columns and rows." } },
-          { name: "Offset", type: "Two numbers", default: "0", description: { km: "", en: "Shifts the grid origin, for lines that have to land on a particular coordinate." } },
-          { name: "Spacing on the page", type: "Two numbers", default: "50\u2013100 mm", description: { km: "", en: "*Fit the page automatically* only. QGIS recomputes the interval at each render so the spacing stays between these two widths." } },
-          { name: "Line colour / Line width", type: "Colour button, number", default: "Black, 0.2 mm", description: { km: "", en: "Opacity included. The colour is also the marker colour." } },
-          { name: "Cross size / Marker size", type: "Number", default: "3 mm / 2 mm", description: { km: "", en: "Crosses and markers only." } },
+          { name: "**Grid type**", type: "Combo box", default: "Solid lines", description: { km: "", en: "`Solid lines`, `Crosses`, `Markers`, `Frame and labels only`." } },
+          { name: "**Coordinate system**", type: "CRS selector", default: "Not set", description: {
+            km: "",
+            en: "Not set grids the map in its own CRS. Set it to EPSG:4326 for a latitude/longitude graticule over a projected map. Changing it re-suggests the interval.",
+          } },
+          { name: "**Interval units**", type: "Combo box", default: "Map units", description: {
+            km: "",
+            en: "`Map units`, `Millimetres on the page`, `Centimetres on the page`, `Fit the page automatically`.",
+          } },
+          { name: "**Interval**", type: "Two numbers + **Suggest**", default: "1000", description: {
+            km: "",
+            en: "X and Y spacing, in the chosen units. **Suggest* fills both with a round number — 1, 2, 2.5 or 5 times a power of ten — that cuts the map into about five columns and rows.",
+          } },
+          { name: "**Offset**", type: "Two numbers", default: "0", description: {
+            km: "",
+            en: "Shifts the grid origin, for lines that have to land on a particular coordinate.",
+          } },
+          { name: "**Spacing on the page**", type: "Two numbers", default: "50–100 mm", description: {
+            km: "",
+            en: "*Fit the page automatically only. QGIS recomputes the interval at each render so the spacing stays between these two widths.",
+          } },
+          { name: "**Line colour**", type: "Colour button", default: "Black", description: { km: "", en: "Opacity included. Also the marker colour." } },
+          { name: "**Line width**", type: "Number", default: "0.2 mm", description: { km: "", en: "Solid lines and crosses." } },
+          { name: "**Cross size**", type: "Number", default: "3 mm", description: { km: "", en: "Crosses only." } },
+          { name: "**Marker size**", type: "Number", default: "2 mm", description: { km: "", en: "Markers only." } },
         ],
       },
       {
@@ -4149,11 +4694,18 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Frame style", type: "Combo box", default: "Exterior ticks", description: { km: "", en: "`No frame`, `Zebra`, `Zebra (nautical)`, `Interior ticks`, `Exterior ticks`, `Interior and exterior ticks`, `Line border`, `Line border (nautical)`." } },
-          { name: "Frame size", type: "Number", default: "2 mm", description: { km: "", en: "How far the frame or the ticks reach out from the map." } },
-          { name: "Frame line thickness / colour", type: "Number, colour button", default: "0.3 mm, black", description: { km: "", en: "" } },
-          { name: "Fill colour 1 / 2", type: "Colour buttons", default: "Black / white", description: { km: "", en: "The two zebra bands. Shown for the zebra styles only." } },
-          { name: "Draw on", type: "Four check boxes", default: "all ticked", description: { km: "", en: "Left, Right, Top, Bottom. A frame on three sides is normal on a sheet where the fourth carries the legend." } },
+          { name: "**Frame style**", type: "Combo box", default: "Exterior ticks", description: {
+            km: "",
+            en: "`No frame`, `Zebra`, `Zebra (nautical)`, `Interior ticks`, `Exterior ticks`, `Interior and exterior ticks`, `Line border`, `Line border (nautical)`.",
+          } },
+          { name: "**Frame size**", type: "Number", default: "2 mm", description: { km: "", en: "How far the frame or the ticks reach out from the map." } },
+          { name: "**Frame line thickness**", type: "Number", default: "0.3 mm", description: { km: "", en: "" } },
+          { name: "**Frame line colour**", type: "Colour button", default: "Black", description: { km: "", en: "" } },
+          { name: "**Fill colour 1 / 2**", type: "Colour buttons", default: "Black / white", description: { km: "", en: "The two zebra bands. Shown for the zebra styles only." } },
+          { name: "**Draw on**", type: "Four check boxes", default: "All ticked", description: {
+            km: "",
+            en: "Left, Right, Top, Bottom. A frame on three sides is normal on a sheet where the fourth carries the legend.",
+          } },
         ],
       },
       {
@@ -4161,72 +4713,126 @@ export const tools = [
         nameLabel: "Control",
         blocks: [],
         rows: [
-          { name: "Show coordinate labels", type: "Group check box", default: "On", description: { km: "", en: "Off leaves the lines and the frame with no numbers." } },
-          { name: "Number format", type: "Combo box", default: "Decimal", description: { km: "", en: "`Decimal`, `Decimal with N/S/E/W`, degree/minute and degree/minute/second variants, plus four that label from an expression: `MGRS zone and band letter`, `MGRS 100 km square letter`, `MGRS principal digits`, `MGRS corner value`, and `Custom expression`." } },
-          { name: "UTM zone", type: "Integer (0\u201360)", default: "from the coordinate system", description: { km: "", en: "*MGRS 100 km square letter* only. At 0 it is read from the grid's own CRS, which is what the MGRS preset sets." } },
-          { name: "Expression", type: "Text", default: "\u2014", description: { km: "", en: "*Custom expression* only. A QGIS expression, with `@grid_number` for the value of the line being labelled and `@grid_axis` for `'x'` or `'y'`." } },
-          { name: "Label rule", type: "Read-only text", default: "\u2014", description: { km: "", en: "Shown for the four expression formats: exactly what will be written onto the grid. Change the interval and watch the divisor change with it." } },
-          { name: "Decimals", type: "Integer (0\u201312)", default: "0", description: { km: "", en: "**Hidden for the four expression formats** \u2014 QGIS does not consult it under a custom format, so leaving it on screen would be a control that does nothing." } },
-          { name: "Distance from the frame", type: "Number", default: "1 mm", description: { km: "", en: "" } },
-          { name: "Font / Label colour", type: "Font button, colour button", default: "QGIS default, black", description: { km: "", en: "Family, size and style." } },
-          { name: "Each side", type: "Four rows", default: "Show all, outside, horizontal", description: { km: "", en: "One row per side with **Show**, **Placement** (outside or inside the frame) and **Orientation**. **Copy the Left row to every side** does the common case in one press." } },
+          { name: "**Show coordinate labels**", type: "Group check box", default: "On", description: { km: "", en: "Off leaves the lines and the frame with no numbers." } },
+          { name: "**Number format**", type: "Combo box", default: "Decimal", description: {
+            km: "",
+            en: "`Decimal`, `Decimal with N/S/E/W`, `Degree, minute`, `Degree, minute (padded)`, `Degree, minute, second`, `Degree, minute, second (padded)`, plus four that label from an expression: `MGRS zone and band letter`, `MGRS 100 km square letter`, `MGRS principal digits` (two digits minimum, more on a grid finer than 1 km, with a raised 100 km prefix on every tenth line), `MGRS corner value` (the first line of each margin, written out in full) and `Custom expression`.",
+          } },
+          { name: "**UTM zone**", type: "Integer (0–60)", default: "`from the coordinate system`", description: {
+            km: "",
+            en: "*MGRS 100 km square letter only. Which zone the letters belong to. At 0 it is read from the grid's own CRS, which is what the MGRS preset sets.",
+          } },
+          { name: "**Expression**", type: "Text", default: "—", description: {
+            km: "",
+            en: "*Custom expression only. A QGIS expression, with `@grid_number` for the value of the line being labelled and `@grid_axis` for `'x'` or `'y'`.",
+          } },
+          { name: "**Label rule**", type: "Read-only text", default: "—", description: {
+            km: "",
+            en: "Shown for the four expression formats: exactly what will be written onto the grid. Change the interval and watch the divisor change with it.",
+          } },
+          { name: "**Decimals**", type: "Integer (0–12)", default: "0", description: {
+            km: "",
+            en: "On a degree/minute/second format, the decimals on the last part shown. **Hidden for the four expression formats* — QGIS does not consult it under a custom format, so leaving it on screen would be a control that does nothing.",
+          } },
+          { name: "**Distance from the frame**", type: "Number", default: "1 mm", description: { km: "", en: "" } },
+          { name: "**Font**", type: "Font button", default: "The QGIS default", description: { km: "", en: "Family, size and style." } },
+          { name: "**Label colour**", type: "Colour button", default: "Black", description: { km: "", en: "" } },
+          { name: "**Each side**", type: "Four rows", default: "Show all, outside, horizontal", description: {
+            km: "",
+            en: "One row per side — Left, Right, Top, Bottom — with **Show* (`Show all`, `Latitude / Y only`, `Longitude / X only`, `Hide`), **Placement* (`Outside the frame`, `Inside the frame`) and **Orientation* (`Horizontal`, `Vertical, reading up`, `Vertical, reading down`, `Along the frame`, `Above the tick`, `On the tick`, `Under the tick`).",
+          } },
+          { name: "**Copy the Left row to every side**", type: "Button", default: "—", description: { km: "", en: "The common case — every side the same — in one press." } },
+        ],
+      },
+      {
+        title: { km: "", en: "Buttons" },
+        nameLabel: "Button",
+        blocks: [],
+        rows: [
+          { name: "**Add MGRS Grid (4 grids)**", type: "", default: "", description: {
+            km: "",
+            en: "What **Add Grid* becomes once the MGRS set is picked. One press writes every grid in the set as one undo step, then leaves the tool editing the finest of them. Picking a different layout, map or grid puts the button back before it can fire at the wrong target.",
+          } },
+          { name: "**Add Grid* / **Apply**", type: "", default: "", description: {
+            km: "",
+            en: "Writes the form to the map. On a new grid it adds one and then selects it, so the next press changes that grid instead of stacking a second one beside it — which is why the button changes its name after the first press.",
+          } },
+          { name: "**Remove Grid**", type: "", default: "", description: { km: "", en: "Deletes the selected grid, after asking." } },
+          { name: "**Reset**", type: "", default: "", description: { km: "", en: "Every setting back to its default, then a fresh interval suggestion." } },
+          { name: "**Close**", type: "", default: "", description: { km: "", en: "The grid stays; nothing is undone." } },
+          { name: "**Help**", type: "", default: "", description: { km: "", en: "This page." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "paragraph", text: { km: "", en: "The tool needs a print layout with a map item on it. Run it without one and it says so and stops." } },
-      { type: "steps", items: [
-        { km: "", en: "Open the layout in **Project > Layouts**, and click the map item to select it." },
-        { km: "", en: "Back in the main window, run **KGA Mapping > Add Grid to Layout**. The window opens on that layout and that map, **in front of the layout designer** rather than behind it, so the form and the sheet are on screen together." },
-        { km: "", en: "Pick a **Preset** if one is close to what you want." },
-        { km: "", en: "Press **Suggest** to get a round interval for the scale the map is at." },
-        { km: "", en: "Set the frame and the label sides, then press **Add Grid**." },
-        { km: "", en: "Look at the sheet, change a number, press **Apply** again. Repeat until it reads right at print size." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The tool needs a print layout with a map item on it. Run it without one and it says so and stops — see *Notes and limits*.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Open the layout in **Project > Layouts**, and click the map item to select it. 2. Back in the main window, run **KGA Mapping > Add Grid to Layout**. The window opens on that layout and that map, **in front of the layout designer** rather than behind it, so the form and the sheet are on screen together. 3. Pick a **Preset** if one is close to what you want. 4. Press **Suggest** to get a round interval for the scale the map is at. 5. Set the frame and the label sides, then press **Add Grid**. 6. Look at the sheet, change a number, press **Apply** again. Repeat until it reads right at print size.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "To change a grid the map already has, right-click it in the layout's **Contents** panel (under the map's *Grids* group) and choose **Edit…**. The window opens on the **Edit Grid** tab with that grid chosen under **Grid to edit**.",
+        } },
       { type: "subheading", text: { km: "", en: "The MGRS preset" } },
-      { type: "paragraph", text: { km: "", en: "A grid reference such as **48P VT 92 77** is four things: the zone number, the latitude band letter, the 100 km square letters and the numeric location. They are read off different grids, so the preset lays down four, plus up to three more you can tick on." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "A grid reference such as **48P VT 92 77** is four things: the zone number, the latitude band letter, the 100 km square letters and the numeric location. They are read off different grids, so the preset lays down four, plus up to three more you can tick on (the 1 km mesh is one grid; the interior labels are two, one for northings and one for eastings):",
+        } },
       { type: "table", head: [{ km: "", en: "Grid" }, { km: "", en: "What it draws" }, { km: "", en: "What it labels" }], rows: [
-        [{ km: "", en: "`MGRS zone 48P`" }, { km: "", en: "A 6\u00b0 \u00d7 8\u00b0 graticule in EPSG:4326" }, { km: "", en: "The zone number along the top and bottom, the band letter up the sides \u2014 **inside** the frame" }],
-        [{ km: "", en: "`MGRS 100 km squares`" }, { km: "", en: "A 100,000 m grid in the map's UTM zone" }, { km: "", en: "The square's column letter on the vertical lines, its row letter on the horizontal ones" }],
-        [{ km: "", en: "`MGRS corner values`" }, { km: "", en: "Nothing \u2014 no lines, no frame" }, { km: "", en: "One label per margin: the first line's coordinate written out in full. **It follows the map** \u2014 pan or zoom and it re-finds the first line by itself" }],
-        [{ km: "", en: "`MGRS 1 km mesh` *(optional)*" }, { km: "", en: "A 1 km grid, lighter than the one above it" }, { km: "", en: "Nothing \u2014 see the notes" }],
-        [{ km: "", en: "`MGRS interior northing/easting labels` *(optional)*" }, { km: "", en: "Nothing" }, { km: "", en: "The same principal digits repeated against the **inside** of the frame" }],
-        [{ km: "", en: "`MGRS 1 km` (or 10 km, 100 m\u2026)" }, { km: "", en: "The fine grid" }, { km: "", en: "The principal digits, **never fewer than two**, with the 100 km digits raised and small on every tenth line: `78 79 \u2074\u2078\u2070 81`" }],
+        [{ km: "", en: "`MGRS zone 48P`" }, { km: "", en: "A 6° x 8° graticule in EPSG:4326" }, {
+            km: "",
+            en: "The zone number along the top and bottom, the band letter up the sides — **inside* the frame, since the margin is already carrying numbers",
+          }],
+        [{ km: "", en: "`MGRS 100 km squares`" }, { km: "", en: "A 100,000 m grid in the map's UTM zone" }, {
+            km: "",
+            en: "The square's column letter on the vertical lines, its row letter on the horizontal ones. **In the margin or inside the map**, your choice",
+          }],
+        [{ km: "", en: "`MGRS corner values`" }, { km: "", en: "Nothing — no lines, no frame" }, {
+            km: "",
+            en: "One label per margin: the first line's coordinate written out in full, so the short labels along the rest of the margin have something to be read against. Three parts, only the middle one full size — on a 10 km grid `¹26⁰⁰⁰⁰m.N.`, on a 1 km grid `¹²60⁰⁰⁰m.N.` for the same line. **It follows the map* — pan or zoom and it re-finds the first line by itself",
+          }],
+        [{ km: "", en: "`MGRS 1 km mesh` *(optional)*" }, { km: "", en: "A 1 km grid, lighter than the one above it" }, { km: "", en: "Nothing — see *Notes and limits*" }],
+        [{
+            km: "",
+            en: "`MGRS interior northing labels` and `MGRS interior easting labels` *(optional)*",
+          }, { km: "", en: "Nothing — no lines, no frame" }, {
+            km: "",
+            en: "The same principal digits as the fine grid, repeated against the **inside* of the frame: northings on vertical strips, eastings along horizontal ones",
+          }],
+        [{ km: "", en: "`MGRS 1 km` (or 10 km, 100 m…)" }, { km: "", en: "The fine grid" }, {
+            km: "",
+            en: "The principal digits, **never fewer than two* — `12` on a 1 km grid, `51` on a 10 km grid — with the 100 km digits raised and small on every tenth line: `78 79 ⁴80 81`",
+          }],
       ] },
-      { type: "steps", items: [
-        { km: "", en: "Select the map and run the tool as above." },
-        { km: "", en: "Pick **MGRS grid** from the bottom of the **Preset** list. Nothing is written yet: the button changes to **Add MGRS Grid (4 grids)** and its count follows what you tick." },
-        { km: "", en: "Set the font, colours and frame if you want them different \u2014 everything the set does not fix for itself is taken from the form when you press Add." },
-        { km: "", en: "Choose whether the **100 km letters** go in the margin or inside the map. Inside keeps the margin to the numbers alone, which is how a printed sheet does it." },
-        { km: "", en: "Set the **Grid interval** if `Automatic` is not what the sheet needs. Tick **1 km mesh** and **Labels inside too** if you want them." },
-        { km: "", en: "Press **Add MGRS Grid**. One undo step; the tool is left editing the fine grid, and the others are in the **Grid** list." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Select the map and run the tool as above. 2. Pick **MGRS grid** from the bottom of the **Preset** list. Nothing is written yet: the button changes to **Add MGRS Grid (4 grids)**, the status line names them, and a **100 km letters** row and an **Also add** row appear beside the preset. The button's count follows what you tick. 3. Set the font, colours and frame if you want them different — everything the set does not fix for itself is taken from the form when you press Add, so a colour picked now still reaches every grid in the set. 4. Choose whether the **100 km letters** go in the margin or inside the map. Inside keeps the margin to the numbers alone, which is how a printed sheet does it. 5. Set the **Grid interval** if `Automatic` is not what the sheet needs. Tick **1 km mesh** for the fine mesh a 1:50,000 sheet carries, and **Labels inside too** to repeat the numbers against the inside of the frame. Nothing is remembered between sessions; the window opens on the defaults. 6. Press **Add MGRS Grid**. One undo step; the tool is left editing the fine grid, and the others are in the **Grid** list.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "The zone comes from the middle of the map. The interval comes from the extent unless you name one, snapped down to 10 km / 1 km / 100 m / 10 m / 1 m — name it when the sheet is drawn to a stated scale, because the extent of a 1:50,000 sheet does not always suggest the 1 km grid such a sheet should carry. Everything else follows: the margin digits, the corner label's split, and how many lines land on the page. The three margin rows are stacked by hand — digits innermost, corner values outside them, letters outside those — because QGIS measures every annotation distance from the map frame rather than from the row before it.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "For a latitude/longitude graticule over a projected map, set **Coordinate system** to EPSG:4326 on the Grid tab — the interval re-suggests itself in degrees — and set **Number format** to *Degree, minute* on the Labels tab. The *Lat/long graticule in degrees* preset does all three.",
+        } },
     ],
     results: [
-      { type: "list", items: [
-        { km: "", en: "A grid on the chosen map item of the chosen print layout. Nothing is written to disk; the grid is part of the layout and is saved with the project." },
-        { km: "", en: "Adding, changing and removing are each **one undo step** in the layout designer, so Ctrl+Z there takes back exactly one press of Apply." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- A grid on the chosen map item of the chosen print layout. Nothing is written to disk; the grid is part of the layout and is saved with the project. - Adding, changing and removing are each **one undo step** in the layout designer, so Ctrl+Z there takes back exactly one press of Apply.",
+        } },
     ],
     notes: [
-      { type: "list", items: [
-        { km: "", en: "**It checks there is something to grid before it opens.** A project with no layout \u2014 or with layouts carrying no map item \u2014 gets a message saying which of the two is missing, and nothing opens." },
-        { km: "", en: "**MGRS is written in this plugin, because QGIS has none.** There is no MGRS in the QGIS C++ or Python API. The maths is WGS84 only, no UPS, and is checked against PROJ and against the standard `4QFJ 12345 67890` example." },
-        { km: "", en: "**The GZD graticule draws nothing on most sheets.** Its lines are 6\u00b0 apart across and 8\u00b0 up, so on any map smaller than a zone cell there is no line to draw. On a single-zone sheet, put `48P` in a layout label instead." },
-        { km: "", en: "**Above 84\u00b0 N and below 80\u00b0 S there is no MGRS grid.** Those latitudes use UPS, which the tool does not draw. The preset refuses and says so." },
-        { km: "", en: "**One sheet, one zone.** All the grids use the zone at the middle of the map. A map crossing a zone boundary is gridded anyway and warned about. That is a property of MGRS, not of this tool." },
-        { km: "", en: "**The labels are an expression, so they survive without the plugin.** They are written as QGIS's own *Custom* annotation format with self-contained expression text. The cost is that QGIS's **Decimals** setting stops applying, which is why that row is hidden for these formats." },
-        { km: "", en: "**The margin never prints a single digit.** The labels are floored at two, which is the convention on a 1:50,000 sheet \u2014 a margin of bare single digits reads as a ruler rather than as coordinates." },
-        { km: "", en: "**The raised 100 km digits are Unicode superscripts.** QGIS gives a grid one font per label, so there is no way to set part of it smaller. Nearly every font has these glyphs, but one that does not will draw boxes." },
-        { km: "", en: "**The 1 km mesh carries no numbers.** A second row of labels would land in the same margin row and overlap it. The mesh is there to measure against, not to name." },
-        { km: "", en: "**Interior labels are a grid of their own.** QGIS gives one grid a single label position per side, so repeating the numbers inside the frame needs a second grid rather than a second setting." },
-        { km: "", en: "**The interval is in the grid's CRS, not the map's.** Switching to EPSG:4326 with an interval of 1000 left over from a metre grid means 1000 degrees, and draws nothing. The tool re-suggests the interval whenever the CRS changes." },
-        { km: "", en: "**Fit the page automatically cannot carry MGRS digits.** QGIS recomputes that interval at every render and the expression cannot follow it, so the combination is refused." },
-        { km: "", en: "**Labels outside the frame draw beyond the map item's rectangle.** They can overrun a neighbouring item or the edge of the page; the map item does not grow to make room." },
-        { km: "", en: "**The window follows the layout it is working on**, and **closing that designer closes this window with it**. Nothing is lost \u2014 the grid is already on the map; re-run the tool and pick it under **Grid**." },
-        { km: "", en: "Only **print layouts** are offered. A report is not a layout the tool can put a grid on." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **It checks there is something to grid before it opens.** A grid lives on a map item inside a print layout, so running the tool in a project with no layout — or with layouts that carry no map item — puts up a message saying which of the two is missing and how to fix it, and opens nothing. The message names the layout when there is only one. - **MGRS is written in this plugin, because QGIS has none.** There is no MGRS in the QGIS C++ or Python API, `QgsCoordinateFormatter` has no grid-reference format, and the `mgrs` Python package is not part of a QGIS install. The maths is `kga_tools/core/mgrs.py`: WGS84 only, no UPS, and checked against PROJ (the projection agrees to well under a millimetre, and every 100 km square letter matches an independent derivation) and against the standard `4QFJ 12345 67890` example. - **The GZD graticule draws nothing on most sheets.** Its lines are 6° apart across and 8° up, so on any map smaller than a zone cell — nearly all of them — there is no line to draw and no label to hang on it. The grid is still added, and is *named* for the designator it stands for, because that name is what the Grid list shows. On a single-zone sheet, put `48P` in a layout label instead. - **Above 84° N and below 80° S there is no MGRS grid.** Those latitudes use UPS, which has its own letters and is not something this tool draws. The preset refuses and says so. - **One sheet, one zone.** All the grids use the zone at the middle of the map. A map crossing a zone boundary is gridded anyway and warned about, in the window and in the Processing log, but the numbers and the 100 km letters are right only inside that centre zone. That is a property of MGRS, not of this tool. - **The Norway and Svalbard zones are handled for the letters, not for the graticule.** The reference and the 100 km letters know that south-west Norway is zone 32 and that Svalbard runs 31/33/35/37. The GZD *graticule* still draws plain 6° cells, because a label expression on the x axis is handed only a longitude and can never know which band it is being drawn at. - **The labels are an expression, so they survive without the plugin.** They are written as QGIS's own *Custom* annotation format with self-contained expression text — there is no registered function to go missing when the project is opened elsewhere. The cost is that QGIS's **Decimals** setting stops applying, which is why that row is hidden for these formats. - **The margin never prints a single digit.** A 10 km grid only needs one digit to be unambiguous inside a 100 km square, but a margin of bare single digits reads as a ruler rather than as coordinates, and no printed sheet does it — so the labels are floored at two. Two digits span 1000 km, which is wider than a UTM zone, so the second one costs nothing. A 1 km grid reads `58 59 60 61 62` and a 10 km grid `44 45 46 47`, which is the convention on a 1:50,000 sheet. - **The raised 100 km digits are Unicode superscripts.** `⁴80` is a superscript four followed by an ordinary 80 — QGIS gives a grid one font per label, so there is no way to set part of it smaller. ArcGIS Pro can, because its dynamic text takes `<FNT size>` runs; this is the closest QGIS gets, and it carries the same information. Nearly every font has these glyphs, but a font that does not will draw boxes; change the label font if you see them. - **The corner label is split by the interval, not by the hundred kilometre.** Its large digits are exactly what the margin prints beside every other line, so the two read as the same number; the small digits in front are everything above them and the small digits behind everything below. Change the interval and the split moves with it — `¹26⁰⁰⁰⁰m.N.` on a 10 km grid becomes `¹²60⁰⁰⁰m.N.` on a 1 km one, for the very same line. - **The corner label follows the map.** It draws no lines and no frame; it exists only to put one full coordinate at the start of each margin, and it finds that line by reading the map's own extent every time the layout is drawn. Pan or zoom and it re-finds the first line on its own, with no need to press Apply — the same behaviour as ArcGIS Pro's *Corner Grid Labels*. The one exception is a grid whose coordinate system differs from the map's: the extent is then in the wrong units to compare a grid line against, so the first line is worked out when the grid is written and *does* go stale until the next Apply. Keeping the map in the same UTM zone as the grid avoids it, and the MGRS preset already does. - **The 1 km mesh carries no numbers.** A second row of labels would land in the same margin row as the first and overlap it, and at 1 km spacing on anything wider than a 1:50,000 sheet there are far too many of them to read — a whole country comes out as a solid tint, which the tool warns about. The mesh is there to measure against, not to name. When the automatic interval is already 1 km the mesh would be a duplicate, so it is skipped and the status line says so. - **Interior labels are a grid of their own.** QGIS gives one grid a single label position per side, so repeating the numbers inside the frame needs a second grid rather than a second setting — which is also how Pro does it, with its separate *InteriorLabels* component. - **Finer grids keep their full precision.** Below 1 km the digits go up with the step — three on a 100 m grid, four on 10 m, five on 1 m — so a reference read off the sheet is still unique within its 100 km square. - **The principal digits follow the interval and are rebuilt on every Apply.** Change a 1 km grid to 100 m and the labels go from two digits to three by themselves. An interval that is not an MGRS step is rounded **down** for the labels — a 2.5 km grid is labelled to the kilometre — because rounding up would print the same number on two neighbouring lines. - **Fit the page automatically cannot carry MGRS digits.** QGIS recomputes that interval at every render and the expression cannot follow it, so the combination is refused. - **The letters and the digits are two rows in the margin**, because they are two grids and QGIS gives each grid one label per line. The letters are pushed further out than the digits by about a line of text; a large font may need the *Distance from the frame* on the 100 km grid nudged by hand. - **An MGRS format with no UTM zone falls back to plain numbers** rather than printing a blank margin, and the status line says it has. Set the grid's **Coordinate system** to a UTM zone, or type the zone in yourself. - **The interval is in the grid's CRS, not the map's.** Switching the coordinate system to EPSG:4326 with an interval of 1000 left over from a metre grid means 1000 degrees, and draws nothing at all. The tool re-suggests the interval whenever the CRS changes, so this only bites if you then type a metre value back in. An interval of zero is refused with a message. - **Labels outside the frame draw beyond the map item's rectangle.** They can overrun a neighbouring item or the edge of the page; the map item itself does not grow to make room. Move the map in a little, or set **Placement** to inside. - **Latitude and longitude are QGIS's words** for the two families of line. On a projected grid they mean northing and easting, and *Latitude / Y only* on the left side is the usual choice either way. - **The window is modeless and reads the project when it opens.** Add a layout or a map while it is open and press **Reload** to see it. Selecting a different map in the designer and re-running the tool also re-reads it. - **The window follows the layout it is working on.** It parents itself to the designer showing that layout, so it stays in front of the sheet; picking a different layout in the combo moves it to that layout's designer, and a layout with no designer open leaves it on the QGIS main window. **Closing that designer closes this window with it** — re-run the tool to get it back. Nothing is lost: the grid is already on the map. Pick it under **Grid** to load its settings again; the form itself opens on the defaults, because nothing is remembered between sessions. - **Fit the page automatically** ignores the interval boxes entirely: QGIS computes a fresh interval at every render so the spacing on paper stays between the two widths given. That means the numbers on the sheet change when the map's scale does, which is what makes it useful for an atlas. - Only **print layouts** are offered. A report is not a layout the tool can put a grid on.",
+        } },
     ],
     seeAlso: ["dem_legend_bar"],
   },
@@ -4246,8 +4852,14 @@ export const tools = [
       en: "Generates a colour legend bar PNG for one or more DEM rasters.",
     },
     body: [
-      { type: "paragraph", text: { km: "", en: "Generates a hypsometric legend bar as a PNG for one or more DEM rasters — the elevation colour ramp with tick marks and labels that goes beside a map in a report or on a plan sheet." } },
-      { type: "paragraph", text: { km: "", en: "QGIS's own legend for a continuous raster is not built for print. This writes a standalone image you place in a layout, a Word document or a drawing, at the DPI you need." } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "Generates a hypsometric legend bar as a PNG for one or more DEM rasters — the elevation colour ramp with tick marks and labels that goes beside a map in a report or on a plan sheet.",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "QGIS's own legend for a continuous raster is not built for print. This writes a standalone image you place in a layout, a Word document or a drawing, at the DPI you need.",
+        } },
     ],
     parameters: [
       {
@@ -4255,28 +4867,36 @@ export const tools = [
         nameLabel: "Parameter",
         blocks: [],
         rows: [
-          { name: "DEM Raster Layer(s)", type: "Multiple raster layers", default: "—", description: { km: "", en: "One legend bar is produced per DEM." } },
-          { name: "Color Scheme", type: "Enum", default: "`from_qgis`", description: { km: "", en: "`from_qgis` (reuse the layer's own ramp), `YlGn_r`, `turbo`, `jet`, `RdYlBu_r`, `terrain`, `plasma`, `viridis`, `gist_earth`." } },
-          { name: "Legend DPI (150=Fast | 300=Balanced | 600=HQ)", type: "Enum", default: "`150 (Fast)`", description: { km: "", en: "Also `300 (Balanced)` and `600 (High Quality)`. Use 300 or 600 for anything that will be printed." } },
-          { name: "Output Folder", type: "Folder destination", default: "—", description: { km: "", en: "Where the PNGs are written." } },
-          { name: "Number of Ticks", type: "Integer (3–20)", default: "`7`", description: { km: "", en: "" } },
-          { name: "Legend Title", type: "String", default: "`Elevation (m)`", description: { km: "", en: "" } },
-          { name: "Font Family", type: "String", default: "`Times New Roman`", description: { km: "", en: "" } },
-          { name: "Font Tick Size", type: "Integer (6–24)", default: "`9`", description: { km: "", en: "" } },
-          { name: "Font Title Size", type: "Integer (6–24)", default: "`10`", description: { km: "", en: "" } },
+          { name: "**Input · DEM raster layer(s)**", type: "Multiple raster layers", default: "—", description: {
+            km: "",
+            en: "One legend bar is produced per DEM, from that layer's own minimum and maximum elevation.",
+          } },
+          { name: "**Style · Colour scheme**", type: "Enum", default: "`from_qgis`", description: {
+            km: "",
+            en: "`from_qgis` (copy the colour ramp of each layer's current QGIS style), or a fixed ramp: `YlGn_r`, `turbo`, `jet`, `RdYlBu_r`, `terrain`, `plasma`, `viridis`, `gist_earth`.",
+          } },
+          { name: "**Style · Legend title**", type: "String", default: "`Elevation (m)`", description: { km: "", en: "Text printed beside the bar." } },
+          { name: "**Style · Number of ticks (approx.)**", type: "Number", default: "`7`", description: {
+            km: "",
+            en: "About this many labels. Steps are round numbers, so the count can differ slightly.",
+          } },
+          { name: "**Font · Family**", type: "String, advanced", default: "`Times New Roman`", description: { km: "", en: "" } },
+          { name: "**Font · Tick label size (pt)**", type: "Number, advanced", default: "`9`", description: { km: "", en: "" } },
+          { name: "**Font · Title size (pt)**", type: "Number, advanced", default: "`10`", description: { km: "", en: "" } },
+          { name: "**Output · Resolution (DPI)**", type: "Enum", default: "`150 (Fast)`", description: {
+            km: "",
+            en: "Also `300 (Balanced)` and `600 (High Quality)`. Use 300 or 600 for anything that will be printed; the image is 4 times larger at 600.",
+          } },
+          { name: "**Output · Folder**", type: "Folder destination", default: "—", description: { km: "", en: "Where the PNGs are written." } },
         ],
       },
     ],
     outputs: [],
     usage: [
-      { type: "steps", items: [
-        { km: "", en: "Load the DEM(s) and, if you want the map's own colours, style them first." },
-        { km: "", en: "Open **KGA Mapping > DEM Legend Bar**." },
-        { km: "", en: "Pick the DEMs and an output folder." },
-        { km: "", en: "Leave **Color Scheme** on `from_qgis` to match the map exactly; pick a named ramp only when you want the legend to differ from the layer." },
-        { km: "", en: "Set the **Legend DPI** to match the destination — 150 for screen, 300 or 600 for print." },
-        { km: "", en: "Press **Run**, then place the PNGs in your layout." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "1. Load the DEM(s) and, if you want the map's own colours, style them first. 2. Open **KGA Mapping > DEM Legend Bar**. 3. Pick the DEMs and an output folder. 4. Leave **Colour scheme** on `from_qgis` to match the map exactly; pick a named ramp only when you want the legend to differ from the layer. 5. Set the **Resolution (DPI)** to match the destination — 150 for screen, 300 or 600 for print. 6. Press **Run**, then place the PNGs in your layout.",
+        } },
     ],
     results: [
       { type: "list", items: [
@@ -4284,18 +4904,14 @@ export const tools = [
       ] },
     ],
     notes: [
-      { type: "list", items: [
-        { text: { km: "", en: "**Tick placement is auto-adaptive** from the DEM's elevation range, so the labels land on round numbers rather than on the exact minimum and maximum:" }, items: [
-          { km: "", en: "flat terrain (range ≤ 30 m) → 5 m steps" },
-          { km: "", en: "hills (≤ 300 m) → 50 m steps" },
-          { km: "", en: "mountain → 100, 200 or 500 m steps" },
-        ] },
-      ] },
-      { type: "paragraph", text: { km: "", en: "**Number of Ticks** is a target, not a guarantee: the result is clamped to between 4 and 10 ticks." } },
-      { type: "list", items: [
-        { km: "", en: "`from_qgis` reads the layer's current renderer, so restyling the DEM changes the legend — regenerate it after any styling change." },
-        { km: "", en: "The font must be installed on this machine; an unavailable family falls back silently." },
-      ] },
+      { type: "paragraph", text: {
+          km: "",
+          en: "- **Tick placement is auto-adaptive** from the DEM's elevation range, so the labels land on round numbers rather than on the exact minimum and maximum: - flat terrain (range ≤ 30 m) → 5 m steps - hills (≤ 300 m) → 50 m steps - mountain → 100, 200 or 500 m steps",
+        } },
+      { type: "paragraph", text: {
+          km: "",
+          en: "**Number of ticks** is a target, not a guarantee: the result is clamped to between 4 and 10 ticks. - `from_qgis` reads the layer's current renderer, so restyling the DEM changes the legend — regenerate it after any styling change. - The font must be installed on this machine; an unavailable family falls back silently.",
+        } },
     ],
     seeAlso: ["add_grid"],
   },
