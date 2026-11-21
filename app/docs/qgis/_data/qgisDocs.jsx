@@ -3831,7 +3831,38 @@ export const tools = [
       },
     ],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          {
+            km: "",
+            en: "Open **KGA Geometry Utilities > Strip Lines and Point Grid**. The window stays open while you work.",
+          },
+          {
+            km: "",
+            en: "Under **Area**, choose what to cover: **Current map extent**, **Draw a rectangle or polygon on the map**, **Boundary of a polygon layer** or **Extent of a layer**.",
+          },
+          {
+            km: "",
+            en: "Under **Make**, choose **Strip lines**, **Point grid** or **Shape grid**. The settings below change to match.",
+          },
+          {
+            km: "",
+            en: "Set the spacing: **Spacing** (or **Strips** > *Varying spacing* with a list of **Gaps (m)**), or the **Shape** and its size for a shape grid.",
+          },
+          {
+            km: "",
+            en: "For strips and point grids, set the **Direction** or **Angle**. **Edge** and **Draw** take the angle from a line on the map. Set **First one** and **Offset from edge** if the first line should start inside the area.",
+          },
+          { km: "", en: "Choose **Output**: a temporary layer, or **Save to file** for a GeoPackage." },
+          {
+            km: "",
+            en: "Check the line below the form, which says how many strips or points to expect, then press **Create**. Change a value and press **Create** again for another layer.",
+          },
+        ],
+      },
+    ],
     results: [
       {
         type: "list",
@@ -4195,7 +4226,49 @@ export const tools = [
       },
     ],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          {
+            km: "",
+            en: "Add the imagery you want to read to the project as a plain raster layer. Avoid a hybrid or map layer, because its drawn roads and labels would be detected.",
+          },
+          {
+            km: "",
+            en: "Open **Detect Roads from Imagery** from the **KGA GeoAI** toolbar (also in the KGA Toolbox menu and the Processing Toolbox).",
+          },
+          {
+            km: "",
+            en: "The first time, in the **Road model** group press **Install AI runtime**, then **Download model**. If the automatic install cannot run, use **Copy install command** and run it in the OSGeo4W Shell, then reopen the window.",
+          },
+          {
+            km: "",
+            en: "Pick the **Imagery layer** and the **Area**: the current map extent, a layer's extent, a polygon layer's boundary, or a rectangle or polygon you draw.",
+          },
+          {
+            km: "",
+            en: "Choose the **Sensitivity** (**Normal** to start). Adjust **Join gaps up to**, **Drop pieces shorter than**, **Simplify** and **Trim dead ends shorter than** if the first result needs cleaning up.",
+          },
+          {
+            km: "",
+            en: "Optionally set **Compare with** to OpenStreetMap roads or a line layer of your own, with a **Match distance**.",
+          },
+          {
+            km: "",
+            en: "Tick the **Output** layers you want (centerlines, edges, surface), choose the **Output CRS**, and set the **Output folder** and **Name**. Leave the folder empty for a temporary result.",
+          },
+          {
+            km: "",
+            en: "Start the run. QGIS stays usable, and one progress bar covers reading the imagery, detecting, tracing and writing.",
+          },
+          {
+            km: "",
+            en: "When it finishes, the layers are added to the map in a group named after the run, and the report shows in the window and is saved beside the GeoPackage.",
+          },
+        ],
+      },
+    ],
     results: [
       {
         type: "paragraph",
@@ -4586,7 +4659,50 @@ export const tools = [
       },
     ],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          {
+            km: "",
+            en: "Add the imagery you want to read to the project as a plain raster layer, not a hybrid or map layer.",
+          },
+          {
+            km: "",
+            en: "Open **Detect Paddy Field Plots from Imagery** from the **KGA GeoAI** toolbar (also in the KGA Toolbox menu and the Processing Toolbox).",
+          },
+          {
+            km: "",
+            en: "The first time, in the **Field model** group press **Install AI runtime** (nothing to do if Detect Roads is already set up), then **Download model**. On a PC without internet, use **Use a model file...** and pick the `.onnx` file.",
+          },
+          {
+            km: "",
+            en: "Choose the **Model** (**Delineate Anything S** is the small, fast default) and the **Imagery layer**.",
+          },
+          {
+            km: "",
+            en: "Pick the **Area**: the current map extent, a layer's extent, a polygon layer's boundary, or a rectangle or polygon you draw.",
+          },
+          {
+            km: "",
+            en: "Set the **Resolution** (**1 m** suits most paddies; use 0.5 m for very small plots and 2 m for large areas) and the **Sensitivity**.",
+          },
+          {
+            km: "",
+            en: "Leave **Keep only plots on farmland** and **Drop giant plots the model is unsure of** ticked unless you have a reason to turn them off. Adjust **Close gaps between plots up to**, **Simplify** and **Drop plots smaller than** as needed.",
+          },
+          {
+            km: "",
+            en: "Tick the **Output** layers (plots and/or boundaries), choose the **Output CRS**, and set the **Output folder** and **Name**.",
+          },
+          { km: "", en: "Start the run. A progress bar follows the job, and **Stop** cancels it." },
+          {
+            km: "",
+            en: "When it finishes, the layers are added to the map in a group named after the run, and the report is saved beside the GeoPackage.",
+          },
+        ],
+      },
+    ],
     results: [
       { type: "paragraph", text: { km: "", en: "`<name>_paddy.gpkg`, added to the map in a group `<name>`:" } },
       { type: "paragraph", text: { km: "", en: "**`paddy_plots`** (polygons), largest first" } },
@@ -11261,7 +11377,34 @@ export const tools = [
       },
     ],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          {
+            km: "",
+            en: "Press **Go To XY** on the KGA Toolbox toolbar, next to **Zoom to Location**. The bar appears at the top left of the map.",
+          },
+          {
+            km: "",
+            en: "Choose the **Unit**: Search Place, Meters, Feet, Decimal Degrees, Degrees Minutes Seconds, Degrees Decimal Minutes, MGRS, US National Grid or UTM. For UTM, also set the **Zone**, for example `48N`.",
+          },
+          {
+            km: "",
+            en: "Type the coordinate in **X** and **Y**, or tick **Combined** and paste both values into one box. In Search Place, type a name and pick a match from the list, or paste a Google Maps link.",
+          },
+          { km: "", en: "Choose a **Pin** style if you want something other than the default." },
+          {
+            km: "",
+            en: "Press **Zoom To** (or Enter in a box). The map moves there at 1:5000, unless it is already closer, and the temporary point marks the spot.",
+          },
+          {
+            km: "",
+            en: "Press **Clear** to remove the point. Press the toolbar button again, or the **×** on the bar, to close it.",
+          },
+        ],
+      },
+    ],
     results: [],
     notes: [
       {
@@ -11445,7 +11588,33 @@ export const tools = [
     ],
     parameters: [],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          { km: "", en: "Open **KGA Toolbox > Map Cursor > Cursor Style Manager**." },
+          { km: "", en: "Make sure **On** is ticked. **Use Custom Map Cursor** in the same menu is the same switch." },
+          {
+            km: "",
+            en: "On the **Presets** tab, click a preset. It becomes the main style and the map cursor changes at once.",
+          },
+          {
+            km: "",
+            en: "Pick a digitizing or selection tool and move over the map. The live preview shows the exact image the cursor uses.",
+          },
+          {
+            km: "",
+            en: "To fine-tune it, use **Customize** (shape, colours, size, thickness) and **Advanced** (centre gap, inner ring, opacity, dashes). Leave **Update map while editing** ticked to see changes straight away.",
+          },
+          { km: "", en: "Press **Save as…** under **My styles** to keep the result under a name." },
+          {
+            km: "",
+            en: "On the **Tools** tab, give each kind of tool its own cursor (digitizing, editing, selection and so on), or leave it on **Main style** or **QGIS cursor**.",
+          },
+          { km: "", en: "Switch **On** off, or use **Reset**, to go back to the QGIS cursors." },
+        ],
+      },
+    ],
     results: [],
     notes: [
       {
@@ -11778,7 +11947,30 @@ export const tools = [
     ],
     parameters: [],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          { km: "", en: "Click **Label Bag** on the KGA Layer toolbar, or pick it from **KGA Toolbox > Bags**." },
+          {
+            km: "",
+            en: "Select a vector layer in the Layers panel. The bag follows it, and the button after the layer name switches to another vector layer.",
+          },
+          { km: "", en: "Choose **All** or **Selected features only** to turn labels on. **Off** turns them off." },
+          { km: "", en: "Pick the **Field or expression** for the label text." },
+          {
+            km: "",
+            en: "Set the **Font**, size, bold, italic and colour, and add a **Buffer** or **Drop shadow** if the text is hard to read.",
+          },
+          {
+            km: "",
+            en: "For a numeric field, use the **Number** options to round, add a thousands separator or show a unit.",
+          },
+          { km: "", en: "Choose a **Placement**, with an **Offset** (and **X / Y** for a point), then check the map." },
+          { km: "", en: "Press **Minimize** to fold the bag into a bubble, and click the bubble to open it again." },
+        ],
+      },
+    ],
     results: [],
     notes: [],
     seeAlso: ["quick_labeling", "layer_bag"],
@@ -12043,7 +12235,35 @@ export const tools = [
     ],
     parameters: [],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          {
+            km: "",
+            en: "Click **Layer Bag** on the KGA Layer toolbar, or press **Ctrl+Alt+L**. It opens at the top right of the map the first time.",
+          },
+          {
+            km: "",
+            en: "Select a layer in the Layers panel. The panel follows it, and the header shows its name, geometry, provider and CRS. Use the button after the name to switch to another vector layer.",
+          },
+          {
+            km: "",
+            en: "On **Attributes**, choose **Table**, fields or statistics. Click a column header to sort, use **Filter rows...** to narrow the rows, and double-click a row to zoom to it.",
+          },
+          {
+            km: "",
+            en: "On **Labels**, turn labels on, pick the field or expression, and set the font, buffer and placement.",
+          },
+          {
+            km: "",
+            en: "On **Colors**, recolour the layer or its classes with the colour wheel and see the change live on the map.",
+          },
+          { km: "", en: "Use the gear menu to change the bag style, window style and bubble options." },
+          { km: "", en: "Press **Minimize** to fold the panel into a bubble, or **Close** to put it away." },
+        ],
+      },
+    ],
     results: [],
     notes: [
       {
@@ -12231,7 +12451,25 @@ export const tools = [
     ],
     parameters: [],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          { km: "", en: "Click **Tool Bag** on the KGA Layer toolbar, or open it from **KGA Toolbox > Bags**." },
+          {
+            km: "",
+            en: "Add a tool: click **+** in the bag's title bar, then click any QGIS toolbar button or menu item. It goes into the bag instead of running. You can also Shift + right-click a toolbar button, or use the gear menu > **Add Tool from List...**.",
+          },
+          { km: "", en: "Click a tool in the bag to run it, exactly as you would from its own toolbar." },
+          { km: "", en: "Drag tools to reorder them. Right-click a tool to take it out of the bag or move it." },
+          {
+            km: "",
+            en: "Choose how the bag looks in the gear menu: **Show Tools As** a list or a grid, the number of **Columns**, and the **Icon Size**. **Bag Style...** changes the colours.",
+          },
+          { km: "", en: "Press **-** to fold the bag into a bubble on the map, and click the bubble to open it again." },
+        ],
+      },
+    ],
     results: [],
     notes: [],
     seeAlso: ["symbol_bag"],
@@ -12397,7 +12635,34 @@ export const tools = [
     ],
     parameters: [],
     outputs: [],
-    usage: [],
+    usage: [
+      {
+        type: "steps",
+        items: [
+          {
+            km: "",
+            en: "Click **Symbol Bag** or **Layer Colors** on the KGA Layer toolbar, or open them from **KGA Toolbox > Bags**.",
+          },
+          {
+            km: "",
+            en: "Fill the Symbol Bag: use the **+** button or gear > Import to collect symbols from the Style Manager, the project, layers, QML, XML, SLD, SVG, style databases or **Import from KGA Layer Symbol...**. Right-click a layer and choose **Add Layer Symbol to Symbol Bag** to add its style.",
+          },
+          { km: "", en: "Organize symbols into collections with favourites, tags and search." },
+          {
+            km: "",
+            en: "Select a layer in the Layers panel, then double-click a symbol, or drag it onto the layer, to apply it.",
+          },
+          {
+            km: "",
+            en: "To recolour, open **Layer Colors** (or right-click a layer and choose **Recolor Layer Colors...**). Pick a chip such as **Size**, **Outline** or **Fill color**, then use the colour wheel and the thickness dial.",
+          },
+          {
+            km: "",
+            en: "Minimize either window to fold it into a bubble on the map, and click the bubble to open it again.",
+          },
+        ],
+      },
+    ],
     results: [],
     notes: [
       {
