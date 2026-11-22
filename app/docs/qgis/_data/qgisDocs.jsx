@@ -759,8 +759,8 @@ export const tools = [
     status: "full",
     youtubeId: null,
     algorithmId: "kga:create_layer_package",
-    interactive: false,
-    toolType: { km: "", en: "Batch algorithm (runs on the GUI thread — it reads the project layer tree)" },
+    interactive: true,
+    toolType: { km: "", en: "Interactive (opens its own window; no Processing parameters)" },
     processingPath: "Processing ▸ Toolbox ▸ KGA Toolbox ▸ KGA Data Management ▸ Create Layer Package",
     summary: {
       km: "ខ្ចប់ស្រទាប់ រចនាបថ និងអ្វីៗដែលរចនាបថត្រូវការ ទៅក្នុងឯកសារ .kgalp តែមួយ ដែលអាចបើកបានគ្រប់ទីកន្លែង។",
@@ -847,8 +847,8 @@ export const tools = [
     status: "full",
     youtubeId: null,
     algorithmId: "kga:open_layer_package",
-    interactive: false,
-    toolType: { km: "", en: "Batch algorithm (runs on the GUI thread — it adds layers to the project)" },
+    interactive: true,
+    toolType: { km: "", en: "Interactive (opens its own window; no Processing parameters)" },
     processingPath: "Processing ▸ Toolbox ▸ KGA Toolbox ▸ KGA Data Management ▸ Open Layer Package",
     summary: {
       km: "ស្រាយឯកសារ .kgalp រួចបន្ថែមស្រទាប់ រចនាបថ និងរចនាសម្ព័ន្ធក្រុមរបស់វា ទៅក្នុងគម្រោងបច្ចុប្បន្ន។",

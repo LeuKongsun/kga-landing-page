@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { m } from "framer-motion";
 import { ArrowLeft, CalendarDays, Boxes, Layers3, Tag } from "lucide-react";
@@ -23,8 +24,9 @@ const versionFromHash = () => {
 const ReleaseFacts = ({ release }) => {
   const { language } = useLanguage();
 
-  // 1.1.0's notes give no tool count, so it comes from the docs data and can
-  // never disagree with the rest of the section.
+  // Every shipped release pins its own count, so the history stays fixed as
+  // later releases are added. The live total is only a fallback for an entry
+  // written before its count is known.
   const toolCount = release.toolCount ?? PLUGIN.toolCount;
 
   // "Prepared" and "QGIS" are already shown as their own facts below; the rest
@@ -199,6 +201,23 @@ const ReleaseNotes = () => {
                 <p className="mt-3 text-xs leading-relaxed text-brand-text/50 dark:text-gray-500">
                   {t(UI.dateApprox, language)}
                 </p>
+              )}
+
+              {release.image && (
+                <figure className="mt-10">
+                  {/* No fixed-ratio box and no object-cover: the intrinsic size
+                      is given, so the whole screenshot scales to the column
+                      width and nothing is cropped. */}
+                  <Image
+                    src={release.image.src}
+                    alt={t(release.image.alt, language)}
+                    width={release.image.width}
+                    height={release.image.height}
+                    sizes="(min-width: 1024px) 70vw, 100vw"
+                    priority
+                    className="h-auto w-full rounded-2xl border border-brand-blue/8 bg-brand-light dark:border-white/8 dark:bg-white/5"
+                  />
+                </figure>
               )}
 
               <div className="mt-10">

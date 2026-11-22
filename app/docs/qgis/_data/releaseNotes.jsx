@@ -10,13 +10,28 @@ export const releases = [
   {
     version: "1.1.0",
     date: "2026-11-22",
+    // Width and height are the file's own, so the page reserves the right box
+    // and the screenshot is never cropped.
+    image: {
+      src: "/images/release-notes/v1.1.0.png",
+      width: 2557,
+      height: 1597,
+      alt: {
+        km: "QGIS ជាមួយ KGA Toolbox 1.1.0៖ ផ្ទាំង Modify Features ពពុះ bag នៅលើផែនទី និង Data Explorer",
+        en: "QGIS running KGA Toolbox 1.1.0: the Modify Features pane, the bag bubbles on the map, and Data Explorer",
+      },
+    },
     dateLabel: { km: "២២ វិច្ឆិកា ២០២៦", en: "22 November 2026" },
     title: { km: "ផ្ទាំងអណ្តែត ការរុករករលូន និង QGIS 4", en: "Bags, smooth navigation and QGIS 4" },
     tagline: {
                km: "បន្ថែមឧបករណ៍ធរណីមាត្រ ធារាសាស្ត្រ និងរូបភាពថ្មី ព្រមទាំងផ្ទាំងអណ្តែតនៅលើរបារឧបករណ៍ KGA Layer ថ្មី និងការរុករកបែប ArcGIS Pro។ ឥឡូវដំណើរការលើ QGIS 4.2 ផងដែរ។",
                en: "KGA Toolbox 1.1.0 adds new geometry, irrigation and imagery tools, a set of floating \"bags\" with a new KGA Layer toolbar, and ArcGIS Pro-style navigation. It also runs on QGIS 4.2 as well as 3.x. QGIS 3.28 to 4.x is supported.",
              },
-    toolCount: null,
+    // Pinned, like every other release. Verified against the plugin: 1.1.0
+    // registers 58 algorithms with a helpUrl. Left unpinned it would read the
+    // live PLUGIN.toolCount, so adding 1.2.0 would retroactively restate this
+    // release's count.
+    toolCount: 58,
     qgis: "3.28 – 4.x",
     facts: [],
     body: [
