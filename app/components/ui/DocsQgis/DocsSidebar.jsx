@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Tag } from "lucide-react";
 import { useLanguage } from "../../LanguageProvider";
 import { t, UI } from "../../../docs/qgis/_data/ui";
 import {
@@ -85,9 +86,17 @@ const DocsSidebar = ({ mode = "anchors", activeSlug = null, activeGroupId = null
     >
       <Link
         href="/docs/qgis"
-        className="mb-3 inline-flex items-center rounded-lg px-2 py-1 text-sm font-display font-700 text-brand-text transition-colors hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:text-white"
+        className="inline-flex items-center rounded-lg px-2 py-1 text-sm font-display font-700 text-brand-text transition-colors hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:text-white"
       >
         {t(UI.allTools, language)}
+      </Link>
+
+      <Link
+        href="/docs/qgis/release-notes"
+        className="mb-3 mt-1 flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-brand-text/65 transition-colors hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:text-gray-400"
+      >
+        <Tag className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
+        {t(UI.releaseNotes, language)}
       </Link>
 
       <ul className="space-y-1">

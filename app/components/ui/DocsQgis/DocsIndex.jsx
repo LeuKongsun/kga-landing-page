@@ -51,12 +51,29 @@ const Icon = ({ name, className }) => {
   return <Component className={className} aria-hidden="true" />;
 };
 
-const Stat = ({ value, label }) => (
-  <div className="rounded-2xl border border-brand-blue/8 bg-white px-4 py-3 text-center dark:border-white/8 dark:bg-white/5">
-    <p className="text-2xl font-display font-900 text-brand-orange">{value}</p>
-    <p className="mt-0.5 text-xs text-brand-text/60 dark:text-gray-400">{label}</p>
-  </div>
-);
+const Stat = ({ value, label, href = null }) => {
+  const body = (
+    <>
+      <p className="text-2xl font-display font-900 text-brand-orange">{value}</p>
+      <p className="mt-0.5 text-xs text-brand-text/60 dark:text-gray-400">{label}</p>
+    </>
+  );
+  const shell =
+    "rounded-2xl border border-brand-blue/8 bg-white px-4 py-3 text-center dark:border-white/8 dark:bg-white/5";
+
+  // The version tile doubles as the way into the release notes.
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={`${shell} block transition-colors hover:border-brand-orange/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60`}
+      >
+        {body}
+      </Link>
+    );
+  }
+  return <div className={shell}>{body}</div>;
+};
 
 const DocsIndex = () => {
   const { language } = useLanguage();
@@ -98,7 +115,11 @@ const DocsIndex = () => {
                 <Stat value={PLUGIN.toolCount} label={t(UI.toolsLabel, language)} />
                 <Stat value={PLUGIN.groupCount} label={t(UI.groupsLabel, language)} />
                 <Stat value={`QGIS ${PLUGIN.qgisMinimum}+`} label={t(UI.requiresLabel, language)} />
-                <Stat value={`v${PLUGIN.version}`} label={t(UI.versionLabel, language)} />
+                <Stat
+                  value={`v${PLUGIN.version}`}
+                  label={t(UI.versionLabel, language)}
+                  href="/docs/qgis/release-notes"
+                />
               </div>
             </div>
 

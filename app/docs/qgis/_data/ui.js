@@ -58,6 +58,23 @@ export const UI = {
   // Tool page section headings and the identity card.
   howToUse: { km: "របៀបប្រើ", en: "How to use" },
   toolsInPane: { km: "ឧបករណ៍ក្នុងផ្ទាំងនេះ", en: "Tools in this pane" },
+
+  // Release notes
+  releaseNotes: { km: "កំណត់ត្រាកំណែ", en: "Release notes" },
+  releaseNotesLead: {
+    km: "អ្វីដែលបានផ្លាស់ប្តូរក្នុងកំណែនីមួយៗនៃ KGA Toolbox for QGIS។",
+    en: "What changed in each release of KGA Toolbox for QGIS.",
+  },
+  latest: { km: "ចុងក្រោយ", en: "Latest" },
+  released: { km: "ចេញផ្សាយ", en: "Released" },
+  allReleases: { km: "កំណែទាំងអស់", en: "All releases" },
+  thisRelease: { km: "កំណែនេះ", en: "In this release" },
+  backToDocs: { km: "ត្រឡប់ទៅឯកសារណែនាំ", en: "Back to documentation" },
+  viewReleaseNotes: { km: "មើលកំណត់ត្រាកំណែ", en: "View release notes" },
+  dateApprox: {
+    km: "កាលបរិច្ឆេទប៉ាន់ស្មានពី commit ដំបូងរបស់ឃ្លាំង។",
+    en: "Date taken from the repository's first commit; the notes themselves give none.",
+  },
   notesAndLimits: { km: "កំណត់សម្គាល់ និងដែនកំណត់", en: "Notes and limits" },
   outputsDeclared: { km: "លទ្ធផលដែលប្រកាស", en: "Outputs declared" },
   whatYouGet: { km: "អ្វីដែលអ្នកទទួលបាន", en: "What you get" },
