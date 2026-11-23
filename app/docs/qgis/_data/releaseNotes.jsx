@@ -43,11 +43,11 @@ export const releases = [
         }, items: [
             {
               km: "",
-              en: "**Layer Bag:** follows the selected layer. It shows the attribute table, fields, statistics and labels, and has the Layer Colors wheel for live recolouring.",
+              en: "**[Layer Bag](layer_bag.md):** follows the selected layer. It shows the attribute table, fields, statistics and labels, and has the Layer Colors wheel for live recolouring.",
             },
             {
               km: "",
-              en: "**Tool Bag:** keeps your favourite tools from any toolbar, menu or Processing, in list or grid layout.",
+              en: "**[Tool Bag](tool_bag.md):** keeps your favourite tools from any toolbar, menu or Processing, in list or grid layout.",
             },
         ] },
         {
@@ -60,63 +60,63 @@ export const releases = [
       { type: "list", items: [
         {
           km: "",
-          en: "**Strip Lines and Point Grid** (Geometry Utilities): strip lines, point grids, and grids of squares, hexagons, triangles and other regular shapes. They are measured in metres in the UTM zone under the area.",
+          en: "**[Strip Lines and Point Grid](strip_point_grid.md)** (Geometry Utilities): strip lines, point grids, and grids of squares, hexagons, triangles and other regular shapes. They are measured in metres in the UTM zone under the area.",
         },
         {
           km: "",
-          en: "**Point to Geometry Converter** and **Sliver and Spike Cleaner** (Geometry Utilities).",
+          en: "**[Point to Geometry Converter](point_to_geometry.md)** and **[Sliver and Spike Cleaner](sliver_spike_cleaner.md)** (Geometry Utilities).",
         },
         {
           km: "",
-          en: "**Multipart Line Repair** (Irrigation tools): finds multipart canal and drain lines, explains why they are multipart and repairs them.",
+          en: "**[Multipart Line Repair](multipart_line_repair.md)** (Irrigation tools): finds multipart canal and drain lines, explains why they are multipart and repairs them.",
         },
         {
           km: "",
-          en: "**DEM / DSM Inspector:** tells a bare-earth DEM from a surface model, with a confidence score, a block map and a report.",
+          en: "**[DEM / DSM Inspector](dem_dsm_inspector.md):** tells a bare-earth DEM from a surface model, with a confidence score, a block map and a report.",
         },
         {
           km: "",
-          en: "**Satellite Imagery Archive** (in the Imagery Downloader drop-down): search Sentinel-2, Landsat, OpenAerialMap and any STAC catalog by date and cloud cover, and download only your area.",
+          en: "**[Satellite Imagery Archive](satellite_imagery_archive.md)** (in the Imagery Downloader drop-down): search Sentinel-2, Landsat, OpenAerialMap and any STAC catalog by date and cloud cover, and download only your area.",
         },
         {
           km: "",
-          en: "**Panels and Toolbars Manager:** a searchable switcher for every panel and toolbar, with saved layouts.",
+          en: "**[Panels and Toolbars Manager](ui_manager.md):** a searchable switcher for every panel and toolbar, with saved layouts.",
         },
         {
           km: "",
-          en: "**Zoom to Location** and **Go To XY:** jump to a place from open data or to a typed coordinate.",
+          en: "**[Zoom to Location](zoom_to_location.md)** and **[Go To XY](go_to_xy.md):** jump to a place from open data or to a typed coordinate.",
         },
       ] },
       { type: "heading", text: { km: "", en: "New and improved in the editor and the map" } },
       { type: "list", items: [
         {
           km: "",
-          en: "**Create Features:** a floating sketch toolbar over the map, with line, arc, trace and construction segment types (right angle, intersection, distance-distance, along and offset).",
+          en: "**[Create Features](create_features.md):** a floating sketch toolbar over the map, with line, arc, trace and construction segment types (right angle, intersection, distance-distance, along and offset).",
         },
         {
           km: "",
-          en: "**Modify Features:** Points On Line and Points On Polygon Boundary, bringing it to 32 tools. Tools can be shown as a grid or a list.",
+          en: "**[Modify Features](modify_features.md):** Points On Line and Points On Polygon Boundary, bringing it to 32 tools. Tools can be shown as a grid or a list.",
         },
         {
           km: "",
-          en: "**Quick Labeling and Quick Symbology:** label or restyle a layer in one click. They moved to the new KGA Layer toolbar.",
+          en: "**[Quick Labeling](quick_labeling.md) and [Quick Symbology](quick_symbology.md):** label or restyle a layer in one click. They moved to the new KGA Layer toolbar.",
         },
-        { km: "", en: "**Vertices and Nodes view** and a map **Grid**, both display only." },
+        { km: "", en: "**[Vertices and Nodes view](vertices_and_nodes.md)** and a map **[Grid](grid.md)**, both display only." },
         { km: "", en: "**Hold C and drag** to pan while digitizing." },
-        { km: "", en: "**Map Cursor:** choose a custom cursor for the map tools." },
+        { km: "", en: "**[Map Cursor](cursor_style_manager.md):** choose a custom cursor for the map tools." },
         { km: "", en: "**Toolbar magnify:** toolbar buttons grow under the mouse, like a dock." },
         { km: "", en: "**Genie or Classic animation:** tool windows open out of their toolbar button." },
         {
           km: "",
-          en: "**Data Explorer:** Copy, Cut, Paste, drag-and-drop move and Delete of datasets, converting between shapefile, GeoPackage and geodatabase. It also has a Rename tab and an Export drop-down that cuts by a drawn area, a layer extent or a polygon layer.",
+          en: "**[Data Explorer](data_explorer.md):** Copy, Cut, Paste, drag-and-drop move and Delete of datasets, converting between shapefile, GeoPackage and geodatabase. It also has a Rename tab and an Export drop-down that cuts by a drawn area, a layer extent or a polygon layer.",
         },
         {
           km: "",
-          en: "**Add Grid to Layout:** Create New Grid and Edit Grid tabs. You can also right-click a grid in the Contents panel and choose Edit.",
+          en: "**[Add Grid to Layout](add_grid.md):** Create New Grid and Edit Grid tabs. You can also right-click a grid in the Contents panel and choose Edit.",
         },
         {
           km: "",
-          en: "**Map tabs:** a duplicated map gets its own layer copies, layout frames follow style changes, and there is a new Refresh Layout button.",
+          en: "**[Map tabs](maps_and_layouts.md):** a duplicated map gets its own layer copies, layout frames follow style changes, and there is a new Refresh Layout button.",
         },
         {
           km: "",
@@ -135,7 +135,7 @@ export const releases = [
         },
         {
           km: "",
-          en: "**Quick Labeling and Quick Symbology** moved from the KGA Editor toolbar to the new KGA Layer toolbar. The Bags drop-down moved there from the KGA Toolbox toolbar.",
+          en: "**[Quick Labeling](quick_labeling.md) and [Quick Symbology](quick_symbology.md)** moved from the KGA Editor toolbar to the new KGA Layer toolbar. The Bags drop-down moved there from the KGA Toolbox toolbar.",
         },
       ] },
       { type: "heading", text: { km: "", en: "Performance" } },
@@ -162,7 +162,7 @@ export const releases = [
       { type: "list", items: [
         {
           km: "",
-          en: "Network use is disclosed in the plugin description. These features connect online: Add Open Data, Imagery Downloader, Satellite Imagery Archive, Go To XY, Zoom to Location and Check for Update.",
+          en: "Network use is disclosed in the plugin description. These features connect online: [Add Open Data](add_data.md), [Imagery Downloader](imagery_downloader.md), [Satellite Imagery Archive](satellite_imagery_archive.md), [Go To XY](go_to_xy.md), [Zoom to Location](zoom_to_location.md) and [Check for Update](kga_settings.md).",
         },
         { km: "", en: "Reference pages for every tool are in `toolMetadata/`." },
       ] },
@@ -190,15 +190,15 @@ export const releases = [
       { type: "list", items: [
         {
           km: "",
-          en: "**KGA Editor toolbar** — Edit Session, Create Features, Modify Features (30 tools) and Open Feature Attribute. QGIS 3.44+.",
+          en: "**KGA Editor toolbar** — Edit Session, [Create Features](create_features.md), [Modify Features](modify_features.md) (30 tools) and [Open Feature Attribute](open_feature_attribute.md). QGIS 3.44+.",
         },
         {
           km: "",
-          en: "**Catalog and workspaces** — Pro's Catalog pane for QGIS; one folder per project; tool output lands in the project. QGIS 3.36+.",
+          en: "**[Catalog and workspaces](catalog_and_workspaces.md)** — Pro's Catalog pane for QGIS; one folder per project; tool output lands in the project. QGIS 3.36+.",
         },
         {
           km: "",
-          en: "**Project packages** — Share Workspace to one `.kgapp`, Import Project Package, Convert Project to Workspace.",
+          en: "**[Project packages](project_packages.md)** — Share Workspace to one `.kgapp`, Import Project Package, Convert Project to Workspace.",
         },
         {
           km: "",
@@ -206,7 +206,7 @@ export const releases = [
         },
         {
           km: "",
-          en: "**Irrigation and hydrology** — Generate Contour and River or Stream for ROI from the free Copernicus DEM; Reservoir Storage Analyzer.",
+          en: "**Irrigation and hydrology** — [Generate Contour](generate_contour_roi.md) and [River or Stream for ROI](generate_stream_roi.md) from the free Copernicus DEM; [Reservoir Storage Analyzer](reservoir_storage_analyzer.md).",
         },
         {
           km: "",
@@ -222,15 +222,15 @@ export const releases = [
         },
         {
           km: "",
-          en: "**Create Features** — templates pane with construction tools and a right-click construction menu.",
+          en: "**[Create Features](create_features.md)** — templates pane with construction tools and a right-click construction menu.",
         },
         {
           km: "",
-          en: "**Modify Features** — Pro's pane: Alignment, Reshape, Divide, Construct, Attributes, COGO; favorites on the toolbar.",
+          en: "**[Modify Features](modify_features.md)** — Pro's pane: Alignment, Reshape, Divide, Construct, Attributes, COGO; favorites on the toolbar.",
         },
         {
           km: "",
-          en: "**Open Feature Attribute** — pane to select features and type into their attributes.",
+          en: "**[Open Feature Attribute](open_feature_attribute.md)** — pane to select features and type into their attributes.",
         },
         {
           km: "",
@@ -241,7 +241,7 @@ export const releases = [
       { type: "list", items: [
         {
           km: "",
-          en: "**Catalog panel** with Project, Connections, Computer and Favorites tabs; **Set / Open Workspace**; scratch *Untitled* project with recovery.",
+          en: "**[Catalog panel](catalog_and_workspaces.md)** with Project, Connections, Computer and Favorites tabs; **[Set / Open Workspace](catalog_and_workspaces.md)**; scratch *Untitled* project with recovery.",
         },
         {
           km: "",
@@ -249,60 +249,60 @@ export const releases = [
         },
         {
           km: "",
-          en: "**Share Workspace / Import Project Package / Convert Project to Workspace**, with a layer analysis and checksums. Opening a plain `.qgz` offers to convert it.",
+          en: "**[Share Workspace / Import Project Package / Convert Project to Workspace](project_packages.md)**, with a layer analysis and checksums. Opening a plain `.qgz` offers to convert it.",
         },
         { km: "", en: "**Save / Save As** ask workspace or traditional `.qgz`." },
         {
           km: "",
-          en: "**Browser Copy and Paste**, **Add to Map**, **Duplicate to New Layer**, **Quick Template**, **Add Layers to Layer Package**.",
+          en: "**[Browser Copy and Paste](browser_copy_paste.md)**, **Add to Map**, **[Duplicate to New Layer](duplicate_to_new_layer.md)**, **[Quick Template](add_quick_template.md)**, **[Add Layers to Layer Package](add_to_layer_package.md)**.",
         },
         {
           km: "",
-          en: "**Data Explorer** — media-browser dock to browse, search, preview and ingest geodata. QGIS 3.44+.",
+          en: "**[Data Explorer](data_explorer.md)** — media-browser dock to browse, search, preview and ingest geodata. QGIS 3.44+.",
         },
-        { km: "", en: "**Layer Auto-Sort** — points, lines, polygons, rasters, basemaps last." },
+        { km: "", en: "**[Layer Auto-Sort](layer_auto_sort.md)** — points, lines, polygons, rasters, basemaps last." },
         { km: "", en: "**Shape_Length / Shape_Area** kept up to date on project database layers." },
       ] },
       { type: "paragraph", text: { km: "", en: "**Open data**" } },
       { type: "list", items: [
         {
           km: "",
-          en: "**KGA Database (Cambodia)** in Add Open Data: province, district, commune and village, as boundary or centre.",
+          en: "**[KGA Database (Cambodia)](add_data.md)** in Add Open Data: province, district, commune and village, as boundary or centre.",
         },
-        { km: "", en: "**Clip Basemap by Boundary** and **Add Quick Basemap**." },
+        { km: "", en: "**[Clip Basemap by Boundary](clip_basemap.md)** and **Add Quick Basemap**." },
       ] },
       { type: "paragraph", text: { km: "", en: "**Irrigation and mapping**" } },
       { type: "list", items: [
         {
           km: "",
-          en: "**Generate Contour for ROI**, **Generate River or Stream for ROI** (graded, optional OpenStreetMap check), **Reservoir Storage Analyzer**, Paddy Irrigation Tools (high point per block, gravity command check).",
+          en: "**[Generate Contour for ROI](generate_contour_roi.md)**, **[Generate River or Stream for ROI](generate_stream_roi.md)** (graded, optional OpenStreetMap check), **[Reservoir Storage Analyzer](reservoir_storage_analyzer.md)**, [Paddy Irrigation Tools](highest_point_per_block.md) (high point per block, gravity command check).",
         },
         {
           km: "",
-          en: "**Callout Label Studio** (also a mode in Layer Properties > Labels) and **KGA Layer Symbol** gallery.",
+          en: "**[Callout Label Studio](callout_label_studio.md)** (also a mode in Layer Properties > Labels) and **[KGA Layer Symbol](kga_layer_symbol.md)** gallery.",
         },
         {
           km: "",
-          en: "**Layout tools:** Layout Guides, Khmer North Arrows, New Layout dialog, map tabs with a Contents panel.",
+          en: "**[Layout tools](maps_and_layouts.md):** Layout Guides, Khmer North Arrows, New Layout dialog, map tabs with a Contents panel.",
         },
       ] },
       { type: "paragraph", text: { km: "", en: "**Settings and updates**" } },
       { type: "list", items: [
         {
           km: "",
-          en: "**KGA Toolbox > Settings**: new-project location, CRS, basemap and start extent; Save choice; Appearance switches.",
+          en: "**[KGA Toolbox > Settings](kga_settings.md)**: new-project location, CRS, basemap and start extent; Save choice; Appearance switches.",
         },
-        { km: "", en: "**Check for Update** from the KGA Toolbox menu." },
+        { km: "", en: "**[Check for Update](kga_settings.md)** from the KGA Toolbox menu." },
       ] },
       { type: "heading", text: { km: "", en: "Improved" } },
       { type: "list", items: [
         {
           km: "",
-          en: "CSV to DEM/Contour: choose X, Y, Z fields; delimiter and column names auto-detected.",
+          en: "[CSV to DEM/Contour](csvtodemcontour.md): choose X, Y, Z fields; delimiter and column names auto-detected.",
         },
         {
           km: "",
-          en: "DEM Legend Bar, DEM Elevation Correction, Raster Format Converter, Reservoir Rating Curve: grouped parameters, help on every field, clearer help pages.",
+          en: "[DEM Legend Bar](dem_legend_bar.md), [DEM Elevation Correction](demelevationcorrectionandpointsamplereport.md), [Raster Format Converter](raster_format_converter.md), [Reservoir Rating Curve](reservoir_rating_curve.md): grouped parameters, help on every field, clearer help pages.",
         },
         {
           km: "",
@@ -313,11 +313,11 @@ export const releases = [
       { type: "list", items: [
         {
           km: "",
-          en: "**Storage Capacity Curve** (`kga:storage_capacity_curve`) → use **Reservoir Storage Analyzer**.",
+          en: "**Storage Capacity Curve** (`kga:storage_capacity_curve`) → use **[Reservoir Storage Analyzer](reservoir_storage_analyzer.md)**.",
         },
         {
           km: "",
-          en: "**DEM and Contour Tool** (`kga:demcontourtool`) → use **CSV to DEM and Contour**, or QGIS's Contour tool for a DEM you already have.",
+          en: "**DEM and Contour Tool** (`kga:demcontourtool`) → use **[CSV to DEM and Contour](csvtodemcontour.md)**, or QGIS's Contour tool for a DEM you already have.",
         },
       ] },
       { type: "paragraph", text: { km: "", en: "Domain Manager is off the toolbar but still in the menu." } },
@@ -363,7 +363,7 @@ export const releases = [
     title: { km: "ទិន្នន័យបើកចំហ រូបភាពផ្កាយរណប និង MGRS", en: "Open data, imagery and MGRS" },
     tagline: {
                km: "ការចេញផ្សាយធំបំផុតចាប់តាំងពីកំណែដំបូង៖ ឧបករណ៍ថ្មី ៤ ក្រុម KGA Mapping ថ្មី និងការត្រួតពិនិត្យសុវត្ថិភាព QGIS 4 និងកំហុសទាំងស្រុង។",
-               en: "0.2.0 is the biggest release since the first one. It adds four new tools — **Add Open Data & Basemaps**, **Imagery Downloader**, **Add Grid to Layout** (with the first MGRS support QGIS has ever had) and **Raster Format Converter** — a new **KGA Mapping** toolbar group, and a security, QGIS 4 (Qt 6) and bug-fix pass over everything new before release. The plugin goes from 41 to **45 algorithms**.",
+               en: "0.2.0 is the biggest release since the first one. It adds four new tools — **[Add Open Data & Basemaps](add_data.md)**, **[Imagery Downloader](imagery_downloader.md)**, **[Add Grid to Layout](add_grid.md)** (with the first MGRS support QGIS has ever had) and **[Raster Format Converter](raster_format_converter.md)** — a new **KGA Mapping** toolbar group, and a security, QGIS 4 (Qt 6) and bug-fix pass over everything new before release. The plugin goes from 41 to **45 algorithms**.",
              },
     toolCount: 45,
     qgis: "3.28 – 4.99",
@@ -535,7 +535,7 @@ export const releases = [
         },
         {
           km: "",
-          en: "**Duplicate Checker** — flags now work on **Shapefile layers**. The helper field is renamed `dup_status` (10 characters; the old 11-character name was truncated by DBF so the symbology pointed at a field that did not exist). A failed edit/commit is now reported instead of ignored.",
+          en: "**[Duplicate Checker](duplicate_checker.md)** — flags now work on **Shapefile layers**. The helper field is renamed `dup_status` (10 characters; the old 11-character name was truncated by DBF so the symbology pointed at a field that did not exist). A failed edit/commit is now reported instead of ignored.",
         },
         {
           km: "",
@@ -551,7 +551,7 @@ export const releases = [
         },
         {
           km: "",
-          en: "**Domain & Schema Manager** now shares its busy overlay with the new tools (no behaviour change).",
+          en: "**[Domain & Schema Manager](domain_manager.md)** now shares its busy overlay with the new tools (no behaviour change).",
         },
         { km: "", en: "**About dialog, README and metadata** describe the new tools." },
       ] },
@@ -684,7 +684,7 @@ export const releases = [
       { type: "heading", text: { km: "", en: "Network use and privacy" } },
       { type: "paragraph", text: {
           km: "",
-          en: "Only **Add Open Data & Basemaps** and **Imagery Downloader** use the network, and only when you ask for data. They contact geoBoundaries, HDX, Natural Earth (via GitHub), OpenStreetMap, Google and Esri tile services, the Copernicus DEM and ESA WorldCover buckets on Amazon S3, Esri's Living Atlas land-cover service, OpenTopography, and any address you type. **OpenTopography is the only source that needs an account**; your free API key is kept in the QGIS authentication database and sent only to OpenTopography. The only information sent is what a request needs — a country code, the bounding box of the area, or tile numbers. No project data is uploaded and nothing runs in the background. (The 0.2.0 `metadata.txt` disclosure was corrected to say all of this.)",
+          en: "Only **[Add Open Data & Basemaps](add_data.md)** and **[Imagery Downloader](imagery_downloader.md)** use the network, and only when you ask for data. They contact geoBoundaries, HDX, Natural Earth (via GitHub), OpenStreetMap, Google and Esri tile services, the Copernicus DEM and ESA WorldCover buckets on Amazon S3, Esri's Living Atlas land-cover service, OpenTopography, and any address you type. **OpenTopography is the only source that needs an account**; your free API key is kept in the QGIS authentication database and sent only to OpenTopography. The only information sent is what a request needs — a country code, the bounding box of the area, or tile numbers. No project data is uploaded and nothing runs in the background. (The 0.2.0 `metadata.txt` disclosure was corrected to say all of this.)",
         } },
       { type: "heading", text: { km: "", en: "Things to know" } },
       { type: "list", items: [
@@ -844,29 +844,29 @@ export const releases = [
       { type: "list", items: [
         {
           km: "",
-          en: "**Copy Parallel** offsets lines left, right or both ways with mitered, beveled or rounded corners, and keeps the digitized direction that decides which side is which.",
+          en: "**[Copy Parallel](copy_parallel.md)** offsets lines left, right or both ways with mitered, beveled or rounded corners, and keeps the digitized direction that decides which side is which.",
         },
         {
           km: "",
-          en: "**Split into COGO Lines** breaks a boundary into one line per course carrying Direction, Distance, Radius and ArcLength, in any of the four ArcGIS direction types and four direction units. Circular arcs stay single courses with a signed radius rather than being chorded.",
+          en: "**[Split into COGO Lines](split_into_cogo_lines.md)** breaks a boundary into one line per course carrying Direction, Distance, Radius and ArcLength, in any of the four ArcGIS direction types and four direction units. Circular arcs stay single courses with a signed radius rather than being chorded.",
         },
         {
           km: "",
-          en: "**Merge** combines features with a per-field value chooser and keeps the preserved feature's id.",
+          en: "**[Merge](merge_features.md)** combines features with a per-field value chooser and keeps the preserved feature's id.",
         },
         {
           km: "",
-          en: "**Divide** cuts lines by length and polygons into equal-area strips along a chosen direction.",
+          en: "**[Divide](divide_features.md)** cuts lines by length and polygons into equal-area strips along a chosen direction.",
         },
         {
           km: "",
-          en: "**Construct Polygon** writes the polygon a set of lines encloses, naming and flashing the loose ends when they do not close.",
+          en: "**[Construct Polygon](construct_polygon.md)** writes the polygon a set of lines encloses, naming and flashing the loose ends when they do not close.",
         },
         {
           km: "",
-          en: "**Copy-Paste Feature** fits geometry to the target on the way in and reports every value that had to be converted rather than leaving a silent `NULL`.",
+          en: "**[Copy-Paste Feature](copy_paste_feature.md)** fits geometry to the target on the way in and reports every value that had to be converted rather than leaving a silent `NULL`.",
         },
-        { km: "", en: "Also **Buffer**, **Clip** and **Sequential Numbering**." },
+        { km: "", en: "Also **[Buffer](buffer_features.md)**, **[Clip](clip_features.md)** and **[Sequential Numbering](sequential_numbering.md)**." },
       ] },
       { type: "subheading", text: { km: "", en: "Irrigation" } },
       { type: "paragraph", text: {
