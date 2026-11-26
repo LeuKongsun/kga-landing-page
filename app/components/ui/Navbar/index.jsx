@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Brand from "../Brand";
 import ThemeSwitcher from "../ThemeSwitcher";
@@ -9,6 +10,8 @@ import { m, AnimatePresence } from "framer-motion";
 const Navbar = () => {
   const [state, setState] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Ad landing pages open with a dark hero, so keep the navbar solid there.
+  const solidNav = usePathname()?.startsWith("/course-announcement");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +39,7 @@ const Navbar = () => {
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${scrolled ? "py-2" : "py-4 md:py-4"}`}>
       <nav
         className={`mx-auto max-w-screen-xl px-4 md:px-8 transition-all duration-300 ${
-          scrolled || state ? "nav-blur bg-white/80 dark:bg-[#0B1929]/80 border border-brand-blue/10 dark:border-white/5 rounded-2xl mx-4" : "bg-white/40 dark:bg-black/20 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none"
+          scrolled || state || solidNav ? "nav-blur bg-white/80 dark:bg-[#0B1929]/80 border border-brand-blue/10 dark:border-white/5 rounded-2xl mx-4" : "bg-white/40 dark:bg-black/20 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none"
         }`}
       >
         <div className="flex items-center justify-between py-3">
