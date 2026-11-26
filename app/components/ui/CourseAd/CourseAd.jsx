@@ -159,7 +159,7 @@ const Hero = ({ c }) => {
               <p className="text-3xl font-display font-900 leading-none text-white">{c.price}</p>
             </div>
           )}
-          {c.badges.map((b) => (
+          {(c.badges || []).map((b) => (
             <div key={b.top} className="absolute -top-4 -right-2 flex rotate-[3deg] items-center gap-2 rounded-[10px] bg-white px-4 py-2.5 shadow-xl sm:-right-6">
               <Image src={icons[c.icon]} alt="" className="h-8 w-8 object-contain" />
               <div className="text-left">

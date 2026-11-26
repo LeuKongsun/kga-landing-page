@@ -37,6 +37,17 @@ const Check = () => (
   </svg>
 );
 
+const svg = { className: "h-5 w-5", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true };
+const ClassIcon = () => (<svg {...svg}><rect x="2" y="4" width="20" height="13" rx="2" /><path d="M8 21h8M12 17v4" /></svg>);
+const CertIcon = () => (<svg {...svg}><circle cx="12" cy="9" r="6" /><path d="m8.5 14 -1.5 8 5 -3 5 3 -1.5 -8" /></svg>);
+const BookIcon = () => (<svg {...svg}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z" /><path d="M20 17v4H6.5A2.5 2.5 0 0 1 4 18.5" /></svg>);
+
+const heroPoints = [
+  { Icon: ClassIcon, title: "ថ្នាក់ផ្ទាល់ + អនឡាញ" },
+  { Icon: CertIcon, title: "វិញ្ញាបនបត្របញ្ចប់វគ្គសិក្សា" },
+  { Icon: BookIcon, title: "ឯកសារបង្រៀន" },
+];
+
 const Eyebrow = ({ children, light }) => (
   <span className={`mb-4 inline-block rounded-[5px] border px-4 py-1.5 text-xs font-display font-700 uppercase tracking-wider ${light ? "border-white/20 bg-white/10 text-white" : "border-brand-orange/20 bg-brand-orange/10 text-brand-orange"}`}>
     {children}
@@ -116,16 +127,16 @@ const CourseCatalog = () => {
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">
             ពីមូលដ្ឋានគ្រឹះ រហូតដល់ស្វ័យប្រវត្តិកម្មដោយ Python។ រៀនផ្ទាល់ ឬអនឡាញ ជាមួយក្រុមគ្រូ Khmer GRS Academy។
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/80">
-            {["ថ្នាក់ផ្ទាល់ + អនឡាញ", "វិញ្ញាបនបត្របញ្ចប់វគ្គសិក្សា", "ឯកសារបង្រៀន"].map((t) => (
-              <span key={t} className="flex items-center gap-2 rounded-[5px] bg-white/10 px-4 py-2 ring-1 ring-white/15">
-                <svg className="h-4 w-4 text-brand-orange" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                {t}
-              </span>
+          <ul className="mx-auto mt-10 grid max-w-3xl divide-y divide-white/10 overflow-hidden rounded-[10px] bg-white/[0.07] ring-1 ring-white/15 backdrop-blur-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            {heroPoints.map(({ Icon, title }) => (
+              <li key={title} className="flex items-center justify-center gap-3 px-5 py-4 text-left">
+                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-brand-orange text-white shadow-[0_6px_14px_-6px_rgba(255,100,52,0.7)]">
+                  <Icon />
+                </span>
+                <span className="font-display font-700 leading-[1.5] text-white">{title}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </m.div>
       </div>
     </section>

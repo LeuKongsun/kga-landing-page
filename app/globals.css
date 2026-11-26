@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -198,15 +196,6 @@ body {
 html[lang="en"] .hero-heading-white {
   font-size: 0.62em;
   line-height: 1.3;
-}
-/* Match KGA Toolbox typography when English is selected. */
-html[lang="en"] body,
-html[lang="en"] .font-body {
-  font-family: "DM Sans", sans-serif !important;
-}
-
-html[lang="en"] .font-display {
-  font-family: "Plus Jakarta Sans", sans-serif !important;
 }
 /* ─── WCAG 2.1 AA text contrast ───
    Secondary/caption copy keeps its visual hierarchy but never drops below 4.5:1.
