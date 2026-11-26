@@ -78,7 +78,7 @@ const BlogPost = ({ post: sourcePost }) => {
                   />
                 ) : null}
                 <span
-                  className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-full border backdrop-blur-md ${categoryStyles[cat.color]}`}
+                  className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-sm border backdrop-blur-md ${categoryStyles[cat.color]}`}
                 >
                   {getCategoryLabel(cat.slug)}
                 </span>
@@ -225,7 +225,7 @@ const BlogPost = ({ post: sourcePost }) => {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-display font-600 px-3 py-1 rounded-full bg-brand-blue/8 dark:bg-white/5 text-brand-text/60 dark:text-gray-400"
+                      className="text-xs font-display font-600 px-3 py-1 rounded-sm bg-brand-blue/8 dark:bg-white/5 text-brand-text/60 dark:text-gray-400"
                     >
                       #{tag}
                     </span>

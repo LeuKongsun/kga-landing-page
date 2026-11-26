@@ -47,7 +47,7 @@ const BlogPreview = () => {
           viewport={{ once: true }}
           className="text-center mb-12 max-w-3xl mx-auto px-4"
         >
-          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-full bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
+          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-[5px] bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
             Blog
           </span>
           <h2 className="text-3xl md:text-4xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">
@@ -146,7 +146,7 @@ const BlogPreview = () => {
         >
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-orange text-white text-sm font-display font-600 rounded-full hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-orange text-white text-sm font-display font-600 rounded-sm hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all"
           >
             {isEnglish ? "View All Articles" : "មើលអត្ថបទទាំងអស់"}
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">

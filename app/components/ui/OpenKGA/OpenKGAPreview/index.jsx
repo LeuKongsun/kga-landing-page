@@ -44,7 +44,7 @@ const OpenKGAPreview = () => {
           viewport={{ once: true }}
           className="text-center mb-12 max-w-3xl mx-auto px-4"
         >
-          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-full bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
+          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-[5px] bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
             OpenKGA
           </span>
           <h2 className="text-3xl md:text-4xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">
@@ -140,7 +140,7 @@ const OpenKGAPreview = () => {
                   <div className="flex gap-2 mt-auto">
                     <Link
                       href={`/openkga/${ds.slug}`}
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-full border border-brand-blue/20 dark:border-white/10 text-brand-text/80 dark:text-gray-300 hover:border-brand-orange/30 hover:text-brand-orange transition-all"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-sm border border-brand-blue/20 dark:border-white/10 text-brand-text/80 dark:text-gray-300 hover:border-brand-orange/30 hover:text-brand-orange transition-all"
                     >
                       Details
                     </Link>
@@ -148,7 +148,7 @@ const OpenKGAPreview = () => {
                       href={ds.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-full bg-brand-orange text-white hover:bg-brand-orange/90 shadow-sm shadow-brand-orange/20 transition-all"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-sm bg-brand-orange text-white hover:bg-brand-orange/90 shadow-sm shadow-brand-orange/20 transition-all"
                     >
                       <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10 3a1 1 0 011 1v8.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L9 12.586V4a1 1 0 011-1z" clipRule="evenodd" />
@@ -178,7 +178,7 @@ const OpenKGAPreview = () => {
         >
           <Link
             href="/openkga"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-orange text-white text-sm font-display font-600 rounded-full hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-orange text-white text-sm font-display font-600 rounded-sm hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all"
           >
             មើលទិន្នន័យទាំងអស់
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">

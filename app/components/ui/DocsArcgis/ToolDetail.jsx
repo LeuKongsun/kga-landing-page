@@ -89,17 +89,17 @@ const ToolDetail = ({ slug }) => {
                 {group && (
                   <Link
                     href={`/docs/arcgis#group-${group.id}`}
-                    className="rounded-full border border-brand-blue/20 bg-brand-blue/5 px-3 py-1 text-xs font-display font-600 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-blue-300"
+                    className="rounded-sm border border-brand-blue/20 bg-brand-blue/5 px-3 py-1 text-xs font-display font-600 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-blue-300"
                   >
                     <span lang="en">{group.name}</span>
                   </Link>
                 )}
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-blue/10 bg-brand-blue/[0.04] px-3 py-1 text-xs font-display font-600 text-brand-text/65 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-brand-blue/10 bg-brand-blue/[0.04] px-3 py-1 text-xs font-display font-600 text-brand-text/65 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
                   <TypeIcon className="h-3.5 w-3.5" aria-hidden="true" />
                   {t(type.label, language)}
                 </span>
                 {tool.status === "planned" && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-xs font-display font-600 text-amber-700 dark:text-amber-300">
+                  <span className="inline-flex items-center gap-1.5 rounded-sm border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-xs font-display font-600 text-amber-700 dark:text-amber-300">
                     <AlertTriangle className="h-3.5 w-3.5" aria-hidden="true" />
                     {t(UI.plannedBadge, language)}
                   </span>
@@ -254,7 +254,7 @@ const ToolDetail = ({ slug }) => {
                         <li key={otherSlug}>
                           <Link
                             href={`/docs/arcgis/${other.slug}`}
-                            className="inline-flex rounded-full border border-brand-blue/15 bg-brand-blue/5 px-3 py-1.5 text-sm text-brand-text/75 transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
+                            className="inline-flex rounded-sm border border-brand-blue/15 bg-brand-blue/5 px-3 py-1.5 text-sm text-brand-text/75 transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
                           >
                             <span lang="en">{other.name}</span>
                           </Link>

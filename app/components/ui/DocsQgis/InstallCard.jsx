@@ -60,7 +60,7 @@ const InstallCard = ({ compact = false }) => {
           href={PLUGIN.links.pluginRepo}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-4 py-2.5 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60"
+          className="inline-flex items-center gap-2 rounded-sm bg-brand-orange px-4 py-2.5 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60"
         >
           <Download className="h-4 w-4" aria-hidden="true" />
           {t(UI.pluginRepo, language)}
@@ -70,7 +70,7 @@ const InstallCard = ({ compact = false }) => {
           href={PLUGIN.links.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-brand-blue/15 bg-brand-blue/5 px-4 py-2.5 text-sm font-display font-600 text-brand-text transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-gray-200"
+          className="inline-flex items-center gap-2 rounded-sm border border-brand-blue/15 bg-brand-blue/5 px-4 py-2.5 text-sm font-display font-600 text-brand-text transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-gray-200"
         >
           <Github className="h-4 w-4" aria-hidden="true" />
           {t(UI.viewOnGithub, language)}

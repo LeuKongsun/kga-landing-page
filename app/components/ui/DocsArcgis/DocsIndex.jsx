@@ -117,10 +117,10 @@ const DocsIndex = () => {
           >
             <div className="min-w-0">
               <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-brand-orange/30 bg-brand-orange/15 px-3 py-1 text-xs font-display font-600 text-brand-orange">
+                <span className="rounded-sm border border-brand-orange/30 bg-brand-orange/15 px-3 py-1 text-xs font-display font-600 text-brand-orange">
                   {t({ km: "ឧបករណ៍ ArcGIS Pro", en: "ArcGIS Pro Add-in" }, language)}
                 </span>
-                <span className="rounded-full border border-brand-blue/25 bg-brand-blue/10 px-3 py-1 text-xs font-display font-600 text-brand-blue dark:text-blue-300">
+                <span className="rounded-sm border border-brand-blue/25 bg-brand-blue/10 px-3 py-1 text-xs font-display font-600 text-brand-blue dark:text-blue-300">
                   {t(PRODUCT.licence, language)}
                 </span>
               </div>
@@ -250,7 +250,7 @@ const DocsIndex = () => {
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder={t(UI.searchPlaceholder, language)}
-                    className="w-full rounded-full border border-brand-blue/12 bg-white py-2.5 pl-9 pr-10 text-sm text-brand-text placeholder:text-brand-text/40 focus-visible:border-brand-orange/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/40 dark:border-white/10 dark:bg-white/5 dark:text-gray-100 dark:placeholder:text-gray-500"
+                    className="w-full rounded-lg border border-brand-blue/12 bg-white py-2.5 pl-9 pr-10 text-sm text-brand-text placeholder:text-brand-text/40 focus-visible:border-brand-orange/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/40 dark:border-white/10 dark:bg-white/5 dark:text-gray-100 dark:placeholder:text-gray-500"
                   />
                   {query && (
                     <button
@@ -269,7 +269,7 @@ const DocsIndex = () => {
                     type="button"
                     aria-pressed={activeGroup === null}
                     onClick={() => setActiveGroup(null)}
-                    className={`rounded-full border px-3 py-1 text-xs font-display font-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 ${
+                    className={`rounded-sm border px-3 py-1 text-xs font-display font-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 ${
                       activeGroup === null
                         ? "border-brand-orange/40 bg-brand-orange/15 text-brand-orange"
                         : "border-brand-blue/12 bg-white text-brand-text/65 hover:border-brand-orange/30 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
@@ -285,7 +285,7 @@ const DocsIndex = () => {
                       onClick={() =>
                         setActiveGroup((current) => (current === group.id ? null : group.id))
                       }
-                      className={`rounded-full border px-3 py-1 text-xs font-display font-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 ${
+                      className={`rounded-sm border px-3 py-1 text-xs font-display font-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 ${
                         activeGroup === group.id
                           ? "border-brand-orange/40 bg-brand-orange/15 text-brand-orange"
                           : "border-brand-blue/12 bg-white text-brand-text/65 hover:border-brand-orange/30 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-300"

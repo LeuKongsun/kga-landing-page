@@ -20,7 +20,7 @@ const ProjectComingSoon = () => {
             viewport={{ once: true }}
             className="mx-auto mb-12 max-w-3xl px-4 text-center"
           >
-            <span className="mb-6 inline-block rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider text-brand-orange">
+            <span className="mb-6 inline-block rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider text-brand-orange">
               {isEnglish ? "Project" : "គម្រោង"}
             </span>
             <h1 className="mb-4 text-3xl font-display font-800 leading-[1.4] text-brand-text dark:text-white md:text-5xl">
@@ -67,7 +67,7 @@ const ProjectComingSoon = () => {
                     ? "This section is reserved for KGA's past and current training project records."
                     : "ផ្នែកនេះត្រូវបានរក្សាទុកសម្រាប់បង្ហាញកំណត់ត្រាគម្រោងបណ្តុះបណ្តាលមុនៗ និងបច្ចុប្បន្នរបស់ KGA។"}
                 </p>
-                <span className="mt-auto inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/10 bg-brand-blue/5 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
+                <span className="mt-auto inline-flex items-center justify-center gap-2 rounded-sm border border-brand-blue/10 bg-brand-blue/5 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
                   {isEnglish ? "Available for display soon" : "នឹងមានសម្រាប់បង្ហាញឆាប់ៗនេះ"}
                   <Clock3 className="h-4 w-4" aria-hidden="true" />
                 </span>

@@ -46,7 +46,7 @@ const ProjectPreview = () => {
           viewport={{ once: true }}
           className="mx-auto mb-12 max-w-3xl px-4 text-center"
         >
-          <span className="mb-6 inline-block rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase text-brand-orange">
+          <span className="mb-6 inline-block rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase text-brand-orange">
             {isEnglish ? "Project" : "គម្រោង"}
           </span>
           <h2 className="mb-4 text-3xl font-display font-800 leading-[1.4] text-brand-text dark:text-white md:text-4xl">
@@ -160,7 +160,7 @@ const ProjectPreview = () => {
                     </div>
                   </div>
 
-                  <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-4 py-2.5 text-sm font-display font-700 text-white shadow-sm shadow-brand-orange/20 transition-colors group-hover:bg-brand-orange/90">
+                  <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-4 py-2.5 text-sm font-display font-700 text-white shadow-sm shadow-brand-orange/20 transition-colors group-hover:bg-brand-orange/90">
                     {isEnglish ? "Details" : "មើលព័ត៌មានលម្អិត"}
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </span>
@@ -173,7 +173,7 @@ const ProjectPreview = () => {
         <div className="mt-10 text-center">
           <Link
             href="/project"
-            className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-sm bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2"
           >
             {isEnglish ? "View All Projects" : "មើលគម្រោងទាំងអស់"}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />

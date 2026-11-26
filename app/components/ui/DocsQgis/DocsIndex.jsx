@@ -94,10 +94,10 @@ const DocsIndex = () => {
           >
             <div className="min-w-0">
               <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-brand-orange/30 bg-brand-orange/15 px-3 py-1 text-xs font-display font-600 text-brand-orange">
+                <span className="rounded-sm border border-brand-orange/30 bg-brand-orange/15 px-3 py-1 text-xs font-display font-600 text-brand-orange">
                   {t({ km: "កម្មវិធីជំនួយ QGIS", en: "QGIS Plugin" }, language)}
                 </span>
-                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-display font-600 text-emerald-700 dark:text-emerald-300">
+                <span className="rounded-sm border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-display font-600 text-emerald-700 dark:text-emerald-300">
                   {t(PLUGIN.price, language)}
                 </span>
               </div>

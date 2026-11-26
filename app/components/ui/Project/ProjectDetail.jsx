@@ -99,7 +99,7 @@ const ProjectDetail = ({ slug }) => {
                   sizes="(min-width: 1024px) 70vw, 100vw"
                 />
                 <span
-                  className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-full border backdrop-blur-md ${categoryStyles[project.category]}`}
+                  className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-sm border backdrop-blur-md ${categoryStyles[project.category]}`}
                 >
                   {getProjectCategoryLabel(project.category, language)}
                 </span>
@@ -199,7 +199,7 @@ const ProjectDetail = ({ slug }) => {
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-display font-600 px-3 py-1 rounded-full bg-brand-blue/8 dark:bg-white/5 text-brand-text/60 dark:text-gray-400"
+                      className="text-xs font-display font-600 px-3 py-1 rounded-sm bg-brand-blue/8 dark:bg-white/5 text-brand-text/60 dark:text-gray-400"
                     >
                       #{tag}
                     </span>
@@ -217,7 +217,7 @@ const ProjectDetail = ({ slug }) => {
               <div className="bg-white dark:bg-white/5 rounded-2xl border border-brand-blue/8 dark:border-white/8 p-6">
                 <Link
                   href="/contact"
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-brand-orange text-white text-sm font-display font-700 rounded-full hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all mb-5"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-brand-orange text-white text-sm font-display font-700 rounded-sm hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all mb-5"
                 >
                   {isEnglish ? "Discuss Training" : "ពិភាក្សាគម្រោងបណ្តុះបណ្តាល"}
                 </Link>
@@ -313,7 +313,7 @@ const ProjectDetail = ({ slug }) => {
                   {project.trainingTopics.map((topic) => (
                     <span
                       key={topic}
-                      className="text-xs font-display font-600 px-3 py-1 rounded-full bg-brand-orange/10 text-brand-orange"
+                      className="text-xs font-display font-600 px-3 py-1 rounded-sm bg-brand-orange/10 text-brand-orange"
                     >
                       {topic}
                     </span>

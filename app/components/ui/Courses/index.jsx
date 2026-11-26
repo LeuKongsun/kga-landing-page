@@ -75,7 +75,7 @@ const Courses = () => {
           >
             <Link
               href="/course-announcement"
-              className="group inline-flex items-center gap-2 px-8 py-3.5 bg-brand-orange hover:bg-brand-orange/90 text-white font-display font-600 rounded-full shadow-lg shadow-brand-orange/20 hover:shadow-xl hover:shadow-brand-orange/30 transition-all duration-300 hover:-translate-y-0.5"
+              className="group inline-flex items-center gap-2 px-8 py-3.5 bg-brand-orange hover:bg-brand-orange/90 text-white font-display font-600 rounded-sm shadow-lg shadow-brand-orange/20 hover:shadow-xl hover:shadow-brand-orange/30 transition-all duration-300 hover:-translate-y-0.5"
             >
               <span>ចុចមើលវគ្គសិក្សារបស់យើង</span>
               <svg

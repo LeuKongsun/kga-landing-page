@@ -57,7 +57,7 @@ const ProjectListing = () => {
             transition={{ duration: 0.5 }}
             className="mx-auto max-w-3xl px-4 text-center"
           >
-            <span className="inline-block rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase text-brand-orange">
+            <span className="inline-block rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase text-brand-orange">
               {isEnglish ? "Project" : "គម្រោង"}
             </span>
             <h1 className="mt-5 text-3xl font-display font-800 leading-[1.4] text-brand-text dark:text-white md:text-5xl">
@@ -201,7 +201,7 @@ const ProjectListing = () => {
                         </div>
                       </div>
 
-                      <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-4 py-2.5 text-sm font-display font-700 text-white shadow-sm shadow-brand-orange/20 transition-colors group-hover:bg-brand-orange/90">
+                      <span className="mt-5 inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-4 py-2.5 text-sm font-display font-700 text-white shadow-sm shadow-brand-orange/20 transition-colors group-hover:bg-brand-orange/90">
                         {isEnglish ? "Details" : "មើលព័ត៌មានលម្អិត"}
                         <ArrowRight className="h-4 w-4" aria-hidden="true" />
                       </span>

@@ -17,7 +17,7 @@ export default function ToolNotFound() {
         <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/docs/qgis"
-            className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90"
+            className="inline-flex items-center gap-2 rounded-sm bg-brand-orange px-5 py-3 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90"
           >
             ឧបករណ៍ទាំងអស់
           </Link>
@@ -25,7 +25,7 @@ export default function ToolNotFound() {
             href={PLUGIN.links.issues}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-brand-blue/15 bg-brand-blue/5 px-5 py-3 text-sm font-display font-600 text-brand-text transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-200"
+            className="inline-flex items-center gap-2 rounded-sm border border-brand-blue/15 bg-brand-blue/5 px-5 py-3 text-sm font-display font-600 text-brand-text transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-200"
           >
             រាយការណ៍បញ្ហា
           </a>

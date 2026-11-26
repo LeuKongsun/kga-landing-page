@@ -154,13 +154,13 @@ const ProgramCard = ({ program, index }) => {
         {program.href ? (
           <Link
             href={program.href}
-            className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
+            className="mt-auto inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-5 py-3 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
           >
             {program.cta}
             <ExternalLink className="h-4 w-4" aria-hidden="true" />
           </Link>
         ) : (
-          <span className="mt-auto inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/10 bg-brand-blue/5 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
+          <span className="mt-auto inline-flex items-center justify-center gap-2 rounded-sm border border-brand-blue/10 bg-brand-blue/5 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
             {program.cta}
             <Clock3 className="h-4 w-4" aria-hidden="true" />
           </span>
@@ -274,7 +274,7 @@ function ProgramShowcase() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
           >
-            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider text-brand-orange">
+            <span className="mb-6 inline-flex items-center gap-2 rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider text-brand-orange">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               កម្មវិធី
             </span>
@@ -320,7 +320,7 @@ function ProgramShowcase() {
                   </p>
                 </div>
                 <span className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full border border-brand-orange/30 bg-brand-orange/10 px-3 py-1.5 text-sm font-display font-700 text-brand-orange">
+                  <span className="rounded-sm border border-brand-orange/30 bg-brand-orange/10 px-3 py-1.5 text-sm font-display font-700 text-brand-orange">
                     {activeProgram.badge}
                   </span>
                   <FreePill program={activeProgram} />
@@ -362,7 +362,7 @@ function ProgramShowcase() {
           <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full bg-brand-orange/10 px-3 py-1.5 text-xs font-display font-700 uppercase tracking-wider text-brand-orange">
+                <span className="inline-flex items-center gap-2 rounded-[5px] bg-brand-orange/10 px-3 py-1.5 text-xs font-display font-700 uppercase tracking-wider text-brand-orange">
                   {activeProgram.platform}
                 </span>
                 <span className="text-sm text-brand-text/55 dark:text-gray-400">
@@ -418,13 +418,13 @@ function ProgramShowcase() {
               {activeProgram.href ? (
                 <Link
                   href={activeProgram.href}
-                  className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
+                  className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-brand-orange px-5 py-3 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 hover:shadow-lg hover:shadow-brand-orange/30"
                 >
                   {activeProgram.primaryActionLabel}
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
                 </Link>
               ) : (
-                <span className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full border border-brand-blue/10 bg-white/70 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
+                <span className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-sm border border-brand-blue/10 bg-white/70 px-5 py-3 text-sm font-display font-700 text-brand-text/70 dark:border-white/10 dark:bg-white/5 dark:text-gray-300">
                   {activeProgram.primaryActionLabel}
                   <Clock3 className="h-4 w-4" aria-hidden="true" />
                 </span>
@@ -450,7 +450,7 @@ export default function Programs({ preview = false }) {
           viewport={{ once: true }}
           className="mx-auto mb-12 max-w-3xl px-4 text-center"
         >
-          <span className="mb-6 inline-block rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider text-brand-orange">
+          <span className="mb-6 inline-block rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider text-brand-orange">
             កម្មវិធី
           </span>
           <h2 className="mb-4 text-3xl font-display font-800 leading-[1.4] text-brand-text dark:text-white md:text-4xl">
@@ -467,7 +467,7 @@ export default function Programs({ preview = false }) {
         <div className="mt-10 flex justify-center">
           <Link
             href="/program"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/10 bg-white px-6 py-3 text-sm font-display font-700 text-brand-text shadow-sm transition-all hover:border-brand-orange/30 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white"
+            className="inline-flex items-center justify-center gap-2 rounded-sm border border-brand-blue/10 bg-white px-6 py-3 text-sm font-display font-700 text-brand-text shadow-sm transition-all hover:border-brand-orange/30 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white"
           >
             មើលកម្មវិធីទាំងអស់
             <ArrowRight className="h-4 w-4" aria-hidden="true" />

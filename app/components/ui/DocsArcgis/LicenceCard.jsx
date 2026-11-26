@@ -81,7 +81,7 @@ const LicenceCard = ({ compact = false }) => {
       <div className="mt-6 flex flex-wrap gap-2">
         <Link
           href={PRODUCT.links.product}
-          className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-4 py-2.5 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60"
+          className="inline-flex items-center gap-2 rounded-sm bg-brand-orange px-4 py-2.5 text-sm font-display font-600 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60"
         >
           {t(UI.productPage, language)}
         </Link>
@@ -89,7 +89,7 @@ const LicenceCard = ({ compact = false }) => {
           href={PRODUCT.links.support}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-brand-blue/15 bg-brand-blue/5 px-4 py-2.5 text-sm font-display font-600 text-brand-text transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-gray-200"
+          className="inline-flex items-center gap-2 rounded-sm border border-brand-blue/15 bg-brand-blue/5 px-4 py-2.5 text-sm font-display font-600 text-brand-text transition-colors hover:border-brand-orange/40 hover:text-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 dark:border-white/10 dark:bg-white/5 dark:text-gray-200"
         >
           <LifeBuoy className="h-4 w-4" aria-hidden="true" />
           {t(UI.contactSupport, language)}

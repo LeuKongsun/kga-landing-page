@@ -139,7 +139,7 @@ function SectionHeader({ eyebrow, title, lead, align = "center" }) {
   return (
     <div className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
       {eyebrow ? (
-        <span className="mb-4 inline-flex rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-orange">
+        <span className="mb-4 inline-flex rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-orange">
           {eyebrow}
         </span>
       ) : null}
@@ -160,7 +160,7 @@ export default function About() {
       <section className="grid-bg">
         <div className="custom-screen grid gap-10 py-16 md:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <FadeIn className="max-w-3xl">
-            <span className="mb-5 inline-flex rounded-full border border-brand-blue/10 bg-white/70 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-blue shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-blue-200">
+            <span className="mb-5 inline-flex rounded-[5px] border border-brand-blue/10 bg-white/70 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-blue shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-blue-200">
               {text.eyebrow}
             </span>
             <h1 className="font-display text-4xl font-900 leading-[1.22] text-brand-text dark:text-white md:text-6xl">
@@ -169,15 +169,15 @@ export default function About() {
             <p className="mt-6 text-lg leading-9 text-brand-text/75 dark:text-gray-200">{text.lead}</p>
             <p className="mt-4 text-base leading-8 text-brand-text/65 dark:text-gray-300">{text.intro}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Link href="/courses" className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-lg shadow-brand-orange/20 transition-all hover:bg-brand-orange-hover">
+              <Link href="/courses" className="inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-lg shadow-brand-orange/20 transition-all hover:bg-brand-orange-hover">
                 {text.ctaCourses}
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="/project" className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-6 py-3 text-sm font-display font-700 text-brand-orange transition-colors hover:bg-brand-orange hover:text-white">
+              <Link href="/project" className="inline-flex items-center justify-center gap-2 rounded-sm border border-brand-orange/30 bg-brand-orange/10 px-6 py-3 text-sm font-display font-700 text-brand-orange transition-colors hover:bg-brand-orange hover:text-white">
                 {text.ctaProject}
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="/openkga" className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/15 bg-white/70 px-6 py-3 text-sm font-display font-700 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white">
+              <Link href="/openkga" className="inline-flex items-center justify-center gap-2 rounded-sm border border-brand-blue/15 bg-white/70 px-6 py-3 text-sm font-display font-700 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-white">
                 {text.ctaOpen}
               </Link>
             </div>
@@ -269,7 +269,7 @@ export default function About() {
         <div className="custom-screen grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
           <FadeIn>
             <div className="rounded-3xl bg-brand-blue p-7 text-white shadow-xl shadow-brand-blue/15 dark:bg-brand-blue-dark">
-              <span className="mb-4 inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-orange">{text.philosophyEyebrow}</span>
+              <span className="mb-4 inline-flex rounded-[5px] bg-white/10 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-orange">{text.philosophyEyebrow}</span>
               <h2 className="font-display text-3xl font-900 leading-[1.35] md:text-4xl">{text.philosophyTitle}</h2>
               <p className="mt-5 text-base leading-8 text-white/82">{text.philosophy}</p>
             </div>
@@ -308,14 +308,14 @@ export default function About() {
         <div className="custom-screen">
           <FadeIn>
             <div className="rounded-3xl border border-brand-blue/10 bg-white p-8 text-center shadow-xl shadow-brand-blue/10 dark:border-white/10 dark:bg-white/[0.05] md:p-12">
-              <span className="mb-4 inline-flex rounded-full border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-orange">{text.visionEyebrow}</span>
+              <span className="mb-4 inline-flex rounded-[5px] border border-brand-orange/20 bg-brand-orange/10 px-4 py-1.5 text-xs font-display font-700 uppercase tracking-[0.18em] text-brand-orange">{text.visionEyebrow}</span>
               <h2 className="mx-auto max-w-4xl font-display text-3xl font-900 leading-[1.35] text-brand-text dark:text-white md:text-5xl">{text.visionTitle}</h2>
               <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-brand-text/70 dark:text-gray-300 md:text-lg">{text.vision}</p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-lg shadow-brand-orange/20 transition-all hover:bg-brand-orange-hover">
+                <Link href="/contact" className="inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-6 py-3 text-sm font-display font-700 text-white shadow-lg shadow-brand-orange/20 transition-all hover:bg-brand-orange-hover">
                   {text.visionAction}<Users className="h-4 w-4" />
                 </Link>
-                <Link href="/courses" className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-blue/15 px-6 py-3 text-sm font-display font-700 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:text-white">
+                <Link href="/courses" className="inline-flex items-center justify-center gap-2 rounded-sm border border-brand-blue/15 px-6 py-3 text-sm font-display font-700 text-brand-blue transition-colors hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:text-white">
                   <BookOpen className="h-4 w-4" />{text.ctaCourses}
                 </Link>
               </div>

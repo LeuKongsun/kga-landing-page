@@ -88,7 +88,7 @@ const OpenKGADetail = ({ slug }) => {
                   />
                 )}
                 <span
-                  className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-full border backdrop-blur-md ${categoryStyles[cat.color]}`}
+                  className={`absolute top-4 left-4 text-xs font-display font-600 px-3 py-1.5 rounded-sm border backdrop-blur-md ${categoryStyles[cat.color]}`}
                 >
                   {cat.label}
                 </span>
@@ -162,7 +162,7 @@ const OpenKGADetail = ({ slug }) => {
                   {dataset.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-display font-600 px-3 py-1 rounded-full bg-brand-blue/8 dark:bg-white/5 text-brand-text/60 dark:text-gray-400"
+                      className="text-xs font-display font-600 px-3 py-1 rounded-sm bg-brand-blue/8 dark:bg-white/5 text-brand-text/60 dark:text-gray-400"
                     >
                       #{tag}
                     </span>
@@ -184,7 +184,7 @@ const OpenKGADetail = ({ slug }) => {
                   href={dataset.downloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-brand-orange text-white text-sm font-display font-700 rounded-full hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all mb-4"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-brand-orange text-white text-sm font-display font-700 rounded-sm hover:bg-brand-orange/90 shadow-md shadow-brand-orange/20 hover:shadow-lg hover:shadow-brand-orange/30 transition-all mb-4"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 3a1 1 0 011 1v8.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L9 12.586V4a1 1 0 011-1z" clipRule="evenodd" />
@@ -199,7 +199,7 @@ const OpenKGADetail = ({ slug }) => {
                     href={dataset.demoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mb-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-brand-blue/20 dark:border-white/10 text-sm font-display font-700 text-brand-text/80 dark:text-gray-300 hover:border-brand-orange/40 hover:text-brand-orange transition-all"
+                    className="mb-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-sm border border-brand-blue/20 dark:border-white/10 text-sm font-display font-700 text-brand-text/80 dark:text-gray-300 hover:border-brand-orange/40 hover:text-brand-orange transition-all"
                   >
                     <PlayCircle className="w-4 h-4" aria-hidden="true" />
                     មើលវីដេអូបង្ហាញ

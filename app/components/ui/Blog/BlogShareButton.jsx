@@ -140,14 +140,14 @@ export default function BlogShareButton({
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="inline-flex items-center justify-center rounded-full border border-brand-blue/15 px-5 py-2.5 text-sm font-display font-700 text-brand-text/70 transition-all hover:border-brand-orange/30 hover:text-brand-orange dark:border-white/10 dark:text-gray-300"
+                  className="inline-flex items-center justify-center rounded-sm border border-brand-blue/15 px-5 py-2.5 text-sm font-display font-700 text-brand-text/70 transition-all hover:border-brand-orange/30 hover:text-brand-orange dark:border-white/10 dark:text-gray-300"
                 >
                   Close
                 </button>
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90"
+                  className="inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-5 py-2.5 text-sm font-display font-700 text-white shadow-md shadow-brand-orange/20 transition-all hover:bg-brand-orange/90"
                 >
                   {copied ? (
                     <Check className="h-4 w-4" aria-hidden="true" />
@@ -170,7 +170,7 @@ export default function BlogShareButton({
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label={`Share ${title}`}
-        className={`inline-flex items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange ${className}`}
+        className={`inline-flex items-center justify-center gap-1.5 rounded-sm border border-brand-blue/20 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange ${className}`}
       >
         <Share2 className="h-4 w-4" aria-hidden="true" />
         {showLabel ? <span>{buttonLabel}</span> : <span className="sr-only">{buttonLabel}</span>}

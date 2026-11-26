@@ -137,7 +137,7 @@ const BlogListing = () => {
             viewport={{ once: true }}
             className="text-center mb-12 max-w-3xl px-4"
           >
-            <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-full bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
+            <span className="inline-block px-4 py-1.5 mb-6 text-xs font-display font-600 tracking-wider uppercase rounded-[5px] bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
               Blog
             </span>
             <h1 className="text-3xl md:text-5xl font-display font-800 leading-[1.4] mb-4 text-brand-text dark:text-white">
@@ -157,7 +157,7 @@ const BlogListing = () => {
                   <button
                     key={cat.slug}
                     onClick={() => setActiveCategory(cat.slug)}
-                    className={`px-4 md:px-5 py-2 rounded-full text-sm font-display font-600 transition-all ${
+                    className={`px-4 md:px-5 py-2 rounded-sm text-sm font-display font-600 transition-all ${
                       isActive
                         ? "bg-brand-orange text-white shadow-md shadow-brand-orange/20"
                         : "bg-brand-blue/8 dark:bg-white/5 text-brand-text/70 dark:text-gray-300 hover:bg-brand-blue/15 dark:hover:bg-white/10"
@@ -245,7 +245,7 @@ const BlogListing = () => {
                       href="https://t.me/khmergisacademychannel"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-display font-600 px-4 py-2 bg-brand-orange text-white rounded-full hover:bg-brand-orange/90 transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs font-display font-600 px-4 py-2 bg-brand-orange text-white rounded-sm hover:bg-brand-orange/90 transition-colors"
                     >
                       Telegram Channel
                     </Link>
@@ -354,7 +354,7 @@ const BlogListing = () => {
                                   />
                                   <Link
                                     href={`/blog/${post.slug}`}
-                                    className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-full bg-brand-orange text-white hover:bg-brand-orange/90 shadow-sm shadow-brand-orange/20 transition-all"
+                                    className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-display font-600 px-3 py-2 rounded-sm bg-brand-orange text-white hover:bg-brand-orange/90 shadow-sm shadow-brand-orange/20 transition-all"
                                   >
                                     {post.youtubeId ? "Watch" : "Read"}
                                   </Link>
@@ -375,7 +375,7 @@ const BlogListing = () => {
                           type="button"
                           onClick={() => changePage(activePage - 1)}
                           disabled={activePage === 1}
-                          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
+                          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-sm border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
                         >
                           <span aria-hidden="true">←</span>
                           <span>{isEnglish ? "Previous" : "មុន"}</span>
@@ -389,7 +389,7 @@ const BlogListing = () => {
                               onClick={() => changePage(item)}
                               aria-label={`Page ${item}`}
                               aria-current={item === activePage ? "page" : undefined}
-                              className={`inline-flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm font-display font-700 transition-all ${
+                              className={`inline-flex h-10 min-w-10 items-center justify-center rounded-sm border px-3 text-sm font-display font-700 transition-all ${
                                 item === activePage
                                   ? "border-brand-orange bg-brand-orange text-white shadow-md shadow-brand-orange/20"
                                   : "border-brand-blue/20 bg-white text-brand-text/70 hover:border-brand-orange/40 hover:text-brand-orange dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
@@ -412,7 +412,7 @@ const BlogListing = () => {
                           type="button"
                           onClick={() => changePage(activePage + 1)}
                           disabled={activePage === totalPages}
-                          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
+                          className="inline-flex h-10 items-center justify-center gap-1.5 rounded-sm border border-brand-blue/20 bg-white px-4 text-sm font-display font-600 text-brand-text/75 transition-all hover:border-brand-orange/40 hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-brand-orange/40 dark:hover:text-brand-orange"
                         >
                           <span>{isEnglish ? "Next" : "បន្ទាប់"}</span>
                           <span aria-hidden="true">→</span>
