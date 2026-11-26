@@ -86,8 +86,8 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .spacer{flex:1}
 #libStatus{font-size:11px;color:rgba(255,255,255,.42);white-space:nowrap}
 
-.pillgroup{display:flex;gap:3px;padding:3px;border-radius:15px;background:rgba(255,255,255,.09)}
-.pillgroup button{border:0;cursor:pointer;border-radius:15px;padding:5px 13px;font-size:12px;font-weight:700;background:transparent;color:rgba(255,255,255,.62);transition:all var(--t)}
+.pillgroup{display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(255,255,255,.09)}
+.pillgroup button{border:0;cursor:pointer;border-radius:999px;padding:5px 13px;font-size:12px;font-weight:700;background:transparent;color:rgba(255,255,255,.62);transition:all var(--t)}
 .pillgroup button.on{background:var(--brand);color:#fff}
 .icon-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);border-radius:8px;cursor:pointer;transition:all var(--t);flex-shrink:0}
 .icon-btn:hover{background:rgba(255,255,255,.14);color:#fff}
@@ -145,7 +145,7 @@ select:focus,input[type="text"]:focus{border-color:var(--brand)}
 input[type="text"]::placeholder{color:var(--ink-3)}
 
 .btn{
-  width:100%;cursor:pointer;border:0;border-radius:15px;padding:12px;
+  width:100%;cursor:pointer;border:0;border-radius:999px;padding:12px;
   font-size:13px;font-weight:700;transition:all var(--t)
 }
 .btn-primary{background:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(255,100,52,.22)}
@@ -274,7 +274,7 @@ html.dark .fitem .tblbtn.on{border-color:rgba(143,178,240,.5);background:rgba(14
 /* Export chips */
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chip{
-  cursor:pointer;border:1px solid var(--line-2);border-radius:15px;background:var(--panel);
+  cursor:pointer;border:1px solid var(--line-2);border-radius:999px;background:var(--panel);
   padding:7px 13px;font-size:12px;font-weight:700;color:var(--ink-2);transition:all var(--t)
 }
 .chip:hover{border-color:var(--brand)}
@@ -299,7 +299,7 @@ html.dark .fitem .tblbtn.on{border-color:rgba(143,178,240,.5);background:rgba(14
   font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3)
 }
 .panebtn{
-  flex-shrink:0;cursor:pointer;border:1px solid var(--line-2);border-radius:15px;padding:5px 12px;
+  flex-shrink:0;cursor:pointer;border:1px solid var(--line-2);border-radius:999px;padding:5px 12px;
   font-size:11.5px;font-weight:700;background:var(--panel);color:var(--ink-2);transition:all var(--t)
 }
 .panebtn:hover{border-color:var(--brand);color:var(--brand)}
@@ -536,14 +536,14 @@ html.dark .leaflet-pane.kga-selpane{
 }
 .maphud{
   display:flex;gap:6px;align-items:center;
-  background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:5px 12px;
+  background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;
   font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);box-shadow:var(--shadow);pointer-events:none
 }
 
 /* scale box: type a denominator, or pick one of the round ones */
 .mapscale{
   position:relative;display:flex;gap:1px;align-items:center;pointer-events:auto;
-  background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:3px 4px 3px 11px;
+  background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px 4px 3px 11px;
   font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);
   box-shadow:var(--shadow);transition:border-color var(--t)
 }
@@ -680,7 +680,7 @@ html.dark .basemenu{box-shadow:0 10px 30px rgba(0,0,0,.5)}
 /* hint pill: only while a draw tool is armed */
 .maphint{
   position:absolute;left:50%;top:12px;z-index:1002;
-  max-width:min(420px,74%);padding:7px 15px;border-radius:15px;
+  max-width:min(420px,74%);padding:7px 15px;border-radius:999px;
   background:var(--navy);border:1px solid rgba(255,255,255,.10);color:rgba(255,255,255,.9);
   font-size:11.5px;line-height:1.55;text-align:center;
   box-shadow:0 6px 20px rgba(15,35,71,.28);
@@ -710,7 +710,7 @@ html.dark .cscrim{background:rgba(4,10,22,.66)}
 .ccard .chint{margin:0 0 18px;font-size:12px;line-height:1.75;color:var(--ink-2)}
 .crow{display:flex;gap:9px}
 .cbtn{
-  flex:1;cursor:pointer;border:1px solid var(--line-2);border-radius:15px;padding:10px;
+  flex:1;cursor:pointer;border:1px solid var(--line-2);border-radius:999px;padding:10px;
   font-size:13px;font-weight:700;background:var(--panel);color:var(--ink-2);transition:all var(--t)
 }
 .cbtn:hover{border-color:var(--brand);color:var(--brand)}

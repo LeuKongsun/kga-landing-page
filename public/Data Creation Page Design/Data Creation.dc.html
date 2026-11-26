@@ -54,7 +54,7 @@
           <span style="display:flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:#FF6434;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600">1</span>
           <h2 style="margin:0;font-size:14px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:#1E2F4F">{{ t.s1 }}</h2>
         </div>
-        <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:1.5px dashed rgba(36,76,143,0.25);border-radius:12px;padding:20px 12px;background:rgba(36,76,143,0.03);text-align:center">
+        <label style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:1.5px dashed rgba(36,76,143,0.25);border-radius:10px;padding:20px 12px;background:rgba(36,76,143,0.03);text-align:center">
           <span style="font-size:22px;color:#FF6434">⬆</span>
           <span style="font-size:13px;font-weight:700;color:#1E2F4F">{{ t.pickCsv }}</span>
           <span style="font-size:11px;color:rgba(30,47,79,0.5)">{{ t.csvHint }}</span>
@@ -76,14 +76,14 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <label style="display:flex;flex-direction:column;gap:5px">
             <span style="font-size:11px;font-weight:700;color:rgba(30,47,79,0.55)">{{ t.xField }}</span>
-            <select value="{{ xField }}" onChange="{{ onX }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
+            <select value="{{ xField }}" onChange="{{ onX }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
               <option value="">—</option>
               <sc-for list="{{ headers }}" as="h" hint-placeholder-count="0"><option value="{{ h }}">{{ h }}</option></sc-for>
             </select>
           </label>
           <label style="display:flex;flex-direction:column;gap:5px">
             <span style="font-size:11px;font-weight:700;color:rgba(30,47,79,0.55)">{{ t.yField }}</span>
-            <select value="{{ yField }}" onChange="{{ onY }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
+            <select value="{{ yField }}" onChange="{{ onY }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
               <option value="">—</option>
               <sc-for list="{{ headers }}" as="h" hint-placeholder-count="0"><option value="{{ h }}">{{ h }}</option></sc-for>
             </select>
@@ -91,14 +91,14 @@
         </div>
         <label style="display:flex;flex-direction:column;gap:5px;margin-top:10px">
           <span style="font-size:11px;font-weight:700;color:rgba(30,47,79,0.55)">{{ t.crs }}</span>
-          <select value="{{ crs }}" onChange="{{ onCrs }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
+          <select value="{{ crs }}" onChange="{{ onCrs }}" style="font-family:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:1px solid rgba(36,76,143,0.18);background:#fff;color:#1E2F4F">
             <option value="EPSG:4326">WGS 84 — EPSG:4326</option>
             <option value="EPSG:32648">UTM 48N / WGS 84 — EPSG:32648</option>
             <option value="custom">{{ t.customCrs }}</option>
           </select>
         </label>
         <sc-if value="{{ isCustomCrs }}" hint-placeholder-val="{{ false }}">
-          <input type="text" value="{{ customEpsg }}" onChange="{{ onCustomEpsg }}" placeholder="e.g. 3148" style="margin-top:8px;width:100%;box-sizing:border-box;font-family:'JetBrains Mono',monospace;font-size:13px;padding:9px 10px;border-radius:9px;border:1px solid rgba(255,100,52,0.4);background:#fff;color:#1E2F4F" />
+          <input type="text" value="{{ customEpsg }}" onChange="{{ onCustomEpsg }}" placeholder="e.g. 3148" style="margin-top:8px;width:100%;box-sizing:border-box;font-family:'JetBrains Mono',monospace;font-size:13px;padding:9px 10px;border-radius:8px;border:1px solid rgba(255,100,52,0.4);background:#fff;color:#1E2F4F" />
         </sc-if>
         <button type="button" onClick="{{ plot }}" style="margin-top:12px;width:100%;cursor:pointer;border:0;border-radius:999px;background:#FF6434;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:#fff;box-shadow:0 4px 12px rgba(255,100,52,0.22)">{{ t.plot }}</button>
       </section>
@@ -155,8 +155,8 @@
           </sc-for>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px">
-          <button type="button" onClick="{{ setSeparate }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:9px;background:{{ sepBg }};padding:8px;font-family:inherit;font-size:12px;font-weight:700;color:{{ sepFg }}">{{ t.separate }}</button>
-          <button type="button" onClick="{{ setZip }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:9px;background:{{ zipBg }};padding:8px;font-family:inherit;font-size:12px;font-weight:700;color:{{ zipFg }}">{{ t.oneZip }}</button>
+          <button type="button" onClick="{{ setSeparate }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:8px;background:{{ sepBg }};padding:8px;font-family:inherit;font-size:12px;font-weight:700;color:{{ sepFg }}">{{ t.separate }}</button>
+          <button type="button" onClick="{{ setZip }}" style="flex:1;cursor:pointer;border:1px solid rgba(36,76,143,0.15);border-radius:8px;background:{{ zipBg }};padding:8px;font-family:inherit;font-size:12px;font-weight:700;color:{{ zipFg }}">{{ t.oneZip }}</button>
         </div>
         <button type="button" onClick="{{ runExport }}" style="margin-top:12px;width:100%;cursor:pointer;border:0;border-radius:999px;background:#244C8F;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:#fff">{{ t.exportBtn }}</button>
         <button type="button" onClick="{{ exportDb }}" style="margin-top:8px;width:100%;cursor:pointer;border:1px solid rgba(36,76,143,0.2);border-radius:999px;background:#fff;padding:12px;font-family:inherit;font-size:13px;font-weight:700;color:#244C8F">{{ t.exportDb }}</button>
