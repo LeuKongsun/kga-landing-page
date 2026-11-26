@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import CourseAd from "../../components/ui/CourseAd/CourseAd";
 import { qgisBasic as data } from "../../components/ui/CourseAd/courses";
 
@@ -16,5 +17,7 @@ export const metadata = {
 };
 
 export default function Page() {
+  // Not open yet: no detail view, the catalog shows an "opening in the future" popup instead.
+  if (data.comingSoon) redirect("/course-announcement");
   return <CourseAd data={data} />;
 }

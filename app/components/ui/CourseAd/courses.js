@@ -111,6 +111,7 @@ export const arcgisProBasic = {
 export const arcgisProAdvanced = {
   ...common,
   slug: "arcgis-pro-advanced",
+  comingSoon: true, // no detail page for now: the catalog shows an "opening in the future" popup
   icon: "arcgisPro",
   title: "ArcGIS Pro Advanced",
   price: null,
@@ -190,6 +191,7 @@ export const arcgisProAdvanced = {
 export const qgisBasic = {
   ...common,
   slug: "qgis-basic",
+  comingSoon: true, // no detail page for now: the catalog shows an "opening in the future" popup
   icon: "qgis",
   title: "QGIS Basic",
   price: null,

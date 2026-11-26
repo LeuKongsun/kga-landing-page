@@ -1,4 +1,5 @@
 'use client'
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { m } from "framer-motion";
@@ -42,7 +43,61 @@ const Eyebrow = ({ children, light }) => (
   </span>
 );
 
-const CourseCatalog = () => (
+const SoonModal = ({ course, onClose }) => {
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="soon-title">
+      <button type="button" aria-label="បិទ" onClick={onClose} className="absolute inset-0 cursor-default bg-brand-blue-deeper/70 backdrop-blur-sm" />
+      <m.div
+        initial={{ opacity: 0, y: 16, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.25 }}
+        className="relative w-full max-w-md rounded-[15px] bg-white p-7 text-center shadow-2xl dark:bg-[#0F2236] md:p-9"
+      >
+        <button type="button" onClick={onClose} aria-label="បិទ"
+          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full text-xl leading-none text-brand-text/50 transition-colors hover:bg-brand-blue/10 hover:text-brand-text dark:text-gray-400 dark:hover:text-white">
+          ×
+        </button>
+        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-[10px] bg-brand-blue/8 p-3 dark:bg-brand-orange/10">
+          <Image src={icons[course.icon]} alt="" className="h-full w-full object-contain" />
+        </span>
+        <span className="mt-5 inline-flex items-center gap-2 rounded-[5px] bg-brand-blue px-3 py-1.5 text-xs font-display font-700 text-white">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-brand-orange" />
+          នឹងបើកក្នុងពេលអនាគត
+        </span>
+        <h2 id="soon-title" className="mt-4 text-2xl font-display font-900 leading-[1.5] text-brand-text dark:text-white">{course.title}</h2>
+        <p className="mt-3 text-sm leading-[1.9] text-brand-text/70 dark:text-gray-300 md:text-base">
+          វគ្គសិក្សានេះនឹងបើកចុះឈ្មោះនៅពេលអនាគត។ សូមទាក់ទងយើងតាម Telegram ដើម្បីដឹងមុនគេ នៅពេលបើកចុះឈ្មោះ។
+        </p>
+        <div className="mt-7 flex flex-col gap-3">
+          <Link href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" data-cta={`soon-${course.slug}`}
+            className="inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-6 py-3.5 font-display font-700 text-white shadow-[0_6px_14px_-6px_rgba(255,100,52,0.6)] transition-all hover:-translate-y-0.5 hover:bg-brand-orange-hover">
+            សួរព័ត៌មានតាម Telegram
+            <Arrow />
+          </Link>
+          <button type="button" onClick={onClose}
+            className="rounded-sm px-6 py-3 text-sm font-display font-700 text-brand-blue ring-2 ring-brand-blue/20 transition-all hover:bg-brand-blue/5 dark:text-white dark:ring-white/20 dark:hover:bg-white/10">
+            បិទ
+          </button>
+        </div>
+      </m.div>
+    </div>
+  );
+};
+
+const CourseCatalog = () => {
+  const [soon, setSoon] = useState(null);
+  return (
   <div>
     {/* ───── Hero ───── */}
     <section className="relative overflow-hidden bg-gradient-to-br from-brand-blue-deeper via-brand-blue-dark to-brand-blue pt-28 pb-16 md:pt-36 md:pb-24">
@@ -81,7 +136,9 @@ const CourseCatalog = () => (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {courses.map((c, i) => {
             const href = `/course-announcement/${c.slug}`;
-            const open = c.status.open;
+            const open = c.status.open && !c.comingSoon;
+            const Media = c.comingSoon ? "button" : Link;
+            const mediaProps = c.comingSoon ? { type: "button", onClick: () => setSoon(c) } : { href };
             return (
               <m.article
                 key={c.slug}
@@ -89,7 +146,7 @@ const CourseCatalog = () => (
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="group flex flex-col overflow-hidden rounded-[15px] border border-brand-blue/10 bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:border-white/10 dark:bg-white/5"
               >
-                <Link href={href} className="relative block overflow-hidden bg-gradient-to-br from-brand-blue-deeper via-brand-blue-dark to-brand-blue" aria-label={c.title}>
+                <Media {...mediaProps} className="relative block w-full overflow-hidden bg-gradient-to-br from-brand-blue-deeper via-brand-blue-dark to-brand-blue" aria-label={c.title}>
                   {c.poster ? (
                     <Image src={c.poster} alt={`ប៉ូស្ទ័រវគ្គសិក្សា ${c.title}`} width={1080} height={1080} sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
@@ -105,9 +162,9 @@ const CourseCatalog = () => (
                   )}
                   <span className={`absolute left-3 top-3 inline-flex items-center gap-2 rounded-[5px] px-3 py-1.5 text-xs font-display font-700 text-white shadow-md ${open ? "bg-brand-orange" : "bg-brand-blue ring-1 ring-white/30"}`}>
                     <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
-                    {c.status.label}
+                    {c.comingSoon ? "នឹងបើកក្នុងពេលអនាគត" : c.status.label}
                   </span>
-                </Link>
+                </Media>
 
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center gap-3">
@@ -131,6 +188,7 @@ const CourseCatalog = () => (
                     ))}
                   </ul>
 
+                  {!c.comingSoon && (
                   <div className="mt-5 flex items-center justify-between gap-3 rounded-[10px] bg-brand-blue/[0.05] px-4 py-3 dark:bg-white/5">
                     {c.price ? (
                       <div>
@@ -142,17 +200,20 @@ const CourseCatalog = () => (
                     )}
                     {c.freeGift && <p className="max-w-[55%] text-right text-xs font-display font-700 leading-[1.6] text-brand-blue dark:text-sky-300">+ {c.freeGift}</p>}
                   </div>
+                  )}
 
                   <div className="mt-auto flex flex-col gap-3 pt-6">
-                    <Link href={href}
+                    <Media {...mediaProps}
                       className="group/btn inline-flex items-center justify-center gap-2 rounded-sm bg-brand-orange px-6 py-3.5 font-display font-700 text-white shadow-[0_6px_14px_-6px_rgba(255,100,52,0.6)] transition-all hover:-translate-y-0.5 hover:bg-brand-orange-hover">
                       មើលព័ត៌មានលម្អិត
                       <span className="transition-transform group-hover/btn:translate-x-1"><Arrow /></span>
-                    </Link>
+                    </Media>
+                    {!c.comingSoon && (
                     <Link href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" data-cta={`catalog-${c.slug}`}
                       className="inline-flex items-center justify-center rounded-sm px-6 py-3 text-sm font-display font-700 text-brand-blue ring-2 ring-brand-blue/20 transition-all hover:bg-brand-blue/5 hover:ring-brand-blue/40 dark:text-white dark:ring-white/20 dark:hover:bg-white/10">
-                      {open ? "ចុះឈ្មោះតាម Telegram" : "កក់ទុកតាម Telegram"}
+                      ចុះឈ្មោះតាម Telegram
                     </Link>
+                    )}
                   </div>
                 </div>
               </m.article>
@@ -197,7 +258,9 @@ const CourseCatalog = () => (
         </m.div>
       </div>
     </section>
+    {soon && <SoonModal course={soon} onClose={() => setSoon(null)} />}
   </div>
-);
+  );
+};
 
 export default CourseCatalog;
