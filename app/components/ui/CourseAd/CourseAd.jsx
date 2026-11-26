@@ -134,7 +134,7 @@ const Hero = ({ c }) => {
           transition={{ duration: 0.7, delay: 0.15 }}
           className="relative mx-auto w-full max-w-md"
         >
-          <div className={`absolute -inset-3 rounded-[2rem] bg-gradient-to-br blur-2xl ${c.posterFloat ? "from-brand-orange/25 to-sky-400/20" : "from-brand-orange/50 to-sky-400/30"}`} />
+          <div className={`absolute -inset-3 rounded-[15px] bg-gradient-to-br blur-2xl ${c.posterFloat ? "from-brand-orange/25 to-sky-400/20" : "from-brand-orange/50 to-sky-400/30"}`} />
           <div className={c.posterFloat ? "relative" : "relative overflow-hidden rounded-[15px] border border-white/15 bg-white shadow-2xl"}>
             {c.posterFloat ? (
               <Image src={c.poster} alt={`ប៉ូស្ទ័រវគ្គសិក្សា ${c.title}`} width={1080} height={1080} priority className="h-auto w-full drop-shadow-[0_20px_30px_rgba(0,0,0,0.35)]" />

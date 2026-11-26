@@ -305,7 +305,7 @@ function ProgramShowcase() {
             transition={{ duration: 0.45 }}
             className="relative"
           >
-            <div className="absolute -inset-4 rounded-[2rem] bg-brand-orange/10 blur-3xl dark:bg-brand-orange/15" aria-hidden="true" />
+            <div className="absolute -inset-4 rounded-[15px] bg-brand-orange/10 blur-3xl dark:bg-brand-orange/15" aria-hidden="true" />
             <div className="relative overflow-hidden rounded-3xl border border-brand-blue/10 bg-white shadow-2xl shadow-brand-blue/10 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/30">
               <div className="relative aspect-[16/10]">
                 <ProgramMedia program={activeProgram} priority />

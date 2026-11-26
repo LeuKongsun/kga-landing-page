@@ -59,9 +59,14 @@ module.exports = {
         300: "300", 400: "400", 500: "500", 600: "600", 700: "700", 800: "800", 900: "900",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        // Matches khmergrs.com: 5px small / 8px buttons / 10px cards / 15px panels
+        DEFAULT: "5px",
+        sm: "8px",
+        md: "10px",
+        lg: "10px",
+        xl: "10px",
+        "2xl": "15px",
+        "3xl": "15px",
       },
       fontFamily: {
         display: ['var(--font-hanuman)', 'serif'],
