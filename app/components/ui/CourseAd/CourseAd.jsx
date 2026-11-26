@@ -454,7 +454,7 @@ const Bonus = ({ c }) => {
 const Schedule = ({ c }) => (
   <section className="bg-brand-blue/[0.04] py-16 dark:bg-white/[0.02] md:py-24">
     <div className="custom-screen">
-      <SectionHead eyebrow="កាលវិភាគ" title="ជ្រើសរើសទម្រង់រៀនដែលស័ក្តិសមនឹងអ្នក" sub={`${c.seats} — ចុះឈ្មោះមុន ទទួលបានកន្លែងមុន។`} />
+      <SectionHead eyebrow="កាលវិភាគ" title="ជ្រើសរើសប្រភេទថ្នាក់រៀនដែលស័ក្តិសមនឹងអ្នក" sub={`${c.seats} — ចុះឈ្មោះមុន ទទួលបានកន្លែងមុន។`} />
       <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
         {c.schedules.map((s, i) => {
           const online = s.type === "online";
