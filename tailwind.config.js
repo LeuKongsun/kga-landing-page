@@ -69,8 +69,9 @@ module.exports = {
         "3xl": "15px",
       },
       fontFamily: {
-        display: ['var(--font-hanuman)', 'serif'],
-        body: ['var(--font-hanuman)', 'serif'],
+        // Kantumruy Pro is limited to Latin via unicode-range; Khmer falls through to Noto Sans Khmer.
+        display: ['var(--font-latin)', 'var(--font-khmer)', 'sans-serif'],
+        body: ['var(--font-latin)', 'var(--font-khmer)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
       },
       backgroundImage: {
