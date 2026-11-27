@@ -156,7 +156,8 @@ const Hero = ({ c }) => {
           {c.price && (
             <div className="absolute -bottom-5 -left-3 rotate-[-4deg] rounded-[10px] bg-brand-orange px-5 py-3 text-center shadow-xl sm:-left-8">
               <p className="text-[11px] font-display font-700 uppercase tracking-wide text-white/90">{c.priceNote}</p>
-              <p className="text-3xl font-display font-900 leading-none text-white">{c.price}</p>
+              {c.oldPrice && <p className="text-base font-display font-700 leading-none text-white/75 line-through decoration-2">{c.oldPrice}</p>}
+              <p className={`text-3xl font-display font-900 leading-none text-white ${c.oldPrice ? "mt-1" : ""}`}>{c.price}</p>
             </div>
           )}
           {(c.badges || []).map((b) => (
@@ -686,7 +687,12 @@ const StickyBar = ({ c }) => (
     <div className="flex items-center gap-3">
       <div className="leading-tight">
         <p className="text-xs text-brand-text/60 dark:text-gray-400">{c.title}</p>
-        {c.price && <p className="text-xl font-display font-900 text-brand-orange">{c.price}</p>}
+        {c.price && (
+          <p className="flex items-baseline gap-2">
+            <span className="text-xl font-display font-900 text-brand-orange">{c.price}</span>
+            {c.oldPrice && <span className="text-sm font-display font-700 text-brand-text/50 line-through decoration-2 dark:text-gray-500">{c.oldPrice}</span>}
+          </p>
+        )}
       </div>
       <Link href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" data-cta="sticky"
         className="flex flex-1 items-center justify-center gap-2 rounded-sm bg-brand-orange py-3 font-display font-700 text-white shadow-md">

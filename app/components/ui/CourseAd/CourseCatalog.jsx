@@ -204,7 +204,8 @@ const CourseCatalog = () => {
                     {c.price ? (
                       <div>
                         <p className="text-[11px] font-display font-700 text-brand-text/50 dark:text-gray-500">{c.priceNote}</p>
-                        <p className="text-2xl font-display font-900 leading-none text-brand-orange">{c.price}</p>
+                        {c.oldPrice && <p className="text-sm font-display font-700 leading-none text-brand-text/45 line-through decoration-2 dark:text-gray-500">{c.oldPrice}</p>}
+                        <p className={`text-2xl font-display font-900 leading-none text-brand-orange ${c.oldPrice ? "mt-1" : ""}`}>{c.price}</p>
                       </div>
                     ) : (
                       <p className="text-sm font-display font-700 text-brand-text dark:text-white">សូមទាក់ទងសួរតម្លៃ</p>
