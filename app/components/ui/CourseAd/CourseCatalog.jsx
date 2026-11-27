@@ -159,7 +159,7 @@ const CourseCatalog = () => {
               >
                 <Media {...mediaProps} className="relative block w-full overflow-hidden bg-gradient-to-br from-brand-blue-deeper via-brand-blue-dark to-brand-blue" aria-label={c.title}>
                   {c.poster ? (
-                    <Image src={c.poster} alt={`ប៉ូស្ទ័រវគ្គសិក្សា ${c.title}`} width={1080} height={1080} sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <Image src={c.cardCover || c.poster} alt={`ប៉ូស្ទ័រវគ្គសិក្សា ${c.title}`} width={1080} height={1080} sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
                     <>
                       <Image src={c.gallery[1]} alt="ថ្នាក់រៀន Khmer GRS Academy" width={640} height={640} sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />

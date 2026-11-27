@@ -18,6 +18,7 @@ export const arcgisProBasic = {
   seats: "កន្លែងមានកំណត់",
   status: { label: "កំពុងបើកចុះឈ្មោះ", open: true },
   poster: "/posters/arcgis-pro-basic-cover.png",
+  cardCover: "/posters/arcgis-pro-basic-card.png", // full poster used only on the /course-announcement card
   posterFloat: true, // transparent cut-out: floats on the hero instead of sitting in a card
   ogImage: "/posters/arcgis-pro-basic-cover.jpg",
   hero: {
